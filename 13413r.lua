@@ -2703,17 +2703,11 @@ local function setupAnimator()
             warn("Humanoid not found in ViewModel")
         end
     else
-        stopprogram()
+        warn("ViewModel or Camera not found in Workspace")
     end
     return false
 end
 
-local function stopprogram()
-
-
-
-
-end
 -- Function to continuously check for ViewModel and update Animator
 local function monitorViewModel()
     while monitoring do
