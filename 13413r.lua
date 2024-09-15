@@ -3183,15 +3183,15 @@ aimtab:AddDropdown('dv2materialchanger', {
 })
 
 
-aimtab:AddToggle('hitboxexpander', {
-    Text = 'Bigger Heads',
-    Tooltip = 'Bigger Heads',
-    Default = false,
-
-    Callback = function(first)
-       toggleHeadEffect()
-    end
-})
+--aimtab:AddToggle('hitboxexpander', {
+--    Text = 'Bigger Heads',
+--    Tooltip = 'Bigger Heads',
+--    Default = false,
+--
+--    Callback = function(first)
+--       toggleHeadEffect()
+--    end
+--})
 
 aimtab:AddButton('Make Doors Invisible', function()
 
@@ -4252,25 +4252,28 @@ end
 
 -- Aimbot logic with dynamic prediction
 local function aimbot()
-    local target = findTargetWithinFovCircle994()
+    if isSilentAimEnabled994 then  -- Check if Silent Aim is enabled
+        local target = findTargetWithinFovCircle994()
 
-    if target then
-        local head = target:FindFirstChild("Head")
-        if head then
-            -- Adjust prediction based on distance
-            local distance = adjustPrediction(target)
+        if target then
+            local head = target:FindFirstChild("Head")
+            if head then
+                -- Adjust prediction based on distance
+                local distance = adjustPrediction(target)
 
-            -- Predict the target's future position using the adjusted predictionAmount
-            local predictedPosition = predictTargetPosition(target)
+                -- Predict the target's future position using the adjusted predictionAmount
+                local predictedPosition = predictTargetPosition(target)
 
-            -- Set the camera's CFrame to aim at the predicted position of the head
-            camera.CFrame = CFrame.new(camera.CFrame.Position, predictedPosition)
+                -- Set the camera's CFrame to aim at the predicted position of the head
+                camera.CFrame = CFrame.new(camera.CFrame.Position, predictedPosition)
 
-            -- Print logs with prediction value
-            print("Locked to target at distance:", distance, " studs. Prediction factor:", predictionAmount)
+                -- Print logs with prediction value
+                print("Locked to target at distance:", distance, " studs. Prediction factor:", predictionAmount)
+            end
         end
     end
 end
+
 
 -- Hook into the game's RenderStepped event to update the aim only when RMB is held
 RunService.RenderStepped:Connect(function()
