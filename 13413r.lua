@@ -4288,7 +4288,14 @@ end)
 -- Create the FOV circle at the start
 createFovCircle()
 
+aimtab:AddToggle('silenw23', {
+    Text = 'old silent aim',
+    Default = false,
 
+    Callback = function(first)
+        pdlt.silentaim = first
+    end
+})
 
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
