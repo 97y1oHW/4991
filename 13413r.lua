@@ -4159,13 +4159,13 @@ end
 -- Services and Variables
 -- Required Services
 -- Required Services
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 local camera = workspace.CurrentCamera
-local player = game.Players.LocalPlayer
+local userInputService = game:GetService("UserInputService")
+local mouse = game.Players.LocalPlayer:GetMouse()
+local runService = game:GetService("RunService")
 
 -- FOV Settings
-local fovRadius = 150  -- Field of view radius for detecting targets
+local fovRadius = 150  -- Default FOV radius
 local fovCircle
 
 -- Prediction settings
@@ -4177,45 +4177,59 @@ local predictionAmount = defaultPrediction -- Initial prediction value
 local minDistance = 10      -- Minimum distance (in studs) to start changing the prediction
 local maxDistance = 1000    -- Maximum distance (in studs) for the maximum prediction factor
 
+-- Variables to track aiming state and debugging
+local isAiming = false
+local lockedCharacter = nil
+local debugEnabled = true -- Toggle this to enable/disable debugging
+local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
+local fovSize = 60 -- Default FOV size
+
 -- Function to create a visible FOV circle
 local function createFovCircle()
+    if fovCircle then
+        fovCircle:Remove()  -- Remove existing circle if it exists
+        if debugEnabled then
+            print("Removed existing fovCircle.")
+        end
+    end
     fovCircle = Drawing.new("Circle")
     fovCircle.Thickness = 2
     fovCircle.NumSides = 100
-    fovCircle.Radius = fovRadius
+    fovCircle.Radius = fovSize
     fovCircle.Color = Color3.new(1, 1, 1) -- White color
     fovCircle.Filled = false
     fovCircle.Visible = true
     fovCircle.Transparency = 1
+    if debugEnabled then
+        print("Created new fovCircle.")
+    end
 end
 
 -- Update FOV circle position
-local function updateFovCircle()
-    local mouse = player:GetMouse()
-    fovCircle.Position = Vector2.new(mouse.X, mouse.Y)
-end
-
--- Function to predict target's future position
-local function predictTargetPosition(target)
-    local head = target:FindFirstChild("Head")
-    if head then
-        local velocity = head.Velocity
-        local predictedPosition = head.Position + (velocity * predictionAmount)
-        return predictedPosition
+local function updateFovCircle994()
+    if fovCircle then
+        local mousePos = Vector2.new(mouse.X, mouse.Y)
+        fovCircle.Position = mousePos
+        fovCircle.Radius = fovSize -- Update FOV circle size
+        if debugEnabled then
+            print("FOV circle updated to position:", mousePos, "and size:", fovSize)
+        end
+    else
+        if debugEnabled then
+            print("FOV circle is not created or is nil.")
+        end
     end
-    return head.Position
 end
 
 -- Function to find a target within the FOV
-local function findTargetWithinFovCircle994()
-    local mouse = player:GetMouse()
+local function findTargetWithinFovCircle()
     local mousePos = Vector2.new(mouse.X, mouse.Y)
     local closestTarget = nil
-    local shortestDistance = fovRadius
+    local shortestDistance = fovSize
 
     -- Iterate over all players to find a target within FOV
     for _, targetPlayer in pairs(game.Players:GetPlayers()) do
-        if targetPlayer ~= player and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
+        if targetPlayer ~= game.Players.LocalPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
             local head = targetPlayer.Character.Head
             local screenPos, onScreen = camera:WorldToScreenPoint(head.Position)
 
@@ -4235,75 +4249,100 @@ local function findTargetWithinFovCircle994()
     return closestTarget
 end
 
+-- Function to predict target's future position
+local function predictTargetPosition(target)
+    local head = target:FindFirstChild("Head")
+    if head then
+        local velocity = head.Velocity
+        local predictedPosition = head.Position + (velocity * predictionAmount)
+        return predictedPosition
+    end
+    return head.Position
+end
+
 -- Function to dynamically adjust prediction based on distance
 local function adjustPrediction(target)
     local head = target:FindFirstChild("Head")
     if head then
-        local distance = (player.Character.Head.Position - head.Position).Magnitude
-
-        -- Linearly scale the predictionAmount based on the distance
+        local distance = (game.Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
         local scale = math.clamp((distance - minDistance) / (maxDistance - minDistance), 0, 1)
         predictionAmount = minPrediction + (maxPrediction - minPrediction) * scale
-
-        return distance  -- Returning distance for logs or display
+        return distance
     end
     return 0
 end
 
--- Aimbot logic with dynamic prediction
-local function aimbot()
-    if isSilentAimEnabled994 then  -- Check if Silent Aim is enabled
-        local target = findTargetWithinFovCircle994()
-
-        if target then
-            local head = target:FindFirstChild("Head")
-            if head then
-                -- Adjust prediction based on distance
-                local distance = adjustPrediction(target)
-
-                -- Predict the target's future position using the adjusted predictionAmount
-                local predictedPosition = predictTargetPosition(target)
-
-                -- Set the camera's CFrame to aim at the predicted position of the head
-                camera.CFrame = CFrame.new(camera.CFrame.Position, predictedPosition)
-
-                -- Print logs with prediction value
-                print("Locked to target at distance:", distance, " studs. Prediction factor:", predictionAmount)
+-- Function to handle aiming logic
+local function updateAiming()
+    if isSilentAimEnabled994 then -- Check if Silent Aim is enabled
+        if userInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+            local characterUnderMouse = findTargetWithinFovCircle()
+            if characterUnderMouse and characterUnderMouse ~= lockedCharacter then
+                lockedCharacter = characterUnderMouse
+                if debugEnabled then
+                    print("Locked onto new character:", lockedCharacter.Name)
+                end
             end
+
+            if lockedCharacter and lockedCharacter:FindFirstChild("Head") and camera:FindFirstChild("ViewModel") then
+                local head = lockedCharacter.Head
+                local vm = camera.ViewModel
+                local ap = vm:FindFirstChild("AimPart")
+                local apc = vm:FindFirstChild("AimPartCanted")
+                local fc = vm:FindFirstChild("FakeCamera")
+
+                if ap and apc and fc then
+                    -- Adjust prediction based on distance
+                    adjustPrediction(lockedCharacter)
+                    local aimPosition = predictTargetPosition(lockedCharacter)
+                    local cameraPosition = camera.CFrame.Position
+
+                    -- Update AimPart positions
+                    ap.CFrame = CFrame.new(cameraPosition, aimPosition)
+                    apc.CFrame = CFrame.new(cameraPosition, aimPosition)
+
+                    -- Print debug information
+                    if debugEnabled then
+                        print("Aiming at position:", aimPosition)
+                        print("Camera position:", cameraPosition)
+                        print("Prediction factor:", predictionAmount)
+                    end
+                else
+                    if debugEnabled then
+                        print("One or more ViewModel parts are missing.")
+                    end
+                end
+            end
+        else
+            if isAiming then
+                if debugEnabled then
+                    print("Right mouse button released. Unlocking.")
+                end
+            end
+            lockedCharacter = nil
         end
     end
 end
 
-
--- Hook into the game's RenderStepped event to update the aim only when RMB is held
-RunService.RenderStepped:Connect(function()
-    updateFovCircle()
-
-    -- Only activate the aimbot when right mouse button (RMB) is held down
-    if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-        aimbot()
-    end
+-- Call the updateAiming function continuously
+runService.RenderStepped:Connect(function()
+    updateFovCircle994()  -- Ensure this function is correctly implemented
+    updateAiming()
 end)
 
 -- Create the FOV circle at the start
 createFovCircle()
 
-aimtab:AddToggle('silenw23', {
-    Text = 'old silent aim',
-    Default = false,
+-- GUI Toggle for Silent Aim
 
-    Callback = function(first)
-        pdlt.silentaim = first
-    end
-})
 
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
     Default = false,
     Callback = function(isEnabled)
         isSilentAimEnabled994 = isEnabled
-        targetCharacter994 = nil -- Reset locked character when toggling
-        updateFovCircle994()
+        lockedCharacter = nil -- Reset locked character when toggling
+        updateFovCircle994() -- Update the FOV circle when toggling
     end
 }):AddKeyPicker('silentAimBind994', {
     Default = 'None',
@@ -4312,9 +4351,9 @@ aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim Bind',
     NoUI = false,
     Callback = function(Value)
+        -- Optionally handle key bindings here
     end,
 })
-
 
 
 aimtab:AddToggle('silen1w22', {
@@ -4378,13 +4417,23 @@ aimtab:AddSlider('aimfov', {
     Rounding = 0,
     Compact = false,
     Callback = function(size)
-        
+        fovSize = size
         -- Update the FOV circle size based on the slider value
-        if pdlt.drawfov then
-            if fovCircle then
-                fovCircle.Size = UDim2.new(0, pdlt.aimfov * 2, 0, pdlt.aimfov * 2)
-            end
+        if fovCircle then
+            fovCircle.Radius = fovSize
         end
+        if debugEnabled then
+            print("FOV size updated to:", fovSize)
+        end
+    end
+})
+
+-- Add a toggle for print debug
+aimtab:AddToggle('printDebug', {
+    Text = 'Print Debug',
+    Default = true,
+    Callback = function(isEnabled)
+        debugEnabled = isEnabled
     end
 })
 
