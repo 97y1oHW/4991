@@ -4165,24 +4165,25 @@ local mouse = game.Players.LocalPlayer:GetMouse()
 local runService = game:GetService("RunService")
 
 -- FOV Settings
-local fovRadius = 150  -- Default FOV radius
+local fovRadius = 180  -- Increased FOV for slightly better target tracking
 local fovCircle
 
 -- Prediction settings
-local minPrediction = 0.05  -- Minimum prediction amount for close targets
-local maxPrediction = 0.6   -- Maximum prediction amount for far targets
-local defaultPrediction = 0.128 -- Default prediction value when auto-prediction is disabled
-local predictionAmount = defaultPrediction -- Initial prediction value
+local minPrediction = 0.03                                      -- Reduced minimum for closer targets
+local maxPrediction = 0.5                                       -- Lowered max to reduce overcompensation at far distances
+local defaultPrediction = 0.1                                   -- Slightly lower default value for consistent hit registration
+local predictionAmount = defaultPrediction                      -- Initial prediction value
 
-local minDistance = 10      -- Minimum distance (in studs) to start changing the prediction
-local maxDistance = 1000    -- Maximum distance (in studs) for the maximum prediction factor
+local minDistance = 15                                          -- Increased minimum distance for better accuracy in short range
+local maxDistance = 850                                         -- Lowered max distance to focus prediction for mid-range shots
+                                     -- Maximum distance (in studs) for the maximum prediction factor
 
 -- Variables to track aiming state and debugging
 local isAiming = false
 local lockedCharacter = nil
 local debugEnabled = true -- Toggle this to enable/disable debugging
 local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
-local fovSize = 60 -- Default FOV size
+local fovSize = 90 -- Default FOV size
 
 -- Function to create a visible FOV circle
 local function createFovCircle()
