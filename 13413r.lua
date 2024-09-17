@@ -1,4 +1,5 @@
 --ibet opti
+
 if not LPH_OBFUSCATED then
     -- Define a series of functions that serve as placeholders when obfuscation is not active.
     
@@ -40,6 +41,7 @@ if not LPH_OBFUSCATED then
     end
 end
 
+print("hello from server")
 
 
 
