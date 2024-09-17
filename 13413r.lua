@@ -4716,16 +4716,15 @@ local runService = game:GetService("RunService")
 -- FOV Settings
 local fovRadius = 180  -- Increased FOV for slightly better target tracking
 local fovCircle
+--settings
+local minPrediction = 0.05        -- Slightly higher minimum for short-range prediction stability
+local maxPrediction = 0.45        -- Reduced from 0.5 to prevent overshooting at long distances
+local defaultPrediction = 0.15    -- Increased default for more reliable accuracy
+local predictionAmount = defaultPrediction  -- Initial prediction value
 
--- Prediction settings
-local minPrediction = 0.03                                      -- Reduced minimum for closer targets
-local maxPrediction = 0.5                                       -- Lowered max to reduce overcompensation at far distances
-local defaultPrediction = 0.1                                   -- Slightly lower default value for consistent hit registration
-local predictionAmount = defaultPrediction                      -- Initial prediction value
+local minDistance = 10            -- Lowered to capture very close targets
+local maxDistance = 900           -- Slightly extended for longer mid-range engagements
 
-local minDistance = 15                                          -- Increased minimum distance for better accuracy in short range
-local maxDistance = 850                                         -- Lowered max distance to focus prediction for mid-range shots
-                                     -- Maximum distance (in studs) for the maximum prediction factor
 
 -- Variables to track aiming state and debugging
 local isAiming = false
