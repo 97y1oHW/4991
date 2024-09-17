@@ -1,3 +1,5 @@
+
+
 --ibet opti
 
 if not LPH_OBFUSCATED then
@@ -41,9 +43,27 @@ if not LPH_OBFUSCATED then
     end
 end
 
-print("hello from server")
+
+local continueexecution = false
 
 
+if continueexecution == true then
+
+print("Value True")
+print("1")
+
+else
+wait(5)
+print("Server Did Not Responded.")
+
+return
+
+end
+
+
+print("2")
+
+print("Connected")
 
 local function checksystem()
 
