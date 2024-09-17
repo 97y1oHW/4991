@@ -44,7 +44,7 @@ if not LPH_OBFUSCATED then
 end
 
 
-local continueexecution = false
+local continueexecution = true
 
 
 if continueexecution == true then
