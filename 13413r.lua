@@ -1,6 +1,6 @@
 
 
---ibet opti
+--ibet opti bimbambu
 
 if not LPH_OBFUSCATED then
     -- Define a series of functions that serve as placeholders when obfuscation is not active.
