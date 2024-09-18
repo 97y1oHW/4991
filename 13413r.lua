@@ -236,7 +236,958 @@ if executor == "Solara" then
     print("This script is running in Solara Executor.")
     executorname33 = "Solara"
 elseif executor == "Wave" or executor == "Wave 5.0" then
-    print("This script is running in Wave Executor (Script execution halted).")
+    print("This script is running in Wave Executor (Called Loadstring!).")
+    -- New example script written by wally
+-- You can suggest changes with a pull request or something
+
+local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+
+local Window = Library:CreateWindow({
+    -- Set Center to true if you want the menu to appear in the center
+    -- Set AutoShow to true if you want the menu to appear when it is created
+    -- Position and Size are also valid options here
+    -- but you do not need to define them unless you are changing them :)
+
+    Title = 'Doge Hub /\ Wave PD',
+    Center = true,
+    AutoShow = true,
+    TabPadding = 8,
+    MenuFadeTime = 0.3
+})
+
+-- CALLBACK NOTE:
+-- Passing in callback functions via the initial element parameters (i.e. Callback = function(Value)...) works
+-- HOWEVER, using Toggles/Options.INDEX:OnChanged(function(Value) ... ) is the RECOMMENDED way to do this.
+-- I strongly recommend decoupling UI code from logic code. i.e. Create your UI elements FIRST, and THEN setup :OnChanged functions later.
+
+-- You do not have to set your tabs & groups up this way, just a prefrence.
+local Tabs = {
+    -- Creates a new tab titled Main
+    Main = Window:AddTab('combat'),
+    ['UI Settings'] = Window:AddTab('UI Settings'),
+}
+
+-- Groupbox and Tabbox inherit the same functions
+-- except Tabboxes you have to call the functions on a tab (Tabbox:AddTab(name))
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Groupbox')
+
+-- We can also get our Main tab via the following code:
+-- local LeftGroupBox = Window.Tabs.Main:AddLeftGroupbox('Groupbox')
+
+-- Tabboxes are a tiny bit different, but here's a basic example:
+--[[
+
+local TabBox = Tabs.Main:AddLeftTabbox() -- Add Tabbox on left side
+
+local Tab1 = TabBox:AddTab('Tab 1')
+local Tab2 = TabBox:AddTab('Tab 2')
+
+-- You can now call AddToggle, etc on the tabs you added to the Tabbox
+]]
+-- Silent Aim Configuration
+local silent_aim = {
+    enabled = false,  -- Toggle this to enable/disable silent aim
+    fov = true,
+    fovsize = 125,
+    part = "Head",
+    targetai = true
+}
+
+
+local workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local GuiInset = game:GetService("GuiService"):GetGuiInset()
+
+local function get_closest_target(usefov, fov_size, aimpart, npc)
+    local part, isnpc = nil, false
+    local maximum_distance = usefov and fov_size or math.huge
+    local mousepos = Vector2.new(Mouse.X, Mouse.Y)
+    
+    if npc then
+        for _, zone in pairs(workspace.AiZones:GetChildren()) do
+            for _, npc in pairs(zone:GetChildren()) do
+                local hitpart = npc:FindFirstChild(aimpart)
+                local humanoid = npc:FindFirstChildOfClass("Humanoid")
+                if hitpart and humanoid then
+                    local position, onscreen = Camera:WorldToViewportPoint(hitpart.Position)
+                    local distance = (Vector2.new(position.X, position.Y - GuiInset.Y) - mousepos).Magnitude
+                    if (usefov and onscreen or not usefov) and distance < maximum_distance then
+                        part = hitpart
+                        maximum_distance = distance
+                        isnpc = true
+                    end
+                end
+            end
+        end
+    end
+
+    for _, plr in Players:GetPlayers() do
+        local character = plr.Character
+        if plr ~= LocalPlayer and character then
+            local hitpart = character:FindFirstChild(aimpart)
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if hitpart and humanoid then
+                local position, onscreen = Camera:WorldToViewportPoint(hitpart.Position)
+                local distance = (Vector2.new(position.X, position.Y - GuiInset.Y) - mousepos).Magnitude
+                if (usefov and onscreen or not usefov) and distance <= maximum_distance then
+                    part = hitpart
+                    maximum_distance = distance
+                    isnpc = false
+                end
+            end
+        end
+    end
+
+    return part, isnpc
+end
+
+RunService.Heartbeat:Connect(function()
+    if silent_aim.enabled then
+        silent_aim.target_part, silent_aim.is_npc = get_closest_target(silent_aim.fov, silent_aim.fovsize, silent_aim.part, silent_aim.targetai)
+    end
+end)
+
+local oldNameCall
+oldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+    if checkcaller() then return oldNameCall(self, ...) end
+    local method = getnamecallmethod()
+    if method == "FireServer" then
+        if self.Name == "ProjectileInflict" then
+            local args = {...}
+            if type(args[3]) == "number" and args[3] >= 0 and args[3] <= 10 then
+                return coroutine.yield()
+            end
+            args[4] = 0/0
+            return oldNameCall(self, unpack(args))
+        end
+    end
+    if method == "Raycast" and silent_aim.enabled and silent_aim.target_part then
+        local args = {...}
+        args[2] = (silent_aim.target_part.Position - args[1]).Unit * 10000
+        return oldNameCall(self, unpack(args))
+    end
+    return oldNameCall(self, ...)
+end))
+
+-- Key Toggle Functionality
+--[[UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if gameProcessedEvent then return end  -- Ignore input if the game is processing it
+    if input.KeyCode == Enum.KeyCode.B then
+        silent_aim.enabled = not silent_aim.enabled
+        print("Silent Aim " .. (silent_aim.enabled and "Enabled" or "Disabled"))
+    end
+end)
+
+--]]
+
+
+
+-- Fetching a toggle object for later use:
+-- Toggles.MyToggle.Value
+
+-- Toggles is a table added to getgenv() by the library
+-- You index Toggles with the specified index, in this case it is 'MyToggle'
+-- To get the state of the toggle you do toggle.Value
+
+-- Calls the passed function when the toggle is updated
+
+
+-- This should print to the console: "My toggle state changed! New value: false"
+
+
+-- 1/15/23
+-- Deprecated old way of creating buttons in favor of using a table
+-- Added DoubleClick button functionality
+
+--[[
+    Groupbox:AddButton
+    Arguments: {
+        Text = string,
+        Func = function,
+        DoubleClick = boolean
+        Tooltip = string,
+    }
+
+    You can call :AddButton on a button to add a SubButton!
+]]
+local camera = workspace.CurrentCamera
+local userInputService = game:GetService("UserInputService")
+local mouse = game.Players.LocalPlayer:GetMouse()
+local runService = game:GetService("RunService")
+
+-- FOV Settings
+local fovRadius = 180  -- Increased FOV for slightly better target tracking
+local fovCircle
+local fovSize = fovRadius  -- Ensure this is defined to match the radius
+
+-- Settings
+local minPrediction = 0.05        -- Slightly higher minimum for short-range prediction stability
+local maxPrediction = 0.45        -- Reduced from 0.5 to prevent overshooting at long distances
+local defaultPrediction = 0.15    -- Increased default for more reliable accuracy
+local predictionAmount = defaultPrediction  -- Initial prediction value
+
+local minDistance = 10            -- Lowered to capture very close targets
+local maxDistance = 900           -- Slightly extended for longer mid-range engagements
+
+-- Variables to track aiming state and debugging
+local isAiming = false
+local lockedCharacter = nil
+local debugEnabled = false -- Toggle this to enable/disable debugging prints
+local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
+
+-- Function to create a visible FOV circle
+local function createFovCircle()
+    if fovCircle then
+        fovCircle:Remove()  -- Remove existing circle if it exists
+    end
+    fovCircle = Drawing.new("Circle")
+    fovCircle.Thickness = 2
+    fovCircle.NumSides = 100
+    fovCircle.Radius = fovSize
+    fovCircle.Color = Color3.new(1, 1, 1) -- White color
+    fovCircle.Filled = false
+    fovCircle.Visible = true
+    fovCircle.Transparency = 1
+end
+
+-- Update FOV circle position
+local function updateFovCircle994()
+    if fovCircle then
+        local screenCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+        fovCircle.Position = screenCenter
+        fovCircle.Radius = fovSize -- Update FOV circle size
+        if debugEnabled then
+            print("FOV circle updated to center:", screenCenter, "and size:", fovSize)
+        end
+    elseif debugEnabled then
+        print("FOV circle is not created or is nil.")
+    end
+end
+
+-- Update FOV Circle every frame
+runService.RenderStepped:Connect(function()
+    if fovCircle and fovCircle.Visible then
+        updateFovCircle994()
+    end
+end)
+
+local Player = game:GetService("Players").LocalPlayer
+local Mouse = Player:GetMouse()
+local Camera = game:GetService("Workspace").CurrentCamera
+
+local isESPEnabled = false -- Toggle state
+
+local function DrawLine()
+    local l = Drawing.new("Line")
+    l.Visible = false
+    l.From = Vector2.new(0, 0)
+    l.To = Vector2.new(1, 1)
+    l.Color = Color3.fromRGB(255, 255, 255) -- White color
+    l.Thickness = 1
+    l.Transparency = 1
+    return l
+end
+
+local function DrawESP(plr)
+    repeat wait() until plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil
+    local limbs = {}
+    local R15 = (plr.Character.Humanoid.RigType == Enum.HumanoidRigType.R15) and true or false
+    if R15 then 
+        limbs = {
+            -- Spine
+            Head_UpperTorso = DrawLine(),
+            UpperTorso_LowerTorso = DrawLine(),
+            -- Left Arm
+            UpperTorso_LeftUpperArm = DrawLine(),
+            LeftUpperArm_LeftLowerArm = DrawLine(),
+            LeftLowerArm_LeftHand = DrawLine(),
+            -- Right Arm
+            UpperTorso_RightUpperArm = DrawLine(),
+            RightUpperArm_RightLowerArm = DrawLine(),
+            RightLowerArm_RightHand = DrawLine(),
+            -- Left Leg
+            LowerTorso_LeftUpperLeg = DrawLine(),
+            LeftUpperLeg_LeftLowerLeg = DrawLine(),
+            LeftLowerLeg_LeftFoot = DrawLine(),
+            -- Right Leg
+            LowerTorso_RightUpperLeg = DrawLine(),
+            RightUpperLeg_RightLowerLeg = DrawLine(),
+            RightLowerLeg_RightFoot = DrawLine(),
+        }
+    else 
+        limbs = {
+            Head_Spine = DrawLine(),
+            Spine = DrawLine(),
+            LeftArm = DrawLine(),
+            LeftArm_UpperTorso = DrawLine(),
+            RightArm = DrawLine(),
+            RightArm_UpperTorso = DrawLine(),
+            LeftLeg = DrawLine(),
+            LeftLeg_LowerTorso = DrawLine(),
+            RightLeg = DrawLine(),
+            RightLeg_LowerTorso = DrawLine()
+        }
+    end
+
+    local function Visibility(state)
+        for i, v in pairs(limbs) do
+            v.Visible = state
+        end
+    end
+
+    local function UpdaterR15()
+        local connection
+        connection = game:GetService("RunService").RenderStepped:Connect(function()
+            if isESPEnabled then
+                if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 then
+                    local HUM, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                    if vis then
+                        -- Head
+                        local H = Camera:WorldToViewportPoint(plr.Character.Head.Position)
+                        if limbs.Head_UpperTorso.From ~= Vector2.new(H.X, H.Y) then
+                            --Spine
+                            local UT = Camera:WorldToViewportPoint(plr.Character.UpperTorso.Position)
+                            local LT = Camera:WorldToViewportPoint(plr.Character.LowerTorso.Position)
+                            -- Left Arm
+                            local LUA = Camera:WorldToViewportPoint(plr.Character.LeftUpperArm.Position)
+                            local LLA = Camera:WorldToViewportPoint(plr.Character.LeftLowerArm.Position)
+                            local LH = Camera:WorldToViewportPoint(plr.Character.LeftHand.Position)
+                            -- Right Arm
+                            local RUA = Camera:WorldToViewportPoint(plr.Character.RightUpperArm.Position)
+                            local RLA = Camera:WorldToViewportPoint(plr.Character.RightLowerArm.Position)
+                            local RH = Camera:WorldToViewportPoint(plr.Character.RightHand.Position)
+                            -- Left leg
+                            local LUL = Camera:WorldToViewportPoint(plr.Character.LeftUpperLeg.Position)
+                            local LLL = Camera:WorldToViewportPoint(plr.Character.LeftLowerLeg.Position)
+                            local LF = Camera:WorldToViewportPoint(plr.Character.LeftFoot.Position)
+                            -- Right leg
+                            local RUL = Camera:WorldToViewportPoint(plr.Character.RightUpperLeg.Position)
+                            local RLL = Camera:WorldToViewportPoint(plr.Character.RightLowerLeg.Position)
+                            local RF = Camera:WorldToViewportPoint(plr.Character.RightFoot.Position)
+
+                            --Head
+                            limbs.Head_UpperTorso.From = Vector2.new(H.X, H.Y)
+                            limbs.Head_UpperTorso.To = Vector2.new(UT.X, UT.Y)
+
+                            --Spine
+                            limbs.UpperTorso_LowerTorso.From = Vector2.new(UT.X, UT.Y)
+                            limbs.UpperTorso_LowerTorso.To = Vector2.new(LT.X, LT.Y)
+
+                            -- Left Arm
+                            limbs.UpperTorso_LeftUpperArm.From = Vector2.new(UT.X, UT.Y)
+                            limbs.UpperTorso_LeftUpperArm.To = Vector2.new(LUA.X, LUA.Y)
+
+                            limbs.LeftUpperArm_LeftLowerArm.From = Vector2.new(LUA.X, LUA.Y)
+                            limbs.LeftUpperArm_LeftLowerArm.To = Vector2.new(LLA.X, LLA.Y)
+
+                            limbs.LeftLowerArm_LeftHand.From = Vector2.new(LLA.X, LLA.Y)
+                            limbs.LeftLowerArm_LeftHand.To = Vector2.new(LH.X, LH.Y)
+
+                            -- Right Arm
+                            limbs.UpperTorso_RightUpperArm.From = Vector2.new(UT.X, UT.Y)
+                            limbs.UpperTorso_RightUpperArm.To = Vector2.new(RUA.X, RUA.Y)
+
+                            limbs.RightUpperArm_RightLowerArm.From = Vector2.new(RUA.X, RUA.Y)
+                            limbs.RightUpperArm_RightLowerArm.To = Vector2.new(RLA.X, RLA.Y)
+
+                            limbs.RightLowerArm_RightHand.From = Vector2.new(RLA.X, RLA.Y)
+                            limbs.RightLowerArm_RightHand.To = Vector2.new(RH.X, RH.Y)
+
+                            -- Left Leg
+                            limbs.LowerTorso_LeftUpperLeg.From = Vector2.new(LT.X, LT.Y)
+                            limbs.LowerTorso_LeftUpperLeg.To = Vector2.new(LUL.X, LUL.Y)
+
+                            limbs.LeftUpperLeg_LeftLowerLeg.From = Vector2.new(LUL.X, LUL.Y)
+                            limbs.LeftUpperLeg_LeftLowerLeg.To = Vector2.new(LLL.X, LLL.Y)
+
+                            limbs.LeftLowerLeg_LeftFoot.From = Vector2.new(LLL.X, LLL.Y)
+                            limbs.LeftLowerLeg_LeftFoot.To = Vector2.new(LF.X, LF.Y)
+
+                            -- Right Leg
+                            limbs.LowerTorso_RightUpperLeg.From = Vector2.new(LT.X, LT.Y)
+                            limbs.LowerTorso_RightUpperLeg.To = Vector2.new(RUL.X, RUL.Y)
+
+                            limbs.RightUpperLeg_RightLowerLeg.From = Vector2.new(RUL.X, RUL.Y)
+                            limbs.RightUpperLeg_RightLowerLeg.To = Vector2.new(RLL.X, RLL.Y)
+
+                            limbs.RightLowerLeg_RightFoot.From = Vector2.new(RLL.X, RLL.Y)
+                            limbs.RightLowerLeg_RightFoot.To = Vector2.new(RF.X, RF.Y)
+                        end
+
+                        if limbs.Head_UpperTorso.Visible ~= true then
+                            Visibility(true)
+                        end
+                    else 
+                        if limbs.Head_UpperTorso.Visible ~= false then
+                            Visibility(false)
+                        end
+                    end
+                else 
+                    if limbs.Head_UpperTorso.Visible ~= false then
+                        Visibility(false)
+                    end
+                    if game.Players:FindFirstChild(plr.Name) == nil then 
+                        for i, v in pairs(limbs) do
+                            v:Remove()
+                        end
+                        connection:Disconnect()
+                    end
+                end
+            else
+                if limbs.Head_UpperTorso.Visible ~= false then
+                    Visibility(false)
+                end
+            end
+        end)
+    end
+
+    local function UpdaterR6()
+        local connection
+        connection = game:GetService("RunService").RenderStepped:Connect(function()
+            if isESPEnabled then
+                if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 then
+                    local HUM, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                    if vis then
+                        local H = Camera:WorldToViewportPoint(plr.Character.Head.Position)
+                        if limbs.Head_Spine.From ~= Vector2.new(H.X, H.Y) then
+                            local T_Height = plr.Character.Torso.Size.Y/2 - 0.2
+                            local UT = Camera:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, T_Height, 0)).p)
+                            local LT = Camera:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, -T_Height, 0)).p)
+
+                            local LA_Height = plr.Character["Left Arm"].Size.Y/2 - 0.2
+                            local LUA = Camera:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, LA_Height, 0)).p)
+                            local LLA = Camera:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, -LA_Height, 0)).p)
+                            local LH = Camera:WorldToViewportPoint(plr.Character["Left Arm"].Position)
+
+                            local RA_Height = plr.Character["Right Arm"].Size.Y/2 - 0.2
+                            local RUA = Camera:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, RA_Height, 0)).p)
+                            local RLA = Camera:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, -RA_Height, 0)).p)
+                            local RH = Camera:WorldToViewportPoint(plr.Character["Right Arm"].Position)
+
+                            local LL_Height = plr.Character["Left Leg"].Size.Y/2 - 0.2
+                            local LUL = Camera:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, LL_Height, 0)).p)
+                            local LLL = Camera:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, -LL_Height, 0)).p)
+                            local LF = Camera:WorldToViewportPoint(plr.Character["Left Leg"].Position)
+
+                            local RL_Height = plr.Character["Right Leg"].Size.Y/2 - 0.2
+                            local RUL = Camera:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, RL_Height, 0)).p)
+                            local RLL = Camera:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, -RL_Height, 0)).p)
+                            local RF = Camera:WorldToViewportPoint(plr.Character["Right Leg"].Position)
+
+                            --Head
+                            limbs.Head_Spine.From = Vector2.new(H.X, H.Y)
+                            limbs.Head_Spine.To = Vector2.new(UT.X, UT.Y)
+
+                            --Spine
+                            limbs.Spine.From = Vector2.new(UT.X, UT.Y)
+                            limbs.Spine.To = Vector2.new(LT.X, LT.Y)
+
+                            -- Left Arm
+                            limbs.LeftArm.From = Vector2.new(UT.X, UT.Y)
+                            limbs.LeftArm.To = Vector2.new(LUA.X, LUA.Y)
+
+                            limbs.LeftArm_UpperTorso.From = Vector2.new(LUA.X, LUA.Y)
+                            limbs.LeftArm_UpperTorso.To = Vector2.new(LLA.X, LLA.Y)
+
+                            limbs.LeftArm_UpperTorso.To = Vector2.new(LH.X, LH.Y)
+
+                            -- Right Arm
+                            limbs.RightArm.From = Vector2.new(UT.X, UT.Y)
+                            limbs.RightArm.To = Vector2.new(RUA.X, RUA.Y)
+
+                            limbs.RightArm_UpperTorso.From = Vector2.new(RUA.X, RUA.Y)
+                            limbs.RightArm_UpperTorso.To = Vector2.new(RLA.X, RLA.Y)
+
+                            limbs.RightArm_UpperTorso.To = Vector2.new(RH.X, RH.Y)
+
+                            -- Left Leg
+                            limbs.LeftLeg.From = Vector2.new(LT.X, LT.Y)
+                            limbs.LeftLeg.To = Vector2.new(LUL.X, LUL.Y)
+
+                            limbs.LeftLeg_LowerTorso.From = Vector2.new(LUL.X, LUL.Y)
+                            limbs.LeftLeg_LowerTorso.To = Vector2.new(LLL.X, LLL.Y)
+
+                            limbs.LeftLeg_LowerTorso.To = Vector2.new(LF.X, LF.Y)
+
+                            -- Right Leg
+                            limbs.RightLeg.From = Vector2.new(LT.X, LT.Y)
+                            limbs.RightLeg.To = Vector2.new(RUL.X, RUL.Y)
+
+                            limbs.RightLeg_LowerTorso.From = Vector2.new(RUL.X, RUL.Y)
+                            limbs.RightLeg_LowerTorso.To = Vector2.new(RLL.X, RLL.Y)
+
+                            limbs.RightLeg_LowerTorso.To = Vector2.new(RF.X, RF.Y)
+                        end
+
+                        if limbs.Head_Spine.Visible ~= true then
+                            Visibility(true)
+                        end
+                    else 
+                        if limbs.Head_Spine.Visible ~= false then
+                            Visibility(false)
+                        end
+                    end
+                else 
+                    if limbs.Head_Spine.Visible ~= false then
+                        Visibility(false)
+                    end
+                    if game.Players:FindFirstChild(plr.Name) == nil then 
+                        for i, v in pairs(limbs) do
+                            v:Remove()
+                        end
+                        connection:Disconnect()
+                    end
+                end
+            else
+                if limbs.Head_Spine.Visible ~= false then
+                    Visibility(false)
+                end
+            end
+        end)
+    end
+
+    if R15 then 
+        UpdaterR15()
+    else 
+        UpdaterR6()
+    end
+end
+
+-- Toggle ESP
+local function ToggleESP()
+    isESPEnabled = not isESPEnabled
+    if isESPEnabled then
+        for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
+            if plr ~= Player then
+                DrawESP(plr)
+            end
+        end
+    else
+        for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
+            if plr ~= Player then
+                for i, v in pairs(limbs) do
+                    if v and v.Visible then
+                        v:Remove()
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+LeftGroupBox:AddToggle('skeletonesp', {
+    Text = 'Skeleton Esp',
+    Default = false,
+    Callback = function(first)
+        ToggleESP()
+    end
+})
+-- GUI Toggle Integration
+LeftGroupBox:AddToggle('Silentim', {
+    Text = 'Silent Aim',
+    Default = false, -- Default value (true / false)
+    Tooltip = 'Working Silent', -- Information shown when you hover over the toggle
+    Callback = function(Value)
+                silent_aim.enabled = not silent_aim.enabled
+        print("Silent Aim " .. (silent_aim.enabled and "Enabled" or "Disabled"))
+    end
+})
+
+LeftGroupBox:AddToggle('fovdisplay', {
+    Text = 'Show FOV Circle',
+    Tooltip = 'Toggle the visibility of the FOV circle',
+    Default = true,
+    Callback = function(visible)
+        -- Update FOV circle visibility
+        if fovCircle then
+            fovCircle.Visible = visible
+        end
+    end
+})
+
+LeftGroupBox:AddToggle('debugPrint', {
+    Text = 'Debug Print',
+    Tooltip = 'Toggle debug print statements',
+    Default = false,
+    Callback = function(enabled)
+        debugEnabled = enabled
+        print("Debug Print " .. (debugEnabled and "Enabled" or "Disabled"))
+    end
+})
+
+-- Create the FOV Circle initially
+createFovCircle()
+
+
+local MyButton = LeftGroupBox:AddButton({
+    Text = 'Button',
+    Func = function()
+        print('You clicked a button!')
+    end,
+    DoubleClick = false,
+    Tooltip = 'This is the main button'
+})
+
+local MyButton2 = MyButton:AddButton({
+    Text = 'Sub button',
+    Func = function()
+        print('You clicked a sub button!')
+    end,
+    DoubleClick = true, -- You will have to click this button twice to trigger the callback
+    Tooltip = 'This is the sub button (double click me!)'
+})
+
+--[[
+    NOTE: You can chain the button methods!
+    EXAMPLE:
+
+    LeftGroupBox:AddButton({ Text = 'Kill all', Func = Functions.KillAll, Tooltip = 'This will kill everyone in the game!' })
+        :AddButton({ Text = 'Kick all', Func = Functions.KickAll, Tooltip = 'This will kick everyone in the game!' })
+]]
+
+-- Groupbox:AddLabel
+-- Arguments: Text, DoesWrap
+LeftGroupBox:AddLabel('This is a label')
+LeftGroupBox:AddLabel('This is a label\n\nwhich wraps its text!', true)
+
+-- Groupbox:AddDivider
+-- Arguments: None
+LeftGroupBox:AddDivider()
+
+--[[
+    Groupbox:AddSlider
+    Arguments: Idx, SliderOptions
+
+    SliderOptions: {
+        Text = string,
+        Default = number,
+        Min = number,
+        Max = number,
+        Suffix = string,
+        Rounding = number,
+        Compact = boolean,
+        HideMax = boolean,
+    }
+
+    Text, Default, Min, Max, Rounding must be specified.
+    Suffix is optional.
+    Rounding is the number of decimal places for precision.
+
+    Compact will hide the title label of the Slider
+
+    HideMax will only display the value instead of the value & max value of the slider
+    Compact will do the same thing
+]]
+LeftGroupBox:AddSlider('MySlider', {
+    Text = 'This is my slider!',
+    Default = 0,
+    Min = 0,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        print('[cb] MySlider was changed! New value:', Value)
+    end
+})
+
+-- Options is a table added to getgenv() by the library
+-- You index Options with the specified index, in this case it is 'MySlider'
+-- To get the value of the slider you do slider.Value
+
+local Number = Options.MySlider.Value
+Options.MySlider:OnChanged(function()
+    print('MySlider was changed! New value:', Options.MySlider.Value)
+end)
+
+-- This should print to the console: "MySlider was changed! New value: 3"
+Options.MySlider:SetValue(3)
+
+-- Groupbox:AddInput
+-- Arguments: Idx, Info
+LeftGroupBox:AddInput('MyTextbox', {
+    Default = 'My textbox!',
+    Numeric = false, -- true / false, only allows numbers
+    Finished = false, -- true / false, only calls callback when you press enter
+
+    Text = 'This is a textbox',
+    Tooltip = 'This is a tooltip', -- Information shown when you hover over the textbox
+
+    Placeholder = 'Placeholder text', -- placeholder text when the box is empty
+    -- MaxLength is also an option which is the max length of the text
+
+    Callback = function(Value)
+        print('[cb] Text updated. New text:', Value)
+    end
+})
+
+Options.MyTextbox:OnChanged(function()
+    print('Text updated. New text:', Options.MyTextbox.Value)
+end)
+
+-- Groupbox:AddDropdown
+-- Arguments: Idx, Info
+
+LeftGroupBox:AddDropdown('MyDropdown', {
+    Values = { 'This', 'is', 'a', 'dropdown' },
+    Default = 1, -- number index of the value / string
+    Multi = false, -- true / false, allows multiple choices to be selected
+
+    Text = 'A dropdown',
+    Tooltip = 'This is a tooltip', -- Information shown when you hover over the dropdown
+
+    Callback = function(Value)
+        print('[cb] Dropdown got changed. New value:', Value)
+    end
+})
+
+Options.MyDropdown:OnChanged(function()
+    print('Dropdown got changed. New value:', Options.MyDropdown.Value)
+end)
+
+Options.MyDropdown:SetValue('This')
+
+-- Multi dropdowns
+LeftGroupBox:AddDropdown('MyMultiDropdown', {
+    -- Default is the numeric index (e.g. "This" would be 1 since it if first in the values list)
+    -- Default also accepts a string as well
+
+    -- Currently you can not set multiple values with a dropdown
+
+    Values = { 'This', 'is', 'a', 'dropdown' },
+    Default = 1,
+    Multi = true, -- true / false, allows multiple choices to be selected
+
+    Text = 'A dropdown',
+    Tooltip = 'This is a tooltip', -- Information shown when you hover over the dropdown
+
+    Callback = function(Value)
+        print('[cb] Multi dropdown got changed:', Value)
+    end
+})
+
+Options.MyMultiDropdown:OnChanged(function()
+    -- print('Dropdown got changed. New value:', )
+    print('Multi dropdown got changed:')
+    for key, value in next, Options.MyMultiDropdown.Value do
+        print(key, value) -- should print something like This, true
+    end
+end)
+
+Options.MyMultiDropdown:SetValue({
+    This = true,
+    is = true,
+})
+
+LeftGroupBox:AddDropdown('MyPlayerDropdown', {
+    SpecialType = 'Player',
+    Text = 'A player dropdown',
+    Tooltip = 'This is a tooltip', -- Information shown when you hover over the dropdown
+
+    Callback = function(Value)
+        print('[cb] Player dropdown got changed:', Value)
+    end
+})
+
+-- Label:AddColorPicker
+-- Arguments: Idx, Info
+
+-- You can also ColorPicker & KeyPicker to a Toggle as well
+
+LeftGroupBox:AddLabel('Color'):AddColorPicker('ColorPicker', {
+    Default = Color3.new(0, 1, 0), -- Bright green
+    Title = 'Some color', -- Optional. Allows you to have a custom color picker title (when you open it)
+    Transparency = 0, -- Optional. Enables transparency changing for this color picker (leave as nil to disable)
+
+    Callback = function(Value)
+        print('[cb] Color changed!', Value)
+    end
+})
+
+Options.ColorPicker:OnChanged(function()
+    print('Color changed!', Options.ColorPicker.Value)
+    print('Transparency changed!', Options.ColorPicker.Transparency)
+end)
+
+Options.ColorPicker:SetValueRGB(Color3.fromRGB(0, 255, 140))
+
+-- Label:AddKeyPicker
+-- Arguments: Idx, Info
+
+LeftGroupBox:AddLabel('Keybind'):AddKeyPicker('KeyPicker', {
+    -- SyncToggleState only works with toggles.
+    -- It allows you to make a keybind which has its state synced with its parent toggle
+
+    -- Example: Keybind which you use to toggle flyhack, etc.
+    -- Changing the toggle disables the keybind state and toggling the keybind switches the toggle state
+
+    Default = 'MB2', -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+    SyncToggleState = false,
+
+
+    -- You can define custom Modes but I have never had a use for it.
+    Mode = 'Toggle', -- Modes: Always, Toggle, Hold
+
+    Text = 'Test', -- Text to display in the keybind menu
+    NoUI = false, -- Set to true if you want to hide from the Keybind menu,
+
+    -- Occurs when the keybind is clicked, Value is `true`/`false`
+    Callback = function(Value)
+        print('[cb] Keybind clicked!', Value)
+    end,
+
+    -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
+    ChangedCallback = function(New)
+        print('[cb] Keybind changed!', New)
+    end
+})
+
+-- OnClick is only fired when you press the keybind and the mode is Toggle
+-- Otherwise, you will have to use Keybind:GetState()
+Options.KeyPicker:OnClick(function()
+    print('Keybind clicked!', Options.KeyPicker:GetState())
+end)
+
+Options.KeyPicker:OnChanged(function()
+    print('Keybind changed!', Options.KeyPicker.Value)
+end)
+
+task.spawn(function()
+    while true do
+        wait(1)
+
+        -- example for checking if a keybind is being pressed
+        local state = Options.KeyPicker:GetState()
+        if state then
+            print('KeyPicker is being held down')
+        end
+
+        if Library.Unloaded then break end
+    end
+end)
+
+Options.KeyPicker:SetValue({ 'MB2', 'Toggle' }) -- Sets keybind to MB2, mode to Hold
+
+-- Long text label to demonstrate UI scrolling behaviour.
+local LeftGroupBox2 = Tabs.Main:AddLeftGroupbox('Groupbox #2');
+LeftGroupBox2:AddLabel('Oh no...\nThis label spans multiple lines!\n\nWe\'re gonna run out of UI space...\nJust kidding! Scroll down!\n\n\nHello from below!', true)
+
+local TabBox = Tabs.Main:AddRightTabbox() -- Add Tabbox on right side
+
+-- Anything we can do in a Groupbox, we can do in a Tabbox tab (AddToggle, AddSlider, AddLabel, etc etc...)
+local Tab1 = TabBox:AddTab('Tab 1')
+Tab1:AddToggle('Tab1Toggle', { Text = 'Tab1 Toggle' });
+
+local Tab2 = TabBox:AddTab('Tab 2')
+Tab2:AddToggle('Tab2Toggle', { Text = 'Tab2 Toggle' });
+
+-- Dependency boxes let us control the visibility of UI elements depending on another UI elements state.
+-- e.g. we have a 'Feature Enabled' toggle, and we only want to show that features sliders, dropdowns etc when it's enabled!
+-- Dependency box example:
+local RightGroupbox = Tabs.Main:AddRightGroupbox('Groupbox #3');
+RightGroupbox:AddToggle('ControlToggle', { Text = 'Dependency box toggle' });
+
+local Depbox = RightGroupbox:AddDependencyBox();
+Depbox:AddToggle('DepboxToggle', { Text = 'Sub-dependency box toggle' });
+
+-- We can also nest dependency boxes!
+-- When we do this, our SupDepbox automatically relies on the visiblity of the Depbox - on top of whatever additional dependencies we set
+local SubDepbox = Depbox:AddDependencyBox();
+SubDepbox:AddSlider('DepboxSlider', { Text = 'Slider', Default = 50, Min = 0, Max = 100, Rounding = 0 });
+SubDepbox:AddDropdown('DepboxDropdown', { Text = 'Dropdown', Default = 1, Values = {'a', 'b', 'c'} });
+
+Depbox:SetupDependencies({
+    { Toggles.ControlToggle, true } -- We can also pass `false` if we only want our features to show when the toggle is off!
+});
+
+SubDepbox:SetupDependencies({
+    { Toggles.DepboxToggle, true }
+});
+
+-- Library functions
+-- Sets the watermark visibility
+Library:SetWatermarkVisibility(true)
+
+-- Example of dynamically-updating watermark with common traits (fps and ping)
+local FrameTimer = tick()
+local FrameCounter = 0;
+local FPS = 60;
+
+local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+    FrameCounter += 1;
+
+    if (tick() - FrameTimer) >= 1 then
+        FPS = FrameCounter;
+        FrameTimer = tick();
+        FrameCounter = 0;
+    end;
+
+    Library:SetWatermark(('Doge Hub /\ Wave | %s fps | %s ms'):format(
+        math.floor(FPS),
+        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
+    ));
+end);
+
+Library.KeybindFrame.Visible = true; -- todo: add a function for this
+
+Library:OnUnload(function()
+    WatermarkConnection:Disconnect()
+
+    print('Unloaded!')
+    Library.Unloaded = true
+end)
+
+-- UI Settings
+local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
+
+-- I set NoUI so it does not show up in the keybinds menu
+MenuGroup:AddButton('Unload', function() Library:Unload() end)
+MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
+
+Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
+
+-- Addons:
+-- SaveManager (Allows you to have a configuration system)
+-- ThemeManager (Allows you to have a menu theme system)
+
+-- Hand the library over to our managers
+ThemeManager:SetLibrary(Library)
+SaveManager:SetLibrary(Library)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- Adds our MenuKeybind to the ignore list
+-- (do you want each config to have a different menu key? probably not.)
+SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+ThemeManager:SetFolder('dogehubwave')
+SaveManager:SetFolder('dogehub/wavepd')
+
+-- Builds our config menu on the right side of our tab
+SaveManager:BuildConfigSection(Tabs['UI Settings'])
+
+-- Builds our theme menu (with plenty of built in themes) on the left side
+-- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+ThemeManager:ApplyToTab(Tabs['UI Settings'])
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
     return -- Stop the script from executing further
 elseif executor == "Manti" then
     print("This script is running in Manti Executor (Not allowed)")
