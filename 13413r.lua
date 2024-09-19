@@ -1323,6 +1323,96 @@ game.ReplicatedStorage.AiPresets.WhisperAI.LookAt:Destroy()
 
  end)
 
+ -- Desired fire rate
+local newFireRate = 0.05  -- Set the fire rate to a faster value
+local originalFireRate = 0.1  -- Assuming this is the original fire rate
+
+-- Function to change fire rate for all items in the player's inventory
+local function setFireRateForAllItems(rate)
+    -- Get the Inventory folder
+    local inventory = game.ReplicatedStorage.Players.BroadMostly1519.Inventory
+
+    -- Check if Inventory exists
+    if not inventory then
+        print("Inventory not found for player.")
+        return
+    end
+
+    -- Iterate through all items in the Inventory
+    for _, item in pairs(inventory:GetChildren()) do
+        -- Check if the item has a SettingsModule
+        local settingsModulePath = item:FindFirstChild("SettingsModule")
+        if settingsModulePath and settingsModulePath:IsA("ModuleScript") then
+            local success, settingsModule = pcall(require, settingsModulePath)
+            if success and settingsModule then
+                -- Modify the fire rate if it exists
+                if settingsModule.FireRate then
+                    settingsModule.FireRate = rate
+                    print(item.Name .. " fire rate set to: " .. rate)
+                else
+                    print("No FireRate property found in: " .. item.Name)
+                end
+            else
+                print("Failed to require SettingsModule for: " .. item.Name)
+            end
+        end
+    end
+end
+
+-- Adding a toggle to enable/disable rapid fire
+LeftGroupBox:AddToggle('rapidfire', { 
+    Text = 'Rapid Fire', 
+    Default = false,
+    Callback = function(state)
+        if state then
+            -- Enable rapid fire
+            setFireRateForAllItems(0.05)  -- Set to desired rapid fire rate
+            print("Rapid Fire enabled.")
+        else
+            -- Disable rapid fire, reset to original fire rate
+            setFireRateForAllItems(originalFireRate)  -- Reset to original fire rate
+            print("Rapid Fire disabled.")
+        end
+    end 
+})
+LeftGroupBox:AddLabel('You Have To Requip gun to enable rapid fire.', true)
+
+-- Adding a toggle to enable/disable faster aiming
+Esptab3:AddToggle('fasteraim', { 
+    Text = 'Faster Aim', 
+    Default = false,
+    Callback = function(state)
+        -- Iterate through each weapon in the inventory
+        local inventory = game.ReplicatedStorage.Players.BroadMostly1519.Inventory:GetChildren()
+        
+        for _, weapon in ipairs(inventory) do
+            local settingsModule = require(weapon:WaitForChild("SettingsModule", 5)) -- Wait for the SettingsModule
+            
+            if settingsModule then
+                if state then
+                    -- Modify Aim In and Out Speeds
+                    settingsModule.AimInSpeed = 0.1  -- Faster aim in
+                    settingsModule.AimOutSpeed = 0.1  -- Faster aim out
+                else
+                    -- Reset to original speeds if necessary
+                    settingsModule.AimInSpeed = 0.4  -- Reset to default aim in speed
+                    settingsModule.AimOutSpeed = 0.4  -- Reset to default aim out speed
+                end
+
+                -- Print to verify
+                print("New Aim In Speed for " .. weapon.Name .. ": ", settingsModule.AimInSpeed)
+                print("New Aim Out Speed for " .. weapon.Name .. ": ", settingsModule.AimOutSpeed)
+            else
+                print("SettingsModule not found for " .. weapon.Name)
+            end
+        end
+    end 
+})
+
+
+
+
+
 LeftGroupBox:AddButton('Naked Whisper', function()
 
 game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
