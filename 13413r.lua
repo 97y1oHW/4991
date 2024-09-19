@@ -1378,8 +1378,8 @@ LeftGroupBox:AddToggle('rapidfire', {
 LeftGroupBox:AddLabel('You Have To Requip gun to enable rapid fire.', true)
 
 -- Adding a toggle to enable/disable faster aiming
-Esptab3:AddToggle('fasteraim', { 
-    Text = 'Faster Aim', 
+LeftGroupBox:AddToggle('fasteraim', { 
+    Text = 'Instant Aim', 
     Default = false,
     Callback = function(state)
         -- Iterate through each weapon in the inventory
