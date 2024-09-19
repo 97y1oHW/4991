@@ -1375,7 +1375,7 @@ LeftGroupBox:AddToggle('rapidfire', {
         end
     end 
 })
-LeftGroupBox:AddLabel('You Have To Requip gun to enable rapid fire.', true)
+LeftGroupBox:AddLabel('You Have To Equip your gun again to enable rapid fire.', true)
 
 -- Adding a toggle to enable/disable faster aiming
 LeftGroupBox:AddToggle('fasteraim', { 
