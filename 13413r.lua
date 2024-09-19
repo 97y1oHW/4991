@@ -2107,6 +2107,20 @@ LeftGroupBox:AddToggle('EspSwitch', {
     end
 })
 
+LeftGroupBox:AddToggle('removevisors', {
+    Text = 'Remove Visors',
+    Default = false,
+    Callback = function(state)  -- Renamed 'first' to 'state' for clarity
+        if state then
+            game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = false
+        else
+            game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = true
+        end
+    end
+})
+
+
+
 LeftGroupBox:AddToggle('boxswitch', {
     Text = 'box esp',
     Default = false,
