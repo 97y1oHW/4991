@@ -239,9 +239,9 @@ elseif executor == "Wave" or executor == "Wave 5.0" then
     print("This script is running in Wave Executor (Called Loadstring!).")
     -- New example script written by wally
 -- You can suggest changes with a pull request or something
-
+local repo2 = "http://31.210.171.229:3000/new/"
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
-
+_esplib = loadstring(game:HttpGet(repo2 .. 'newlib/old/esp'))()
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
@@ -268,12 +268,14 @@ local Window = Library:CreateWindow({
 local Tabs = {
     -- Creates a new tab titled Main
     Main = Window:AddTab('combat'),
+    movetab3 = Window:AddTab('Esp'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
 -- Groupbox and Tabbox inherit the same functions
 -- except Tabboxes you have to call the functions on a tab (Tabbox:AddTab(name))
 local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Groupbox')
+local Esptab3 = Tabs.movetab3:AddLeftGroupbox('Movement')
 
 -- We can also get our Main tab via the following code:
 -- local LeftGroupBox = Window.Tabs.Main:AddLeftGroupbox('Groupbox')
@@ -762,6 +764,1298 @@ local function DrawESP(plr)
     end
 end
 
+local jesusEnabled = false
+local jesusFolder = workspace:FindFirstChild("JesusFolder") or Instance.new("Folder", workspace)
+jesusFolder.Name = "JesusFolder"
+
+local function onJesusToggle(enabled)
+    jesusEnabled = enabled
+
+    -- If disabled, clear the platforms and stop the function
+    if not jesusEnabled then
+        for _, v in pairs(jesusFolder:GetChildren()) do
+            v:Destroy()
+        end
+        return
+    end
+
+    -- Continuously check and create platforms if enabled
+    while jesusEnabled do
+        task.wait(0.1)
+
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+
+        if not character then
+            continue
+        end
+
+        local head = character:FindFirstChild("Head")
+        if not head then continue end
+
+        local rayOrigin = head.Position + Vector3.new(0, 150, 0) + workspace.CurrentCamera.CFrame.LookVector * 5
+        local rayDirection = Vector3.new(0, -300, 0)
+        local rayParams = RaycastParams.new()
+        rayParams.FilterType = Enum.RaycastFilterType.Exclude
+        rayParams.FilterDescendantsInstances = {character}
+
+        local rayResult = workspace:Raycast(rayOrigin, rayDirection, rayParams)
+
+        if rayResult and rayResult.Material == Enum.Material.Water then
+            local platform = Instance.new("Part")
+            platform.Size = Vector3.new(500, 1, 500)
+            platform.Anchored = true
+            platform.CanCollide = true
+            platform.Position = rayResult.Position + Vector3.new(0, 0.3, 0) -- Slightly above water surface
+            platform.Material = Enum.Material.ForceField
+            platform.Parent = jesusFolder
+        end
+    end
+end
+
+
+local Utility = {
+    Drawings = { };
+    Objects = { };
+    BindToRenders = { };
+    Fonts = { }
+}
+
+local autoFireEnabled = false -- Initially disabled
+local plr = plrs.LocalPlayer
+local mouse = plr:GetMouse()
+local camera = game:GetService("Workspace").CurrentCamera
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local TweenService = game:GetService("TweenService")
+
+local tracersEnabled = false -- Initial state of tracers
+local varsglobal = {
+    visuals = {
+        font = 1,
+        gradientenabled = false,
+        gradientcolor1 = Color3.fromRGB(90, 90, 90),
+        gradientcolor2 = Color3.fromRGB(150, 150, 150),
+        oldgradient1 = Lighting.Ambient,
+        oldgradient2 = Lighting.OutdoorAmbient,
+        FogEnabled = false,
+        oldFogStart = Lighting.FogStart,
+        oldFogEnd = Lighting.FogEnd,
+        oldFogColor = Lighting.FogColor,
+        FogStart = 0,
+        FogEnd = 0,
+        FogColor = Color3.fromRGB(255, 255, 255),
+        oldTime = Lighting.ClockTime,
+        Time = 14,
+        FovChanger = false,
+        FovAdd = 0,
+        OldFov = workspace.CurrentCamera.FieldOfView,
+        ZoomAmt = 0,
+        FovZoom = false,
+    },
+    cursor = {
+        Enabled = false,
+        CustomPos = false,
+        Position = Vector2.new(0, 0),
+        Speed = 5,
+        Radius = 25,
+        Color = Color3.fromRGB(180, 50, 255),
+        Thickness = 1.7,
+        Outline = false,
+        Resize = false,
+        Dot = false,
+        Gap = 10,
+        TheGap = false,
+        Text = {
+            Logo = false,
+            LogoColor = Color3.new(1, 1, 1),
+            Name = false,
+            NameColor = Color3.new(1, 1, 1),
+            LogoFadingOffset = 0,
+        }
+    },
+    thirdperson = false,
+    thirdpdist = 0,
+    speenx = 0,
+    speeny = 0,
+    speenz = 0,
+    tpwalkspeed = 0,
+    spin = false,
+    spinspeed = 0,
+    infJumpDebounce = false,
+    spamsettings = {
+        speed = 0,
+        num = 1,
+        enabled = false,
+        emojis = false,
+        symb = false,
+        symbols = { "$", "\"", "/", "%", "&", "_", "^", ">", "[", "]", ":", "™" },
+        real = {
+            [1] = {
+                "\240\159\152\142", --"😎",
+                "\240\159\152\136", --"😈",
+                "\240\159\164\145", --"🤑",
+                "\240\159\152\173", --"😭",
+                "\240\159\164\175", --"🤯",
+                "\240\159\165\182", --"🥶",
+                "\240\159\152\177", --"😱",
+                "\240\159\152\161", --"😡",
+                "\240\159\152\130", --"😂",
+                "\240\159\166\134", --"🦆",
+                "\226\153\191"      --"♿"
+            },
+            [2] = {
+                "be a doge",
+                "Dont Use Cheats FR!",
+                "🤡",
+                "Cheating In This Lego Game?",
+                "skibidi better than gen z",
+		"OMG SO EASY!!!11!",
+		"Hmm Bypass Cheat??!",
+		"Cmonn so badd",
+		"why not?1!1",
+		"skibidi sigma rizzz",
+		"BBC?? Trash",
+		"Get A Life Kiddos!1",
+		"Hm Trash Loot",
+		"I am a sigma and you're not",
+                "erm.. what the sigma",
+                "no free scripts? :(",
+            }
+        },
+        customword = "",
+        customwordenabled = false,
+        chatchannelpatch = "Global",
+        chatlenghtpatch = 100,
+    }
+}
+
+--- Lighting shits world
+local Lighting = game:GetService("Lighting")
+local RunService = game:GetService("RunService")
+local Terrain = workspace:FindFirstChildOfClass("Terrain")
+
+local isFiring = false
+local UserInputService = game:GetService("UserInputService")
+
+-- Function to toggle tracers on and off
+function Utility:ToggleTracers(enable)
+    tracersEnabled = enable
+end
+
+-- Function to check for ViewModel in the Camera
+function Utility:HasViewModel()
+    return workspace:FindFirstChild("Camera") and workspace.Camera:FindFirstChild("ViewModel") ~= nil
+end
+
+-- Function to create bullet tracers with gradual transparency fading and decals on all sides
+function Utility:CreateBullets(Position, From)
+    if not tracersEnabled or not self:HasViewModel() then
+        return -- Do nothing if tracers are disabled or there's no ViewModel
+    end
+
+    local direction = (Position - From).unit -- Calculate the direction vector
+
+    local BulletTracers = Instance.new("Part")
+    BulletTracers.Anchored = true
+    BulletTracers.CanCollide = false
+    BulletTracers.Material = Enum.Material.ForceField
+    BulletTracers.Color = Color3.fromRGB(119, 120, 255)
+    BulletTracers.Size = Vector3.new(0.1, 0.1, (From - Position).magnitude)
+    BulletTracers.CFrame = CFrame.new(From, Position) * CFrame.new(0, 0, -BulletTracers.Size.Z / 2)
+    BulletTracers.Name = "BulletTracers"
+    BulletTracers.Transparency = 0
+    BulletTracers.Parent = game.Workspace.NoCollision
+
+    -- Function to add decals to all sides of the part
+    local function addDecal(face)
+        local decal = Instance.new("Decal")
+        decal.Texture = "rbxassetid://7151778311"
+        decal.Face = face
+        decal.Transparency = 0
+        decal.Parent = BulletTracers
+    end
+
+    -- Add decals to each face of the part
+    addDecal(Enum.NormalId.Front)
+    addDecal(Enum.NormalId.Back)
+    addDecal(Enum.NormalId.Top)
+    addDecal(Enum.NormalId.Bottom)
+    addDecal(Enum.NormalId.Left)
+    addDecal(Enum.NormalId.Right)
+
+    -- Gradually fade the tracer out, including the decals
+    for i = 0, 1, 0.05 do
+        BulletTracers.Transparency = i
+        for _, decal in ipairs(BulletTracers:GetChildren()) do
+            if decal:IsA("Decal") then
+                decal.Transparency = i
+            end
+        end
+        wait(0.1) -- Adjust for faster or slower fading
+    end
+    
+    BulletTracers:Destroy()
+end
+
+-- Function to fire the weapon
+function FireWeapon()
+    local gunPosition = game.Players.LocalPlayer.Character.Head.Position -- Replace with the actual gun position
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    local hitPosition = mouse.Hit.p -- Get the mouse hit position
+
+    -- Call the CreateBullets function
+    Utility:CreateBullets(hitPosition, gunPosition)
+end
+
+-- Detect when the mouse button is pressed
+UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isFiring = true
+
+        -- Continuously fire while holding down the button
+        spawn(function()
+            while isFiring do
+                FireWeapon()
+                wait(0.1) -- Adjust this delay to control the firing rate
+            end
+        end)
+    end
+end)
+
+-- Detect when the mouse button is released
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isFiring = false
+    end
+end)
+
+-- Add a toggle for the tracers in the UI
+LeftGroupBox:AddToggle('tracers', {
+    Text = 'Tracers',
+    Tooltip = 'Toggle tracers on or off',
+    Default = tracersEnabled, -- Initialize with the current state
+    Callback = function(enabled)
+        Utility:ToggleTracers(enabled) -- Enable or disable based on toggle
+    end
+})
+
+
+
+-- Toggle implementation
+LeftGroupBox:AddToggle('jesus', {
+    Text = 'Walk On Water',
+    Tooltip = 'Lets You Walk On Water',
+    Default = false,
+
+    Callback = function(value)
+        onJesusToggle(value)
+    end
+})
+
+
+LeftGroupBox:AddButton('Remove Scope From Gun', function()
+
+
+game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):Destroy()
+
+ end)
+
+LeftGroupBox:AddButton('Disable OKP7 SCOPE GUI', function()
+
+
+game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):FindFirstChild("OKP7"):FindFirstChild("Reticle"):FindFirstChild("ScopeGui"):Destroy()
+
+ end)
+
+LeftGroupBox:AddButton('Remove Gloves From Viewmodel', function()
+
+
+game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("CombatGloves"):Destroy()	
+
+ end)
+ local isCheckingVisibility = false
+local textLabel = nil
+local connection = nil
+
+-- Function to create the visibility text label
+local function createVisibilityText()
+    if not textLabel then
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+        textLabel = Instance.new("TextLabel")
+        textLabel.Parent = screenGui
+        textLabel.Text = ""
+        textLabel.TextColor3 = Color3.new(0, 1, 0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.Position = UDim2.new(0.5, 0, 0.9, 0) -- Positioning slightly down the middle
+        textLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+        textLabel.Font = Enum.Font.SourceSansBold
+        textLabel.TextSize = 24 -- Medium-sized text
+    end
+end
+
+-- Function to check if the player is visible
+local function isPlayerVisible(target)
+    if target and target.Parent:FindFirstChild("HumanoidRootPart") then
+        local camera = workspace.CurrentCamera
+        local humanoidRootPart = target.Parent.HumanoidRootPart
+        local ray = Ray.new(camera.CFrame.Position, (humanoidRootPart.Position - camera.CFrame.Position).unit * 5000)
+        local part, position = workspace:FindPartOnRayWithIgnoreList(ray, {camera, game.Players.LocalPlayer.Character})
+
+        if part and part:IsDescendantOf(target.Parent) then
+            return true
+        end
+    end
+    return false
+end
+
+-- Function to toggle visibility checking
+local function toggleVisibilityCheck()
+    isCheckingVisibility = not isCheckingVisibility
+
+    if isCheckingVisibility then
+        createVisibilityText()
+
+        connection = game:GetService("RunService").RenderStepped:Connect(function()
+            local target = game.Players.LocalPlayer:GetMouse().Target
+            if isPlayerVisible(target) then
+                textLabel.Text = "Player Visible"
+            else
+                textLabel.Text = ""
+            end
+        end)
+    else
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+        if textLabel then
+            textLabel.Text = ""
+        end
+    end
+end
+local isEnabled883 = false  -- Global variable to track whether the script is enabled or disabled
+local LC = game.Players.LocalPlayer
+
+local function toggleBunnyHop()
+    isEnabled883 = not isEnabled883
+    print("Bunny Hop is now", isEnabled883 and "enabled" or "disabled")
+end
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if isEnabled883 then
+        LC.Character.Humanoid:SetAttribute("JumpCooldown", 0)
+    end
+end)
+
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+
+-- Global variables
+local speedMultiplier = 1 -- Default speed multiplier
+local viewModel = nil
+local animator = nil
+local monitoring = true -- To control the loop
+
+-- Function to change the speed of all currently playing animations
+local function changeAnimationSpeed(multiplier)
+    if animator then
+        for _, animTrack in pairs(animator:GetPlayingAnimationTracks()) do
+            animTrack:AdjustSpeed(multiplier)
+        end
+    end
+end
+
+-- Function to set up the Animator
+local function setupAnimator()
+    viewModel = Workspace:FindFirstChild("Camera") and Workspace.Camera:FindFirstChild("ViewModel")
+    if viewModel then
+        local humanoid = viewModel:FindFirstChild("Humanoid")
+        if humanoid then
+            animator = humanoid:FindFirstChildOfClass("Animator")
+            if animator then
+                -- Apply speed to currently playing animations
+                changeAnimationSpeed(speedMultiplier)
+                
+                -- Adjust speed for any new animations that start playing
+                animator.AnimationPlayed:Connect(function(animTrack)
+                    animTrack:AdjustSpeed(speedMultiplier)
+                end)
+                
+                return true
+            else
+                warn("Animator not found in Humanoid")
+            end
+        else
+            warn("Humanoid not found in ViewModel")
+        end
+    else
+        warn("ViewModel or Camera not found in Workspace")
+    end
+    return false
+end
+
+-- Function to continuously check for ViewModel and update Animator
+local function monitorViewModel()
+    while monitoring do
+        local hasViewModel = setupAnimator()
+
+        if not hasViewModel then
+            animator = nil
+            viewModel = nil
+        end
+
+        wait(1) -- Check every second, adjust as needed
+    end
+end
+
+-- Function to toggle animation speed adjustment
+local function toggleAnimationSpeed(enable)
+    if enable and animator then
+        -- Apply the speed multiplier to currently playing animations
+        changeAnimationSpeed(speedMultiplier)
+    else
+        -- Optional: You might want to reset speed or handle disabling here if needed
+        print("Animation speed adjustment disabled.")
+    end
+end
+
+-- Slider or value control for speedMultiplier
+local function setSpeedMultiplier(value)
+    speedMultiplier = value
+    toggleAnimationSpeed(true) -- Reapply speed with new multiplier
+end
+
+-- Adding Toggle to aimtab
+LeftGroupBox:AddToggle('InstantReload', {
+    Text = 'Instant Reload',
+    Tooltip = 'Instant Reload',
+    Default = false,
+    
+    Callback = function(isToggled)
+        if isToggled then
+            -- Enable instant reload and set high speed
+            setSpeedMultiplier(100)
+        else
+            -- Disable instant reload and reset to normal speed
+            setSpeedMultiplier(1)
+        end
+    end
+})
+
+-- Start monitoring the ViewModel in a coroutine to avoid blocking the main thread
+coroutine.wrap(monitorViewModel)()
+
+local function nostalgiaModePd(enabled)
+    if enabled then
+        game.Lighting.Brightness = 14
+        game.Lighting.GlobalShadows = false
+        game.Lighting.Technology = Enum.Technology.Compatibility
+    else
+        game.Lighting.Brightness = 1
+        game.Lighting.GlobalShadows = true
+        game.Lighting.Technology = Enum.Technology.Future
+    end
+end
+
+LeftGroupBox:AddToggle('NostalgiaMode', {
+    Text = 'Old Times Mode',
+    Tooltip = 'Old Times Mode',
+    Default = false,
+
+    Callback = function(enabled)
+        if enabled then
+            nostalgiaModePd(true)
+        else
+            nostalgiaModePd(false)
+        end
+    end
+})
+
+local function printFolderNames(parent)
+    for _, child in ipairs(parent:GetChildren()) do
+        if child:IsA("Folder") then
+            print(child.Name)
+        end
+    end
+end
+
+-- Example usage
+local directory = game.ReplicatedStorage.Clans -- or any other parent instance
+
+LeftGroupBox:AddButton('Nigga Whisper', function()
+
+    -- Destroy clothing items
+    game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
+    game.ReplicatedStorage.AiPresets.WhisperAI.Shirt:Destroy()
+    
+    -- Retrieve the BodyColors instance
+    local bodyColors = game.ReplicatedStorage.AiPresets.WhisperAI["Body Colors"]
+    
+    -- Function to change body colors to dark
+    local function setDarkColors()
+        -- Check if BodyColors instance exists
+        if bodyColors and bodyColors:IsA("BodyColors") then
+            -- Set all color properties to dark color
+            bodyColors.HeadColor = BrickColor.new("Black")
+            bodyColors.LeftArmColor = BrickColor.new("Black")
+            bodyColors.LeftLegColor = BrickColor.new("Black")
+            bodyColors.RightArmColor = BrickColor.new("Black")
+            bodyColors.RightLegColor = BrickColor.new("Black")
+            bodyColors.TorsoColor = BrickColor.new("Black")
+        else
+            warn("BodyColors instance not found or invalid.")
+        end
+    end
+    
+    -- Apply the dark colors
+    setDarkColors()
+
+end)
+
+LeftGroupBox:AddButton('Destroy Look At (Whisper)', function()
+
+game.ReplicatedStorage.AiPresets.WhisperAI.LookAt:Destroy()
+
+
+ end)
+
+LeftGroupBox:AddButton('Naked Whisper', function()
+
+game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
+game.ReplicatedStorage.AiPresets.WhisperAI.Shirt:Destroy()
+
+ end)
+
+LeftGroupBox:AddButton('Print All Clan Names', function()
+
+printFolderNames(directory)
+
+ end)
+
+LeftGroupBox:AddButton('Destroy Drown Remote', function()
+
+game.StarterPlayer.StarterCharacterScripts.Health.Drowning:Destroy()
+
+ end)
+
+LeftGroupBox:AddButton('Destroy Buildables', function()
+
+game.ReplicatedStorage.Buildable:Destroy()
+
+ end)
+
+LeftGroupBox:AddToggle('Bunnyhop', {
+    Text = 'No Jump Cooldown',
+    Tooltip = 'Bunny Hop',
+    Default = false,
+
+    Callback = function(first)
+        toggleBunnyHop()
+    end
+})
+
+LeftGroupBox:AddToggle('VisibleText', {
+    Text = 'Visible Text',
+    Tooltip = 'Tells you if the user you aim is visible or not',
+    Default = false,
+
+    Callback = function(first)
+        toggleVisibilityCheck()
+    end
+})
+
+local function norecoil()
+
+for i,v in pairs(ammo:GetChildren()) do
+     v:SetAttribute("RecoilStrength", "0")
+end
+
+end
+
+LeftGroupBox:AddButton('No Gun Weight', function()
+
+local playerName = game.Players.LocalPlayer.Name
+
+-- Access the player's inventory based on their actual name
+local playerInventory = game.ReplicatedStorage.Players[playerName].Inventory
+
+
+
+-- Loop through all items in the inventory and set the "MovementModifier" attribute
+for _, item in pairs(playerInventory:GetChildren()) do
+    if item:FindFirstChild("ItemProperties") and item.ItemProperties:FindFirstChild("Tool") then
+        item.ItemProperties.Tool:SetAttribute("MovementModifer", "0")
+    end
+end
+
+
+ end)
+
+LeftGroupBox:AddSlider('hydration', {
+    Text = 'Hydration Slider',
+    Default = 3700,
+    Min = 0,
+    Max = 3700,
+    Rounding = 3,
+    Compact = true,
+}):OnChanged(function(state)
+    local playerName = game.Players.LocalPlayer.Name
+
+
+local playerInventory = game.ReplicatedStorage.Players[playerName].Status.GameplayVariables
+
+
+playerInventory.Hydration:SetAttribute("Value", state)
+end)
+
+
+LeftGroupBox:AddSlider('radiationslider', {
+    Text = 'Radiation Slider',
+    Default = 0,
+    Min = 0,
+    Max = 800,
+    Rounding = 3,
+    Compact = true,
+}):OnChanged(function(state)
+    local playerName = game.Players.LocalPlayer.Name
+
+
+local playerInventory = game.ReplicatedStorage.Players[playerName].Status.GameplayVariables
+
+
+playerInventory.Radiation:SetAttribute("Value", state)
+end)
+
+
+LeftGroupBox:AddSlider('legfracture', {
+    Text = 'Leg Fracture Slider',
+    Default = 0,
+    Min = 0,
+    Max = 30,
+    Rounding = 1,
+    Compact = true,
+}):OnChanged(function(state)
+    local playerName = game.Players.LocalPlayer.Name
+
+
+local playerInventory = game.ReplicatedStorage.Players[playerName].Status.GameplayVariables
+
+
+playerInventory.LegFracture:SetAttribute("Value", state)
+end)
+
+
+LeftGroupBox:AddSlider('Bleeding', {
+    Text = 'Bleeding Slider',
+    Default = 0,
+    Min = 0,
+    Max = 70,
+    Rounding = 1,
+    Compact = true,
+}):OnChanged(function(state)
+    local playerName = game.Players.LocalPlayer.Name
+
+
+local playerInventory = game.ReplicatedStorage.Players[playerName].Status.GameplayVariables
+
+
+playerInventory.Bleeding:SetAttribute("Value", state)
+end)
+
+
+LeftGroupBox:AddSlider('hunger', {
+    Text = 'Hunger Slider',
+    Default = 2000,
+    Min = 0,
+    Max = 2000,
+    Rounding = 3,
+    Compact = true,
+}):OnChanged(function(state)
+    local playerName = game.Players.LocalPlayer.Name
+
+
+local playerInventory = game.ReplicatedStorage.Players[playerName].Status.GameplayVariables
+
+
+playerInventory.Hunger:SetAttribute("Value", state)
+end)
+
+LeftGroupBox:AddToggle('nograss', {
+    Text = 'No Grass',
+    Default = false,
+    Tooltip = 'Removes Grasses',
+    Callback = function(first)
+        sethiddenproperty(game:GetService("Workspace").Terrain, "Decoration", not first)
+    end
+})
+
+
+
+-- Ensure that `players` is defined correctly and `skins` is accessible.
+local Players = game:GetService("Players")
+local LC = Players.LocalPlayer  -- Correctly define `LC` as the LocalPlayer
+local rp = game:GetService("ReplicatedStorage")
+local skins = {
+	["762x25MAG"] = "Nutcracker",
+	["762x25Rnd71Mag"] = "Arctic",
+	["762x25TTMAG"] = "Watergun",
+	["762x39MAG"] = "DeltaAnime",
+	["762x39Rnd75Mag"] = "Anton",
+	["762x54Rnd10Mag"] = "Permafrost",
+	["9x18vzMag"] = "GiftWrap",
+	["9x19MP443MAG"] = "JollyRoger",
+	["9x19MP5MAG"] = "Permafrost",
+	["9x39Mag"] = "Shoreline",
+	AKMN = "DeltaAnime",
+	FrontAKMN = "DeltaAnime",
+	HandleRK3AKMN = "DeltaAnime",
+	PolymerStockAKMN = "DeltaAnime",
+	HandleAKMN = "Valentine",
+    Tortilla = "Blackout",
+	DV2 = "Cutlass",
+	TacticalFrontAKMN = "AnodizedRed",
+	SvdFront = "Permafrost",
+	MuzzleBrakeAKM = "AnodizedRed",
+	CombatGloves = "Anarchy",
+	CamoShirt = "Anarchy",
+	HandWraps = "SantaCommando",
+	WastelandShirt = "SantaCommando",
+	M4 = "Devil",
+	Lighter = "EarlyAccess",
+	GorkaShirt = "Wetsuit",
+	GhillieTorso = "Arctic",
+	AsVal = "Shoreline",
+	F1 = "Pineapple",
+	Makarov = "Serpant",
+	Mosin = "SkullHunter",
+	PPSH41 = "Nutcracker",
+	SVD = "Permafrost",
+	Saiga12 = "Valentine",
+	TT33 = "Watergun",
+	ZSh = "Woodland",
+	MP5SD  = "Permafrost",
+	MP443 = "Whiteout",
+	IZh81 = "Watergun",
+}
+local player = game.Players.LocalPlayer
+local runSpeedThreshold = 16 -- Trigger teleport only when running faster than normal walk speed
+local speed = 0.5 -- Initial teleport speed for running
+local isRunning = false
+local cframeSpeedActive = false -- Toggle state for CFrameSpeed
+local humanoid
+
+-- Function to handle teleport movement while running
+local function teleportWhileRunning()
+    while isRunning and cframeSpeedActive do -- Check if toggle is active
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -speed)
+        end
+        task.wait(0.03) -- Smoother teleportation
+    end
+end
+
+-- Check when the player is running (speed greater than walk speed)
+local function onRunning(walkSpeed)
+    if walkSpeed > runSpeedThreshold and cframeSpeedActive then
+        if not isRunning then
+            isRunning = true
+            teleportWhileRunning() -- Start teleport when running
+        end
+    else
+        isRunning = false -- Stop teleporting when running stops or player walks
+    end
+end
+
+-- Function to initialize the humanoid
+local function initializeHumanoid(character)
+    humanoid = character:WaitForChild("Humanoid")
+    humanoid.Running:Connect(onRunning)
+end
+
+-- Initialize with the current character
+if player.Character then
+    initializeHumanoid(player.Character)
+end
+
+-- Listen for player respawn
+player.CharacterAdded:Connect(function(newCharacter)
+    initializeHumanoid(newCharacter)
+end)
+
+-- Adding a slider to control the teleportation speed
+Esptab3:AddSlider('CFrameSpeed', {
+    Text = 'Speed Slider',
+    Default = 0.5, -- Initial default value for the slider
+    Min = 0,
+    Max = 2, -- Maximum speed value
+    Rounding = 3, -- Set rounding precision
+    Compact = false,
+}):OnChanged(function(State)
+    -- Update the teleportation speed with the slider's value
+    speed = State
+end)
+
+-- Adding a toggle to enable/disable CFrameSpeed
+Esptab3:AddToggle('cframespeed', {
+    Text = 'CFrameSpeed Toggle',
+    Default = false,
+    Callback = function(state)
+        cframeSpeedActive = state
+        if not state then
+            isRunning = false -- Disable running when toggle is off
+        elseif humanoid and humanoid.MoveDirection.Magnitude > 0 then
+            isRunning = true
+            teleportWhileRunning() -- Start teleporting if moving
+        end
+    end
+})
+
+
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local spiderActive = false -- Toggle state for spider climbing
+local spiderSpeed = 1 -- Initial climbing speed
+
+-- Function to handle wall climbing
+local function climbWalls()
+    while spiderActive do
+        local ray = Ray.new(character.HumanoidRootPart.Position, Vector3.new(0, -1, 0)) -- Ray to check for ground
+        local hit, position = workspace:FindPartOnRay(ray, character)
+
+        if not hit then -- If not on ground
+            local climbDirection = Vector3.new(0, 1, 0) -- Climb upwards
+            character.HumanoidRootPart.Velocity = climbDirection * spiderSpeed
+        else
+            character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0) -- Stop climbing if on the ground
+        end
+
+        task.wait(0.03) -- Adjust for smoother climbing
+    end
+end
+
+-- Adding a toggle to enable/disable spider climbing
+Esptab3:AddToggle('spiderToggle', {
+    Text = 'Spider Climb',
+    Default = false,
+    Callback = function(state)
+        spiderActive = state
+        if spiderActive then
+            climbWalls() -- Start climbing when toggled on
+        end
+    end
+})
+local player = game.Players.LocalPlayer
+local camera = workspace.CurrentCamera
+local thirdPersonDistance = 5 -- Distance for third-person view
+local thirdPersonActive = false -- Toggle state for third-person
+
+-- Function to update the camera position
+local function updateCamera()
+    local character = player.Character
+    if thirdPersonActive and character and character:FindFirstChild("HumanoidRootPart") then
+        local rootPart = character.HumanoidRootPart
+        local cameraOffset = rootPart.CFrame.LookVector * -thirdPersonDistance + Vector3.new(0, 2, 0) -- Adjust Y to raise the camera
+        camera.CFrame = CFrame.new(rootPart.Position + cameraOffset, rootPart.Position)
+    end
+end
+
+-- Hook to update the camera every frame
+game:GetService("RunService").RenderStepped:Connect(updateCamera)
+
+-- Toggle to enable/disable third-person camera
+
+
+local lighting = game:GetService("Lighting")
+local fullBrightActive = false -- Track toggle state
+
+local function enableFullBright()
+    lighting.Ambient = Color3.fromRGB(255, 255, 255)
+    lighting.Brightness = 1
+    lighting.FogEnd = 1e10
+
+    for _, v in pairs(lighting:GetDescendants()) do
+        if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("SunRaysEffect") then
+            v.Enabled = false
+        end
+    end
+
+    -- Reset lighting settings on change
+    lighting.Changed:Connect(function()
+        lighting.Ambient = Color3.fromRGB(255, 255, 255)
+        lighting.Brightness = 1
+        lighting.FogEnd = 1e10
+    end)
+
+    -- Add point light to character
+    local player = game:GetService("Players").LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    while wait() do
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            if not character.HumanoidRootPart:FindFirstChildWhichIsA("PointLight") then
+                local headlight = Instance.new("PointLight", character.HumanoidRootPart)
+                headlight.Brightness = 1
+                headlight.Range = 60
+            end
+        end
+        wait(0.5) -- Check every half second
+    end
+end
+
+
+
+local lighting = game:GetService("Lighting")
+local timeValue = 12 -- Default time
+
+-- Function to change the time of day
+local function changeTimeOfDay(value)
+    lighting.ClockTime = value
+end
+
+-- Slider to set time of day
+local lighting = game:GetService("Lighting")
+local timeValue = 12 -- Default time
+
+-- Function to change the time of day
+local function changeTimeOfDay(value)
+    lighting.ClockTime = value
+end
+
+-- Slider to set time of day
+Esptab3:AddSlider('timeSlider', {
+    Text = 'Set Time of Day',
+    Default = 12, -- Default to noon
+    Min = 0, -- Minimum time (midnight)
+    Max = 24, -- Maximum time (next midnight)
+    Rounding = 1, -- Round to 1 decimal place
+    Compact = false,
+}):OnChanged(function(value)
+    timeValue = value -- Update timeValue with the slider
+end)
+
+-- Coroutine to continuously update the time based on the slider value
+coroutine.wrap(function()
+    while true do
+        changeTimeOfDay(timeValue) -- Change the time based on the current slider value
+        wait(0) -- Update every second for smoother transitions
+    end
+end)()
+
+
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local head = character:WaitForChild("Head")
+
+local billboards = {} -- Table to keep track of Billboard GUIs
+
+LeftGroupBox:AddToggle('exitesppdlt', {
+    Text = 'Exit ESP',
+    Tooltip = 'Shows Exits',
+    Default = false,
+
+    Callback = function(first)
+        if first then
+            -- Function to create a Billboard GUI for each exit
+            local function createBillboardGui(exit)
+                local billboardGui = Instance.new("BillboardGui")
+                billboardGui.Adornee = exit
+                billboardGui.Size = UDim2.new(0, 100, 0, 50)
+                billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+                billboardGui.AlwaysOnTop = true -- Always on top
+
+                local textLabel = Instance.new("TextLabel", billboardGui)
+                textLabel.Size = UDim2.new(1, 0, 1, 0)
+                textLabel.BackgroundTransparency = 1
+                textLabel.Text = "Exit"
+                textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red text
+                textLabel.TextScaled = true
+                textLabel.Font = Enum.Font.GothamBold -- Change to a better font
+                textLabel.TextStrokeTransparency = 0.5 -- Add stroke for better visibility
+
+                -- Update distance and size every frame
+                local function updateDisplay()
+                    while billboardGui.Parent do
+                        local distance = (exit.Position - head.Position).Magnitude
+                        textLabel.Text = "Exit\nDistance: " .. math.floor(distance) .. " studs"
+
+                        -- Adjust size based on distance (for visibility)
+                        local sizeFactor = math.clamp(200 / distance, 0.5, 2) -- Adjust as needed
+                        billboardGui.Size = UDim2.new(0, 100 * sizeFactor, 0, 50 * sizeFactor)
+
+                        wait(0.1) -- Update every 0.1 seconds
+                    end
+                end
+
+                coroutine.wrap(updateDisplay)() -- Start updating display
+                billboardGui.Parent = workspace -- Parent to workspace
+
+                -- Store the Billboard GUI in the table
+                table.insert(billboards, billboardGui)
+            end
+
+            -- Create Billboard GUIs for existing exits
+            for _, exit in next, workspace.NoCollision.ExitLocations:GetChildren() do
+                createBillboardGui(exit)
+            end
+
+            -- Listen for new exits added
+            workspace.NoCollision.ExitLocations.ChildAdded:Connect(function(exit)
+                createBillboardGui(exit)
+            end)
+        else
+            -- Remove all Billboard GUIs when toggled off
+            for _, billboard in ipairs(billboards) do
+                billboard:Destroy()
+            end
+            billboards = {} -- Clear the table
+        end
+    end
+})
+
+
+
+Esptab3:AddButton('no fog', function()
+    if Lighting:FindFirstChildOfClass("Atmosphere") then
+        Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
+ end
+ end)
+
+Esptab3:AddButton("remove foliage", function()
+    for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
+        if v.ClassName == "MeshPart" and v:FindFirstChildOfClass("SurfaceAppearance") then
+            v:Destroy()
+        end
+    end
+    workspace.SpawnerZones.DescendantAdded:Connect(function(inst)
+        if inst.ClassName == "MeshPart" and inst:FindFirstChildOfClass("SurfaceAppearance") then
+            inst:Destroy()
+        end
+    end)
+end)
+
+local lighting = game:GetService("Lighting")
+local fullBrightActive = false -- Track toggle state
+local oldSettings = {} -- Table to store old lighting settings
+
+local function enableFullBright()
+    -- Store old settings
+    oldSettings.Ambient = lighting.Ambient
+    oldSettings.Brightness = lighting.Brightness
+    oldSettings.FogEnd = lighting.FogEnd
+
+    lighting.Ambient = Color3.fromRGB(255, 255, 255)
+    lighting.Brightness = 1
+    lighting.FogEnd = 1e10
+
+    for _, v in pairs(lighting:GetDescendants()) do
+        if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("SunRaysEffect") then
+            v.Enabled = false
+        end
+    end
+
+    -- Reset lighting settings on change
+    lighting.Changed:Connect(function()
+        lighting.Ambient = Color3.fromRGB(255, 255, 255)
+        lighting.Brightness = 1
+        lighting.FogEnd = 1e10
+    end)
+
+    -- Add point light to character
+    local player = game:GetService("Players").LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    while wait() do
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            if not character.HumanoidRootPart:FindFirstChildWhichIsA("PointLight") then
+                local headlight = Instance.new("PointLight", character.HumanoidRootPart)
+                headlight.Brightness = 1
+                headlight.Range = 60
+            end
+        end
+        wait(0.5) -- Check every half second
+    end
+end
+
+
+
+
+
+
+
+
+
+Esptab3:AddSlider('spiderSpeed', {
+    Text = 'Climb Speed',
+    Default = 5, -- Initial default value for the slider
+    Min = 1,
+    Max = 20, -- Maximum speed value
+    Rounding = 1, -- Set rounding precision
+    Compact = false,
+}):OnChanged(function(State)
+    spiderSpeed = State -- Update the climbing speed with the slider's value
+end)
+
+-- Toggle function to enable or disable third-person mode
+local function toggleThirdPerson(enable)
+    if enable then
+        -- Enable third-person view
+        player.CameraMode = Enum.CameraMode.Classic
+        player.CameraMaxZoomDistance = 10
+        player.CameraMinZoomDistance = 10
+        camera.CameraType = Enum.CameraType.Custom
+        camera.CameraSubject = player.Character:FindFirstChild("Humanoid")
+    else
+        -- Disable third-person view
+        player.CameraMode = Enum.CameraMode.LockFirstPerson
+        camera.CameraType = Enum.CameraType.Custom
+        camera.CameraSubject = nil  -- No specific subject in first-person
+    end
+end
+
+-- Add toggle to the UI
+Esptab3:AddToggle('ThirdPerson', {
+    Text = 'Third Person',
+    Default = false,
+
+    Callback = function(isEnabled)
+        toggleThirdPerson(isEnabled)
+    end
+})
+
+local lighting = game:GetService("Lighting")
+local fullBrightActive = false -- Track toggle state
+local oldSettings = {} -- Table to store old lighting settings
+
+local function enableFullBright()
+    -- Store old settings
+    oldSettings.Ambient = lighting.Ambient
+    oldSettings.Brightness = lighting.Brightness
+    oldSettings.ShadowSoftness = lighting.ShadowSoftness
+    oldSettings.GlobalShadows = lighting.GlobalShadows
+
+    lighting.Ambient = Color3.fromRGB(255, 255, 255)
+    lighting.Brightness = 2 -- Increased brightness
+    lighting.GlobalShadows = false -- Disable shadows
+
+    -- Disable shadow softness for a flat lighting effect
+    lighting.ShadowSoftness = 0
+end
+
+local function disableFullBright()
+    if oldSettings.Ambient then
+        lighting.Ambient = oldSettings.Ambient -- Restore old settings
+    end
+    if oldSettings.Brightness then
+        lighting.Brightness = oldSettings.Brightness
+    end
+    if oldSettings.GlobalShadows ~= nil then
+        lighting.GlobalShadows = oldSettings.GlobalShadows -- Restore shadows
+    end
+    if oldSettings.ShadowSoftness then
+        lighting.ShadowSoftness = oldSettings.ShadowSoftness -- Restore shadow softness
+    end
+end
+
+-- Toggle to enable/disable full bright
+LeftGroupBox:AddToggle('fullBrightToggle', {
+    Text = 'Enable Full Bright',
+    Default = false,
+    Callback = function(state)
+        fullBrightActive = state
+        if fullBrightActive then
+            enableFullBright() -- Enable full bright
+        else
+            disableFullBright() -- Disable full bright
+        end
+    end
+})
+
+
+LeftGroupBox:AddButton('Skin Changer', function()
+
+if rp:FindFirstChild("Players") then
+    local playersContainer = rp.Players
+    local player = playersContainer:FindFirstChild(LC.Name)
+    
+    if player then
+        for _, item in player:GetDescendants() do
+            local itemProperties = item:FindFirstChild("ItemProperties")
+            if itemProperties and skins[item.Name] then
+                itemProperties:SetAttribute("Skin", skins[item.Name])
+            end
+        end
+    end
+end
+
+
+ end)
+
+LeftGroupBox:AddDropdown('raritychanger', {
+    Values = { 'Epic', 'Common', 'Legendary', 'Mythical' },
+    Default = 1,
+    Multi = false,
+    Text = 'Rarity Changer',
+    Tooltip = 'Works For All Guns!',
+    Callback = function(state)
+       
+local playerName = game.Players.LocalPlayer.Name
+
+
+local playerInventory = game.ReplicatedStorage.Players[playerName].Inventory
+
+
+for _, item in pairs(playerInventory:GetChildren()) do
+
+    if item:FindFirstChild("ItemProperties") then
+
+        item.ItemProperties:SetAttribute("Rarity", state)
+    end
+end
+
+
+
+    end
+})
+
+LeftGroupBox:AddDropdown('cameradropdown', {
+    Values = { 'Attach', 'Custom', 'Fixed', 'Follow', 'Orbital', 'Scriptable', 'Track', 'Watch'},
+    Default = 2,
+    Multi = false,
+    Text = 'Camera Type',
+    Tooltip = 'Camera Type',
+    Callback = function(state)
+        game.workspace.Camera.CameraType = state -- Update the target part based on dropdown selection
+    end
+})
+
+
+LeftGroupBox:AddSlider('RecoilStrength', {
+    Text = 'Recoil Slider',
+    Default = 230,
+    Min = 0,
+    Max = 300,
+    Rounding = 0,
+    Compact = false,
+}):OnChanged(function(State)
+    -- Check if the slider value is zero
+    if State == 0 then
+        -- Set the recoil strength to "0" for all children of ammo
+        for i, v in pairs(ammo:GetChildren()) do
+            v:SetAttribute("RecoilStrength", "0")
+        end
+    else
+        -- Set the recoil strength to the slider value for all children of ammo
+        for i, v in pairs(ammo:GetChildren()) do
+            v:SetAttribute("RecoilStrength", State)
+        end
+    end
+end)
+
 -- Toggle ESP
 local function ToggleESP()
     isESPEnabled = not isESPEnabled
@@ -802,6 +2096,47 @@ LeftGroupBox:AddToggle('Silentim', {
         print("Silent Aim " .. (silent_aim.enabled and "Enabled" or "Disabled"))
     end
 })
+
+
+local enemysets = _esplib.teamSettings.enemy
+LeftGroupBox:AddToggle('EspSwitch', {
+    Text = 'enable esp',
+    Default = false,
+    Callback = function(first)
+        enemysets.enabled = first
+    end
+})
+
+LeftGroupBox:AddToggle('boxswitch', {
+    Text = 'box esp',
+    Default = false,
+    Callback = function(first)
+        enemysets.box = first
+    end
+}):AddColorPicker('boxcolor', {
+    Default = Color3.new(1, 1, 1),
+    Title = 'box color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        enemysets.boxColor[1] = Value
+    end
+})
+LeftGroupBox:AddToggle('nameswitch', {
+    Text = 'name esp',
+    Default = false,
+
+
+    Callback = function(first)
+        enemysets.name = first
+    end
+})
+
+
+
+
+
+
 
 LeftGroupBox:AddToggle('fovdisplay', {
     Text = 'Show FOV Circle',
@@ -1152,7 +2487,7 @@ local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 
 -- I set NoUI so it does not show up in the keybinds menu
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
-MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
+MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'RightShift', NoUI = true, Text = 'Menu keybind' })
 
 Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
 
@@ -4268,7 +5603,7 @@ aimtab:AddToggle('InstantReload', {
     Callback = function(isToggled)
         if isToggled then
             -- Enable instant reload and set high speed
-            setSpeedMultiplier(100)
+            setSpeedMultiplier(3)
         else
             -- Disable instant reload and reset to normal speed
             setSpeedMultiplier(1)
