@@ -133,7 +133,7 @@ local function printLoadingBar(percentage)
     local dashes = totalLength - hashMarks          -- Remaining dashes
     
     local loadingBar = string.rep("#", hashMarks) .. string.rep("-", dashes)
-    warn(string.format("Loading Doge Hub V1.4 %%%-3d %s", percentage, loadingBar))
+    warn(string.format("Loading Doge Hub V1.6 %%%-3d %s", percentage, loadingBar))
 end
 
 -- Function to simulate the loading process
@@ -1323,14 +1323,14 @@ game.ReplicatedStorage.AiPresets.WhisperAI.LookAt:Destroy()
 
  end)
 
- -- Desired fire rate
+-- Desired fire rate
 local newFireRate = 0.05  -- Set the fire rate to a faster value
 local originalFireRate = 0.1  -- Assuming this is the original fire rate
 
--- Function to change fire rate for all items in the player's inventory
+-- Function to change fire rate for all items in the local player's inventory
 local function setFireRateForAllItems(rate)
     -- Get the Inventory folder
-    local inventory = game.ReplicatedStorage.Players.BroadMostly1519.Inventory
+    local inventory = game.ReplicatedStorage.Players[localPlayer.Name].Inventory
 
     -- Check if Inventory exists
     if not inventory then
@@ -1366,7 +1366,7 @@ LeftGroupBox:AddToggle('rapidfire', {
     Callback = function(state)
         if state then
             -- Enable rapid fire
-            setFireRateForAllItems(0.05)  -- Set to desired rapid fire rate
+            setFireRateForAllItems(newFireRate)  -- Set to desired rapid fire rate
             print("Rapid Fire enabled.")
         else
             -- Disable rapid fire, reset to original fire rate
@@ -1375,6 +1375,7 @@ LeftGroupBox:AddToggle('rapidfire', {
         end
     end 
 })
+
 LeftGroupBox:AddLabel('You Have To Equip your gun again to enable rapid fire.', true)
 
 -- Adding a toggle to enable/disable faster aiming
@@ -1382,8 +1383,8 @@ LeftGroupBox:AddToggle('fasteraim', {
     Text = 'Instant Aim', 
     Default = false,
     Callback = function(state)
-        -- Iterate through each weapon in the inventory
-        local inventory = game.ReplicatedStorage.Players.BroadMostly1519.Inventory:GetChildren()
+        -- Iterate through each weapon in the local player's inventory
+        local inventory = game.ReplicatedStorage.Players[localPlayer.Name].Inventory:GetChildren()
         
         for _, weapon in ipairs(inventory) do
             local settingsModule = require(weapon:WaitForChild("SettingsModule", 5)) -- Wait for the SettingsModule
@@ -1408,6 +1409,7 @@ LeftGroupBox:AddToggle('fasteraim', {
         end
     end 
 })
+
 
 
 
@@ -2161,6 +2163,64 @@ local function ToggleESP()
 end
 
 
+LeftGroupBox:AddToggle('highlightgun', {
+    Text = 'Gun Highlighter',
+    Default = false,
+    Callback = function(first)
+        local highlight
+        local item
+
+        -- Coroutine to check for ViewModel existence
+        coroutine.wrap(function()
+            while true do
+                item = game.workspace.Camera:FindFirstChild("ViewModel") and game.workspace.Camera.ViewModel:FindFirstChild("Item")
+                if item then
+                    highlight = item:FindFirstChildOfClass("Highlight")
+
+                    if first then
+                        if not highlight then
+                            -- Create a new highlight
+                            highlight = Instance.new("Highlight")
+                            highlight.Adornee = item
+                            highlight.OutlineColor = Color3.fromRGB(128, 0, 128) -- Default Purple color
+                            highlight.FillColor = Color3.fromRGB(128, 0, 128) -- Default Purple color
+                            highlight.FillTransparency = 1 -- Fully transparent
+                            highlight.Parent = item
+                        else
+                            highlight.Enabled = true
+                        end
+                    else
+                        if highlight then
+                            highlight.Enabled = false
+                        end
+                    end
+                end
+                wait(0.1) -- Check every 1 second
+            end
+        end)()
+    end
+})
+
+LeftGroupBox:AddLabel('Higlighter Color Picker'):AddColorPicker('ColorPickerhiglightergun', {
+    Default = Color3.new(0.768627, 0.039216, 0.913725), -- Default color
+    Title = 'Higlighter Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        local item = game.workspace.Camera:FindFirstChild("ViewModel") and game.workspace.Camera.ViewModel:FindFirstChild("Item")
+        if item then
+            local highlight = item:FindFirstChildOfClass("Highlight")
+            if highlight then
+                highlight.OutlineColor = Value -- Update outline color
+                highlight.FillColor = Value -- Update fill color
+            end
+        end
+    end
+})
+
+
+
+
 LeftGroupBox:AddToggle('skeletonesp', {
     Text = 'Skeleton Esp',
     Default = false,
@@ -2313,6 +2373,8 @@ local function toggleESP()
     end
 end
 
+
+
 -- Example of how to toggle ESP
 LeftGroupBox:AddToggle('EspSwitch', {
     Text = 'Enable ESP',
@@ -2321,6 +2383,7 @@ LeftGroupBox:AddToggle('EspSwitch', {
         toggleESP()
     end
 })
+
 
 
 LeftGroupBox:AddToggle('removevisors', {
@@ -2548,16 +2611,11 @@ LeftGroupBox:AddLabel('Color'):AddColorPicker('ColorPicker', {
     Transparency = 0, -- Optional. Enables transparency changing for this color picker (leave as nil to disable)
 
     Callback = function(Value)
-        print('[cb] Color changed!', Value)
+        
     end
 })
 
-Options.ColorPicker:OnChanged(function()
-    print('Color changed!', Options.ColorPicker.Value)
-    print('Transparency changed!', Options.ColorPicker.Transparency)
-end)
 
-Options.ColorPicker:SetValueRGB(Color3.fromRGB(0, 255, 140))
 
 -- Label:AddKeyPicker
 -- Arguments: Idx, Info
@@ -7090,11 +7148,11 @@ pdlt.corpseespfun = function(drop)
     end))
 end
 
-Library:Notify("Doge Hub V1.4")
+Library:Notify("Doge Hub V1.5")
 Library:Notify(executorname33)
 Library:Notify("Optimization Loaded")
 wait(1)
-Library:Notify("Loading Silent Aim")
+Library:Notify("Loading Updates ")
 wait(0.4)
 Library:Notify("Loaded")
 
