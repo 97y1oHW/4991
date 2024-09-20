@@ -268,7 +268,7 @@ local Window = Library:CreateWindow({
 local Tabs = {
     -- Creates a new tab titled Main
     Main = Window:AddTab('combat'),
-    movetab3 = Window:AddTab('Esp'),
+    movetab3 = Window:AddTab('Misc'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
@@ -1798,16 +1798,6 @@ local function enableFullBright()
 end
 
 
-
-local lighting = game:GetService("Lighting")
-local timeValue = 12 -- Default time
-
--- Function to change the time of day
-local function changeTimeOfDay(value)
-    lighting.ClockTime = value
-end
-
--- Slider to set time of day
 local lighting = game:GetService("Lighting")
 local timeValue = 12 -- Default time
 
@@ -1825,16 +1815,18 @@ Esptab3:AddSlider('timeSlider', {
     Rounding = 1, -- Round to 1 decimal place
     Compact = false,
 }):OnChanged(function(value)
+    -- Only change the time when the slider is adjusted
     timeValue = value -- Update timeValue with the slider
+    changeTimeOfDay(timeValue) -- Apply the new time
 end)
 
--- Coroutine to continuously update the time based on the slider value
-coroutine.wrap(function()
-    while true do
-        changeTimeOfDay(timeValue) -- Change the time based on the current slider value
-        wait(0) -- Update every second for smoother transitions
+-- OPTIONAL: Monitor if the game resets the time and reapply if necessary
+game:GetService("RunService").Stepped:Connect(function()
+    if lighting.ClockTime ~= timeValue then
+        changeTimeOfDay(timeValue) -- Reapply the desired time if it changes
     end
-end)()
+end)
+
 
 
 
