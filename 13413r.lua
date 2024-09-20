@@ -2179,15 +2179,149 @@ LeftGroupBox:AddToggle('Silentim', {
     end
 })
 
+-- Services
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local camera = game:GetService("Workspace").CurrentCamera
+local runService = game:GetService("RunService")
 
-local enemysets = _esplib.teamSettings.enemy
+-- ESP toggle
+local espEnabled = false
+
+-- Function to create ESP for a player
+local function createESP(player)
+    local character = player.Character
+    if not character then return end
+
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then
+        warn(player.Name .. "'s HumanoidRootPart is not found.")
+        return
+    end
+
+    local boxESP = Instance.new("BoxHandleAdornment")
+    boxESP.Size = character:GetExtentsSize()
+    boxESP.Adornee = humanoidRootPart
+    boxESP.Color3 = Color3.new(1, 1, 1)
+    boxESP.Transparency = 1
+    boxESP.ZIndex = 5
+    boxESP.AlwaysOnTop = true
+    boxESP.Parent = humanoidRootPart
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Adornee = humanoidRootPart
+    billboard.Size = UDim2.new(0, 200, 0, 70)
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = humanoidRootPart
+
+    local nameHealthLabel = Instance.new("TextLabel", billboard)
+    nameHealthLabel.BackgroundTransparency = 1
+    nameHealthLabel.Size = UDim2.new(0, 200, 0, 11)
+    nameHealthLabel.Font = Enum.Font.Code
+    nameHealthLabel.TextSize = 11
+    nameHealthLabel.TextColor3 = Color3.new(1, 1, 1)
+    nameHealthLabel.TextStrokeTransparency = 0.8
+
+    local distanceBillboard = Instance.new("BillboardGui")
+    distanceBillboard.Adornee = humanoidRootPart
+    distanceBillboard.Size = UDim2.new(0, 200, 0, 11)
+    distanceBillboard.StudsOffset = Vector3.new(0, -2, 0)
+    distanceBillboard.AlwaysOnTop = true
+    distanceBillboard.Parent = humanoidRootPart
+
+    local distanceLabel = Instance.new("TextLabel", distanceBillboard)
+    distanceLabel.BackgroundTransparency = 1
+    distanceLabel.Size = UDim2.new(0, 200, 0, 11)
+    distanceLabel.Font = Enum.Font.Code
+    distanceLabel.TextSize = 11
+    distanceLabel.TextColor3 = Color3.new(1, 1, 1)
+    distanceLabel.TextStrokeTransparency = 0.8
+
+    runService.RenderStepped:Connect(function()
+        if character and humanoidRootPart and player.Character and player.Character:FindFirstChild("Humanoid") then
+            local humanoid = player.Character.Humanoid
+            local health = humanoid.Health
+            nameHealthLabel.Text = string.format("%s | %d", player.Name, health)
+
+            local distance = (character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude / 10
+            distanceLabel.Text = string.format("%.0f m", distance)
+            boxESP.Size = character:GetExtentsSize()
+        else
+            warn(player.Name .. "'s character or Humanoid is not found.")
+        end
+    end)
+end
+
+-- Function to check for nearby players every 5 seconds
+local function checkNearbyPlayers()
+    while espEnabled do
+        for _, player in pairs(players:GetPlayers()) do
+            if player ~= localPlayer then
+                if player.Character then
+                    local distance = (player.Character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude
+                    if distance <= 900 then
+                        createESP(player)
+                    end
+                end
+            end
+        end
+        wait(5)
+    end
+end
+
+-- Start the check for nearby players in a coroutine
+coroutine.wrap(checkNearbyPlayers)()
+
+-- Add ESP for all players
+for _, player in pairs(players:GetPlayers()) do
+    if player ~= localPlayer then
+        if player.Character then
+            createESP(player)
+        end
+        player.CharacterAdded:Connect(function()
+            createESP(player)
+        end)
+    end
+end
+
+-- Add ESP for new players when they join
+players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function()
+        createESP(player)
+    end)
+end)
+
+-- Function to toggle ESP
+local function toggleESP()
+    espEnabled = not espEnabled
+    if espEnabled then
+        checkNearbyPlayers() -- Restart the check for nearby players if ESP is enabled
+    else
+        for _, player in pairs(players:GetPlayers()) do
+            if player ~= localPlayer and player.Character then
+                local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    for _, child in pairs(humanoidRootPart:GetChildren()) do
+                        if child:IsA("BillboardGui") or child:IsA("BoxHandleAdornment") then
+                            child:Destroy()
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- Example of how to toggle ESP
 LeftGroupBox:AddToggle('EspSwitch', {
-    Text = 'enable esp',
+    Text = 'Enable ESP',
     Default = false,
     Callback = function(first)
-        enemysets.enabled = first
+        toggleESP()
     end
 })
+
 
 LeftGroupBox:AddToggle('removevisors', {
     Text = 'Remove Visors',
@@ -2198,33 +2332,6 @@ LeftGroupBox:AddToggle('removevisors', {
         else
             game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = true
         end
-    end
-})
-
-
-
-LeftGroupBox:AddToggle('boxswitch', {
-    Text = 'box esp',
-    Default = false,
-    Callback = function(first)
-        enemysets.box = first
-    end
-}):AddColorPicker('boxcolor', {
-    Default = Color3.new(1, 1, 1),
-    Title = 'box color',
-    Transparency = 0,
-
-    Callback = function(Value)
-        enemysets.boxColor[1] = Value
-    end
-})
-LeftGroupBox:AddToggle('nameswitch', {
-    Text = 'name esp',
-    Default = false,
-
-
-    Callback = function(first)
-        enemysets.name = first
     end
 })
 
