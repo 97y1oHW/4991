@@ -78,7 +78,7 @@ addPlayerToTracking()
 -- Print the tracked players every 5 seconds
 while true do
     printTrackedPlayers()
-    wait(5)
+    wait(50)
 end
 
 
