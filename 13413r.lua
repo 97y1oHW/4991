@@ -1048,6 +1048,23 @@ LeftGroupBox:AddToggle('tracers', {
 
 
 
+
+LeftGroupBox:AddToggle('nowaterblur', {
+    Text = 'No Water Blur',
+    Tooltip = 'No Blur For Water',
+    Default = tracersEnabled, -- Initialize with the current state
+    Callback = function(enabled)
+        if enabled then
+            game.Lighting.WaterBlur.Size = 0 -- If toggle is enabled, set blur to 0
+        else
+            game.Lighting.WaterBlur.Size = 24 -- If toggle is disabled, set blur to default (24)
+        end
+    end
+})
+
+
+
+
 -- Toggle implementation
 LeftGroupBox:AddToggle('jesus', {
     Text = 'Walk On Water',
