@@ -2247,6 +2247,7 @@ local runService = game:GetService("RunService")
 
 -- ESP toggle
 local espEnabled = false
+local espCoroutine = nil
 
 -- Function to create ESP for a player
 local function createESP(player)
@@ -2254,10 +2255,7 @@ local function createESP(player)
     if not character then return end
 
     local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-    if not humanoidRootPart then
-        warn(player.Name .. "'s HumanoidRootPart is not found.")
-        return
-    end
+    if not humanoidRootPart then return end -- Skip if no HumanoidRootPart
 
     local boxESP = Instance.new("BoxHandleAdornment")
     boxESP.Size = character:GetExtentsSize()
@@ -2307,8 +2305,6 @@ local function createESP(player)
             local distance = (character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude / 10
             distanceLabel.Text = string.format("%.0f m", distance)
             boxESP.Size = character:GetExtentsSize()
-        else
-            warn(player.Name .. "'s character or Humanoid is not found.")
         end
     end)
 end
@@ -2318,10 +2314,14 @@ local function checkNearbyPlayers()
     while espEnabled do
         for _, player in pairs(players:GetPlayers()) do
             if player ~= localPlayer then
-                if player.Character then
-                    local distance = (player.Character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude
-                    if distance <= 900 then
-                        createESP(player)
+                local character = player.Character
+                if character then
+                    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+                    if humanoidRootPart then
+                        local distance = (humanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude
+                        if distance <= 900 then
+                            createESP(player)
+                        end
                     end
                 end
             end
@@ -2329,9 +2329,6 @@ local function checkNearbyPlayers()
         wait(5)
     end
 end
-
--- Start the check for nearby players in a coroutine
-coroutine.wrap(checkNearbyPlayers)()
 
 -- Add ESP for all players
 for _, player in pairs(players:GetPlayers()) do
@@ -2356,7 +2353,8 @@ end)
 local function toggleESP()
     espEnabled = not espEnabled
     if espEnabled then
-        checkNearbyPlayers() -- Restart the check for nearby players if ESP is enabled
+        espCoroutine = coroutine.wrap(checkNearbyPlayers)
+        espCoroutine() -- Restart the check for nearby players if ESP is enabled
     else
         for _, player in pairs(players:GetPlayers()) do
             if player ~= localPlayer and player.Character then
@@ -2373,8 +2371,6 @@ local function toggleESP()
     end
 end
 
-
-
 -- Example of how to toggle ESP
 LeftGroupBox:AddToggle('EspSwitch', {
     Text = 'Enable ESP',
@@ -2383,6 +2379,7 @@ LeftGroupBox:AddToggle('EspSwitch', {
         toggleESP()
     end
 })
+
 
 
 
