@@ -2339,9 +2339,9 @@ local function createOrUpdateESP(player)
         local health = humanoid.Health
         espObjects[player].nameHealthLabel.Text = string.format("%s | %d", player.Name, health)
 
-        -- Calculate distance
+        -- Calculate distance in studs
         local distance = (humanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude
-        espObjects[player].distanceLabel.Text = string.format("%.0f m", distance)
+        espObjects[player].distanceLabel.Text = string.format("%.0f studs", distance)
 
         -- Update the box size
         espObjects[player].boxESP.Size = character:GetExtentsSize()
@@ -2369,7 +2369,7 @@ local function checkNearbyPlayers()
                     local character = player.Character
                     if character and character:FindFirstChild("HumanoidRootPart") then
                         local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude
-                        -- Adjust visibility range (1000 meters for demonstration)
+                        -- Adjust visibility range (1000 studs for demonstration)
                         if distance <= 1000 then
                             createOrUpdateESP(player)
                         else
@@ -2451,6 +2451,7 @@ end
 
 -- Call the function to check and display weapon names
 checkAndDisplayWeaponNames()
+
 
 
 
