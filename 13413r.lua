@@ -43,18 +43,23 @@ if not LPH_OBFUSCATED then
     end
 end
 
--- Check if the shared tracking table exists; if not, create it
+-- Initialize the global tracking table if it doesn't exist
 getgenv().TrackedPlayers = getgenv().TrackedPlayers or {}
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Add the local player to the shared tracking table if not already added
-if not table.find(getgenv().TrackedPlayers, LocalPlayer.Name) then
-    table.insert(getgenv().TrackedPlayers, LocalPlayer.Name)
+-- Function to add the local player to the tracking table
+local function addPlayerToTracking()
+    if not table.find(getgenv().TrackedPlayers, LocalPlayer.Name) then
+        table.insert(getgenv().TrackedPlayers, LocalPlayer.Name)
+        print("Added player to tracking: " .. LocalPlayer.Name)
+    else
+        print(LocalPlayer.Name .. " is already being tracked.")
+    end
 end
 
--- Function to print the players using the script
+-- Function to print the players currently tracked
 local function printTrackedPlayers()
     print("Players currently using this script:")
     for _, playerName in pairs(getgenv().TrackedPlayers) do
@@ -62,8 +67,14 @@ local function printTrackedPlayers()
     end
 end
 
--- Run the check every few seconds to see who is running the script
-printTrackedPlayers()
+-- Add the local player to the tracking list
+addPlayerToTracking()
+
+-- Print the tracked players every 5 seconds
+while true do
+    printTrackedPlayers()
+    wait(5)
+end
 
 
 
