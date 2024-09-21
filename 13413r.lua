@@ -2276,30 +2276,27 @@ local espObjects = {}
 -- Function to create or update ESP for a player
 local function createOrUpdateESP(player)
     local character = player.Character
-    if not character then return end
-
-    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-    if not humanoidRootPart then return end -- Skip if no HumanoidRootPart
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
 
     -- Create ESP if it doesn't already exist for this player
     if not espObjects[player] then
         -- Box ESP
         local boxESP = Instance.new("BoxHandleAdornment")
         boxESP.Size = character:GetExtentsSize()
-        boxESP.Adornee = humanoidRootPart
+        boxESP.Adornee = character.HumanoidRootPart
         boxESP.Color3 = Color3.new(1, 1, 1)
         boxESP.Transparency = 1
         boxESP.ZIndex = 5
         boxESP.AlwaysOnTop = true
-        boxESP.Parent = humanoidRootPart
+        boxESP.Parent = character.HumanoidRootPart
 
         -- Billboard for Name and Health
         local billboard = Instance.new("BillboardGui")
-        billboard.Adornee = humanoidRootPart
+        billboard.Adornee = character.HumanoidRootPart
         billboard.Size = UDim2.new(0, 200, 0, 70)
         billboard.StudsOffset = Vector3.new(0, 3, 0)
         billboard.AlwaysOnTop = true
-        billboard.Parent = humanoidRootPart
+        billboard.Parent = character.HumanoidRootPart
 
         local nameHealthLabel = Instance.new("TextLabel", billboard)
         nameHealthLabel.BackgroundTransparency = 1
@@ -2311,11 +2308,11 @@ local function createOrUpdateESP(player)
 
         -- Billboard for Distance
         local distanceBillboard = Instance.new("BillboardGui")
-        distanceBillboard.Adornee = humanoidRootPart
+        distanceBillboard.Adornee = character.HumanoidRootPart
         distanceBillboard.Size = UDim2.new(0, 200, 0, 11)
         distanceBillboard.StudsOffset = Vector3.new(0, -2, 0)
         distanceBillboard.AlwaysOnTop = true
-        distanceBillboard.Parent = humanoidRootPart
+        distanceBillboard.Parent = character.HumanoidRootPart
 
         local distanceLabel = Instance.new("TextLabel", distanceBillboard)
         distanceLabel.BackgroundTransparency = 1
@@ -2339,9 +2336,9 @@ local function createOrUpdateESP(player)
         local health = humanoid.Health
         espObjects[player].nameHealthLabel.Text = string.format("%s | %d", player.Name, health)
 
-        -- Calculate distance in studs
-        local distance = (humanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude
-        espObjects[player].distanceLabel.Text = string.format("%.0f studs", distance)
+        -- Calculate distance in meters (1 stud = 0.28 meters)
+        local distance = (character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude * 0.28
+        espObjects[player].distanceLabel.Text = string.format("%.2f m", distance)
 
         -- Update the box size
         espObjects[player].boxESP.Size = character:GetExtentsSize()
@@ -2368,9 +2365,8 @@ local function checkNearbyPlayers()
                 if player ~= localPlayer then
                     local character = player.Character
                     if character and character:FindFirstChild("HumanoidRootPart") then
-                        local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude
-                        -- Adjust visibility range (1000 studs for demonstration)
-                        if distance <= 1000 then
+                        local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude * 0.28
+                        if distance <= 1000 * 0.28 then  -- 1000 studs = 280 meters
                             createOrUpdateESP(player)
                         else
                             removeESP(player)
@@ -2379,7 +2375,7 @@ local function checkNearbyPlayers()
                 end
             end
         end
-        wait(0.5) -- Update every 0.5 seconds instead of every frame
+        wait(0.5) -- Update every 0.5 seconds
     end
 end
 
@@ -2451,6 +2447,7 @@ end
 
 -- Call the function to check and display weapon names
 checkAndDisplayWeaponNames()
+
 
 
 
