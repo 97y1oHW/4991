@@ -2243,6 +2243,8 @@ LeftGroupBox:AddToggle('Silentim', {
 local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
 local runService = game:GetService("RunService")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local workspace = game:GetService("Workspace")
 
 -- ESP toggle
 local espEnabled = false
@@ -2385,6 +2387,45 @@ LeftGroupBox:AddToggle('EspSwitch', {
         toggleESP()
     end
 })
+
+-- Function to check and display weapon names
+local function checkAndDisplayWeaponNames()
+    local rangedWeapons = replicatedStorage:FindFirstChild("RangedWeapons")
+    if not rangedWeapons then return end
+
+    local playerFolder = workspace:FindFirstChild(localPlayer.Name)
+    if not playerFolder then return end
+
+    -- Iterate through all the weapons in RangedWeapons
+    for _, weapon in pairs(rangedWeapons:GetChildren()) do
+        local weaponName = weapon.Name
+        
+        -- Check if there's an object with the same name in the player's folder
+        local playerWeapon = playerFolder:FindFirstChild(weaponName)
+        if playerWeapon then
+            -- Add a text label to display the weapon name
+            local billboard = Instance.new("BillboardGui")
+            billboard.Adornee = playerWeapon
+            billboard.Size = UDim2.new(0, 200, 0, 50)
+            billboard.StudsOffset = Vector3.new(0, 2, 0)
+            billboard.AlwaysOnTop = true
+            billboard.Parent = playerWeapon
+            
+            local weaponNameLabel = Instance.new("TextLabel", billboard)
+            weaponNameLabel.BackgroundTransparency = 1
+            weaponNameLabel.Size = UDim2.new(1, 0, 1, 0)
+            weaponNameLabel.Text = weaponName
+            weaponNameLabel.Font = Enum.Font.Code
+            weaponNameLabel.TextSize = 14
+            weaponNameLabel.TextColor3 = Color3.new(1, 1, 1)
+            weaponNameLabel.TextStrokeTransparency = 0.8
+        end
+    end
+end
+
+-- Call the function to check and display weapon names
+checkAndDisplayWeaponNames()
+
 
 
 
