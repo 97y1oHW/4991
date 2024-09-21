@@ -45,41 +45,6 @@ end
 
 -- Initialize the global tracking table if it doesn't exist
 -- Initialize the global tracking table if it doesn't exist
--- Check if the global tracking table exists; if not, create it
-if not getgenv().TrackedPlayers then
-    getgenv().TrackedPlayers = {}
-    print("Initialized TrackedPlayers.")
-end
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
--- Function to add the local player to the tracking table
-local function addPlayerToTracking()
-    if not table.find(getgenv().TrackedPlayers, LocalPlayer.Name) then
-        table.insert(getgenv().TrackedPlayers, LocalPlayer.Name)
-        print("Added player to tracking: " .. LocalPlayer.Name)
-    else
-        print(LocalPlayer.Name .. " is already being tracked.")
-    end
-end
-
--- Add the local player to the tracking list
-addPlayerToTracking()
-
--- Print the tracked players every 5 seconds
-while true do
-    print("Checking tracked players...")
-    if #getgenv().TrackedPlayers > 0 then
-        print("Players currently using this script:")
-        for _, playerName in pairs(getgenv().TrackedPlayers) do
-            print(playerName)
-        end
-    else
-        print("No players are currently using this script.")
-    end
-    wait(50)
-end
 
 
 
