@@ -46,8 +46,13 @@ end
 -- Initialize the global tracking table if it doesn't exist
 -- Initialize the global tracking table if it doesn't exist
 
+local function securitylayerchecks()
 
+print("dd")
 
+end
+
+securitylayerchecks()
 
 
 local continueexecution = true
@@ -1046,6 +1051,81 @@ LeftGroupBox:AddToggle('tracers', {
     end
 })
 
+-- Zoom functionality
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+
+local zoomValue = 0 -- Default zoom value
+local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
+local zoomKey = Enum.KeyCode.Z -- Default keybind
+
+-- Function to apply zoom based on zoom value
+local function applyZoom()
+    Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
+end
+
+-- Slider for Zoom Value
+LeftGroupBox:AddSlider('ZoomSlider', {
+    Text = 'Zoom Value',
+    Default = 0,
+    Min = 0.1,
+    Max = 9,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        zoomValue = Value
+        -- Apply zoom every time the slider changes
+        applyZoom() -- Apply zoom immediately when the slider is adjusted
+    end
+})
+
+-- Keybind for Zoom
+LeftGroupBox:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
+    Default = 'Z',
+    SyncToggleState = false,
+    Mode = 'Toggle',
+    Text = 'Zoom Keybind',
+    
+    Callback = function(value)
+        print('[cb] Keybind clicked!', value)
+    end,
+
+    ChangedCallback = function(newKey)
+        zoomKey = newKey -- Update the zoom key when a new key is selected
+        print('[cb] Keybind changed!', newKey)
+    end
+})
+
+-- Variable to track zoom state
+local isZoomed = false
+
+-- Function to handle input for zooming
+local function onKeyPress(input, gameProcessed)
+    if gameProcessed then return end -- Prevent if the input is processed by the game
+
+    -- Check if the input is the zoom key
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
+        isZoomed = not isZoomed -- Toggle zoom state
+        if isZoomed then
+            applyZoom() -- Apply zoom when enabled
+        else
+            Camera.FieldOfView = defaultFOV -- Reset to default FOV when disabled
+        end
+    end
+end
+
+-- Connect the key press event
+UserInputService.InputBegan:Connect(onKeyPress)
+
+-- Ensure zoom is applied when the slider is adjusted
+UserInputService.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
+        if isZoomed then
+            applyZoom() -- Reapply zoom if the key is currently held down
+        end
+    end
+end)
 
 
 
@@ -2568,7 +2648,7 @@ LeftGroupBox:AddSlider('MySlider', {
     Compact = false,
 
     Callback = function(Value)
-        print('[cb] MySlider was changed! New value:', Value)
+        
     end
 })
 
@@ -2576,13 +2656,7 @@ LeftGroupBox:AddSlider('MySlider', {
 -- You index Options with the specified index, in this case it is 'MySlider'
 -- To get the value of the slider you do slider.Value
 
-local Number = Options.MySlider.Value
-Options.MySlider:OnChanged(function()
-    print('MySlider was changed! New value:', Options.MySlider.Value)
-end)
 
--- This should print to the console: "MySlider was changed! New value: 3"
-Options.MySlider:SetValue(3)
 
 -- Groupbox:AddInput
 -- Arguments: Idx, Info
@@ -3558,6 +3632,8 @@ EnemyEspTab:AddToggle('EspSwitch', {
         enemysets.enabled = first
     end
 })
+
+
 
 local Players = game:service("Players")
 local Player = Players.LocalPlayer
