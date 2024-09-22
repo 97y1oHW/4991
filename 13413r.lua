@@ -108,7 +108,7 @@ checkForSameScript(hwid)
 
 
 
-local continueexecution = false
+local continueexecution = true
 
 
 if continueexecution == true then
