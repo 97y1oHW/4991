@@ -43,6 +43,8 @@ if not LPH_OBFUSCATED then
     end
 end
 
+--IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
+
 -- Initialize the global tracking table if it doesn't exist
 -- Initialize the global tracking table if it doesn't exist
 
@@ -138,6 +140,7 @@ local aimbotEnabled = false
 local plrs = game:GetService("Players")
 local virtualInput = game:GetService("VirtualInputManager")
 print(".")
+print("DIRECTED.")
 local ammo = game.ReplicatedStorage.AmmoTypes
 local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
@@ -161,7 +164,7 @@ end
 
 -- Function to simulate the loading process
 local function simulateLoading()
-    for percentage = 0, 101, 1 do
+    for percentage = 0, 100, 1 do
         printLoadingBar(percentage)
         wait(0.02)  -- Adjust the wait time to make the loading appear slower or faster
     end
@@ -1155,6 +1158,18 @@ LeftGroupBox:AddToggle('nowaterblur', {
         else
             game.Lighting.WaterBlur.Size = 24 -- If toggle is disabled, set blur to default (24)
         end
+    end
+})
+
+
+
+
+LeftGroupBox:AddToggle('Experiementalsettingon', {
+    Text = 'Developer Mode',
+    Tooltip = '0',
+    Default = tracersEnabled, -- Initialize with the current state
+    Callback = function(value)
+print("AA CC EE SS DD EE NN II EE DD")
     end
 })
 
