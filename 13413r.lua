@@ -378,89 +378,63 @@ local player = Players.LocalPlayer
 
 -- Function to send a notification
 local function sendNotification(message)
-    pcall(function() -- Use pcall to catch any errors in SetCore
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Doge Hub User Found!";
-            Text = message;
-            Duration = 3;
-        })
-    end)
-    print("Notification sent: " .. message) -- Print for debugging
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Doge Hub User Found!";
+        Text = message;
+        Duration = 3;
+    })
 end
 
--- Function to detect teleportation by continuously checking positions
+-- Function to track teleportation of a player
 local function detectTeleportation(humanoidRootPart, p)
     local lastPosition = humanoidRootPart.Position
 
     coroutine.wrap(function()
         while true do
-            wait(1) -- Check every second
+            wait(0.2) -- Increase frequency (every 0.2 seconds)
 
             local newPosition = humanoidRootPart.Position
             if (newPosition - lastPosition).magnitude > 2800 then
+                -- Log detection
                 sendNotification("Doge Hub User: " .. p.Name)
                 print("Detected teleportation for: " .. p.Name)
+            else
+                print(p.Name .. " has not teleported.")
             end
 
-            lastPosition = newPosition -- Update the last known position
+            lastPosition = newPosition -- Update last known position
         end
     end)()
 end
 
--- Function to track other players' teleportation
+-- Function to track each player
 local function trackPlayerTeleportation(p)
-    local function monitorCharacter(char)
-        local humanoidRootPart = char:WaitForChild("HumanoidRootPart", 5) -- Wait for HumanoidRootPart
-        if humanoidRootPart then
-            print("Monitoring teleportation for: " .. p.Name) -- Debug print
-            detectTeleportation(humanoidRootPart, p)
-        else
-            warn("Failed to find HumanoidRootPart for: " .. p.Name) -- Warn if it can't be found
-        end
-    end
-
-    -- Monitor already existing character
-    if p.Character then
-        monitorCharacter(p.Character)
-    end
-
-    -- Monitor when a new character spawns
     p.CharacterAdded:Connect(function(char)
-        monitorCharacter(char)
+        local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
+
+        -- Start monitoring the player
+        detectTeleportation(humanoidRootPart, p)
     end)
+
+    -- If the character already exists, monitor them
+    if p.Character then
+        local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
+        detectTeleportation(humanoidRootPart, p)
+    end
 end
 
--- Start monitoring all players' teleportation
-local function startTracking()
-    for _, p in pairs(Players:GetPlayers()) do
-        if p ~= player then -- Skip the local player
-            trackPlayerTeleportation(p)
-        end
-    end
-
-    -- Monitor new players joining the game
-    Players.PlayerAdded:Connect(function(p)
+-- Start monitoring all players
+for _, p in pairs(Players:GetPlayers()) do
+    if p ~= player then
         trackPlayerTeleportation(p)
-    end)
-end
-
--- Test teleport to verify detection works
-local function teleportPlayerTest()
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
-
-    if humanoidRootPart then
-        local targetPosition = humanoidRootPart.Position + Vector3.new(3000, 0, 0) -- Move player by 3000 studs
-        humanoidRootPart.CFrame = CFrame.new(targetPosition)
-        print("Teleported local player to: " .. tostring(targetPosition))
-    else
-        warn("Failed to teleport local player (HumanoidRootPart not found)")
     end
 end
 
--- Run the test teleport and start tracking
-startTracking()
-teleportPlayerTest() -- Teleport the player for testing
+-- Continuously check for new players
+Players.PlayerAdded:Connect(function(p)
+    trackPlayerTeleportation(p)
+end)
+
 
 
 
