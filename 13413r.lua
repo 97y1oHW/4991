@@ -375,7 +375,6 @@ local silent_aim = {
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
 
 -- Function to send a notification
 local function sendNotification(message)
@@ -386,71 +385,45 @@ local function sendNotification(message)
     })
 end
 
--- Function to teleport the player
-local function teleportPlayer()
-    local targetPosition = character.PrimaryPart.Position + Vector3.new(-3000, 0, 0) -- Teleport 3000 studs to the left
-    character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
-end
-
--- Function to check if teleportation exceeds threshold
+-- Function to check if a teleportation happened (threshold: 2800 studs)
 local function hasTeleported(originalPosition, newPosition, threshold)
     return (newPosition - originalPosition).magnitude > threshold
 end
 
--- Function to track teleportation of the local player
-local function checkTeleportation()
-    local originalPosition = character.PrimaryPart.Position
-
-    teleportPlayer() -- Teleport the player
-
-    wait(0.1) -- Small delay to allow for teleportation to process
-
-    local newPosition = character.PrimaryPart.Position
-    if hasTeleported(originalPosition, newPosition, 2800) then
-        sendNotification("Doge Hub User: " .. player.Name)
-        print("Doge Hub User: " .. player.Name)
-    end
-end
-
--- Function to track other players' teleportation
+-- Function to track a single player's teleportation
 local function trackPlayerTeleportation(p)
-    p.CharacterAdded:Connect(function(char)
-        local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
-        local originalPosition = humanoidRootPart.Position
+    local function monitorCharacter(char)
+        local humanoidRootPart = char:WaitForChild("HumanoidRootPart", 5) -- Wait for HumanoidRootPart to load
+        if not humanoidRootPart then
+            return -- HumanoidRootPart not found, skip tracking for this character
+        end
 
-        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
+        local originalPosition = humanoidRootPart.Position
+        -- Continuously check for teleportation
+        while true do
+            wait(1) -- Check every second
             local newPosition = humanoidRootPart.Position
             if hasTeleported(originalPosition, newPosition, 2800) then
                 sendNotification("Doge Hub User: " .. p.Name)
                 print("Doge Hub User: " .. p.Name)
-                originalPosition = newPosition -- Update the original position after detecting teleportation
+                originalPosition = newPosition -- Update position after detecting teleportation
             end
-        end)
-    end)
-
-    -- If character is already present, track it
-    if p.Character then
-        local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
-        local originalPosition = humanoidRootPart.Position
-
-        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
-            local newPosition = humanoidRootPart.Position
-            if hasTeleported(originalPosition, newPosition, 2800) then
-                sendNotification("Doge Hub User: " .. p.Name)
-                print("Doge Hub User: " .. p.Name)
-                originalPosition = newPosition -- Update the original position after detecting teleportation
-            end
-        end)
+        end
     end
+
+    -- Monitor player's character if already loaded
+    if p.Character then
+        monitorCharacter(p.Character)
+    end
+
+    -- Track player when their character is loaded or respawns
+    p.CharacterAdded:Connect(function(char)
+        monitorCharacter(char)
+    end)
 end
 
--- Start tracking the local player's teleportation
-coroutine.wrap(function()
-    checkTeleportation()
-end)()
-
--- Continuously check for other players' teleportation
-coroutine.wrap(function()
+-- Continuously check all players' teleportation
+local function monitorAllPlayers()
     while true do
         wait(0.1) -- Check every second
         for _, p in pairs(Players:GetPlayers()) do
@@ -459,14 +432,12 @@ coroutine.wrap(function()
             end
         end
     end
-end)()
-
--- Track existing players' teleportation at script start
-for _, p in pairs(Players:GetPlayers()) do
-    if p ~= player then
-        trackPlayerTeleportation(p)
-    end
 end
+
+-- Start checking for other players' teleportation in a coroutine
+coroutine.wrap(function()
+    monitorAllPlayers()
+end)()
 
 
 
