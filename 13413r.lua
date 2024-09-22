@@ -47,19 +47,20 @@ end
 
 -- Initialize the global tracking table if it doesn't exist
 -- Initialize the global tracking table if it doesn't exist
-
+local level = "1.2"
 local function securitylayerchecks()
 
 warn("Started")
 wait(1)
 print("CHECK 1")
-wait(0.4)
+wait(0.7)
 print("CHECK 2")
 wait(0.1)
 print("CHECK 3")
-wait(0.3)
-print("LAYER 4 NOT IMPLEMENTED")
-wait(0.6)
+wait(2)
+print("CHECK 4")
+wait(2)
+print("Verification Level:" .. level ..)
 warn("CONTINUE")
 
 
@@ -68,7 +69,7 @@ end
 
 securitylayerchecks()
 
-local hwid = "0c92155d3650ec09ae39fcc016ca3cff4dd912cc63aca3043513ba9617d2ed16d800f8a209c6b899cd4200dd25aa8981"
+local hwid = "A0c92155d3650ec09ae39fcc016ca3cff4dd912cc63aca3043513ba9617d2ed16d800f8a209c6b899cd4200dd25aa8981"
 
 
 local hwids = {
