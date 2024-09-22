@@ -374,7 +374,6 @@ local silent_aim = {
 
 
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
@@ -424,9 +423,18 @@ local function trackPlayerTeleportation(p)
         end)
     end)
 
-    -- Check already existing character
+    -- Check if the character already exists
     if p.Character then
-        trackPlayerTeleportation(p)
+        local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
+        local originalPosition = humanoidRootPart.Position
+
+        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
+            local newPosition = humanoidRootPart.Position
+            if (newPosition - originalPosition).magnitude > 2800 then
+                sendNotification("Doge Hub User: " .. p.Name)
+                print("Doge Hub User: " .. p.Name)
+            end
+        end)
     end
 end
 
@@ -453,6 +461,7 @@ for _, p in pairs(Players:GetPlayers()) do
         trackPlayerTeleportation(p)
     end
 end
+
 
 
 
@@ -4251,7 +4260,6 @@ EnemyEspTab:AddToggle('nameswitch', {
 })
 
 local Player = game:GetService("Players").LocalPlayer
-local Mouse = Player:GetMouse()
 local Camera = game:GetService("Workspace").CurrentCamera
 
 local isESPEnabled = false -- Toggle state
