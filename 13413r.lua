@@ -392,7 +392,12 @@ local function teleportPlayer()
     character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
 end
 
--- Function to check for abnormal teleportation
+-- Function to check if teleportation exceeds threshold
+local function hasTeleported(originalPosition, newPosition, threshold)
+    return (newPosition - originalPosition).magnitude > threshold
+end
+
+-- Function to track teleportation of the local player
 local function checkTeleportation()
     local originalPosition = character.PrimaryPart.Position
 
@@ -400,9 +405,8 @@ local function checkTeleportation()
 
     wait(0.1) -- Small delay to allow for teleportation to process
 
-    -- Check if the player's position is significantly different
     local newPosition = character.PrimaryPart.Position
-    if (newPosition - originalPosition).magnitude > 2800 then
+    if hasTeleported(originalPosition, newPosition, 2800) then
         sendNotification("Doge Hub User: " .. player.Name)
         print("Doge Hub User: " .. player.Name)
     end
@@ -416,34 +420,36 @@ local function trackPlayerTeleportation(p)
 
         humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
             local newPosition = humanoidRootPart.Position
-            if (newPosition - originalPosition).magnitude > 2800 then
+            if hasTeleported(originalPosition, newPosition, 2800) then
                 sendNotification("Doge Hub User: " .. p.Name)
                 print("Doge Hub User: " .. p.Name)
+                originalPosition = newPosition -- Update the original position after detecting teleportation
             end
         end)
     end)
 
-    -- Check if the character already exists
+    -- If character is already present, track it
     if p.Character then
         local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
         local originalPosition = humanoidRootPart.Position
 
         humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
             local newPosition = humanoidRootPart.Position
-            if (newPosition - originalPosition).magnitude > 2800 then
+            if hasTeleported(originalPosition, newPosition, 2800) then
                 sendNotification("Doge Hub User: " .. p.Name)
                 print("Doge Hub User: " .. p.Name)
+                originalPosition = newPosition -- Update the original position after detecting teleportation
             end
         end)
     end
 end
 
--- Start checking for teleportation in a coroutine
+-- Start tracking the local player's teleportation
 coroutine.wrap(function()
     checkTeleportation()
 end)()
 
--- Start continuously checking for other players in a coroutine
+-- Continuously check for other players' teleportation
 coroutine.wrap(function()
     while true do
         wait(1) -- Check every second
@@ -455,7 +461,7 @@ coroutine.wrap(function()
     end
 end)()
 
--- Initial tracking for already existing players
+-- Track existing players' teleportation at script start
 for _, p in pairs(Players:GetPlayers()) do
     if p ~= player then
         trackPlayerTeleportation(p)
