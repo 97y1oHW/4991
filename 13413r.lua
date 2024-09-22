@@ -47,6 +47,9 @@ end
 
 -- Initialize the global tracking table if it doesn't exist
 -- Initialize the global tracking table if it doesn't exist
+
+
+
 local level = "1.2"
 local function securitylayerchecks()
 
@@ -368,6 +371,89 @@ local silent_aim = {
     part = "Head",
     targetai = true
 }
+
+local Players = game:GetService("Players")
+
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Function to send a notification
+local function sendNotification(message)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Doge Hub User Detected!";
+        Text = message;
+        Duration = 3;
+    })
+end
+
+-- Function to teleport the player
+local function teleportPlayer()
+    local targetPosition = character.PrimaryPart.Position + Vector3.new(-3000, 0, 0) -- Teleport 3000 studs to the left
+    character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+end
+
+-- Function to check for abnormal teleportation
+local function checkTeleportation()
+    local originalPosition = character.PrimaryPart.Position
+
+    teleportPlayer() -- Teleport the player
+
+    wait(0.1) -- Small delay to allow for teleportation to process
+
+    -- Check if the player's position is significantly different
+    local newPosition = character.PrimaryPart.Position
+    if (newPosition - originalPosition).magnitude > 3000 then
+        sendNotification("Doge Hub User: " .. player.Name)
+        print("Doge Hub User: " .. player.Name)
+    end
+end
+
+-- Function to track other players' teleportation
+local function trackPlayerTeleportation(p)
+    local function onCharacterAdded(char)
+        local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
+        local originalPosition = humanoidRootPart.Position
+
+        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
+            local newPosition = humanoidRootPart.Position
+            if (newPosition - originalPosition).magnitude > 3000 then
+                sendNotification("Doge Hub User: " .. p.Name)
+                print("Doge Hub User: " .. p.Name)
+            end
+        end)
+    end
+
+    p.CharacterAdded:Connect(onCharacterAdded)
+
+    -- Check if the character already exists
+    if p.Character then
+        onCharacterAdded(p.Character)
+    end
+end
+
+-- Function to continuously check for teleportation in a coroutine
+local function continuouslyCheckPlayers()
+    while true do
+        wait(1) -- Check every second
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= player then
+                trackPlayerTeleportation(p)
+            end
+        end
+        print("Checked players for teleportation.") -- Debug message
+    end
+end
+
+-- Start checking for teleportation in a coroutine
+coroutine.wrap(function()
+    checkTeleportation()
+end)()
+
+-- Start continuously checking for other players in a coroutine
+coroutine.wrap(continuouslyCheckPlayers)()
+
+
+
+
 
 
 local workspace = game:GetService("Workspace")
@@ -1217,9 +1303,6 @@ print("AA CC EE SS DD EE NN II EE DD")
 
 
 local Players = game:service("Players")
-local Player = Players.LocalPlayer
-local Mouse = Player:GetMouse()
-local Camera = game:service("Workspace").CurrentCamera
 local RS = game:service("RunService")
 local UIS = game:service("UserInputService")
 
@@ -2116,9 +2199,7 @@ Esptab3:AddToggle('cframespeed', {
 
 
 
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+
 local spiderActive = false -- Toggle state for spider climbing
 local spiderSpeed = 1 -- Initial climbing speed
 
@@ -6236,9 +6317,9 @@ game.ReplicatedStorage.VFX:Destroy()
 
  end)
 
-local Players = game:GetService("Players")
+
 local Workspace = game:GetService("Workspace")
-local LocalPlayer = Players.LocalPlayer
+
 
 -- Global variables
 local speedMultiplier = 1 -- Default speed multiplier
