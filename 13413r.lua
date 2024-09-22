@@ -373,14 +373,15 @@ local silent_aim = {
 }
 
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
+local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
 -- Function to send a notification
 local function sendNotification(message)
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Doge Hub User Detected";
+        Title = "Doge Hub User Found!";
         Text = message;
         Duration = 3;
     })
@@ -402,7 +403,7 @@ local function checkTeleportation()
 
     -- Check if the player's position is significantly different
     local newPosition = character.PrimaryPart.Position
-    if (newPosition - originalPosition).magnitude > 3000 then
+    if (newPosition - originalPosition).magnitude > 2800 then
         sendNotification("Doge Hub User: " .. player.Name)
         print("Doge Hub User: " .. player.Name)
     end
@@ -416,24 +417,12 @@ local function trackPlayerTeleportation(p)
 
         humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
             local newPosition = humanoidRootPart.Position
-            if (newPosition - originalPosition).magnitude > 3000 then
+            if (newPosition - originalPosition).magnitude > 2800 then
                 sendNotification("Doge Hub User: " .. p.Name)
                 print("Doge Hub User: " .. p.Name)
             end
         end)
     end)
-end
-local Players = game:GetService("Players")
--- Continuously check for teleportation
-local function continuouslyCheckPlayers()
-    while true do
-        wait(1) -- Check every second
-        for _, p in pairs(Players:GetPlayers()) do
-            if p ~= player and p.Character then
-                trackPlayerTeleportation(p)
-            end
-        end
-    end
 end
 
 -- Start checking for teleportation in a coroutine
@@ -442,7 +431,17 @@ coroutine.wrap(function()
 end)()
 
 -- Start continuously checking for other players in a coroutine
-coroutine.wrap(continuouslyCheckPlayers)()
+coroutine.wrap(function()
+    while true do
+        wait(1) -- Check every second
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= player and p.Character then
+                trackPlayerTeleportation(p)
+            end
+        end
+    end
+end)()
+
 
 
 
