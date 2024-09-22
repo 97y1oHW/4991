@@ -452,7 +452,7 @@ end)()
 -- Continuously check for other players' teleportation
 coroutine.wrap(function()
     while true do
-        wait(1) -- Check every second
+        wait(0.1) -- Check every second
         for _, p in pairs(Players:GetPlayers()) do
             if p ~= player then
                 trackPlayerTeleportation(p)
