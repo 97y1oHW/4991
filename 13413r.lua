@@ -159,7 +159,7 @@ local function printLoadingBar(percentage)
     local dashes = totalLength - hashMarks          -- Remaining dashes
     
     local loadingBar = string.rep("#", hashMarks) .. string.rep("-", dashes)
-    warn(string.format("Loading Doge Hub V1.6 %%%-3d %s", percentage, loadingBar))
+    warn(string.format("Loading Doge Hub V1.7 %%%-3d %s", percentage, loadingBar))
 end
 
 -- Function to simulate the loading process
@@ -2608,6 +2608,7 @@ LeftGroupBox:AddToggle('Silentim', {
 })
 
 -- Services
+-- Services
 local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
 local runService = game:GetService("RunService")
@@ -2617,6 +2618,9 @@ local workspace = game:GetService("Workspace")
 -- ESP toggle
 local espEnabled = false
 local espObjects = {}
+
+-- Custom distance factor for game (set according to game specifics)
+local customFactor = 0.28  -- Modify this according to your game's specific scale
 
 -- Function to create or update ESP for a player
 local function createOrUpdateESP(player)
@@ -2682,7 +2686,7 @@ local function createOrUpdateESP(player)
         espObjects[player].nameHealthLabel.Text = string.format("%s | %d", player.Name, health)
 
         -- Calculate distance in meters (1 stud = 0.28 meters)
-        local distance = (character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude * 0.28
+        local distance = (character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude * customFactor
         espObjects[player].distanceLabel.Text = string.format("%.2f m", distance)
 
         -- Update the box size
@@ -2710,8 +2714,8 @@ local function checkNearbyPlayers()
                 if player ~= localPlayer then
                     local character = player.Character
                     if character and character:FindFirstChild("HumanoidRootPart") then
-                        local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude * 0.28
-                        if distance <= 1000 * 0.28 then  -- 1000 studs = 280 meters
+                        local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude * customFactor
+                        if distance <= 900 / customFactor then  -- 900 metreye kadar olan mesafeleri göster
                             createOrUpdateESP(player)
                         else
                             removeESP(player)
@@ -2792,6 +2796,7 @@ end
 
 -- Call the function to check and display weapon names
 checkAndDisplayWeaponNames()
+
 
 
 
