@@ -372,6 +372,7 @@ local silent_aim = {
     targetai = true
 }
 
+	
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -434,6 +435,73 @@ end
 Players.PlayerAdded:Connect(function(p)
     trackPlayerTeleportation(p)
 end)
+
+
+
+
+-- Function to send a notification
+local function sendNotification(message)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Doge Hub User Found!";
+        Text = message;
+        Duration = 3;
+    })
+end
+
+-- Function to teleport the player (you)
+local function teleportPlayer()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local targetPosition = humanoidRootPart.Position + Vector3.new(-3000, 0, 0) -- Teleport 3000 studs to the left
+    humanoidRootPart.CFrame = CFrame.new(targetPosition)
+    print("Teleported to:", targetPosition)
+end
+
+-- Function to monitor other players' teleports
+local function trackPlayerTeleportation(p)
+    p.CharacterAdded:Connect(function(char)
+        local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
+        local originalPosition = humanoidRootPart.Position
+        
+        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
+            local newPosition = humanoidRootPart.Position
+            if (newPosition - originalPosition).magnitude > 2800 then
+                sendNotification("Doge Hub User: " .. p.Name)
+                print("Detected teleport: " .. p.Name)
+            end
+        end)
+    end)
+
+    -- If character already exists, monitor immediately
+    if p.Character then
+        local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
+        local originalPosition = humanoidRootPart.Position
+        
+        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
+            local newPosition = humanoidRootPart.Position
+            if (newPosition - originalPosition).magnitude > 2800 then
+                sendNotification("Doge Hub User: " .. p.Name)
+                print("Detected teleport: " .. p.Name)
+            end
+        end)
+    end
+end
+
+-- Start tracking other players in the game
+for _, p in pairs(Players:GetPlayers()) do
+    if p ~= player then
+        trackPlayerTeleportation(p)
+    end
+end
+
+-- Handle new players joining
+Players.PlayerAdded:Connect(function(p)
+    if p ~= player then
+        trackPlayerTeleportation(p)
+    end
+end)
+
+-- Test teleporting yourself
+teleportPlayer()
 
 
 
