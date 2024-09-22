@@ -423,6 +423,20 @@ local function trackPlayerTeleportation(p)
             end
         end)
     end)
+
+    -- Check already existing character
+    if p.Character then
+        local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
+        local originalPosition = humanoidRootPart.Position
+
+        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
+            local newPosition = humanoidRootPart.Position
+            if (newPosition - originalPosition).magnitude > 2800 then
+                sendNotification("Doge Hub User: " .. p.Name)
+                print("Doge Hub User: " .. p.Name)
+            end
+        end)
+    end
 end
 
 -- Start checking for teleportation in a coroutine
@@ -435,7 +449,7 @@ coroutine.wrap(function()
     while true do
         wait(1) -- Check every second
         for _, p in pairs(Players:GetPlayers()) do
-            if p ~= player and p.Character then
+            if p ~= player then
                 trackPlayerTeleportation(p)
             end
         end
