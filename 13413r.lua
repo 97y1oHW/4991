@@ -423,7 +423,7 @@ local function trackPlayerTeleportation(p)
         end)
     end)
 end
-
+local Players = game:GetService("Players")
 -- Continuously check for teleportation
 local function continuouslyCheckPlayers()
     while true do
@@ -634,7 +634,6 @@ end)
 
 local Player = game:GetService("Players").LocalPlayer
 local Mouse = Player:GetMouse()
-local Camera = game:GetService("Workspace").CurrentCamera
 
 local isESPEnabled = false -- Toggle state
 
