@@ -2041,19 +2041,19 @@ local skins = {
 	IZh81 = "Watergun",
 }
 local player = game.Players.LocalPlayer
-local runSpeedThreshold = 16 -- Trigger teleport only when running faster than normal walk speed
-local speed = 0.5 -- Initial teleport speed for running
+local runSpeedThreshold = 16 -- Normal yürüyüş hızından daha hızlı olduğunda teleportu tetikle
+local speed = 0.5 -- Başlangıç teleport hızı
 local isRunning = false
-local cframeSpeedActive = false -- Toggle state for CFrameSpeed
+local cframeSpeedActive = false -- CFrameSpeed için toggle durumu
 local humanoid
 
 -- Function to handle teleport movement while running
 local function teleportWhileRunning()
-    while isRunning and cframeSpeedActive do -- Check if toggle is active
+    while isRunning and cframeSpeedActive do -- Toggle aktifse kontrol et
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -speed)
         end
-        task.wait(0.03) -- Smoother teleportation
+        task.wait(0.03) -- Daha pürüzsüz teleport
     end
 end
 
@@ -2062,10 +2062,10 @@ local function onRunning(walkSpeed)
     if walkSpeed > runSpeedThreshold and cframeSpeedActive then
         if not isRunning then
             isRunning = true
-            teleportWhileRunning() -- Start teleport when running
+            teleportWhileRunning() -- Koşarken teleportu başlat
         end
     else
-        isRunning = false -- Stop teleporting when running stops or player walks
+        isRunning = false -- Koşma durduğunda veya oyuncu yürüdüğünde teleportu durdur
     end
 end
 
@@ -2088,14 +2088,13 @@ end)
 -- Adding a slider to control the teleportation speed
 Esptab3:AddSlider('CFrameSpeed', {
     Text = 'Speed Slider',
-    Default = 0.5, -- Initial default value for the slider
+    Default = 0.5, -- Slider için başlangıç değeri
     Min = 0,
-    Max = 2, -- Maximum speed value
-    Rounding = 3, -- Set rounding precision
+    Max = 2, -- Maksimum hız değeri
+    Rounding = 3, -- Yuvarlama hassasiyeti
     Compact = false,
 }):OnChanged(function(State)
-    -- Update the teleportation speed with the slider's value
-    speed = State
+    speed = State -- Slider değeriyle teleport hızını güncelle
 end)
 
 -- Adding a toggle to enable/disable CFrameSpeed
@@ -2105,13 +2104,14 @@ Esptab3:AddToggle('cframespeed', {
     Callback = function(state)
         cframeSpeedActive = state
         if not state then
-            isRunning = false -- Disable running when toggle is off
+            isRunning = false -- Toggle kapalıyken koşmayı devre dışı bırak
         elseif humanoid and humanoid.MoveDirection.Magnitude > 0 then
             isRunning = true
-            teleportWhileRunning() -- Start teleporting if moving
+            teleportWhileRunning() -- Hareket ediyorsa teleport etmeye başla
         end
     end
 })
+
 
 
 
@@ -2744,7 +2744,7 @@ local function removeESP(player)
     end
 end
 
--- Function to check for nearby players every 0.5 seconds
+-- Function to check for nearby players every 5 seconds
 local function checkNearbyPlayers()
     while espEnabled do
         local localCharacter = localPlayer.Character
@@ -2763,7 +2763,7 @@ local function checkNearbyPlayers()
                 end
             end
         end
-        wait(0.5) -- Update every 0.5 seconds
+        wait(5) -- Update every 5 seconds
     end
 end
 
@@ -2835,6 +2835,7 @@ end
 
 -- Call the function to check and display weapon names
 checkAndDisplayWeaponNames()
+
 
 
 
