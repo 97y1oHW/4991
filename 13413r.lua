@@ -60,7 +60,7 @@ print("CHECK 3")
 wait(2)
 print("CHECK 4")
 wait(2)
-print("Verification Level:" .. level ..)
+print("Verification Level: " .. level .."")
 warn("CONTINUE")
 
 
