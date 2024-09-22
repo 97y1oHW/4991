@@ -372,14 +372,15 @@ local silent_aim = {
     targetai = true
 }
 
-local Players = game:GetService("Players")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local character = player.Character or player.CharacterAdded:Wait()
 
 -- Function to send a notification
 local function sendNotification(message)
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Doge Hub User Detected!";
+        Title = "Doge Hub User Detected";
         Text = message;
         Duration = 3;
     })
@@ -409,7 +410,7 @@ end
 
 -- Function to track other players' teleportation
 local function trackPlayerTeleportation(p)
-    local function onCharacterAdded(char)
+    p.CharacterAdded:Connect(function(char)
         local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
         local originalPosition = humanoidRootPart.Position
 
@@ -420,26 +421,18 @@ local function trackPlayerTeleportation(p)
                 print("Doge Hub User: " .. p.Name)
             end
         end)
-    end
-
-    p.CharacterAdded:Connect(onCharacterAdded)
-
-    -- Check if the character already exists
-    if p.Character then
-        onCharacterAdded(p.Character)
-    end
+    end)
 end
 
--- Function to continuously check for teleportation in a coroutine
+-- Continuously check for teleportation
 local function continuouslyCheckPlayers()
     while true do
         wait(1) -- Check every second
         for _, p in pairs(Players:GetPlayers()) do
-            if p ~= player then
+            if p ~= player and p.Character then
                 trackPlayerTeleportation(p)
             end
         end
-        print("Checked players for teleportation.") -- Debug message
     end
 end
 
@@ -450,6 +443,7 @@ end)()
 
 -- Start continuously checking for other players in a coroutine
 coroutine.wrap(continuouslyCheckPlayers)()
+
 
 
 
