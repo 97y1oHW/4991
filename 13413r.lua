@@ -411,7 +411,7 @@ end
 
 -- Function to track other players' teleportation
 local function trackPlayerTeleportation(p)
-    p.CharacterAdded:Connect(function(char)
+    local function checkTeleportationForCharacter(char)
         local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
         local originalPosition = humanoidRootPart.Position
 
@@ -422,20 +422,13 @@ local function trackPlayerTeleportation(p)
                 print("Doge Hub User: " .. p.Name)
             end
         end)
-    end)
+    end
+
+    p.CharacterAdded:Connect(checkTeleportationForCharacter)
 
     -- Check already existing character
     if p.Character then
-        local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
-        local originalPosition = humanoidRootPart.Position
-
-        humanoidRootPart:GetPropertyChangedSignal("CFrame"):Connect(function()
-            local newPosition = humanoidRootPart.Position
-            if (newPosition - originalPosition).magnitude > 2800 then
-                sendNotification("Doge Hub User: " .. p.Name)
-                print("Doge Hub User: " .. p.Name)
-            end
-        end)
+        checkTeleportationForCharacter(p.Character)
     end
 end
 
@@ -455,6 +448,7 @@ coroutine.wrap(function()
         end
     end
 end)()
+
 
 
 
