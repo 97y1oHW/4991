@@ -378,66 +378,91 @@ local player = Players.LocalPlayer
 
 -- Function to send a notification
 local function sendNotification(message)
-    game.StarterGui:SetCore("SendNotification", {
-        Title = "Doge Hub User Found!";
-        Text = message;
-        Duration = 3;
-    })
+    pcall(function() -- Use pcall to catch any errors in SetCore
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Doge Hub User Found!";
+            Text = message;
+            Duration = 3;
+        })
+    end)
+    print("Notification sent: " .. message) -- Print for debugging
 end
 
--- Function to check if a teleportation happened (threshold: 2800 studs)
-local function hasTeleported(originalPosition, newPosition, threshold)
-    return (newPosition - originalPosition).magnitude > threshold
-end
+-- Function to detect teleportation by continuously checking positions
+local function detectTeleportation(humanoidRootPart, p)
+    local lastPosition = humanoidRootPart.Position
 
--- Function to track a single player's teleportation
-local function trackPlayerTeleportation(p)
-    local function monitorCharacter(char)
-        local humanoidRootPart = char:WaitForChild("HumanoidRootPart", 5) -- Wait for HumanoidRootPart to load
-        if not humanoidRootPart then
-            return -- HumanoidRootPart not found, skip tracking for this character
-        end
-
-        local originalPosition = humanoidRootPart.Position
-        -- Continuously check for teleportation
+    coroutine.wrap(function()
         while true do
             wait(1) -- Check every second
+
             local newPosition = humanoidRootPart.Position
-            if hasTeleported(originalPosition, newPosition, 2800) then
+            if (newPosition - lastPosition).magnitude > 2800 then
                 sendNotification("Doge Hub User: " .. p.Name)
-                print("Doge Hub User: " .. p.Name)
-                originalPosition = newPosition -- Update position after detecting teleportation
+                print("Detected teleportation for: " .. p.Name)
             end
+
+            lastPosition = newPosition -- Update the last known position
+        end
+    end)()
+end
+
+-- Function to track other players' teleportation
+local function trackPlayerTeleportation(p)
+    local function monitorCharacter(char)
+        local humanoidRootPart = char:WaitForChild("HumanoidRootPart", 5) -- Wait for HumanoidRootPart
+        if humanoidRootPart then
+            print("Monitoring teleportation for: " .. p.Name) -- Debug print
+            detectTeleportation(humanoidRootPart, p)
+        else
+            warn("Failed to find HumanoidRootPart for: " .. p.Name) -- Warn if it can't be found
         end
     end
 
-    -- Monitor player's character if already loaded
+    -- Monitor already existing character
     if p.Character then
         monitorCharacter(p.Character)
     end
 
-    -- Track player when their character is loaded or respawns
+    -- Monitor when a new character spawns
     p.CharacterAdded:Connect(function(char)
         monitorCharacter(char)
     end)
 end
 
--- Continuously check all players' teleportation
-local function monitorAllPlayers()
-    while true do
-        wait(0.1) -- Check every second
-        for _, p in pairs(Players:GetPlayers()) do
-            if p ~= player then
-                trackPlayerTeleportation(p)
-            end
+-- Start monitoring all players' teleportation
+local function startTracking()
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= player then -- Skip the local player
+            trackPlayerTeleportation(p)
         end
+    end
+
+    -- Monitor new players joining the game
+    Players.PlayerAdded:Connect(function(p)
+        trackPlayerTeleportation(p)
+    end)
+end
+
+-- Test teleport to verify detection works
+local function teleportPlayerTest()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
+
+    if humanoidRootPart then
+        local targetPosition = humanoidRootPart.Position + Vector3.new(3000, 0, 0) -- Move player by 3000 studs
+        humanoidRootPart.CFrame = CFrame.new(targetPosition)
+        print("Teleported local player to: " .. tostring(targetPosition))
+    else
+        warn("Failed to teleport local player (HumanoidRootPart not found)")
     end
 end
 
--- Start checking for other players' teleportation in a coroutine
-coroutine.wrap(function()
-    monitorAllPlayers()
-end)()
+-- Run the test teleport and start tracking
+startTracking()
+teleportPlayerTest() -- Teleport the player for testing
+
+
 
 
 
