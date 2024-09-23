@@ -1708,9 +1708,9 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end
 end)
 
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-local LocalPlayer = Players.LocalPlayer
+
+
+
 
 -- Global variables
 local speedMultiplier = 1 -- Default speed multiplier
