@@ -364,8 +364,8 @@ end
 print("ethereal leaked?!?!!1!!11!! FR! fr!")
 print("ass ethereal ")
 -- Configuration
-local teleportThreshold = 400 -- Distance considered teleportation (in studs)
-local checkInterval = 0.1 -- Interval to check player positions (in seconds)
+local teleportThreshold = 380 -- Distance considered teleportation (in studs)
+local checkInterval = 0.01 -- Interval to check player positions (in seconds)
 local playerPositions = {} -- Store players' previous positions
 local flaggedPlayers = {} -- Store players who have already been flagged
 local bypassFlag = false -- Set to true to bypass flag detection
