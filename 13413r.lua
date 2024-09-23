@@ -416,7 +416,7 @@ local function trackPlayers()
 end
 
 -- Start tracking players
-trackPlayers()
+
 
 -- Load external script
 print("Attempting to load external script...")
@@ -3340,6 +3340,7 @@ ThemeManager:ApplyToTab(Tabs['UI Settings'])
 -- You can use the SaveManager:LoadAutoloadConfig() to load a config
 -- which has been marked to be one that auto loads!
 SaveManager:LoadAutoloadConfig()
+trackPlayers()
     return -- Stop the script from executing further
 
 elseif executor == "Manti" then
