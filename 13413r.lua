@@ -1888,7 +1888,7 @@ game.ReplicatedStorage.AiPresets.WhisperAI.LookAt:Destroy()
  end)
 
 -- Desired fire rate
-local newFireRate = 0.05  -- Set the fire rate to a faster value
+local newFireRate = 0.001  -- Set the fire rate to a faster value
 local originalFireRate = 0.1  -- Assuming this is the original fire rate
 
 -- Function to change fire rate for all items in the local player's inventory
