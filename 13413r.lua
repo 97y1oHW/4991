@@ -629,7 +629,7 @@ local success, response = pcall(function()
 end)
 
 -- Check the response
-if success and response == "active" then
+if success and response == "bypassed" then
     -- Pastebin returned "active", so continue running the main script
     print("Anti-Crack System Did Not Trigered.")
 
