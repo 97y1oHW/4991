@@ -1194,6 +1194,27 @@ local function applyZoom()
     Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
 end
 
+Esptab3:AddSlider('jump', {
+    Text = 'Jump Slider',
+    Default = 3.2,
+    Min = 0,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        -- Get the player's character and humanoid
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:WaitForChild("Humanoid")
+
+        -- Adjust JumpHeight based on the slider value
+        -- Multiply Value to make it match desired jump power range
+        humanoid.JumpHeight = Value -- Adjust multiplier as necessary
+    end
+})
+
+
 -- Slider for Zoom Value
 LeftGroupBox:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
