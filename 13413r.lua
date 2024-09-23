@@ -302,10 +302,10 @@ local Window = Library:CreateWindow({
     -- but you do not need to define them unless you are changing them :)
 
     Title = '                      Doge Hub /\ Wave PD',
-    Center = true,
+    Center = false,
     AutoShow = true,
     TabPadding = 8,
-    MenuFadeTime = 1
+    MenuFadeTime = 1.3
 })
 
 -- CALLBACK NOTE:
