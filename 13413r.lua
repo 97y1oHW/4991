@@ -1103,7 +1103,7 @@ local function toggleBlur()
     local targetSize = blurEffect.Size > 0 and 0 or 25  -- Toggle between blur and no blur
     local tween = TweenService:Create(blurEffect, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = targetSize})
     tween:Play()
-    wait(0.7)
+    wait(0.3)
 end
 
 -- Detect when the RightShift key is pressed to toggle the blur effect
@@ -1111,6 +1111,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if not gameProcessedEvent and input.UserInputType == Enum.UserInputType.Keyboard then
         if input.KeyCode == Enum.KeyCode.RightShift then  -- Check if RightShift is pressed
             toggleBlur()  -- Call the toggle function
+		wait(1)			
         end
     end
 end)
