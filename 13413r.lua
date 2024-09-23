@@ -358,7 +358,7 @@ local function sendNotification(message)
     game.StarterGui:SetCore("SendNotification", {
         Title = "Doge Hub User Found!";
         Text = message;
-        Duration = 3;
+        Duration = 5;
     })
 end
 
@@ -366,8 +366,8 @@ print("ethereal leaked?!?!!1!!11!! FR! fr!")
 print("ass ethereal ")
 
 -- Configuration
-local teleportThresholdSmall = 430 -- Threshold for small teleportation
-local teleportThresholdLarge = 790 -- Threshold for large teleportation
+local teleportThresholdSmall = 6000 -- Threshold for small teleportation
+local teleportThresholdLarge = 90000 -- Threshold for large teleportation
 local checkInterval = 0.01 -- Interval to check player positions (in seconds)
 local playerPositions = {} -- Store players' previous positions
 local flaggedPlayers = {} -- Store players who have already been flagged
