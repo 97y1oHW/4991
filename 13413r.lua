@@ -2551,7 +2551,7 @@ Esptab3:AddButton("remove foliage", function()
     end)
 end)
 
-local lighting = game:GetService("Lighting")
+
 local fullBrightActive = false -- Track toggle state
 local oldSettings = {} -- Table to store old lighting settings
 
@@ -2579,7 +2579,7 @@ local function enableFullBright()
     end)
 
     -- Add point light to character
-    local player = game:GetService("Players").LocalPlayer
+
     local character = player.Character or player.CharacterAdded:Wait()
     while wait() do
         if character and character:FindFirstChild("HumanoidRootPart") then
@@ -2639,7 +2639,7 @@ Esptab3:AddToggle('ThirdPerson', {
     end
 })
 
-local lighting = game:GetService("Lighting")
+
 local fullBrightActive = false -- Track toggle state
 local oldSettings = {} -- Table to store old lighting settings
 
@@ -3021,7 +3021,7 @@ LeftGroupBox:AddToggle('EspSwitch', {
 
 
 
-local player = game.Players.LocalPlayer
+
 local character = player.Character or player.CharacterAdded:Wait()
 
 local antiAimActive = false -- Toggle durumu
@@ -6405,7 +6405,7 @@ aimtab:AddToggle('nograss', {
 })
 
 -- Ensure that `players` is defined correctly and `skins` is accessible.
-local Players = game:GetService("Players")
+
 local LC = Players.LocalPlayer  -- Correctly define `LC` as the LocalPlayer
 local rp = game:GetService("ReplicatedStorage")
 local skins = {
@@ -7027,9 +7027,9 @@ setDoorsMaterialToForceField()
  end)
 
 -- Ensure this script is a LocalScript
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local camera = game.Workspace.CurrentCamera
+
+
+
 
 -- Adding the slider to adjust FOV
 aimtab:AddSlider('fovslider', {
@@ -7437,12 +7437,11 @@ local Utility = {
 local tracersEnabled = false -- Initial state of tracers
 
 --- Lighting shits world
-local Lighting = game:GetService("Lighting")
-local RunService = game:GetService("RunService")
-local Terrain = workspace:FindFirstChildOfClass("Terrain")
+
+
 
 local isFiring = false
-local UserInputService = game:GetService("UserInputService")
+
 
 -- Function to toggle tracers on and off
 function Utility:ToggleTracers(enable)
@@ -7513,6 +7512,7 @@ function FireWeapon()
     -- Call the CreateBullets function
     Utility:CreateBullets(hitPosition, gunPosition)
 end
+local UserInputService = game:GetService("UserInputService")
 
 -- Detect when the mouse button is pressed
 UserInputService.InputBegan:Connect(function(input)
@@ -7986,10 +7986,9 @@ end
 -- Services and Variables
 -- Required Services
 -- Required Services
-local camera = workspace.CurrentCamera
-local userInputService = game:GetService("UserInputService")
-local mouse = game.Players.LocalPlayer:GetMouse()
-local runService = game:GetService("RunService")
+
+
+
 
 -- FOV Settings
 local fovRadius = 180  -- Increased FOV for slightly better target tracking
@@ -8150,9 +8149,10 @@ local function updateAiming()
         end
     end
 end
+local RunService = game:GetService("RunService")
 
 -- Call the updateAiming function continuously
-runService.RenderStepped:Connect(function()
+RunService.RenderStepped:Connect(function()
     updateFovCircle994()  -- Ensure this function is correctly implemented
     updateAiming()
 end)
@@ -8762,7 +8762,7 @@ rawmeta.__namecall = function(self, ...)
         --print(debug.getinfo(3).name)
             local A_Origin = args[1]
             local HitPart = Target
-            if HitPart then
+            if HitPart thenwwww
                 args[2] = (HitPart.Position - A_Origin).Unit * 6000
                 return __namecall(self, unpack(args))
             end
