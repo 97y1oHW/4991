@@ -317,14 +317,17 @@ local Window = Library:CreateWindow({
 local Tabs = {
     -- Creates a new tab titled Main
     Main = Window:AddTab('combat'),
+    antiaimtab = Window:AddTab('Anti-Aim'),
     movetab3 = Window:AddTab('Misc'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
 -- Groupbox and Tabbox inherit the same functions
 -- except Tabboxes you have to call the functions on a tab (Tabbox:AddTab(name))
+local antiaimtab = Tabs.antiaimtab:AddLeftGroupbox('Spin')
 local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Groupbox')
 local Esptab3 = Tabs.movetab3:AddLeftGroupbox('Movement')
+
 
 -- We can also get our Main tab via the following code:
 -- local LeftGroupBox = Window.Tabs.Main:AddLeftGroupbox('Groupbox')
@@ -980,11 +983,11 @@ local Utility = {
 
 local autoFireEnabled = false -- Initially disabled
 local plr = plrs.LocalPlayer
-local mouse = plr:GetMouse()
-local camera = game:GetService("Workspace").CurrentCamera
-local RunService = game:GetService("RunService")
+
+
+
 local Lighting = game:GetService("Lighting")
-local TweenService = game:GetService("TweenService")
+
 
 local tracersEnabled = false -- Initial state of tracers
 local varsglobal = {
@@ -1323,7 +1326,7 @@ end)
 
 -- Path to the ReplicatedStorage and Player's inventory
 local replicatedStorage = game:GetService("ReplicatedStorage")
-local player = game.Players.LocalPlayer
+
 local playerInventoryPath = replicatedStorage.Players:WaitForChild(player.Name, 5) -- 10 saniye bekler
 
 -- Table to keep track of processed items
@@ -1436,7 +1439,7 @@ Library:Notify("No")
 
 
 
-local Players = game:service("Players")
+
 local RS = game:service("RunService")
 local UIS = game:service("UserInputService")
 
@@ -3015,6 +3018,74 @@ LeftGroupBox:AddToggle('EspSwitch', {
         toggleESP()
     end
 })
+
+
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local antiAimActive = false -- Toggle durumu
+local spinspeed = 0.1 -- Varsayılan döngü süresi
+
+-- Anti Aim Fonksiyonu
+local function AntiAim()
+    while true do
+        wait(spinspeed) -- Döngü için bekleme süresi 
+        if antiAimActive and character and character:FindFirstChild("HumanoidRootPart") then
+            -- Karakterin yönünü rastgele değiştirme
+            character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame * CFrame.Angles(0, math.random(-1, 1) * math.pi/2, 0)
+        end
+    end
+end
+
+-- Toggle Fonksiyonu
+local function ToggleAntiAim()
+    antiAimActive = not antiAimActive
+    if antiAimActive then
+        print("Anti Aim Aktif")
+    else
+        print("Anti Aim Pasif")
+    end
+end
+
+-- Klavye dinleyicisi
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if input.KeyCode == Enum.KeyCode.T and not gameProcessed then -- 'T' tuşuna basınca toggle
+        ToggleAntiAim()
+    end
+end)
+
+-- ESP ayarları
+antiaimtab:AddToggle('Spin', {
+    Text = 'Spin',
+    Default = false,
+    Callback = function(enabled)
+        antiAimActive = enabled
+        if enabled then
+            print("Anti Aim Aktif")
+            spawn(AntiAim) -- Anti Aim fonksiyonunu ayrı bir iş parçacığında çalıştır
+        else
+            print("Anti Aim Pasif")
+        end
+    end
+})
+
+-- Spin speed ayarı
+antiaimtab:AddSlider('spinspeed', {
+    Text = 'Spin Speed',
+    Default = 0.1,
+    Min = 0.01,
+    Max = 1,
+    Rounding = 3,
+    Compact = false,
+    Callback = function(Value)
+        spinspeed = Value
+    end
+})
+antiaimtab:AddLabel('Fastest One Is 0.01', true)
+-- Anti Aim'i Başlat
+
+
 
 -- Function to check and display weapon names
 local function checkAndDisplayWeaponNames()
