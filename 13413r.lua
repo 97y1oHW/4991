@@ -959,7 +959,7 @@ end
 
 local RunService = game:GetService("RunService")
 
-
+local LocalPlayer = game.Players.LocalPlayer
 
 local Mouse = LocalPlayer:GetMouse()
 local GuiInset = game:GetService("GuiService"):GetGuiInset()
@@ -1873,7 +1873,7 @@ Library:Notify("[UAC] BAN DETECTOR STARTED!")
 -- Zoom functionality
 local UserInputService = game:GetService("UserInputService")
 
-
+local Camera = game.Workspace.CurrentCamera
 local zoomValue = 0 -- Default zoom value
 local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
 local zoomKey = Enum.KeyCode.Z -- Default keybind
