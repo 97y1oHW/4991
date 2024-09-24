@@ -987,7 +987,7 @@ local function get_closest_target(usefov, fov_size, aimpart, npc)
             end
         end
     end
-local Camera = workspace.CurrentCamera
+local Camera = workspace.Camera
     for _, plr in Players:GetPlayers() do
         local character = plr.Character
         if plr ~= LocalPlayer and character then
