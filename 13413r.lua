@@ -1714,9 +1714,13 @@ UserInputService.InputEnded:Connect(function(input)
 end)
 -- Variables
 
+-- Services
+
+-- Check if character exists and get the Neck position
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local Neck = Character:WaitForChild("HumanoidRootPart")
 
+-- Beam image ID
 local BeamImageId = "rbxassetid://7151778302"
 
 -- Toggle variable
@@ -1765,6 +1769,13 @@ end
 local function onClick()
     if not isToggleEnabled then return end -- Check if the toggle is enabled
 
+    -- Check for ViewModel existence
+    local viewModel = Camera:FindFirstChild("ViewModel")
+    if not viewModel then
+        print("ViewModel not found. Cannot create beams.")
+        return -- Exit if ViewModel is not found
+    end
+
     -- Create the first part at the character's neck
     local neckPart = createPart(Neck.Position)
 
@@ -1774,13 +1785,12 @@ local function onClick()
     local secondPart = createPart(secondPartPosition)
 
     -- Create the beam between the two parts
-    local beam = createBeam(neckPart, secondPart)
+    createBeam(neckPart, secondPart)
 
     -- Start the smooth destruction after 3 seconds
     task.delay(3, function()
         destroySmoothly(neckPart, 1) -- Fade out neck part over 1 second
         destroySmoothly(secondPart, 1) -- Fade out second part over 1 second
-        destroySmoothly(beam, 1) -- Fade out beam over 1 second
     end)
 end
 
@@ -1788,9 +1798,9 @@ end
 local function toggleCreation()
     isToggleEnabled = not isToggleEnabled -- Toggle the state
     if isToggleEnabled then
-        print("enabled tracers")
+        print("Enabled tracers")
     else
-        print("disabled tracers")
+        print("Disabled tracers")
     end
 end
 
@@ -1798,22 +1808,25 @@ end
 local mouse = LocalPlayer:GetMouse()
 mouse.Button1Down:Connect(onClick)
 
--- Key binding for toggling the creation (e.g., pressing 'T')
---togglecreation()
-
-
-
 -- Add a toggle for the tracers in the UI
 LeftGroupBox:AddToggle('tracers', {
     Text = 'Tracers',
     Tooltip = 'Toggle tracers on or off',
-    Default = tracersEnabled, -- Initialize with the current state
+    Default = isToggleEnabled, -- Initialize with the current state
     Callback = function(enabled)
-       toggleCreation()
-       
-         -- Enable or disable based on toggle
+       toggleCreation() -- Call the toggle function
     end
 })
+
+-- Key binding for toggling the creation (e.g., pressing 'T')
+-- You can uncomment this section to use key binding for toggling
+-- local UserInputService = game:GetService("UserInputService")
+-- UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+--     if gameProcessedEvent then return end -- Ignore if the game already processed the input
+--     if input.KeyCode == Enum.KeyCode.T then
+--         toggleCreation()
+--     end
+-- end)
 
 --ban detector initialize
 
