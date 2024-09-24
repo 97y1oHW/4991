@@ -718,7 +718,7 @@ warn("Started Check")
 print("Checking Executor......")
 wait(2)
 
-local player = game.Players.LocalPlayer
+
 
 -- Wait for the character to be added to the player
 local character = player.Character or player.CharacterAdded:Wait()
@@ -850,7 +850,7 @@ local silent_aim = {
 	
 
 local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+
 
 -- Function to send a notification
 local function sendNotification(message)
@@ -1590,7 +1590,7 @@ local varsglobal = {
 -- Define necessary services
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local Lighting = game:GetService("Lighting")
+
 
 -- Create a BlurEffect
 local blurEffect = Instance.new("BlurEffect")
@@ -1712,6 +1712,96 @@ UserInputService.InputEnded:Connect(function(input)
         isFiring = false
     end
 end)
+-- Variables
+
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Neck = Character:WaitForChild("HumanoidRootPart")
+
+local BeamImageId = "rbxassetid://7151778302"
+
+-- Toggle variable
+local isToggleEnabled = false
+
+-- Function to create a transparent part
+local function createPart(position)
+    local part = Instance.new("Part")
+    part.Size = Vector3.new(1, 1, 1) -- You can adjust the size
+    part.Position = position
+    part.Anchored = true
+    part.CanCollide = false
+    part.Transparency = 1
+    part.Parent = workspace
+    return part
+end
+
+-- Function to create a beam between two parts
+local function createBeam(startPart, endPart)
+    local beam = Instance.new("Beam")
+    beam.Texture = BeamImageId
+    beam.FaceCamera = true
+    beam.Width0 = 4.5 -- Adjust width as needed
+    beam.Width1 = 4.5 -- Adjust width as needed
+    beam.Parent = startPart
+
+    local attachment0 = Instance.new("Attachment", startPart)
+    local attachment1 = Instance.new("Attachment", endPart)
+
+    beam.Attachment0 = attachment0
+    beam.Attachment1 = attachment1
+
+    return beam -- Return the beam for later use
+end
+
+-- Function to destroy parts smoothly
+local function destroySmoothly(part, duration)
+    local tween = TweenService:Create(part, TweenInfo.new(duration), { Transparency = 1 })
+    tween:Play()
+
+    tween.Completed:Wait() -- Wait for the tween to finish
+    part:Destroy() -- Destroy the part after fading out
+end
+
+-- Click event to create parts and the beam
+local function onClick()
+    if not isToggleEnabled then return end -- Check if the toggle is enabled
+
+    -- Create the first part at the character's neck
+    local neckPart = createPart(Neck.Position)
+
+    -- Calculate the position for the second part
+    local clickDirection = Camera.CFrame.LookVector * 120 -- Adjust distance as needed
+    local secondPartPosition = neckPart.Position + clickDirection
+    local secondPart = createPart(secondPartPosition)
+
+    -- Create the beam between the two parts
+    local beam = createBeam(neckPart, secondPart)
+
+    -- Start the smooth destruction after 3 seconds
+    task.delay(3, function()
+        destroySmoothly(neckPart, 1) -- Fade out neck part over 1 second
+        destroySmoothly(secondPart, 1) -- Fade out second part over 1 second
+        destroySmoothly(beam, 1) -- Fade out beam over 1 second
+    end)
+end
+
+-- Function to toggle the creation feature
+local function toggleCreation()
+    isToggleEnabled = not isToggleEnabled -- Toggle the state
+    if isToggleEnabled then
+        print("enabled tracers")
+    else
+        print("disabled tracers")
+    end
+end
+
+-- Connect the mouse click to the function
+local mouse = LocalPlayer:GetMouse()
+mouse.Button1Down:Connect(onClick)
+
+-- Key binding for toggling the creation (e.g., pressing 'T')
+--togglecreation()
+
+
 
 -- Add a toggle for the tracers in the UI
 LeftGroupBox:AddToggle('tracers', {
@@ -1719,7 +1809,9 @@ LeftGroupBox:AddToggle('tracers', {
     Tooltip = 'Toggle tracers on or off',
     Default = tracersEnabled, -- Initialize with the current state
     Callback = function(enabled)
-        Utility:ToggleTracers(enabled) -- Enable or disable based on toggle
+       toggleCreation()
+       
+         -- Enable or disable based on toggle
     end
 })
 
@@ -1734,7 +1826,7 @@ LeftGroupBox:AddToggle('tracers', {
 -- Ban detector initialize
 
 -- Define LocalPlayer for easier access
-local LocalPlayer = game.Players.LocalPlayer
+
 
 -- Create a function for ban detection
 local function detectBan()
@@ -1767,7 +1859,7 @@ Library:Notify("[UAC] BAN DETECTOR STARTED!")
 
 -- Zoom functionality
 local UserInputService = game:GetService("UserInputService")
-local Camera = workspace.CurrentCamera
+
 
 local zoomValue = 0 -- Default zoom value
 local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
@@ -2757,8 +2849,8 @@ LeftGroupBox:AddToggle('nograss', {
 
 
 -- Ensure that `players` is defined correctly and `skins` is accessible.
-local Players = game:GetService("Players")
-local LC = Players.LocalPlayer  -- Correctly define `LC` as the LocalPlayer
+
+ -- Correctly define `LC` as the LocalPlayer
 local rp = game:GetService("ReplicatedStorage")
 local skins = {
 	["762x25MAG"] = "Nutcracker",
@@ -2998,8 +3090,7 @@ end)
 
 
 
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
+
 local head = character:WaitForChild("Head")
 
 local billboards = {} -- Table to keep track of Billboard GUIs
