@@ -3558,8 +3558,7 @@ LeftGroupBox:AddDropdown('cameradropdown', {
 -- Services
 -- Services
 
-local runService = game:GetService("RunService")
-local replicatedStorage = game:GetService("ReplicatedStorage")
+
 local workspace = game:GetService("Workspace")
 
 -- ESP toggle
