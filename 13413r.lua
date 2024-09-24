@@ -955,12 +955,11 @@ end
 
 
 
-local workspace = game:GetService("Workspace")
+
 
 local RunService = game:GetService("RunService")
 
-local Camera = workspace.CurrentCamera
-local LocalPlayer = Players.LocalPlayer
+
 local Mouse = LocalPlayer:GetMouse()
 local GuiInset = game:GetService("GuiService"):GetGuiInset()
 
