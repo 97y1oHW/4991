@@ -759,10 +759,12 @@ local function detectExecutor()
             return "Solara"
         if executorName == "Synapse" then
             return "Wave"
-        if executorName == "Synapse X" or "Synapse x" then
+        if executorName == "Synapse X" then
             return "Wave"
         elseif executorName == "Nezur" then
-            return "Nezur"    
+            return "Nezur"   
+        elseif executorName == "Scythex" then
+            return "Wave"
         elseif executorName == "MacSploit" then
             return "Wave"   
         elseif executorName == "Manti" then
