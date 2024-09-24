@@ -606,6 +606,7 @@ end
 print("2")
 
 print("Connected")
+local camera = workspace.CurrentCamera
 
 local function checksystem()
 
@@ -633,7 +634,7 @@ end)
 -- Check the response
 if success and response == "bypassed" then
     -- Pastebin returned "active", so continue running the main script
-    print("Anti-Crack System Did Not Trigered.")
+    print("A-C SYSTEM RESULT: BYPASS")
 
     -- Place your main script logic here
     -- Example: your main exploit code or game feature
@@ -986,7 +987,7 @@ local function get_closest_target(usefov, fov_size, aimpart, npc)
             end
         end
     end
-
+local Camera = workspace.CurrentCamera
     for _, plr in Players:GetPlayers() do
         local character = plr.Character
         if plr ~= LocalPlayer and character then
@@ -1076,7 +1077,7 @@ end)
 
     You can call :AddButton on a button to add a SubButton!
 ]]
-local camera = workspace.CurrentCamera
+
 
 
 local runService = game:GetService("RunService")
@@ -1199,7 +1200,7 @@ local function DrawESP(plr)
             v.Visible = state
         end
     end
-
+local Camera = workspace.CurrentCamera
     local function UpdaterR15()
         local connection
         connection = game:GetService("RunService").RenderStepped:Connect(function()
@@ -1705,7 +1706,7 @@ UserInputService.InputBegan:Connect(function(input)
         end)
     end
 end)
-
+local Camera = game.Workspace.CurrentCamera
 -- Detect when the mouse button is released
 UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -1873,7 +1874,7 @@ Library:Notify("[UAC] BAN DETECTOR STARTED!")
 -- Zoom functionality
 local UserInputService = game:GetService("UserInputService")
 
-local Camera = game.Workspace.CurrentCamera
+
 local zoomValue = 0 -- Default zoom value
 local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
 local zoomKey = Enum.KeyCode.Z -- Default keybind
