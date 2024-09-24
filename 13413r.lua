@@ -45,6 +45,7 @@ if not LPH_OBFUSCATED then
     end
 end
 
+local UserInputService = game:GetService("UserInputService")
 
 
 
@@ -840,13 +841,6 @@ local Tab2 = TabBox:AddTab('Tab 2')
 -- You can now call AddToggle, etc on the tabs you added to the Tabbox
 ]]
 -- Silent Aim Configuration
-local silent_aim = {
-    enabled = false,  -- Toggle this to enable/disable silent aim
-    fov = true,
-    fovsize = 125,
-    part = "Head",
-    targetai = true
-}
 
 	
 
@@ -953,17 +947,22 @@ end
 
 
 
-
-
+local silent_aim = {
+    enabled = false,  -- Toggle this to enable/disable silent aim
+    fov = true,
+    fovsize = 125,
+    part = "Head",
+    targetai = true
+}
 
 
 
 local RunService = game:GetService("RunService")
-
-local LocalPlayer = game.Players.LocalPlayer
-
+-- Define Players
+local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local GuiInset = game:GetService("GuiService"):GetGuiInset()
+local Camera = workspace.CurrentCamera  -- Ensure Camera is correctly set
 
 local function get_closest_target(usefov, fov_size, aimpart, npc)
     local part, isnpc = nil, false
@@ -976,7 +975,7 @@ local function get_closest_target(usefov, fov_size, aimpart, npc)
                 local hitpart = npc:FindFirstChild(aimpart)
                 local humanoid = npc:FindFirstChildOfClass("Humanoid")
                 if hitpart and humanoid then
-                    local position, onscreen = Camera:WorldToViewportPoint(hitpart.Position)
+                    local position, onscreen = Camera:WorldToViewportPoint(hitpart.Position) -- Replace with hitpart:GetPivot() if needed
                     local distance = (Vector2.new(position.X, position.Y - GuiInset.Y) - mousepos).Magnitude
                     if (usefov and onscreen or not usefov) and distance < maximum_distance then
                         part = hitpart
@@ -987,14 +986,14 @@ local function get_closest_target(usefov, fov_size, aimpart, npc)
             end
         end
     end
-local Camera = workspace.Camera
+
     for _, plr in Players:GetPlayers() do
         local character = plr.Character
         if plr ~= LocalPlayer and character then
             local hitpart = character:FindFirstChild(aimpart)
             local humanoid = character:FindFirstChildOfClass("Humanoid")
             if hitpart and humanoid then
-                local position, onscreen = Camera:WorldToViewportPoint(hitpart.Position)
+                local position, onscreen = Camera:WorldToViewportPoint(hitpart.Position) -- Replace with hitpart:GetPivot() if needed
                 local distance = (Vector2.new(position.X, position.Y - GuiInset.Y) - mousepos).Magnitude
                 if (usefov and onscreen or not usefov) and distance <= maximum_distance then
                     part = hitpart
@@ -1030,11 +1029,12 @@ oldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     end
     if method == "Raycast" and silent_aim.enabled and silent_aim.target_part then
         local args = {...}
-        args[2] = (silent_aim.target_part.Position - args[1]).Unit * 10000
+        args[2] = (silent_aim.target_part.Position - args[1]).Unit * 10000 -- Use GetPivot if needed
         return oldNameCall(self, unpack(args))
     end
     return oldNameCall(self, ...)
 end))
+
 
 -- Key Toggle Functionality
 --[[UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
@@ -1589,7 +1589,7 @@ local varsglobal = {
 
 --- Lighting shits world
 -- Define necessary services
-local UserInputService = game:GetService("UserInputService")
+
 local TweenService = game:GetService("TweenService")
 
 
@@ -1620,7 +1620,7 @@ toggleBlur()
 
 
 local isFiring = false
-local UserInputService = game:GetService("UserInputService")
+
 
 -- Function to toggle tracers on and off
 function Utility:ToggleTracers(enable)
@@ -1872,7 +1872,7 @@ Library:Notify("[UAC] BAN DETECTOR STARTED!")
 
 
 -- Zoom functionality
-local UserInputService = game:GetService("UserInputService")
+
 
 
 local zoomValue = 0 -- Default zoom value
@@ -4481,8 +4481,7 @@ local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
 local camera = game:GetService("Workspace").CurrentCamera
 local RunService = game:GetService("RunService")
-local Lighting = game:GetService("Lighting")
-local TweenService = game:GetService("TweenService")
+
 
 local othergames = {
     pdelta = {
@@ -4511,6 +4510,7 @@ local othergames = {
         nobobrecoil = true
     }
 }
+local Lighting = game:GetService("Lighting")
 local varsglobal = {
     visuals = {
         font = 1,
@@ -8056,6 +8056,7 @@ aimtab:AddToggle('walkunderwater', {
 
 
 local UserInputService3es = game:GetService("UserInputService")
+
 local Players3es = game:GetService("Players")
 local RunService3es = game:GetService("RunService")
 local Workspace3es = game:GetService("Workspace")
@@ -8243,7 +8244,8 @@ function FireWeapon()
     -- Call the CreateBullets function
     Utility:CreateBullets(hitPosition, gunPosition)
 end
-local UserInputService = game:GetService("UserInputService")
+
+
 
 -- Detect when the mouse button is pressed
 UserInputService.InputBegan:Connect(function(input)
