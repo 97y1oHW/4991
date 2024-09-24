@@ -960,6 +960,7 @@ end
 local RunService = game:GetService("RunService")
 
 
+
 local Mouse = LocalPlayer:GetMouse()
 local GuiInset = game:GetService("GuiService"):GetGuiInset()
 
@@ -8718,12 +8719,10 @@ end
 -- Required Services
 
 
-
-
 -- FOV Settings
 local fovRadius = 180  -- Increased FOV for slightly better target tracking
 local fovCircle
---settings
+-- Settings
 local minPrediction = 0.05        -- Slightly higher minimum for short-range prediction stability
 local maxPrediction = 0.45        -- Reduced from 0.5 to prevent overshooting at long distances
 local defaultPrediction = 0.15    -- Increased default for more reliable accuracy
@@ -8732,6 +8731,11 @@ local predictionAmount = defaultPrediction  -- Initial prediction value
 local minDistance = 10            -- Lowered to capture very close targets
 local maxDistance = 900           -- Slightly extended for longer mid-range engagements
 
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local camera = workspace.CurrentCamera
+local mouse = Players.LocalPlayer:GetMouse() -- Correct way to get the mouse object
 
 -- Variables to track aiming state and debugging
 local isAiming = false
@@ -8784,8 +8788,8 @@ local function findTargetWithinFovCircle()
     local shortestDistance = fovSize
 
     -- Iterate over all players to find a target within FOV
-    for _, targetPlayer in pairs(game.Players:GetPlayers()) do
-        if targetPlayer ~= game.Players.LocalPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
+    for _, targetPlayer in pairs(Players:GetPlayers()) do
+        if targetPlayer ~= Players.LocalPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
             local head = targetPlayer.Character.Head
             local screenPos, onScreen = camera:WorldToScreenPoint(head.Position)
 
@@ -8820,7 +8824,7 @@ end
 local function adjustPrediction(target)
     local head = target:FindFirstChild("Head")
     if head then
-        local distance = (game.Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
+        local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
         local scale = math.clamp((distance - minDistance) / (maxDistance - minDistance), 0, 1)
         predictionAmount = minPrediction + (maxPrediction - minPrediction) * scale
         return distance
@@ -8831,7 +8835,7 @@ end
 -- Function to handle aiming logic
 local function updateAiming()
     if isSilentAimEnabled994 then -- Check if Silent Aim is enabled
-        if userInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+        if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
             local characterUnderMouse = findTargetWithinFovCircle()
             if characterUnderMouse and characterUnderMouse ~= lockedCharacter then
                 lockedCharacter = characterUnderMouse
@@ -8842,7 +8846,7 @@ local function updateAiming()
 
             if lockedCharacter and lockedCharacter:FindFirstChild("Head") and camera:FindFirstChild("ViewModel") then
                 local head = lockedCharacter.Head
-                local vm = camera.ViewModel
+                local vm = camera:FindFirstChild("ViewModel")
                 local ap = vm:FindFirstChild("AimPart")
                 local apc = vm:FindFirstChild("AimPartCanted")
                 local fc = vm:FindFirstChild("FakeCamera")
@@ -8879,7 +8883,6 @@ local function updateAiming()
         end
     end
 end
-local RunService = game:GetService("RunService")
 
 -- Call the updateAiming function continuously
 RunService.RenderStepped:Connect(function()
@@ -8889,6 +8892,8 @@ end)
 
 -- Create the FOV circle at the start
 createFovCircle()
+
+
 
 -- GUI Toggle for Silent Aim
 
