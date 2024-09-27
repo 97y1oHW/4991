@@ -3498,7 +3498,55 @@ LeftGroupBox:AddLabel('Higlighter Color Picker'):AddColorPicker('ColorPickerhigl
 })
 
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+-- Sway'i toggle yapacak fonksiyonu tanımla
+local swayEnabled = true -- Başlangıçta sway açık olacak
+
+local function toggleSway()
+    -- Oyuncunun envanterindeki tüm silahları kontrol et
+    local inventory = ReplicatedStorage:FindFirstChild("Players")
+        and ReplicatedStorage.Players:FindFirstChild(localPlayer.Name)
+        and ReplicatedStorage.Players[localPlayer.Name]:FindFirstChild("Inventory")
+
+    if inventory then
+        for _, weapon in pairs(inventory:GetChildren()) do
+            local settingsModule = weapon:FindFirstChild("SettingsModule")
+            if settingsModule then
+                local settings = require(settingsModule)
+
+                if swayEnabled then
+                    -- Sway'i kapat
+                    settings.swayMult = 0
+                    settings.IdleSwayModifier = 0
+                    settings.WalkSwayModifer = 0
+                    settings.SprintSwayModifer = 0
+                    print(weapon.Name .. " için sway kapatıldı.")
+                else
+                    -- Sway'i aç (varsayılan değerleri geri yükle)
+                    settings.swayMult = 1
+                    settings.IdleSwayModifier = 8
+                    settings.WalkSwayModifer = 1
+                    settings.SprintSwayModifer = 1
+                    print(weapon.Name .. " için sway açıldı.")
+                end
+            end
+        end
+
+        -- Toggle durumu tersine çevir
+        swayEnabled = not swayEnabled
+    else
+        warn("Inventory bulunamadı.")
+    end
+end
+
+LeftGroupBox:AddToggle('nosway', {
+    Text = 'No Sway',
+    Default = false,
+    Callback = function(first)
+        toggleSway()
+    end
+})
 
 LeftGroupBox:AddToggle('skeletonesp', {
     Text = 'Skeleton Esp',
