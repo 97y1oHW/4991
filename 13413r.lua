@@ -2723,6 +2723,31 @@ game.ReplicatedStorage.Buildable:Destroy()
 
  end)
 
+LeftGroupBox:AddToggle('disabletilt', {
+    Text = 'Disable Tilt',
+    Tooltip = 'Disable Tilt',
+    Default = false,
+
+    Callback = function(isToggled)
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local characterTilt = character:FindFirstChild("CharacterTilt")
+
+        if characterTilt then
+            if isToggled then
+                characterTilt.Disabled = true
+                print("enabled = false")
+            else
+                characterTilt.Enabled = true
+                print("enabled = true")
+            end
+        else
+            warn("CharacterTilt not found in character.")
+        end
+    end
+})
+
+
 LeftGroupBox:AddToggle('Bunnyhop', {
     Text = 'No Jump Cooldown',
     Tooltip = 'Bunny Hop',
