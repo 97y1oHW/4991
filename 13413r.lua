@@ -7162,7 +7162,7 @@ wrap(function()
     end
 end)]]
 
-aimtab:AddLabel("Doge Hub 1", true)
+aimtab:AddLabel("Doge Hub V1.7 Solara", true)
 
 aimtab:AddToggle('nograss', {
     Text = 'No Grass',
