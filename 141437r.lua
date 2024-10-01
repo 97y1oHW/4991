@@ -51,7 +51,12 @@ local E01Key = '0000000000000000000000000000000000000000000000000001'
 local selectedE01Key = "0000000000000000000000000000000000000000000000000001"
 local E02Key = '0000000000000000000000000000000000000000000000000021'
 local selectedE02Key = "0000000000000000000000000000000000000000000000000021"
+local asstable={
+hook='mafaka'
 
+}
+print(asstable)
+print(asstable.hook)
 if selectedE01Key == E01Key then
     print("E01 Key True")
 else
@@ -784,7 +789,7 @@ local function DrawESP(plr)
             v.Visible = state
         end
     end
-local Camera = workspace.CurrentCamera
+
     local function UpdaterR15()
         local connection
         connection = game:GetService("RunService").RenderStepped:Connect(function()
