@@ -45,6 +45,36 @@ end
 
 -- Initialize
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+local ecpkey = '781HID91YRNCIQYWER7EUHF81774UFHHDVNDFUHG819UFJKHOGJFCXNSHGTGFYHRUEIGJRHFY2G6TR383285718TEDFXCSFX  RPEDY71847717458374183939N UQI71 4Y171U38473478143577381483748275827385723857832573285732857239ORD33894E  EWUEUR938R93849384913849138432954950YO6OLTİŞFEDKEWKJFEWJFHREGUERGJHERFHIWEJIOFEWUIFHERUYGFEWIFERHIUGHIUETGHUIERHGERIUIUFHIUSAHFEFIUEWFHWEUHR387TY3498WER734UY87TYF4RIUEFOVHJBRUBFVH DFNV BYUGFO8YUI3YEWF87YU    2Y298ERUDFHEH 12U B 1 4 5 6 54 3 56 7 8 9 87  4 4 3 3 3 22 1 1 1 1 1 2 2 22 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 5 56 6 6 6 6 6 6 6 77 7 7 7 7 7 7 8 8 8 8 8 8 8 8  9 9 9 9 9 9 9 99 9 9 9 9 9 0   * * * * 0 0 0 0 0 0 0 0 0 0 0    ############ 661 ** -- 177841 -- 13784 -17749174 AHR ---- 81* --14781HID91YRNCIQYWER7EUHF81774UFHHDVNDFUHG819UFJKHOGJFCXNSHGTGFYHRUEIGJRHFY2G6TR383285718TEDFXCSFX  RPEDY71847717458374183939N UQI71 4Y171U38473478143577381483748275827385723857832573285732857239ORD33894E  EWUEUR938R93849384913849138432954950YO6OLTİŞFEDKEWKJFEWJFHREGUERGJHERFHIWEJIOFEWUIFHERUYGFEWIFERHIUGHIUETGHUIERHGERIUIUFHIUSAHFEFIUEWFHWEUHR387TY3498WER734UY87TYF4RIUEFOVHJBRUBFVH DFNV BYUGFO8YUI3YEWF87YU    2Y298ERUDFHEH 12U B 1 4 5 6 54 3 56 7 8 9 87  4 4 3 3 3 22 1 1 1 1 1 2 2 22 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 5 56 6 6 6 6 6 6 6 77 7 7 7 7 7 7 8 8 8 8 8 8 8 8  9 9 9 9 9 9 9 99 9 9 9 9 9 0   * * * * 0 0 0 0 0 0 0 0 0 0 0    ############ 661 ** -- 177841 -- 13784 -17749174 AHR ---- 81* --14'
+local selectedecpkey = "781HID91YRNCIQYWER7EUHF81774UFHHDVNDFUHG819UFJKHOGJFCXNSHGTGFYHRUEIGJRHFY2G6TR383285718TEDFXCSFX  RPEDY71847717458374183939N UQI71 4Y171U38473478143577381483748275827385723857832573285732857239ORD33894E  EWUEUR938R93849384913849138432954950YO6OLTİŞFEDKEWKJFEWJFHREGUERGJHERFHIWEJIOFEWUIFHERUYGFEWIFERHIUGHIUETGHUIERHGERIUIUFHIUSAHFEFIUEWFHWEUHR387TY3498WER734UY87TYF4RIUEFOVHJBRUBFVH DFNV BYUGFO8YUI3YEWF87YU    2Y298ERUDFHEH 12U B 1 4 5 6 54 3 56 7 8 9 87  4 4 3 3 3 22 1 1 1 1 1 2 2 22 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 5 56 6 6 6 6 6 6 6 77 7 7 7 7 7 7 8 8 8 8 8 8 8 8  9 9 9 9 9 9 9 99 9 9 9 9 9 0   * * * * 0 0 0 0 0 0 0 0 0 0 0    ############ 661 ** -- 177841 -- 13784 -17749174 AHR ---- 81* --14781HID91YRNCIQYWER7EUHF81774UFHHDVNDFUHG819UFJKHOGJFCXNSHGTGFYHRUEIGJRHFY2G6TR383285718TEDFXCSFX  RPEDY71847717458374183939N UQI71 4Y171U38473478143577381483748275827385723857832573285732857239ORD33894E  EWUEUR938R93849384913849138432954950YO6OLTİŞFEDKEWKJFEWJFHREGUERGJHERFHIWEJIOFEWUIFHERUYGFEWIFERHIUGHIUETGHUIERHGERIUIUFHIUSAHFEFIUEWFHWEUHR387TY3498WER734UY87TYF4RIUEFOVHJBRUBFVH DFNV BYUGFO8YUI3YEWF87YU    2Y298ERUDFHEH 12U B 1 4 5 6 54 3 56 7 8 9 87  4 4 3 3 3 22 1 1 1 1 1 2 2 22 2 2 3 3 3 3 3 3 3 3 4 4 4 4 4 4 5 5 5 5 5 5 5 56 6 6 6 6 6 6 6 77 7 7 7 7 7 7 8 8 8 8 8 8 8 8  9 9 9 9 9 9 9 99 9 9 9 9 9 0   * * * * 0 0 0 0 0 0 0 0 0 0 0    ############ 661 ** -- 177841 -- 13784 -17749174 AHR ---- 81* --14"
+local E01Key = '0000000000000000000000000000000000000000000000000001'
+local selectedE01Key = "0000000000000000000000000000000000000000000000000001"
+local E02Key = '0000000000000000000000000000000000000000000000000021'
+local selectedE02Key = "0000000000000000000000000000000000000000000000000021"
+
+if selectedE01Key == E01Key then
+    print("E01 Key True")
+else
+    print("E01 Key Invalid")
+    print("Aborted")
+    return
+end
+
+if selectedecpkey == ecpkey then
+    print("ECP Key True")
+else
+    print("ECP Key Invalid")
+    return
+end
+
+if selectedE02Key == E02Key then
+    print("E02 Key True")
+else
+    print("E02 Key Invalid")
+    print("Aborted")
+    return
+end
+
 
 
 local level = "1.4"
@@ -496,7 +526,7 @@ end)
 local runService = game:GetService("RunService")
 local playersService = game:GetService("Players")
 local userInputService = game:GetService("UserInputService")
-local camera = workspace.CurrentCamera
+
 
 -- FOV Settings
 local fovRadius = 180
@@ -3186,6 +3216,12 @@ LeftGroupBox:AddDropdown('cameradropdown', {
             SFXDIRECTORY.Hits.HitMarkers.Helmet.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Bodyshot.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Headshot.SoundId = globalhitsounds
+            ---------------------------------------------------------------
+            SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.Volume = 3
+            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.Volume = 4
+            SFXDIRECTORY.Hits.HitMarkers.Helmet.Volume = 4
+            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.Volume = 4.5
+            SFXDIRECTORY.Hits.HitMarkers.Headshot.Volume = 4
         else
             warn("Selected hit sound is not available!")
         end
@@ -3196,16 +3232,89 @@ LeftGroupBox:AddDropdown('cameradropdown', {
 
 -- Services
 -- Services
-
-
 local workspace = game:GetService("Workspace")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local camera = workspace.CurrentCamera
 
 -- ESP toggle
 local espEnabled = false
 local espObjects = {}
 
 -- Custom distance factor for game (set according to game specifics)
-local customFactor = 0.28  -- Modify this according to your game's specific scale
+local customFactor = 0.23 -- Modify this according to your game's specific scale
+
+-- Function to create a 2D box
+local function create2DBox()
+    local box = {}
+    box.topLeft = Drawing.new("Line")
+    box.topRight = Drawing.new("Line")
+    box.bottomLeft = Drawing.new("Line")
+    box.bottomRight = Drawing.new("Line")
+    
+    -- Set properties for the lines (white, 1-pixel width)
+    for _, line in pairs(box) do
+        line.Color = Color3.new(1, 1, 1) -- White color
+        line.Thickness = 1
+        line.Transparency = 1
+    end
+    
+    return box
+end
+
+-- Function to update 2D box positions
+local function update2DBox(box, character)
+    local rootPart = character:FindFirstChild("HumanoidRootPart")
+    if not rootPart then return end
+    
+    -- Get the 3D corners of the character's bounding box
+    local corners = {
+        rootPart.Position + Vector3.new(-2, 3, -1),  -- Top left corner
+        rootPart.Position + Vector3.new(2, 3, -1),   -- Top right corner
+        rootPart.Position + Vector3.new(-2, -3, -1), -- Bottom left corner
+        rootPart.Position + Vector3.new(2, -3, -1)   -- Bottom right corner
+    }
+    
+    -- Project 3D world positions to 2D screen positions
+    local screenCorners = {}
+    for i, corner in ipairs(corners) do
+        local screenPos, onScreen = camera:WorldToViewportPoint(corner)
+        if onScreen then
+            screenCorners[i] = Vector2.new(screenPos.X, screenPos.Y)
+        else
+            -- Hide the box if any part of it goes off-screen
+            for _, line in pairs(box) do
+                line.Visible = false
+            end
+            return
+        end
+    end
+    
+    -- Set positions for the box lines
+    box.topLeft.From = screenCorners[1]
+    box.topLeft.To = screenCorners[2]
+    
+    box.bottomLeft.From = screenCorners[3]
+    box.bottomLeft.To = screenCorners[4]
+    
+    box.topRight.From = screenCorners[1]
+    box.topRight.To = screenCorners[3]
+    
+    box.bottomRight.From = screenCorners[2]
+    box.bottomRight.To = screenCorners[4]
+    
+    -- Make sure the box is visible
+    for _, line in pairs(box) do
+        line.Visible = true
+    end
+end
+
+-- Function to remove 2D box
+local function remove2DBox(box)
+    for _, line in pairs(box) do
+        line:Remove()
+    end
+end
 
 -- Function to create or update ESP for a player
 local function createOrUpdateESP(player)
@@ -3214,20 +3323,12 @@ local function createOrUpdateESP(player)
 
     -- Create ESP if it doesn't already exist for this player
     if not espObjects[player] then
-        -- Box ESP
-        local boxESP = Instance.new("BoxHandleAdornment")
-        boxESP.Size = character:GetExtentsSize()
-        boxESP.Adornee = character.HumanoidRootPart
-        boxESP.Color3 = Color3.new(1, 1, 1)
-        boxESP.Transparency = 1
-        boxESP.ZIndex = 5
-        boxESP.AlwaysOnTop = true
-        boxESP.Parent = character.HumanoidRootPart
+        local boxESP = create2DBox()
 
         -- Billboard for Name and Health
         local billboard = Instance.new("BillboardGui")
         billboard.Adornee = character.HumanoidRootPart
-        billboard.Size = UDim2.new(0, 200, 0, 70)
+        billboard.Size = UDim2.new(0, 200, 0, 50)
         billboard.StudsOffset = Vector3.new(0, 3, 0)
         billboard.AlwaysOnTop = true
         billboard.Parent = character.HumanoidRootPart
@@ -3239,6 +3340,14 @@ local function createOrUpdateESP(player)
         nameHealthLabel.TextSize = 11
         nameHealthLabel.TextColor3 = Color3.new(1, 1, 1)
         nameHealthLabel.TextStrokeTransparency = 0.8
+
+        -- Health bar
+        local healthBar = Instance.new("Frame", billboard)
+        healthBar.BackgroundColor3 = Color3.new(0.121569, 0.945098, 0.011765) -- Green color
+        healthBar.Size = UDim2.new(0, 20, 0, 50)
+        healthBar.Position = UDim2.new(0, 210, 0, 0)
+        healthBar.BorderSizePixel = 0
+        healthBar.BackgroundTransparency = 0.5
 
         -- Billboard for Distance
         local distanceBillboard = Instance.new("BillboardGui")
@@ -3260,7 +3369,8 @@ local function createOrUpdateESP(player)
         espObjects[player] = {
             boxESP = boxESP,
             nameHealthLabel = nameHealthLabel,
-            distanceLabel = distanceLabel,
+            healthBar = healthBar,
+            distanceLabel = distanceLabel
         }
     end
 
@@ -3268,14 +3378,19 @@ local function createOrUpdateESP(player)
     local humanoid = character:FindFirstChild("Humanoid")
     if humanoid then
         local health = humanoid.Health
-        espObjects[player].nameHealthLabel.Text = string.format("%s | %d", player.Name, health)
+        local maxHealth = humanoid.MaxHealth
+        espObjects[player].nameHealthLabel.Text = string.format("%s | %d/%d", player.Name, health, maxHealth)
+
+        -- Update health bar
+        local healthBar = espObjects[player].healthBar
+        healthBar.Size = UDim2.new(0, 20, 0, 50 * (health / maxHealth))
 
         -- Calculate distance in meters (1 stud = 0.28 meters)
         local distance = (character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude * customFactor
         espObjects[player].distanceLabel.Text = string.format("%.2f m", distance)
 
-        -- Update the box size
-        espObjects[player].boxESP.Size = character:GetExtentsSize()
+        -- Update the 2D box
+        update2DBox(espObjects[player].boxESP, character)
     end
 end
 
@@ -3283,14 +3398,15 @@ end
 local function removeESP(player)
     if espObjects[player] then
         -- Clean up the ESP objects
-        for _, obj in pairs(espObjects[player]) do
-            obj:Destroy()
-        end
+        remove2DBox(espObjects[player].boxESP)
+        espObjects[player].nameHealthLabel:Destroy()
+        espObjects[player].healthBar:Destroy()
+        espObjects[player].distanceLabel:Destroy()
         espObjects[player] = nil
     end
 end
 
--- Function to check for nearby players every 5 seconds
+-- Function to check for nearby players every 0.1 seconds
 local function checkNearbyPlayers()
     while espEnabled do
         local localCharacter = localPlayer.Character
@@ -3300,16 +3416,18 @@ local function checkNearbyPlayers()
                     local character = player.Character
                     if character and character:FindFirstChild("HumanoidRootPart") then
                         local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude * customFactor
-                        if distance <= 900 / customFactor then  -- 900 metreye kadar olan mesafeleri göster
+                        if distance <= 1000 / customFactor then -- 1000 meterye kadar olan mesafeleri göster
                             createOrUpdateESP(player)
                         else
                             removeESP(player)
                         end
+                    else
+                        removeESP(player)
                     end
                 end
             end
         end
-        wait(5) -- Update every 5 seconds
+        wait(0.1) -- Update every 0.1 seconds
     end
 end
 
@@ -3332,6 +3450,9 @@ players.PlayerAdded:Connect(function(player)
         if espEnabled then
             createOrUpdateESP(player)
         end
+    end)
+    player.CharacterRemoving:Connect(function()
+        removeESP(player)
     end)
 end)
 
