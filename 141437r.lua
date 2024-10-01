@@ -3865,11 +3865,14 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
         FrameCounter = 0;
     end;
 
-    Library:SetWatermark(('Doge Hub /\ Wave | %s fps | %s ms'):format(
-        math.floor(FPS),
-        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
-    ));
+Library:SetWatermark(('Doge Hub /\ Wave | %s fps | %s ms | %s | %s'):format(
+    math.floor(FPS),
+    math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
+    os.date("%H:%M:%S"),  -- Current time
+    os.date("%Y-%m-%d")   -- Current date in YYYY-MM-DD format
+));
 end);
+
 
 Library.KeybindFrame.Visible = true; -- todo: add a function for this
 
@@ -3877,6 +3880,7 @@ Library:OnUnload(function()
     WatermarkConnection:Disconnect()
 
     print('Unloaded!')
+    warn("did you fingered your ass today?")
     Library.Unloaded = true
 end)
 
