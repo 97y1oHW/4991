@@ -230,7 +230,9 @@ end
 simulateLoading()
 
 print("If script ui not appears try spawning and waiting for 2 min")
-
+warn("Silent Check 5")
+wait(0.2)
+warn("end")
 
 
 local players = game:GetService("Players")
@@ -250,7 +252,7 @@ local Window = Library:CreateWindow({
     -- but you do not need to define them unless you are changing them :)
 
     Title = '                      Doge Hub /\ Wave PD',
-    Center = false,
+    Center = true,
     AutoShow = true,
     TabPadding = 8,
     MenuFadeTime = 1.3
@@ -264,10 +266,10 @@ local Window = Library:CreateWindow({
 -- You do not have to set your tabs & groups up this way, just a prefrence.
 local Tabs = {
     -- Creates a new tab titled Main
-    Main = Window:AddTab('combat'),
-    antiaimtab = Window:AddTab('Anti-Aim'),
-    movetab3 = Window:AddTab('Misc'),
-    ['UI Settings'] = Window:AddTab('UI Settings'),
+    Main = Window:AddTab('combat ⚔️'),
+    antiaimtab = Window:AddTab('Anti-Aim 🛡️'),
+    movetab3 = Window:AddTab('Misc 🔅'),
+    ['UI Settings'] = Window:AddTab('UI Settings 🎚️'),
 }
 
 -- Groupbox and Tabbox inherit the same functions
@@ -382,7 +384,7 @@ end
 	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
 	Library:Notify("Unlocked")
 	Library:Notify("CHECK 2")
-	wait(1)
+	wait(0.1)
 	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
 	Library:Notify("CHECK 3")
 	wait(1)
@@ -1296,7 +1298,7 @@ UserInputService.InputBegan:Connect(function(input)
         end)
     end
 end)
-local Camera = game.Workspace.CurrentCamera
+
 -- Detect when the mouse button is released
 UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
