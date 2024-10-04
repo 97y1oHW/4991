@@ -46,6 +46,22 @@ if not LPH_OBFUSCATED then
 end
 
 local UserInputService = game:GetService("UserInputService")
+local isfirstrun = true  -- Example variable, you should set this appropriately
+
+if isfirstrun then
+    -- Replace with your own file IDs
+    local audioFileId = "1ZzPp2yzuOSIpLW5VIkYxt_h40q7lSB8J"  -- Example ID
+    local audioUrl = "https://drive.google.com/uc?export=download&id=" .. audioFileId
+
+    -- Download the audio file
+    writefile("dogehubsecretmp3.mp3", game:HttpGet(audioUrl))
+    
+    local flex = Instance.new('Sound', game:GetService('CoreGui'))
+    flex.SoundId = getcustomasset("dogehubsecretmp3.mp3")
+    flex.PlaybackSpeed = 0.8
+    flex.Volume = 1 -- Adjust to a reasonable volume (0 to 1)
+    flex:Play()  -- Start playing the sound
+end
 
 
 
