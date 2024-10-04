@@ -816,7 +816,6 @@ _esplib = loadstring(game:HttpGet(repo2 .. 'newlib/old/esp'))()
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
-
     return -- Stop the script from executing further
 
 elseif executor == "Manti" then
@@ -1110,6 +1109,7 @@ local Tabs = {
     Lua = Window:AddTab('Other'),
     Settings = Window:AddTab('settings/configs'),
 }
+
 
 --CYqXb6TX
 loadstring(game:HttpGet("https://pastebin.com/raw/CYqXb6TX"))()
@@ -1484,7 +1484,7 @@ local function checkNearbyPlayers()
                 end
             end
         end
-        wait(0.1) -- Update every 0.1 seconds
+        wait(0.001) -- Update every 0.1 seconds
     end
 end
 
@@ -2149,48 +2149,87 @@ counter = counter + 1
     end
 })]]
 
+local zoomValue = 0 -- Default zoom value
+local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
+local zoomKey = Enum.KeyCode.Z -- Default keybind
 
-    WorldTab:AddLabel('zoom bind'):AddKeyPicker('zoombind', {
-        Default = 'None',
-        SyncToggleState = false,
-        Mode = 'Toggle',
-        Text = 'zoom onto thing',
-        NoUI = false,
-        Callback = function(first)
-            varsglobal.visuals.FovZoom = first
-            if first then
-                workspace.CurrentCamera.FieldOfView = varsglobal.visuals.ZoomAmt
-            else
-                workspace.CurrentCamera.FieldOfView = varsglobal.visuals.OldFov
-            end
-        end,
-    })
-
-print('load_' .. tostring(counter))
-counter = counter + 1
-
-print('load_' .. tostring(counter))
-counter = counter + 1
-print('load_' .. tostring(counter))
-counter = counter + 1
-Misc:AddToggle('keybindshoww', {
-    Text = 'show keybinds',
-    Default = false,
+-- Function to apply zoom based on zoom value
+local function applyZoom()
+    Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
+end
 
 
-    Callback = function(first)
-        Library.KeybindFrame.Visible = first;
+-- Slider for Zoom Value
+WorldTab:AddSlider('ZoomSlider', {
+    Text = 'Zoom Value',
+    Default = 0,
+    Min = 0.1,
+    Max = 9,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        zoomValue = Value
+        -- Apply zoom every time the slider changes
+        applyZoom() -- Apply zoom immediately when the slider is adjusted
     end
 })
-Misc:AddToggle('ChatSPAM', {
-    Text = 'chatspam',
-    Default = false,
 
+-- Keybind for Zoom
+WorldTab:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
+    Default = 'Z',
+    SyncToggleState = false,
+    Mode = 'Toggle',
+    Text = 'Zoom Keybind',
+    
+    Callback = function(value)
+        print('[cb] Keybind clicked!', value)
+    end,
 
-    Callback = function(first)
-        spamsets.enabled = first
+    ChangedCallback = function(newKey)
+        zoomKey = newKey -- Update the zoom key when a new key is selected
+        print('[cb] Keybind changed!', newKey)
     end
 })
+
+-- Variable to track zoom state
+local isZoomed = false
+
+-- Function to handle input for zooming
+local function onKeyPress(input, gameProcessed)
+    if gameProcessed then return end -- Prevent if the input is processed by the game
+
+    -- Check if the input is the zoom key
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
+        isZoomed = not isZoomed -- Toggle zoom state
+        if isZoomed then
+            applyZoom() -- Apply zoom when enabled
+        else
+            Camera.FieldOfView = defaultFOV -- Reset to default FOV when disabled
+        end
+    end
+end
+
+-- Connect the key press event
+UserInputService.InputBegan:Connect(onKeyPress)
+
+-- Ensure zoom is applied when the slider is adjusted
+UserInputService.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
+        if isZoomed then
+            applyZoom() -- Reapply zoom if the key is currently held down
+        end
+    end
+end)
+
+print('load_' .. tostring(counter))
+counter = counter + 1
+
+print('load_' .. tostring(counter))
+counter = counter + 1
+print('load_' .. tostring(counter))
+counter = counter + 1
+
 
 
 WorldTab:AddButton('Delete Solters Anti Cheat', function()
@@ -2211,7 +2250,7 @@ Misc:AddSlider('fpslimiter', {
     setfpscap(State)
 end)
 
-Misc:AddButton('Rejoin', function()
+Misc:AddButton('Rejoin⚡', function()
     if #plrs:GetPlayers() <= 1 then
         plrs.LocalPlayer:Kick("\nrejoining⚡")
         wait()
@@ -3459,6 +3498,8 @@ local Utility = {
     Fonts = { }
 }
 
+
+
 local tracersEnabled = false -- Initial state of tracers
 
 --- Lighting shits world
@@ -3688,21 +3729,21 @@ aimtab:AddToggle('jesus', {
  --   end
 --})
 
-aimtab:AddButton('Remove Scope From Gun', function()
+Misc:AddButton('Remove Scope From Gun', function()
 
 
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):Destroy()
 
  end)
 
-aimtab:AddButton('Disable OKP7 SCOPE GUI', function()
+Misc:AddButton('Disable OKP7 SCOPE GUI', function()
 
 
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):FindFirstChild("OKP7"):FindFirstChild("Reticle"):FindFirstChild("ScopeGui"):Destroy()
 
  end)
 
-aimtab:AddButton('Remove Gloves From Viewmodel', function()
+Misc:AddButton('Remove Gloves From Viewmodel', function()
 
 
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("CombatGloves"):Destroy()	
@@ -3721,7 +3762,7 @@ aimtab:AddToggle('VisibleText', {
 
 
 
-aimtab:AddButton('Remove Mag From Viewmodel', function()
+Misc:AddButton('Remove Mag From Viewmodel', function()
 
 
 local camera = game.Workspace:FindFirstChild("Camera")
@@ -3948,6 +3989,7 @@ local function updateAiming()
                 end
             end
         else
+        
             if isAiming then
                 if debugEnabled then
                     print("Right mouse button released. Unlocking.")
@@ -4180,6 +4222,43 @@ do
         gamesetting.flightspeed = first
     end)
         end
+        local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+print("ok")
+
+local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+
+-- Hand the library over to our managers
+ThemeManager:SetLibrary(Library)
+SaveManager:SetLibrary(Library)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- Adds our MenuKeybind to the ignore list
+-- (do you want each config to have a different menu key? probably not.)
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+ThemeManager:SetFolder('dogehubsolarapd')
+SaveManager:SetFolder('dogehub/solarapd')
+
+-- Builds our config menu on the right side of our tab
+SaveManager:BuildConfigSection(Tabs['UI Settings'])
+
+-- Builds our theme menu (with plenty of built in themes) on the left side
+-- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+ThemeManager:ApplyToTab(Tabs['UI Settings'])
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
+print("reached to end")
 
 --[[local __index; __index = hookmetamethod(game, "__index", function(self, idx, val)
     if self == camera and idx == "CFrame" then
