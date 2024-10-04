@@ -3253,9 +3253,7 @@ LeftGroupBox:AddDropdown('cameradropdown', {
 -- Services
 -- Services
 local workspace = game:GetService("Workspace")
-local players = game:GetService("Players")
-local localPlayer = players.LocalPlayer
-local camera = workspace.CurrentCamera
+
 
 -- ESP toggle
 local espEnabled = false
