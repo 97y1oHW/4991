@@ -3833,18 +3833,17 @@ end
 -- Required Services
 -- Required Services
 
-
 -- FOV Settings
-local fovRadius = 180  -- Increased FOV for slightly better target tracking
+local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
 -- Settings
-local minPrediction = 0.05        -- Slightly higher minimum for short-range prediction stability
-local maxPrediction = 0.45        -- Reduced from 0.5 to prevent overshooting at long distances
-local defaultPrediction = 0.15    -- Increased default for more reliable accuracy
+local minPrediction = 0.07        -- Slightly higher minimum for short-range prediction stability
+local maxPrediction = 0.50        -- Reduced from 0.5 to prevent overshooting at long distances
+local defaultPrediction = 0.23    -- Increased default for more reliable accuracy
 local predictionAmount = defaultPrediction  -- Initial prediction value
 
 local minDistance = 10            -- Lowered to capture very close targets
-local maxDistance = 900           -- Slightly extended for longer mid-range engagements
+local maxDistance = 850          -- Slightly extended for longer mid-range engagements
 
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
@@ -3950,50 +3949,52 @@ end
 -- Function to handle aiming logic
 local function updateAiming()
     if isSilentAimEnabled994 then -- Check if Silent Aim is enabled
-        if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-            local characterUnderMouse = findTargetWithinFovCircle()
-            if characterUnderMouse and characterUnderMouse ~= lockedCharacter then
-                lockedCharacter = characterUnderMouse
+        -- Find the character under the mouse cursor
+        local characterUnderMouse = findTargetWithinFovCircle()
+
+        -- If a character is found within the FOV, lock onto it
+        if characterUnderMouse and characterUnderMouse ~= lockedCharacter then
+            lockedCharacter = characterUnderMouse
+            if debugEnabled then
+                print("Locked onto new character:", lockedCharacter.Name)
+            end
+        end
+
+        -- If we have a locked character, aim at them
+        if lockedCharacter and lockedCharacter:FindFirstChild("Head") and camera:FindFirstChild("ViewModel") then
+            local head = lockedCharacter.Head
+            local vm = camera:FindFirstChild("ViewModel")
+            local ap = vm:FindFirstChild("AimPart")
+            local apc = vm:FindFirstChild("AimPartCanted")
+            local fc = vm:FindFirstChild("FakeCamera")
+
+            if ap and apc and fc then
+                -- Adjust prediction based on distance
+                adjustPrediction(lockedCharacter)
+                local aimPosition = predictTargetPosition(lockedCharacter)
+                local cameraPosition = camera.CFrame.Position
+
+                -- Update AimPart positions
+                ap.CFrame = CFrame.new(cameraPosition, aimPosition)
+                apc.CFrame = CFrame.new(cameraPosition, aimPosition)
+
+                -- Print debug information
                 if debugEnabled then
-                    print("Locked onto new character:", lockedCharacter.Name)
+                    print("Aiming at position:", aimPosition)
+                    print("Camera position:", cameraPosition)
+                    print("Prediction factor:", predictionAmount)
+                end
+            else
+                if debugEnabled then
+                    print("One or more ViewModel parts are missing.")
                 end
             end
+        end
 
-            if lockedCharacter and lockedCharacter:FindFirstChild("Head") and camera:FindFirstChild("ViewModel") then
-                local head = lockedCharacter.Head
-                local vm = camera:FindFirstChild("ViewModel")
-                local ap = vm:FindFirstChild("AimPart")
-                local apc = vm:FindFirstChild("AimPartCanted")
-                local fc = vm:FindFirstChild("FakeCamera")
-
-                if ap and apc and fc then
-                    -- Adjust prediction based on distance
-                    adjustPrediction(lockedCharacter)
-                    local aimPosition = predictTargetPosition(lockedCharacter)
-                    local cameraPosition = camera.CFrame.Position
-
-                    -- Update AimPart positions
-                    ap.CFrame = CFrame.new(cameraPosition, aimPosition)
-                    apc.CFrame = CFrame.new(cameraPosition, aimPosition)
-
-                    -- Print debug information
-                    if debugEnabled then
-                        print("Aiming at position:", aimPosition)
-                        print("Camera position:", cameraPosition)
-                        print("Prediction factor:", predictionAmount)
-                    end
-                else
-                    if debugEnabled then
-                        print("One or more ViewModel parts are missing.")
-                    end
-                end
-            end
-        else
-        
-            if isAiming then
-                if debugEnabled then
-                    print("Right mouse button released. Unlocking.")
-                end
+        -- Unlock the character if they are no longer in the FOV
+        if not characterUnderMouse then
+            if debugEnabled then
+                print("No target in FOV. Unlocking character.")
             end
             lockedCharacter = nil
         end
@@ -4009,11 +4010,7 @@ end)
 -- Create the FOV circle at the start
 createFovCircle()
 
-
-
 -- GUI Toggle for Silent Aim
-
-
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
     Default = false,
@@ -4032,6 +4029,7 @@ aimtab:AddToggle('silentAim994', {
         -- Optionally handle key bindings here
     end,
 })
+
 
 
 aimtab:AddToggle('silen1w22', {
@@ -4090,7 +4088,7 @@ aimtab:AddToggle('fov11outline', {
 aimtab:AddSlider('aimfov', {
     Text = 'Aim FOV Size',
     Default = 60,
-    Min = 0,
+    Min = 60,
     Max = 360,
     Rounding = 0,
     Compact = false,
