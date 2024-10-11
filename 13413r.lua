@@ -45,6 +45,15 @@ if not LPH_OBFUSCATED then
     end
 end
 
+local doge
+
+if doge then
+print("multiple open secured succ")
+return
+
+
+end
+
 local UserInputService = game:GetService("UserInputService")
 local isfirstrun = true  -- Example variable, you should set this appropriately
 
@@ -1601,8 +1610,7 @@ players.PlayerRemoving:Connect(function(player)
     end
 end)
 
--- Keybinds or UI to toggle ESP and health billboards (Example)
-local UserInputService = game:GetService("UserInputService")
+
 
 UserInputService.InputBegan:Connect(function(input)
     if input.KeyCode == Enum.KeyCode.E then -- Example key to toggle ESP
@@ -4125,6 +4133,137 @@ end)
 
 -- Create the FOV circle at the start
 createFovCircle()
+
+-- Create a table to store settings globally
+ViewModelSettings = {
+    Color = Color3.new(0.768627, 0.039216, 0.913725), -- Default color
+    Material = Enum.Material.Plastic, -- Default material
+    IsEnabled = false, -- Toggle state for ViewModel Chams
+    HighlightEnabled = false, -- Toggle state for Highlight effect
+    HighlightTransparency = 0.5 -- Default transparency for highlight
+}
+
+-- Function to apply color, material, and outline to ViewModel parts
+function applySettings(viewModel)
+    if viewModel and ViewModelSettings.IsEnabled then
+        -- Change the color of all parts in the ViewModel
+        for _, part in ipairs(viewModel:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.Color = ViewModelSettings.Color -- Change part color
+                part.Material = ViewModelSettings.Material -- Set material
+
+                -- Create or update the outline (Highlight)
+                local highlight = part:FindFirstChildOfClass("Highlight")
+                if ViewModelSettings.HighlightEnabled then
+                    if not highlight then
+                        highlight = Instance.new("Highlight")
+                        highlight.Parent = part
+                    end
+                    highlight.FillColor = ViewModelSettings.Color -- Set highlight fill color
+                    highlight.OutlineColor = Color3.new(1, 1, 1) -- Set outline color (white)
+                    highlight.OutlineTransparency = ViewModelSettings.HighlightTransparency -- Set outline transparency
+                elseif highlight then
+                    highlight:Destroy() -- Remove highlight if it is disabled
+                end
+            end
+            
+            -- Remove SurfaceAppearance if it exists
+            if part:IsA("MeshPart") then
+                local surfaceAppearance = part:FindFirstChildOfClass("SurfaceAppearance")
+                if surfaceAppearance then
+                    surfaceAppearance:Destroy() -- Remove SurfaceAppearance
+                end
+            end
+        end
+    end
+end
+
+aimtab:AddLabel('---------------------------------')
+-- Color Picker for ViewModel Chams
+aimtab:AddLabel('ViewModel Chams Color Picker'):AddColorPicker('ColorPickerViewModel', {
+    Default = ViewModelSettings.Color,
+    Title = 'ViewModel Chams Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        ViewModelSettings.Color = Value -- Store the selected color
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) -- Apply to the current ViewModel
+    end
+})
+
+aimtab:AddDropdown('MaterialDropdown', {
+    Values = { 'Plastic', 'ForceField', 'Neon' },
+    Default = 1, -- Default to 'Plastic'
+    Multi = false, -- Single selection
+
+    Text = 'Select Material',
+    Tooltip = 'Change the material of the ViewModel parts',
+
+    Callback = function(Value)
+        ViewModelSettings.Material = Enum.Material[Value] -- Store the selected material
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) -- Apply to the current ViewModel
+    end
+})
+
+-- Toggle for enabling/disabling ViewModel Chams
+aimtab:AddToggle('Toggle ViewModel Chams', {
+    Text = 'Enable ViewModel Chams',
+    Default = false,
+    Callback = function(isEnabled)
+        ViewModelSettings.IsEnabled = isEnabled -- Update toggle state
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) -- Apply settings if enabled
+    end
+})
+
+-- Toggle for enabling/disabling Highlight
+aimtab:AddToggle('Toggle Highlight', {
+    Text = 'Enable Highlight',
+    Default = false,
+    Callback = function(isEnabled)
+        ViewModelSettings.HighlightEnabled = isEnabled -- Update highlight toggle state
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) -- Apply settings if enabled
+    end,
+    -- Disable this toggle if ViewModel Chams is not enabled
+    ConditionalEnabled = function() return ViewModelSettings.IsEnabled end
+})
+aimtab:AddLabel('---------------------------------')
+
+-- Function to handle ViewModel spawn
+function onViewModelSpawned()
+    local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+    applySettings(viewModel) -- Apply the last settings
+end
+
+-- Initial check for ViewModel
+onViewModelSpawned()
+
+-- Check for ViewModel being added or respawned
+game.Workspace.Camera.ChildAdded:Connect(function(child)
+    if child.Name == "ViewModel" then
+        wait(0.5) -- Wait for the ViewModel to fully load
+        onViewModelSpawned() -- Apply last settings
+    end
+end)
+
+-- Monitor player character for changes
+game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid").Died:Wait() -- Wait for death
+    wait(0.5) -- Wait for respawn
+    onViewModelSpawned() -- Check for new ViewModel
+end)
+
+-- Continuously update the ViewModel settings
+game:GetService("RunService").Stepped:Connect(function()
+    local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+    if viewModel then
+        applySettings(viewModel) -- Reapply settings every frame
+    end
+end)
+
 
 -- GUI Toggle for Silent Aim
 aimtab:AddToggle('silentAim994', {
