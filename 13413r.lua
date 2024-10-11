@@ -45,6 +45,26 @@ if not LPH_OBFUSCATED then
     end
 end
 
+-- Check if the script is already running
+if _G.ScriptAlreadyOpened then
+    warn("This script is already running. Multiple instances are not allowed.")
+    return -- Stop the script from running again
+end
+local Players = game.Players
+-- Mark the script as opened
+_G.ScriptAlreadyOpened = true
+
+-- Your script logic goes here
+print("CHECK-1")
+
+-- Example of script logic: Simulating script actions
+wait(5) -- Simulating some work being done by the script
+
+-- Once the script finishes, you can reset the flag (optional)
+-- _G.ScriptAlreadyOpened = false -- Uncomment this line if you want the script to run again after finishing
+
+
+
 local doge
 
 if doge then
@@ -819,7 +839,7 @@ elseif executor == "Wave" or executor == "Wave 5.0" then
     print("This script is running in Wave Executor (Called Loadstring!).")
     -- New example script written by wally
 -- You can suggest changes with a pull request or something
-local repo2 = "http://31.210.171.229:3000/new/"
+
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
 _esplib = loadstring(game:HttpGet(repo2 .. 'newlib/old/esp'))()
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
@@ -1206,7 +1226,7 @@ game.Players.PlayerAdded:Connect(function(player)
         end
     end)
 end)
-local players = game:GetService("Players")
+
 local localPlayer = players.LocalPlayer
 local workspace = game:GetService("Workspace")
 local camera = workspace.CurrentCamera
@@ -1524,13 +1544,7 @@ end)
 
 
 
-UserInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.E then -- Example key to toggle ESP
-        toggleESP()
-    elseif input.KeyCode == Enum.KeyCode.H then -- Example key to toggle health billboards
-        toggleHealthBillboards()
-    end
-end)
+
 
 
 -- Sağlık göstergelerini toggle etmek için bir kısayol belirleme
@@ -1554,6 +1568,8 @@ EnemyEspTab:AddToggle('function0017eq1cdx', {
     end
 })
 
+
+
 EnemyEspTab:AddToggle('ChamsSwitch', {
     Text = 'Enable Chams',
     Default = false,
@@ -1564,8 +1580,8 @@ EnemyEspTab:AddToggle('ChamsSwitch', {
 
 
 
-local Players = game:service("Players")
-local Player = Players.LocalPlayer
+
+local Player = game.Players.LocalPlayer
 local Mouse = Player:GetMouse()
 local Camera = game:service("Workspace").CurrentCamera
 local RS = game:service("RunService")
@@ -1674,11 +1690,12 @@ local function PlaceDot(plr)
     coroutine.wrap(Update)()
 end
 
-for _, v in pairs(Players:GetChildren()) do
+for _, v in pairs(game.Players:GetPlayers()) do
     if v.Name ~= Player.Name then
         PlaceDot(v)
     end
 end
+
 
 local function NewLocalDot()
     local d = Drawing.new("Triangle")
@@ -1694,7 +1711,7 @@ end
 
 local LocalPlayerDot = NewLocalDot()
 
-Players.PlayerAdded:Connect(function(v)
+game.Players.PlayerAdded:Connect(function(v)
     if v.Name ~= Player.Name then
         PlaceDot(v)
     end
@@ -1799,7 +1816,7 @@ end)()
 
 
 local Player = game:GetService("Players").LocalPlayer
-local Camera = game:GetService("Workspace").CurrentCamera
+
 
 local isESPEnabled = false -- Toggle state
 
@@ -2466,7 +2483,7 @@ aimtab:AddToggle('nograss', {
 
 -- Ensure that `players` is defined correctly and `skins` is accessible.
 
-local LC = Players.LocalPlayer  -- Correctly define `LC` as the LocalPlayer
+local LC = Game.Players.LocalPlayer  -- Correctly define `LC` as the LocalPlayer
 local rp = game:GetService("ReplicatedStorage")
 local skins = {
 	["762x25MAG"] = "Nutcracker",
@@ -2625,6 +2642,65 @@ local function setSpeedMultiplier(value)
     speedMultiplier = value
     toggleAnimationSpeed(true) -- Reapply speed with new multiplier
 end
+
+local fullBrightActive = false -- Track toggle state
+local oldSettings = {} -- Table to store old lighting settings
+
+local function enableFullBright()
+    -- Store old settings
+    oldSettings.Ambient = lighting.Ambient
+    oldSettings.Brightness = lighting.Brightness
+    oldSettings.ShadowSoftness = lighting.ShadowSoftness
+    oldSettings.GlobalShadows = lighting.GlobalShadows
+
+    Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+    Lighting.Brightness = 2 -- Increased brightness
+    Lighting.GlobalShadows = false -- Disable shadows
+
+    -- Disable shadow softness for a flat lighting effect
+    Lighting.ShadowSoftness = 0
+end
+
+local function disableFullBright()
+    if oldSettings.Ambient then
+        Lighting.Ambient = oldSettings.Ambient -- Restore old settings
+    end
+    if oldSettings.Brightness then
+        Lighting.Brightness = oldSettings.Brightness
+    end
+    if oldSettings.GlobalShadows ~= nil then
+        Lighting.GlobalShadows = oldSettings.GlobalShadows -- Restore shadows
+    end
+    if oldSettings.ShadowSoftness then
+        Lighting.ShadowSoftness = oldSettings.ShadowSoftness -- Restore shadow softness
+    end
+end
+
+-- Toggle to enable/disable full bright
+Misc:AddToggle('fullBrightToggle', {
+    Text = 'Enable Full Bright',
+    Default = false,
+    Callback = function(state)
+        fullBrightActive = state
+        if fullBrightActive then
+            enableFullBright() -- Enable full bright
+        else
+            disableFullBright() -- Disable full bright
+        end
+    end
+})
+
+aimtab:AddToggle('removevisors', {
+    Text = 'Remove Visors',
+    Default = false,
+    Callback = function(state)  -- Renamed 'first' to 'state' for clarity
+        if state then
+            game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = false
+        else
+            game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = true
+        end
+    end
+})
 
 -- Adding Toggle to aimtab
 aimtab:AddToggle('InstantReload', {
@@ -3765,6 +3841,34 @@ aimtab:AddToggle('jesus', {
  --   end
 --})
 
+local timeValue = 12 -- Default time
+
+-- Function to change the time of day
+local function changeTimeOfDay(value)
+    Lighting.ClockTime = value
+end
+
+-- Slider to set time of day
+Misc:AddSlider('timeSlider', {
+    Text = 'Set Time of Day',
+    Default = 12, -- Default to noon
+    Min = 0, -- Minimum time (midnight)
+    Max = 24, -- Maximum time (next midnight)
+    Rounding = 1, -- Round to 1 decimal place
+    Compact = false,
+}):OnChanged(function(value)
+    -- Only change the time when the slider is adjusted
+    timeValue = value -- Update timeValue with the slider
+    changeTimeOfDay(timeValue) -- Apply the new time
+end)
+
+-- OPTIONAL: Monitor if the game resets the time and reapply if necessary
+game:GetService("RunService").Stepped:Connect(function()
+    if Lighting.ClockTime ~= timeValue then
+        changeTimeOfDay(timeValue) -- Reapply the desired time if it changes
+    end
+end)
+
 Misc:AddButton('Remove Scope From Gun', function()
 
 
@@ -3882,9 +3986,9 @@ local minDistance = 10            -- Lowered to capture very close targets
 local maxDistance = 850          -- Slightly extended for longer mid-range engagements
 
 local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
+
 local RunService = game:GetService("RunService")
-local camera = workspace.CurrentCamera
+
 local mouse = Players.LocalPlayer:GetMouse() -- Correct way to get the mouse object
 
 -- Variables to track aiming state and debugging
@@ -4045,14 +4149,14 @@ end)
 
 -- Create the FOV circle at the start
 createFovCircle()
-
 -- Create a table to store settings globally
 ViewModelSettings = {
     Color = Color3.new(0.768627, 0.039216, 0.913725), -- Default color
     Material = Enum.Material.Plastic, -- Default material
     IsEnabled = false, -- Toggle state for ViewModel Chams
     HighlightEnabled = false, -- Toggle state for Highlight effect
-    HighlightTransparency = 0.5 -- Default transparency for highlight
+    HighlightTransparency = 0.5, -- Default transparency for highlight
+    ArmCustomizationEnabled = false -- Toggle state for arm customization
 }
 
 -- Function to apply color, material, and outline to ViewModel parts
@@ -4086,6 +4190,39 @@ function applySettings(viewModel)
                     surfaceAppearance:Destroy() -- Remove SurfaceAppearance
                 end
             end
+        end
+    end
+end
+
+-- Function to customize arms and remove WastelandShirt
+function customizeArms(viewModel)
+    if not viewModel then return end
+    
+    -- Remove WastelandShirt if it exists
+    local wastelandShirt = viewModel:FindFirstChild("WastelandShirt")
+    if wastelandShirt then
+        wastelandShirt:Destroy()
+    end
+    
+    -- List of arm parts to customize
+    local armParts = { "LeftLowerArm", "LeftUpperArm", "RightLowerArm", "RightUpperArm" }
+    
+    -- Apply force field and transparency to arms
+    for _, armName in ipairs(armParts) do
+        local armPart = viewModel:FindFirstChild(armName)
+        if armPart and armPart:IsA("BasePart") then
+            armPart.Material = Enum.Material.ForceField -- Set material to ForceField
+            armPart.Transparency = 0.8 -- Set transparency to 0.8
+
+            -- Create or update the highlight
+            local highlight = armPart:FindFirstChildOfClass("Highlight")
+            if not highlight then
+                highlight = Instance.new("Highlight")
+                highlight.Parent = armPart
+            end
+            highlight.FillColor = ViewModelSettings.Color -- Set highlight color to match ViewModelSettings color
+            highlight.OutlineColor = Color3.new(1, 1, 1) -- Set outline color to white
+            highlight.OutlineTransparency = 0.5 -- Set outline transparency
         end
     end
 end
@@ -4142,12 +4279,29 @@ aimtab:AddToggle('Toggle Highlight', {
     -- Disable this toggle if ViewModel Chams is not enabled
     ConditionalEnabled = function() return ViewModelSettings.IsEnabled end
 })
+
+-- New toggle for arm customization and removing WastelandShirt
+aimtab:AddToggle('Toggle Arm Customization', {
+    Text = 'Enable Arm Customization',
+    Default = false,
+    Callback = function(isEnabled)
+        ViewModelSettings.ArmCustomizationEnabled = isEnabled -- Update arm customization toggle state
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        if isEnabled then
+            customizeArms(viewModel) -- Apply arm customization if enabled
+        end
+    end
+})
+
 aimtab:AddLabel('---------------------------------')
 
 -- Function to handle ViewModel spawn
 function onViewModelSpawned()
     local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
     applySettings(viewModel) -- Apply the last settings
+    if ViewModelSettings.ArmCustomizationEnabled then
+        customizeArms(viewModel) -- Apply arm customization if enabled
+    end
 end
 
 -- Initial check for ViewModel
@@ -4173,8 +4327,12 @@ game:GetService("RunService").Stepped:Connect(function()
     local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
     if viewModel then
         applySettings(viewModel) -- Reapply settings every frame
+        if ViewModelSettings.ArmCustomizationEnabled then
+            customizeArms(viewModel) -- Reapply arm customization every frame
+        end
     end
 end)
+
 
 
 -- GUI Toggle for Silent Aim
@@ -4479,3 +4637,4 @@ for _, player in pairs(game.Players:GetPlayers()) do
         end
     end
 end
+
