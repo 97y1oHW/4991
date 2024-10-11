@@ -1285,23 +1285,20 @@ game.Players.PlayerAdded:Connect(function(player)
         end
     end)
 end)
-
--- Example usage: Toggle tracers for all players except the local player
-local localPlayer = game.Players.LocalPlayer
-
-local workspace = game:GetService("Workspace")
 local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
+local workspace = game:GetService("Workspace")
 local camera = workspace.CurrentCamera
 
--- ESP toggle
+-- Toggle variables
 local espEnabled = false
+local chamsEnabled = false
 local espObjects = {}
 
--- Custom distance factor for game (set according to game specifics)
-local customFactor = 0.23 -- Modify this according to your game's specific scale
+-- Custom distance factor (adjust for your game)
+local customFactor = 0.23
 
--- Function to create a 2D box
+-- Function to create a 2D box for ESP
 local function create2DBox()
     local box = {}
     box.topLeft = Drawing.new("Line")
@@ -1309,7 +1306,6 @@ local function create2DBox()
     box.bottomLeft = Drawing.new("Line")
     box.bottomRight = Drawing.new("Line")
     
-    -- Set properties for the lines (white, 1-pixel width)
     for _, line in pairs(box) do
         line.Color = Color3.new(1, 1, 1) -- White color
         line.Thickness = 1
@@ -1324,22 +1320,19 @@ local function update2DBox(box, character)
     local rootPart = character:FindFirstChild("HumanoidRootPart")
     if not rootPart then return end
     
-    -- Get the 3D corners of the character's bounding box
     local corners = {
-        rootPart.Position + Vector3.new(-2, 3, -1),  -- Top left corner
-        rootPart.Position + Vector3.new(2, 3, -1),   -- Top right corner
-        rootPart.Position + Vector3.new(-2, -3, -1), -- Bottom left corner
-        rootPart.Position + Vector3.new(2, -3, -1)   -- Bottom right corner
+        rootPart.Position + Vector3.new(-2, 3, -1),
+        rootPart.Position + Vector3.new(2, 3, -1),
+        rootPart.Position + Vector3.new(-2, -3, -1),
+        rootPart.Position + Vector3.new(2, -3, -1)
     }
     
-    -- Project 3D world positions to 2D screen positions
     local screenCorners = {}
     for i, corner in ipairs(corners) do
         local screenPos, onScreen = camera:WorldToViewportPoint(corner)
         if onScreen then
             screenCorners[i] = Vector2.new(screenPos.X, screenPos.Y)
         else
-            -- Hide the box if any part of it goes off-screen
             for _, line in pairs(box) do
                 line.Visible = false
             end
@@ -1347,20 +1340,15 @@ local function update2DBox(box, character)
         end
     end
     
-    -- Set positions for the box lines
     box.topLeft.From = screenCorners[1]
     box.topLeft.To = screenCorners[2]
-    
     box.bottomLeft.From = screenCorners[3]
     box.bottomLeft.To = screenCorners[4]
-    
     box.topRight.From = screenCorners[1]
     box.topRight.To = screenCorners[3]
-    
     box.bottomRight.From = screenCorners[2]
     box.bottomRight.To = screenCorners[4]
     
-    -- Make sure the box is visible
     for _, line in pairs(box) do
         line.Visible = true
     end
@@ -1378,11 +1366,9 @@ local function createOrUpdateESP(player)
     local character = player.Character
     if not character or not character:FindFirstChild("HumanoidRootPart") then return end
 
-    -- Create ESP if it doesn't already exist for this player
     if not espObjects[player] then
         local boxESP = create2DBox()
 
-        -- Billboard for Name and Health
         local billboard = Instance.new("BillboardGui")
         billboard.Adornee = character.HumanoidRootPart
         billboard.Size = UDim2.new(0, 200, 0, 50)
@@ -1398,7 +1384,6 @@ local function createOrUpdateESP(player)
         nameHealthLabel.TextColor3 = Color3.new(1, 1, 1)
         nameHealthLabel.TextStrokeTransparency = 0.8
 
-        -- Health bar
         local healthBar = Instance.new("Frame", billboard)
         healthBar.BackgroundColor3 = Color3.new(0.121569, 0.945098, 0.011765) -- Green color
         healthBar.Size = UDim2.new(0, 20, 0, 50)
@@ -1406,7 +1391,6 @@ local function createOrUpdateESP(player)
         healthBar.BorderSizePixel = 0
         healthBar.BackgroundTransparency = 0.5
 
-        -- Billboard for Distance
         local distanceBillboard = Instance.new("BillboardGui")
         distanceBillboard.Adornee = character.HumanoidRootPart
         distanceBillboard.Size = UDim2.new(0, 200, 0, 11)
@@ -1422,7 +1406,6 @@ local function createOrUpdateESP(player)
         distanceLabel.TextColor3 = Color3.new(1, 1, 1)
         distanceLabel.TextStrokeTransparency = 0.8
 
-        -- Store ESP elements for later use
         espObjects[player] = {
             boxESP = boxESP,
             nameHealthLabel = nameHealthLabel,
@@ -1431,22 +1414,18 @@ local function createOrUpdateESP(player)
         }
     end
 
-    -- Update ESP elements for the player
     local humanoid = character:FindFirstChild("Humanoid")
     if humanoid then
         local health = humanoid.Health
         local maxHealth = humanoid.MaxHealth
         espObjects[player].nameHealthLabel.Text = string.format("%s | %d/%d", player.Name, health, maxHealth)
 
-        -- Update health bar
         local healthBar = espObjects[player].healthBar
         healthBar.Size = UDim2.new(0, 20, 0, 50 * (health / maxHealth))
 
-        -- Calculate distance in meters (1 stud = 0.28 meters)
         local distance = (character.HumanoidRootPart.Position - localPlayer.Character.HumanoidRootPart.Position).Magnitude * customFactor
         espObjects[player].distanceLabel.Text = string.format("%.2f m", distance)
 
-        -- Update the 2D box
         update2DBox(espObjects[player].boxESP, character)
     end
 end
@@ -1454,7 +1433,6 @@ end
 -- Function to remove ESP for a player
 local function removeESP(player)
     if espObjects[player] then
-        -- Clean up the ESP objects
         remove2DBox(espObjects[player].boxESP)
         espObjects[player].nameHealthLabel:Destroy()
         espObjects[player].healthBar:Destroy()
@@ -1463,7 +1441,7 @@ local function removeESP(player)
     end
 end
 
--- Function to check for nearby players every 0.1 seconds
+-- Function to check for nearby players
 local function checkNearbyPlayers()
     while espEnabled do
         local localCharacter = localPlayer.Character
@@ -1473,7 +1451,7 @@ local function checkNearbyPlayers()
                     local character = player.Character
                     if character and character:FindFirstChild("HumanoidRootPart") then
                         local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude * customFactor
-                        if distance <= 1000 / customFactor then -- 1000 meterye kadar olan mesafeleri göster
+                        if distance <= 1000 / customFactor then
                             createOrUpdateESP(player)
                         else
                             removeESP(player)
@@ -1488,41 +1466,83 @@ local function checkNearbyPlayers()
     end
 end
 
--- Function to toggle ESP
+-- Highlight functions (Chams)
+local function applyHighlight(player)
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        if not character:FindFirstChild("HighlightEffect") then
+            local highlight = Instance.new("Highlight")
+            highlight.Name = "HighlightEffect"
+            highlight.Adornee = character
+            highlight.FillColor = Color3.fromRGB(255, 255, 255)
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+            highlight.FillTransparency = 0.5
+            highlight.OutlineTransparency = 0
+            highlight.Parent = character
+        end
+    end
+end
+
+local function removeHighlight(player)
+    local character = player.Character
+    if character and character:FindFirstChild("HighlightEffect") then
+        character.HighlightEffect:Destroy()
+    end
+end
+
+local function toggleChams()
+    chamsEnabled = not chamsEnabled
+    for _, player in pairs(players:GetPlayers()) do
+        if chamsEnabled then
+            applyHighlight(player)
+        else
+            removeHighlight(player)
+        end
+    end
+end
+
+-- ESP toggle
 local function toggleESP()
     espEnabled = not espEnabled
     if espEnabled then
         coroutine.wrap(checkNearbyPlayers)()
     else
-        -- Clean up all ESP objects when disabling
         for _, player in pairs(players:GetPlayers()) do
             removeESP(player)
         end
     end
 end
 
--- Add ESP for players when they join
+-- Player events
 players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()
         if espEnabled then
             createOrUpdateESP(player)
         end
+        if chamsEnabled then
+            applyHighlight(player)
+        end
     end)
     player.CharacterRemoving:Connect(function()
         removeESP(player)
+        removeHighlight(player)
     end)
 end)
 
-
-
-
-
-
+-- UI toggles
 EnemyEspTab:AddToggle('EspSwitch', {
-    Text = 'enable esp',
+    Text = 'Enable ESP',
     Default = false,
     Callback = function(first)
         toggleESP()
+    end
+})
+
+EnemyEspTab:AddToggle('ChamsSwitch', {
+    Text = 'Enable Chams',
+    Default = false,
+    Callback = function(first)
+        toggleChams()
     end
 })
 
@@ -4295,4 +4315,20 @@ rawmeta.__namecall = function(self, ...)
     end
     return __namecall(self, ...)
 end]]
+end
+
+-- Toggle variable to enable or disable highlights
+
+
+
+
+-- Apply/remove highlights to all current players when toggled
+for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Character then
+        if chamsEnabled then
+            applyHighlight(player)
+        else
+            removeHighlight(player)
+        end
+    end
 end
