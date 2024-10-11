@@ -1294,6 +1294,7 @@ local camera = workspace.CurrentCamera
 local espEnabled = false
 local chamsEnabled = false
 local espObjects = {}
+local healthBillboards = {}
 
 -- Custom distance factor (adjust for your game)
 local customFactor = 0.23
@@ -1305,13 +1306,13 @@ local function create2DBox()
     box.topRight = Drawing.new("Line")
     box.bottomLeft = Drawing.new("Line")
     box.bottomRight = Drawing.new("Line")
-    
+
     for _, line in pairs(box) do
         line.Color = Color3.new(1, 1, 1) -- White color
         line.Thickness = 1
         line.Transparency = 1
     end
-    
+
     return box
 end
 
@@ -1319,14 +1320,14 @@ end
 local function update2DBox(box, character)
     local rootPart = character:FindFirstChild("HumanoidRootPart")
     if not rootPart then return end
-    
+
     local corners = {
         rootPart.Position + Vector3.new(-2, 3, -1),
         rootPart.Position + Vector3.new(2, 3, -1),
         rootPart.Position + Vector3.new(-2, -3, -1),
         rootPart.Position + Vector3.new(2, -3, -1)
     }
-    
+
     local screenCorners = {}
     for i, corner in ipairs(corners) do
         local screenPos, onScreen = camera:WorldToViewportPoint(corner)
@@ -1339,7 +1340,7 @@ local function update2DBox(box, character)
             return
         end
     end
-    
+
     box.topLeft.From = screenCorners[1]
     box.topLeft.To = screenCorners[2]
     box.bottomLeft.From = screenCorners[3]
@@ -1348,7 +1349,7 @@ local function update2DBox(box, character)
     box.topRight.To = screenCorners[3]
     box.bottomRight.From = screenCorners[2]
     box.bottomRight.To = screenCorners[4]
-    
+
     for _, line in pairs(box) do
         line.Visible = true
     end
@@ -1450,12 +1451,7 @@ local function checkNearbyPlayers()
                 if player ~= localPlayer then
                     local character = player.Character
                     if character and character:FindFirstChild("HumanoidRootPart") then
-                        local distance = (character.HumanoidRootPart.Position - localCharacter.HumanoidRootPart.Position).Magnitude * customFactor
-                        if distance <= 1000 / customFactor then
-                            createOrUpdateESP(player)
-                        else
-                            removeESP(player)
-                        end
+                        createOrUpdateESP(player)
                     else
                         removeESP(player)
                     end
@@ -1513,21 +1509,112 @@ local function toggleESP()
     end
 end
 
--- Player events
+-- Function to clean up stuck boxes
+local function cleanUpBoxes()
+    while true do
+        wait(10) -- Wait for 10 seconds
+        for _, espData in pairs(espObjects) do
+            if espData.boxESP then
+                remove2DBox(espData.boxESP)
+                espData.boxESP = create2DBox() -- Recreate the box to avoid being stuck
+            end
+        end
+    end
+end
+
+-- Start the box cleanup coroutine
+coroutine.wrap(cleanUpBoxes)()
+
+-- Create health billboards for players
+local function createHealthBillboard(player)
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+
+    local billboardGui = Instance.new("BillboardGui")
+    billboardGui.Adornee = character.Head
+    billboardGui.Size = UDim2.new(0, 100, 0, 50)
+    billboardGui.StudsOffset = Vector3.new(2, 0, 0)
+    billboardGui.AlwaysOnTop = true
+
+    local healthText = Instance.new("TextLabel", billboardGui)
+    healthText.Size = UDim2.new(1, 0, 1, 0)
+    healthText.BackgroundTransparency = 1
+    healthText.Font = Enum.Font.Code
+    healthText.TextSize = 18
+    healthText.TextStrokeTransparency = 0.5
+
+    local function updateHealth()
+        local health = humanoid.Health
+        healthText.Text = tostring(math.floor(health))
+
+        if health >= 50 then
+            healthText.TextColor3 = Color3.new(0, 1, 0) -- Green
+        elseif health >= 30 then
+            healthText.TextColor3 = Color3.new(1, 1, 0) -- Yellow
+        else
+            healthText.TextColor3 = Color3.new(1, 0, 0) -- Red
+        end
+
+        -- Ensure the health text is visible based on the player's billboard status
+        billboardGui.Enabled = espEnabled -- Control visibility based on ESP toggle
+    end
+
+    humanoid.HealthChanged:Connect(updateHealth)
+    updateHealth()
+    billboardGui.Parent = character.Head
+
+    healthBillboards[player.UserId] = billboardGui
+end
+
+-- Toggle health billboards
+local function toggleHealthBillboards()
+    for _, player in pairs(players:GetPlayers()) do
+        if player ~= localPlayer then
+            local billboard = healthBillboards[player.UserId]
+            if billboard then
+                billboard.Enabled = not billboard.Enabled -- Toggle visibility
+            end
+        end
+    end
+end
+
+-- Create health billboards for existing players
+for _, player in pairs(players:GetPlayers()) do
+    if player ~= localPlayer then
+        createHealthBillboard(player)
+    end
+end
+
+-- New players joining
 players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()
-        if espEnabled then
-            createOrUpdateESP(player)
-        end
-        if chamsEnabled then
-            applyHighlight(player)
-        end
-    end)
-    player.CharacterRemoving:Connect(function()
-        removeESP(player)
-        removeHighlight(player)
+        createHealthBillboard(player)
     end)
 end)
+
+-- Cleanup health billboards on player leaving
+players.PlayerRemoving:Connect(function(player)
+    local billboard = healthBillboards[player.UserId]
+    if billboard then
+        billboard:Destroy()
+        healthBillboards[player.UserId] = nil
+    end
+end)
+
+-- Keybinds or UI to toggle ESP and health billboards (Example)
+local UserInputService = game:GetService("UserInputService")
+
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.E then -- Example key to toggle ESP
+        toggleESP()
+    elseif input.KeyCode == Enum.KeyCode.H then -- Example key to toggle health billboards
+        toggleHealthBillboards()
+    end
+end)
+
+
+-- Sağlık göstergelerini toggle etmek için bir kısayol belirleme
+
 
 -- UI toggles
 EnemyEspTab:AddToggle('EspSwitch', {
@@ -1535,6 +1622,15 @@ EnemyEspTab:AddToggle('EspSwitch', {
     Default = false,
     Callback = function(first)
         toggleESP()
+    end
+})
+
+-- UI toggles
+EnemyEspTab:AddToggle('function0017eq1cdx', {
+    Text = 'enable health esp',
+    Default = false,
+    Callback = function(first)
+        toggleHealthBillboards()
     end
 })
 
