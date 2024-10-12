@@ -1238,7 +1238,7 @@ local espObjects = {}
 local healthBillboards = {}
 
 -- Custom distance factor (adjust for your game)
-local customFactor = 0.23
+local customFactor = 0.44
 
 -- Function to create a 2D box for ESP
 local function create2DBox()
@@ -3896,9 +3896,9 @@ end
 local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
 -- Settings
-local minPrediction = 0.07        -- Slightly higher minimum for short-range prediction stability
-local maxPrediction = 0.50        -- Reduced from 0.5 to prevent overshooting at long distances
-local defaultPrediction = 0.23    -- Increased default for more reliable accuracy
+local minPrediction = 0.08        -- Slightly higher minimum for short-range prediction stability
+local maxPrediction = 0.810        -- Reduced from 0.5 to prevent overshooting at long distances
+local defaultPrediction = 0.28    -- Increased default for more reliable accuracy
 local predictionAmount = defaultPrediction  -- Initial prediction value
 
 local minDistance = 10            -- Lowered to capture very close targets
@@ -3915,7 +3915,7 @@ local isAiming = false
 local lockedCharacter = nil
 local debugEnabled = true -- Toggle this to enable/disable debugging
 local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
-local fovSize = 90 -- Default FOV size
+local fovSize = 100 -- Default FOV size
 
 -- Function to create a visible FOV circle
 local function createFovCircle()
