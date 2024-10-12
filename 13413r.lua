@@ -47,8 +47,8 @@ end
 
 -- Check if the script is already running
 if _G.ScriptAlreadyOpened then
-    warn("This script is already running. Multiple instances are not allowed.")
-    return -- Stop the script from running again
+    warn("Blocked Multiple Instances.")
+    return -- Stop the script from ruMultiple inning again
 end
 local Players = game.Players
 -- Mark the script as opened
@@ -1132,11 +1132,11 @@ local Window = Library:CreateWindow({
     MenuFadeTime = 1.3
 })
 local Tabs = {
-    Main = Window:AddTab('combat'),
-    Visuals = Window:AddTab('esp'),
-    Misc = Window:AddTab('misc'),
-    Lua = Window:AddTab('Other'),
-    Settings = Window:AddTab('settings/configs'),
+    Main = Window:AddTab('combat ⚔️'),
+    Visuals = Window:AddTab('esp 👤'),
+    Misc = Window:AddTab('Misc 🔅'),
+    Lua = Window:AddTab('Other 🛠️'),
+    Settings = Window:AddTab('UI Settings 🎚️'),
 }
 
 
@@ -1229,7 +1229,7 @@ end)
 
 local localPlayer = players.LocalPlayer
 local workspace = game:GetService("Workspace")
-local camera = workspace.CurrentCamera
+
 
 -- Toggle variables
 local espEnabled = false
@@ -1466,81 +1466,8 @@ end
 -- Start the box cleanup coroutine
 coroutine.wrap(cleanUpBoxes)()
 
--- Create health billboards for players
-local function createHealthBillboard(player)
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
 
-    local billboardGui = Instance.new("BillboardGui")
-    billboardGui.Adornee = character.Head
-    billboardGui.Size = UDim2.new(0, 100, 0, 50)
-    billboardGui.StudsOffset = Vector3.new(2, 0, 0)
-    billboardGui.AlwaysOnTop = true
 
-    local healthText = Instance.new("TextLabel", billboardGui)
-    healthText.Size = UDim2.new(1, 0, 1, 0)
-    healthText.BackgroundTransparency = 1
-    healthText.Font = Enum.Font.Code
-    healthText.TextSize = 18
-    healthText.TextStrokeTransparency = 0.5
-
-    local function updateHealth()
-        local health = humanoid.Health
-        healthText.Text = tostring(math.floor(health))
-
-        if health >= 50 then
-            healthText.TextColor3 = Color3.new(0, 1, 0) -- Green
-        elseif health >= 30 then
-            healthText.TextColor3 = Color3.new(1, 1, 0) -- Yellow
-        else
-            healthText.TextColor3 = Color3.new(1, 0, 0) -- Red
-        end
-
-        -- Ensure the health text is visible based on the player's billboard status
-        billboardGui.Enabled = espEnabled -- Control visibility based on ESP toggle
-    end
-
-    humanoid.HealthChanged:Connect(updateHealth)
-    updateHealth()
-    billboardGui.Parent = character.Head
-
-    healthBillboards[player.UserId] = billboardGui
-end
-
--- Toggle health billboards
-local function toggleHealthBillboards()
-    for _, player in pairs(players:GetPlayers()) do
-        if player ~= localPlayer then
-            local billboard = healthBillboards[player.UserId]
-            if billboard then
-                billboard.Enabled = not billboard.Enabled -- Toggle visibility
-            end
-        end
-    end
-end
-
--- Create health billboards for existing players
-for _, player in pairs(players:GetPlayers()) do
-    if player ~= localPlayer then
-        createHealthBillboard(player)
-    end
-end
-
--- New players joining
-players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function()
-        createHealthBillboard(player)
-    end)
-end)
-
--- Cleanup health billboards on player leaving
-players.PlayerRemoving:Connect(function(player)
-    local billboard = healthBillboards[player.UserId]
-    if billboard then
-        billboard:Destroy()
-        healthBillboards[player.UserId] = nil
-    end
-end)
 
 
 
@@ -1560,13 +1487,6 @@ EnemyEspTab:AddToggle('EspSwitch', {
 })
 
 -- UI toggles
-EnemyEspTab:AddToggle('function0017eq1cdx', {
-    Text = 'enable health esp',
-    Default = false,
-    Callback = function(first)
-        toggleHealthBillboards()
-    end
-})
 
 
 
@@ -2202,6 +2122,9 @@ counter = counter + 1
     end
 })]]
 
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+
 local zoomValue = 0 -- Default zoom value
 local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
 local zoomKey = Enum.KeyCode.Z -- Default keybind
@@ -2211,9 +2134,8 @@ local function applyZoom()
     Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
 end
 
-
 -- Slider for Zoom Value
-WorldTab:AddSlider('ZoomSlider', {
+Misc:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
     Default = 0,
     Min = 0.1,
@@ -2223,18 +2145,17 @@ WorldTab:AddSlider('ZoomSlider', {
 
     Callback = function(Value)
         zoomValue = Value
-        -- Apply zoom every time the slider changes
-        applyZoom() -- Apply zoom immediately when the slider is adjusted
+        -- Do not apply zoom immediately when the slider is adjusted
     end
 })
 
 -- Keybind for Zoom
-WorldTab:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
+Misc:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
     Default = 'Z',
     SyncToggleState = false,
     Mode = 'Toggle',
     Text = 'Zoom Keybind',
-    
+
     Callback = function(value)
         print('[cb] Keybind clicked!', value)
     end,
@@ -2266,7 +2187,7 @@ end
 -- Connect the key press event
 UserInputService.InputBegan:Connect(onKeyPress)
 
--- Ensure zoom is applied when the slider is adjusted
+-- Ensure zoom is applied only when the zoom key is pressed
 UserInputService.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
         if isZoomed then
@@ -2643,37 +2564,32 @@ local function setSpeedMultiplier(value)
     toggleAnimationSpeed(true) -- Reapply speed with new multiplier
 end
 
+local Lighting = game:GetService("Lighting") -- Ensure Lighting service is referenced
 local fullBrightActive = false -- Track toggle state
 local oldSettings = {} -- Table to store old lighting settings
 
 local function enableFullBright()
-    -- Store old settings
-    oldSettings.Ambient = lighting.Ambient
-    oldSettings.Brightness = lighting.Brightness
-    oldSettings.ShadowSoftness = lighting.ShadowSoftness
-    oldSettings.GlobalShadows = lighting.GlobalShadows
+    -- Store old settings if not already stored
+    if not oldSettings.Ambient then
+        oldSettings.Ambient = Lighting.Ambient
+        oldSettings.Brightness = Lighting.Brightness
+        oldSettings.ShadowSoftness = Lighting.ShadowSoftness
+        oldSettings.GlobalShadows = Lighting.GlobalShadows
+    end
 
+    -- Set full bright settings
     Lighting.Ambient = Color3.fromRGB(255, 255, 255)
     Lighting.Brightness = 2 -- Increased brightness
     Lighting.GlobalShadows = false -- Disable shadows
-
-    -- Disable shadow softness for a flat lighting effect
-    Lighting.ShadowSoftness = 0
+    Lighting.ShadowSoftness = 0 -- Disable shadow softness for a flat lighting effect
 end
 
 local function disableFullBright()
-    if oldSettings.Ambient then
-        Lighting.Ambient = oldSettings.Ambient -- Restore old settings
-    end
-    if oldSettings.Brightness then
-        Lighting.Brightness = oldSettings.Brightness
-    end
-    if oldSettings.GlobalShadows ~= nil then
-        Lighting.GlobalShadows = oldSettings.GlobalShadows -- Restore shadows
-    end
-    if oldSettings.ShadowSoftness then
-        Lighting.ShadowSoftness = oldSettings.ShadowSoftness -- Restore shadow softness
-    end
+    -- Restore old settings
+    Lighting.Ambient = oldSettings.Ambient or Lighting.Ambient
+    Lighting.Brightness = oldSettings.Brightness or Lighting.Brightness
+    Lighting.GlobalShadows = oldSettings.GlobalShadows ~= nil and oldSettings.GlobalShadows or Lighting.GlobalShadows
+    Lighting.ShadowSoftness = oldSettings.ShadowSoftness or Lighting.ShadowSoftness
 end
 
 -- Toggle to enable/disable full bright
@@ -3939,12 +3855,15 @@ counter = counter + 1
 local charactertab = pdeltatabbox1:AddTab("misc")
  
 Library:Notify("Doge Hub V1.7 SOLARA")
+Library:Notify("DOWNLOADED BUG FIXES")
 Library:Notify(executorname33)
 Library:Notify("Optimization Loaded")
 wait(1)
 Library:Notify("Loading Updates ")
 wait(0.4)
 Library:Notify("Loaded")
+wait(0.5)
+Library:Notify("MULT INS")
 
 local function IsTargetVisible(target)
     if not plr.Character then return false end
@@ -4637,4 +4556,3 @@ for _, player in pairs(game.Players:GetPlayers()) do
         end
     end
 end
-
