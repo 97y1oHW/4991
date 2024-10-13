@@ -2565,7 +2565,7 @@ local function setupAnimator()
             warn("Humanoid not found in ViewModel")
         end
     else
-        warn("ViewModel or Camera not found in Workspace")
+        
     end
     return false
 end
@@ -4242,9 +4242,9 @@ function customizeArms(viewModel)
     end
 end
 
-aimtab:AddLabel('---------------------------------')
+charactertab:AddLabel('---------------------------------')
 -- Color Picker for ViewModel Chams
-aimtab:AddLabel('ViewModel Chams Color Picker'):AddColorPicker('ColorPickerViewModel', {
+charactertab:AddLabel('ViewModel Chams Color Picker'):AddColorPicker('ColorPickerViewModel', {
     Default = ViewModelSettings.Color,
     Title = 'ViewModel Chams Color Picker',
     Transparency = 0,
@@ -4256,7 +4256,7 @@ aimtab:AddLabel('ViewModel Chams Color Picker'):AddColorPicker('ColorPickerViewM
     end
 })
 
-aimtab:AddDropdown('MaterialDropdown', {
+charactertab:AddDropdown('MaterialDropdown', {
     Values = { 'Plastic', 'ForceField', 'Neon' },
     Default = 1, -- Default to 'Plastic'
     Multi = false, -- Single selection
@@ -4272,7 +4272,7 @@ aimtab:AddDropdown('MaterialDropdown', {
 })
 
 -- Toggle for enabling/disabling ViewModel Chams
-aimtab:AddToggle('Toggle ViewModel Chams', {
+charactertab:AddToggle('Toggle ViewModel Chams', {
     Text = 'Enable ViewModel Chams',
     Default = false,
     Callback = function(isEnabled)
@@ -4283,7 +4283,7 @@ aimtab:AddToggle('Toggle ViewModel Chams', {
 })
 
 -- Toggle for enabling/disabling Highlight
-aimtab:AddToggle('Toggle Highlight', {
+charactertab:AddToggle('Toggle Highlight', {
     Text = 'Enable Highlight',
     Default = false,
     Callback = function(isEnabled)
@@ -4296,7 +4296,7 @@ aimtab:AddToggle('Toggle Highlight', {
 })
 
 -- New toggle for arm customization and removing WastelandShirt
-aimtab:AddToggle('Toggle Arm Customization', {
+charactertab:AddToggle('Toggle Arm Customization', {
     Text = 'Enable Arm Customization',
     Default = false,
     Callback = function(isEnabled)
@@ -4308,7 +4308,7 @@ aimtab:AddToggle('Toggle Arm Customization', {
     end
 })
 
-aimtab:AddLabel('---------------------------------')
+charactertab:AddLabel('---------------------------------')
 
 -- Function to handle ViewModel spawn
 function onViewModelSpawned()
