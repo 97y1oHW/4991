@@ -74,22 +74,36 @@ return
 
 end
 
-local UserInputService = game:GetService("UserInputService")
-local isfirstrun = true  -- Example variable, you should set this appropriately
 
-if isfirstrun then
-    -- Replace with your own file IDs
-    local audioFileId = "1ZzPp2yzuOSIpLW5VIkYxt_h40q7lSB8J"  -- Example ID
+local CoreGui = game:GetService("CoreGui")
+local audioFileName = "dogehubsecretmp3.mp3"  -- File name for the downloaded audio
+
+-- Check if the audio file is already downloaded
+if not isfile(audioFileName) then
+    -- First run, download the audio file
+    local audioFileId = "1ZzPp2yzuOSIpLW5VIkYxt_h40q7lSB8J"  -- Replace with your own Google Drive ID
     local audioUrl = "https://drive.google.com/uc?export=download&id=" .. audioFileId
 
-    -- Download the audio file
-    writefile("dogehubsecretmp3.mp3", game:HttpGet(audioUrl))
-    
-    local flex = Instance.new('Sound', game:GetService('CoreGui'))
-    flex.SoundId = getcustomasset("dogehubsecretmp3.mp3")
-    flex.PlaybackSpeed = 0.5
-    flex.Volume = 100-- Adjust to a reasonable volume (0 to 1)
-    flex:Play()  -- Start playing the sound
+    -- Download the audio file to local storage
+    writefile(audioFileName, game:HttpGet(audioUrl))
+end
+
+-- Check if the audio has already been played
+if not isfile("dogehub_played.txt") then
+    -- Audio file exists, play the audio
+    local soundInstance = Instance.new('Sound', CoreGui)
+    soundInstance.SoundId = getcustomasset(audioFileName)
+    soundInstance.PlaybackSpeed = 0.5
+    soundInstance.Volume = 1  -- Adjust to a reasonable volume (0 to 1)
+    soundInstance:Play()
+
+    -- Mark that the audio has been played by creating a file as a flag
+    writefile("dogehub_played.txt", "true")
+
+    -- Remove the sound instance after it finishes playing
+    soundInstance.Ended:Connect(function()
+        soundInstance:Destroy()
+    end)
 end
 
 
@@ -2303,9 +2317,11 @@ movetab:AddToggle('Third Person', {
 
     Callback = function(isEnabled)
         if isEnabled then
+            print("called")
             -- Load the script when Third Person is enabled
             loadstring(game:HttpGet("https://pastebin.com/raw/0JRqt76Z"))()
         else
+        print("called2")
             -- Load the script when Third Person is disabled
             loadstring(game:HttpGet("https://pastebin.com/raw/sZxZGWn5"))()
         end
@@ -4282,6 +4298,8 @@ charactertab:AddToggle('Toggle ViewModel Chams', {
     end
 })
 
+
+
 -- Toggle for enabling/disabling Highlight
 charactertab:AddToggle('Toggle Highlight', {
     Text = 'Enable Highlight',
@@ -4309,6 +4327,30 @@ charactertab:AddToggle('Toggle Arm Customization', {
 })
 
 charactertab:AddLabel('---------------------------------')
+
+charactertab:AddToggle('disabletilt', {
+    Text = 'Disable Tilt',
+    Tooltip = 'Disable Tilt',
+    Default = false,
+
+    Callback = function(isToggled)
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local characterTilt = character:FindFirstChild("CharacterTilt")
+
+        if characterTilt then
+            if isToggled then
+                characterTilt.Disabled = true
+                print("enabled = false")
+            else
+                characterTilt.Enabled = true
+                print("enabled = true")
+            end
+        else
+            warn("CharacterTilt not found in character.")
+        end
+    end
+})
 
 -- Function to handle ViewModel spawn
 function onViewModelSpawned()
