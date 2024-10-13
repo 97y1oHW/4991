@@ -3946,7 +3946,7 @@ local camera = workspace.CurrentCamera -- Ensure camera reference is set properl
 local isAiming = false
 local lockedCharacter = nil
 local debugEnabled = true -- Toggle this to enable/disable debugging
-local isSilentAimEnabled994 = true -- Toggle this to enable/disable silent aim
+local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
 local fovSize = 100 -- Default FOV size
 
 -- Function to create a visible FOV circle
