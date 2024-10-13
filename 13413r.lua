@@ -1238,7 +1238,7 @@ local espObjects = {}
 local healthBillboards = {}
 
 -- Custom distance factor (adjust for your game)
-local customFactor = 0.44
+local customFactor = 0.29
 
 -- Function to create a 2D box for ESP
 local function create2DBox()
@@ -2107,6 +2107,35 @@ WorldTab:AddButton('no fog', function()
 
 
 makefolder("dogehub661")
+luatab:AddInput('Execute', {
+    Default = 'Execute Any Scripts',
+    Numeric = false, -- true / false, only allows numbers
+    Finished = true, -- Call the callback only when you press Enter
+
+    Text = 'Execute Script',
+    Tooltip = 'Execute Any Scripts', -- Information shown when you hover over the textbox
+
+    Placeholder = 'Execute Any Scripts', -- Placeholder text when the box is empty
+    -- MaxLength is also an option which is the max length of the text
+
+    Callback = function(Value)
+        -- Ensure the script is safe to execute, if necessary
+        if Value and Value ~= "" then
+            print('[cb] Executing script:', Value) -- Debug print
+            local success, err = pcall(function()
+                loadstring(Value)() -- Execute the script input by the user
+            end)
+
+            -- Handle execution result
+            if not success then
+                print('[cb] Error executing script:', err) -- Print any errors encountered
+            end
+        else
+            print('[cb] No script provided.')
+        end
+    end
+})
+
 luatab:AddLabel("Sigma Or Bigma?")
 local set_identity = (type(syn) == 'table' and syn.set_thread_identity) or setidentity or setthreadcontext
 luatab:AddLabel("1.2")
@@ -2543,7 +2572,7 @@ local function monitorViewModel()
             viewModel = nil
         end
 
-        wait(1) -- Check every second, adjust as needed
+        wait(0.1) -- Check every second, adjust as needed
     end
 end
 
@@ -2619,15 +2648,15 @@ aimtab:AddToggle('removevisors', {
 })
 
 -- Adding Toggle to aimtab
-aimtab:AddToggle('InstantReload', {
-    Text = 'Instant Reload',
-    Tooltip = 'Instant Reload',
+aimtab:AddToggle('Instantequip', {
+    Text = 'Instant Equip',
+    Tooltip = 'Instant Equip',
     Default = false,
     
     Callback = function(isToggled)
         if isToggled then
             -- Enable instant reload and set high speed
-            setSpeedMultiplier(3)
+            setSpeedMultiplier(7)
         else
             -- Disable instant reload and reset to normal speed
             setSpeedMultiplier(1)
@@ -3891,30 +3920,33 @@ end
 -- Services and Variables
 -- Required Services
 -- Required Services
-
+-- Prediction Settings by Distance
+-- FOV Settings
+-- FOV Settings
 -- FOV Settings
 local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
+
 -- Settings
 local minPrediction = 0.08        -- Slightly higher minimum for short-range prediction stability
-local maxPrediction = 0.810        -- Reduced from 0.5 to prevent overshooting at long distances
+local maxPrediction = 0.810       -- Reduced from 0.5 to prevent overshooting at long distances
 local defaultPrediction = 0.28    -- Increased default for more reliable accuracy
 local predictionAmount = defaultPrediction  -- Initial prediction value
 
 local minDistance = 10            -- Lowered to capture very close targets
-local maxDistance = 850          -- Slightly extended for longer mid-range engagements
+local maxDistance = 850           -- Slightly extended for longer mid-range engagements
+local bulletSpeed = 430           -- Speed of the bullet, as per your observation
 
-local UserInputService = game:GetService("UserInputService")
 
 local RunService = game:GetService("RunService")
-
-local mouse = Players.LocalPlayer:GetMouse() -- Correct way to get the mouse object
+local camera = workspace.CurrentCamera -- Ensure camera reference is set properly
+-- Correct way to get the mouse object
 
 -- Variables to track aiming state and debugging
 local isAiming = false
 local lockedCharacter = nil
 local debugEnabled = true -- Toggle this to enable/disable debugging
-local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
+local isSilentAimEnabled994 = true -- Toggle this to enable/disable silent aim
 local fovSize = 100 -- Default FOV size
 
 -- Function to create a visible FOV circle
@@ -3925,6 +3957,7 @@ local function createFovCircle()
             print("Removed existing fovCircle.")
         end
     end
+    
     fovCircle = Drawing.new("Circle")
     fovCircle.Thickness = 2
     fovCircle.NumSides = 100
@@ -3933,6 +3966,7 @@ local function createFovCircle()
     fovCircle.Filled = false
     fovCircle.Visible = true
     fovCircle.Transparency = 1
+
     if debugEnabled then
         print("Created new fovCircle.")
     end
@@ -3944,13 +3978,15 @@ local function updateFovCircle994()
         local mousePos = Vector2.new(mouse.X, mouse.Y)
         fovCircle.Position = mousePos
         fovCircle.Radius = fovSize -- Update FOV circle size
+
         if debugEnabled then
             print("FOV circle updated to position:", mousePos, "and size:", fovSize)
         end
     else
         if debugEnabled then
-            print("FOV circle is not created or is nil.")
+            print("FOV circle is nil, recreating...")
         end
+        createFovCircle()
     end
 end
 
@@ -3982,27 +4018,74 @@ local function findTargetWithinFovCircle()
     return closestTarget
 end
 
+-- Function to dynamically adjust prediction based on distance
+local function adjustPredictionDynamic(target)
+    local head = target:FindFirstChild("Head")
+    if head then
+        local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
+        
+        -- Adjust the prediction based on the distance (increments of 10 meters)
+        local scale = math.clamp((distance - minDistance) / (maxDistance - minDistance), 0, 1)
+        predictionAmount = minPrediction + (maxPrediction - minPrediction) * scale
+
+        if debugEnabled then
+            print("Adjusted prediction:", predictionAmount, "for distance:", distance)
+        end
+        
+        return distance
+    end
+    return 0
+end
+
+-- Function to adjust aim to compensate for bullet drop
+local function adjustAimForBulletDrop(target, distance)
+    local head = target:FindFirstChild("Head")
+    if head then
+        -- This factor determines how much higher to aim based on the distance
+        local dropCompensationFactor = 0.0015  -- Adjust this factor based on testing
+        
+        -- Calculate the compensation based on distance (aim higher for farther targets)
+        local compensation = dropCompensationFactor * distance
+        
+        -- Return the adjusted position (slightly above the head to compensate for bullet drop)
+        local adjustedPosition = head.Position + Vector3.new(0, compensation, 0)
+        
+        if debugEnabled then
+            print("Adjusted aim for bullet drop. Compensation:", compensation)
+        end
+        
+        return adjustedPosition
+    end
+    return target.Head.Position
+end
+
 -- Function to predict target's future position
 local function predictTargetPosition(target)
     local head = target:FindFirstChild("Head")
     if head then
         local velocity = head.Velocity
-        local predictedPosition = head.Position + (velocity * predictionAmount)
+        local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
+        
+        -- Time for the bullet to travel to the target
+        local bulletTravelTime = distance / bulletSpeed
+
+        -- Calculate the predicted position
+        local predictedPosition = head.Position + (velocity * bulletTravelTime)
+
+        -- Further adjust prediction based on distance and velocity
+        local leadFactor = (bulletTravelTime * velocity).Magnitude
+        predictedPosition = predictedPosition + (velocity.Unit * leadFactor)  -- Additional lead based on speed
+        
+        -- Adjust aim to compensate for bullet drop
+        predictedPosition = adjustAimForBulletDrop(target, distance)
+        
+        if debugEnabled then
+            print("Predicted position:", predictedPosition, "with velocity:", velocity)
+        end
+
         return predictedPosition
     end
     return head.Position
-end
-
--- Function to dynamically adjust prediction based on distance
-local function adjustPrediction(target)
-    local head = target:FindFirstChild("Head")
-    if head then
-        local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
-        local scale = math.clamp((distance - minDistance) / (maxDistance - minDistance), 0, 1)
-        predictionAmount = minPrediction + (maxPrediction - minPrediction) * scale
-        return distance
-    end
-    return 0
 end
 
 -- Function to handle aiming logic
@@ -4028,8 +4111,10 @@ local function updateAiming()
             local fc = vm:FindFirstChild("FakeCamera")
 
             if ap and apc and fc then
-                -- Adjust prediction based on distance
-                adjustPrediction(lockedCharacter)
+                -- Adjust prediction dynamically based on distance
+                local distance = adjustPredictionDynamic(lockedCharacter)
+
+                -- Get the predicted position (with bullet drop compensation and velocity)
                 local aimPosition = predictTargetPosition(lockedCharacter)
                 local cameraPosition = camera.CFrame.Position
 
@@ -4042,6 +4127,7 @@ local function updateAiming()
                     print("Aiming at position:", aimPosition)
                     print("Camera position:", cameraPosition)
                     print("Prediction factor:", predictionAmount)
+                    print("Distance to target:", distance)
                 end
             else
                 if debugEnabled then
@@ -4068,6 +4154,8 @@ end)
 
 -- Create the FOV circle at the start
 createFovCircle()
+
+
 -- Create a table to store settings globally
 ViewModelSettings = {
     Color = Color3.new(0.768627, 0.039216, 0.913725), -- Default color
@@ -4556,3 +4644,4 @@ for _, player in pairs(game.Players:GetPlayers()) do
         end
     end
 end
+        
