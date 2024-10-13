@@ -87,8 +87,8 @@ if isfirstrun then
     
     local flex = Instance.new('Sound', game:GetService('CoreGui'))
     flex.SoundId = getcustomasset("dogehubsecretmp3.mp3")
-    flex.PlaybackSpeed = 0.8
-    flex.Volume = 1 -- Adjust to a reasonable volume (0 to 1)
+    flex.PlaybackSpeed = 0.5
+    flex.Volume = 100-- Adjust to a reasonable volume (0 to 1)
     flex:Play()  -- Start playing the sound
 end
 
@@ -1116,6 +1116,7 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))
 print("1")
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 print("1")
+
 end
 print('sucker_' .. tostring(counter))
 counter = counter + 1
@@ -2073,7 +2074,7 @@ local WorldTab = Visuals:AddTab('world')
 local Misc = Tabs.Misc:AddLeftGroupbox('misc1')
 local CrosshairTab = Tabs.Misc:AddLeftGroupbox('crosshair')
 local movetab = Tabs.Misc:AddRightGroupbox('misc2')
-local stuffz = Tabs.Settings:AddLeftGroupbox('stuffz')
+local stuffz = Tabs.Settings:AddLeftGroupbox('stuff')
 local luatab = Tabs.Lua:AddRightGroupbox('dogelua');
 do
     local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
@@ -3678,7 +3679,6 @@ aimtab:AddToggle('tracers', {
     end
 })
 
-
 aimtab:AddButton('No Drag', function()
 
 -- Function to set ammo drag
@@ -3953,7 +3953,7 @@ local camera = workspace.CurrentCamera -- Ensure camera reference is set properl
 -- Variables to track aiming state and debugging
 local isAiming = false
 local lockedCharacter = nil
-local debugEnabled = true -- Toggle this to enable/disable debugging
+local debugEnabled = false -- Toggle this to enable/disable debugging
 local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
 local fovSize = 100 -- Default FOV size
 
@@ -4561,21 +4561,41 @@ do
     end)
         end
         local players = game:GetService("Players")
+	for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Character then
+        if chamsEnabled then
+            applyHighlight(player)
+        else
+            removeHighlight(player)
+        end
+    end
+end
+   
 local localPlayer = players.LocalPlayer
-print("ok")
-
+print("repo ok")
 local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+print("repo ok2")
+print("esplib ok")
+print("1")
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+print("1")
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+print("1")
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+print("1")
 
+print("ok")
+print("initializing final codes")
 -- Hand the library over to our managers
 ThemeManager:SetLibrary(Library)
+print("set library")
 SaveManager:SetLibrary(Library)
+print("set library 2")
 
 -- Ignore keys that are used by ThemeManager.
 -- (we dont want configs to save themes, do we?)
 SaveManager:IgnoreThemeSettings()
+print("ignore theme settings")
 
 -- Adds our MenuKeybind to the ignore list
 -- (do you want each config to have a different menu key? probably not.)
@@ -4585,18 +4605,26 @@ SaveManager:IgnoreThemeSettings()
 -- and game configs in a separate folder per game
 ThemeManager:SetFolder('dogehubsolarapd')
 SaveManager:SetFolder('dogehub/solarapd')
+print("created folders")
 
 -- Builds our config menu on the right side of our tab
-SaveManager:BuildConfigSection(Tabs['UI Settings'])
+SaveManager:BuildConfigSection(Tabs['Settings'])
 
 -- Builds our theme menu (with plenty of built in themes) on the left side
 -- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
-ThemeManager:ApplyToTab(Tabs['UI Settings'])
+print("attempt to build config secc")
+
+-- Builds our theme menu (with plenty of built in themes) on the left side
+-- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+ThemeManager:ApplyToTab(Tabs['Settings'])
+print("attempt to apply to tab")
 
 -- You can use the SaveManager:LoadAutoloadConfig() to load a config
 -- which has been marked to be one that auto loads!
-SaveManager:LoadAutoloadConfig()
-print("reached to end")
+
+print("reached to end succ")
+
+
 
 --[[local __index; __index = hookmetamethod(game, "__index", function(self, idx, val)
     if self == camera and idx == "CFrame" then
@@ -4643,13 +4671,4 @@ end
 
 
 -- Apply/remove highlights to all current players when toggled
-for _, player in pairs(game.Players:GetPlayers()) do
-    if player.Character then
-        if chamsEnabled then
-            applyHighlight(player)
-        else
-            removeHighlight(player)
-        end
-    end
-end
-        
+     
