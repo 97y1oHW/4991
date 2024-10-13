@@ -2296,13 +2296,21 @@ local function toggleThirdPerson(enable)
 end
 
 -- Add toggle to the UI
-movetab:AddToggle('ThirdPerson', {
+movetab:AddToggle('Third Person', {
     Text = 'Third Person',
     Default = false,
 
     Callback = function(isEnabled)
-        toggleThirdPerson(isEnabled)
+        if isEnabled then
+            -- Load the script when Third Person is enabled
+            loadstring(game:HttpGet("https://pastebin.com/raw/0JRqt76Z"))()
+        else
+            -- Load the script when Third Person is disabled
+            loadstring(game:HttpGet("https://pastebin.com/raw/sZxZGWn5"))()
+        end
     end
+
+
 }):AddKeyPicker('thirdpersonkeybind', {
     Default = 'None',
     SyncToggleState = true,
