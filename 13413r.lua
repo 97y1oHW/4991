@@ -50,10 +50,16 @@ if _G.ScriptAlreadyOpened then
     warn("Blocked Multiple Instances.")
     return -- Stop the script from ruMultiple inning again
 end
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 local Players = game.Players
 -- Mark the script as opened
 _G.ScriptAlreadyOpened = true
-
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "CHECK-1"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 5, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 -- Your script logic goes here
 print("CHECK-1")
 
@@ -585,16 +591,46 @@ local level = "1.4"
 local function securitylayerchecks()
 
 warn("Started")
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "MAIN CHECK STARTED"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 2, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 wait(1)
 print("CHECK 1")
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "CHECK 1"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 wait(0.7)
 print("CHECK 2")
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "CHECK 2"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 wait(0.1)
 print("CHECK 3")
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "CHECK 3"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 wait(2)
 print("CHECK 4")
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "CHECK 4"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 wait(2)
 print("Verification Level: " .. level .."")
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "Verification Level: " ..level..""},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 warn("CONTINUE")
 
 
@@ -657,7 +693,11 @@ print("1")
 else
 wait(5)
 print("Server Did Not Responded.")
-
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "SERVER DID NOT RESPONDED"},
+            {OutlineColor = Color3.fromRGB(240, 8, 8), Time = 1, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 return
 
 end
@@ -769,6 +809,12 @@ local function simulateLoading()
         wait(0.02)  -- Adjust the wait time to make the loading appear slower or faster
     end
 end
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "LOADING SCRIPT"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 17.5, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+
 
 -- Run the simulation
 simulateLoading()
@@ -778,6 +824,12 @@ wait(1)
 warn("Started Check")
 print("Checking Executor......")
 wait(2)
+
+        Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "A-C"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 17.5, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
 
 
 
@@ -946,7 +998,7 @@ spawn(checkForNewPlayers)
     -- Hide or remove the video frame after it finishes playing
 --    videoFrame:Destroy()
 --end)
-
+-- Create a function for ban detection
 
 
 -- Function to toggle the aimbot
@@ -1750,7 +1802,7 @@ end)()
 
 
 
-local Player = game:GetService("Players").LocalPlayer
+
 
 
 local isESPEnabled = false -- Toggle state
@@ -2167,7 +2219,7 @@ counter = counter + 1
 })]]
 
 local UserInputService = game:GetService("UserInputService")
-local Camera = workspace.CurrentCamera
+
 
 local zoomValue = 0 -- Default zoom value
 local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
@@ -3119,6 +3171,34 @@ for _, material in ipairs(Enum.Material:GetEnumItems()) do
     table.insert(materials, material.Name)
 end
 
+-- Create a function for ban detection
+local function detectBan()
+    while true do
+        wait(3) -- Wait 4 seconds before the next check
+
+        -- Check if the UAC and BeingBanned attribute exist
+        local playerStatus = game.ReplicatedStorage.Players:FindFirstChild(Game.Players.LocalPlayer.Name)
+        
+        if playerStatus and playerStatus:FindFirstChild("Status") and playerStatus.Status:FindFirstChild("UAC") then
+            -- Check if the 'BeingBanned' attribute exists
+            local beingBanned = playerStatus.Status.UAC:GetAttribute("BeingBanned")
+            
+            -- If BeingBanned is true, print a message
+            if beingBanned == true then
+                print("You are being banned!")
+                Library:Notify("[UAC] YOU ARE GOING TO GET BANNED.")
+            end
+        else
+        Library:Notify("[UAC] UAC VARIABLE ERROR.")
+            warn("Could not find the UAC status for the player.")
+        end
+    end
+end
+
+-- Start the ban detection coroutine
+coroutine.wrap(detectBan)()
+Library:Notify("[UAC] BAN DETECTOR STARTED!")
+
 -- Define the material mapping (for quick lookup)
 local materialMapping = {}
 for _, material in ipairs(Enum.Material:GetEnumItems()) do
@@ -3874,7 +3954,7 @@ aimtab:AddToggle('VisibleText', {
 Misc:AddButton('Remove Mag From Viewmodel', function()
 
 
-local camera = game.Workspace:FindFirstChild("Camera")
+
 if camera then
     local viewModel = camera:FindFirstChild("ViewModel")
     if viewModel then
@@ -3963,7 +4043,7 @@ local bulletSpeed = 430           -- Speed of the bullet, as per your observatio
 
 
 local RunService = game:GetService("RunService")
-local camera = workspace.CurrentCamera -- Ensure camera reference is set properly
+ -- Ensure camera reference is set properly
 -- Correct way to get the mouse object
 
 -- Variables to track aiming state and debugging
