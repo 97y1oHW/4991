@@ -3996,7 +3996,7 @@ Library:Notify("Loading Updates ")
 wait(0.4)
 Library:Notify("Loaded")
 wait(0.5)
-Library:Notify("MULT INS")
+Library:Notify("LOADED FLY SCRIPT")
 
 local function IsTargetVisible(target)
     if not plr.Character then return false end
@@ -4659,27 +4659,85 @@ do
             flycontrol.shift = false
         end
     end)
-    charactertab:AddToggle('flight', {
-        Text = 'flight',
-        Default = false,
-        Callback = function(first)
-            gamesetting.flight = first
+
+getgenv().Fly3 = false
+getgenv().speed3 = 26
+
+-- Directly accessing services without storing them in local variables
+game:GetService("RunService").RenderStepped:Connect(function(dt)
+    -- Access character's humanoid root part directly without using local variables
+    local rootPart = game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+    rootPart.Velocity = rootPart.Velocity -- Use default velocity initially
+    local travelDirection3 = Vector3.new(0, 0, 0)
+
+    if getgenv().Fly3 then
+        -- Detect input for movement without using local variables for input
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.W) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, 0, 1)
         end
-    }):AddKeyPicker('flight_key',
-        {
-            Default = 'nil',
-            SyncToggleState = true,
-            Mode = 'Toggle',
-            Text = 'flight',
-            NoUI = false,
-            Callback = function(
-                Value)
-            end
-        })
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.S) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, 0, -1)
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.A) then
+            travelDirection3 = travelDirection3 + Vector3.new(-1, 0, 0)
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.D) then
+            travelDirection3 = travelDirection3 + Vector3.new(1, 0, 0)
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.Space) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, 1, 0)
+        end
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftShift) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, -1, 0)
+        end
+
+        -- Only calculate movement if there's input
+        if travelDirection3.Magnitude > 0 then
+            -- Get camera properties directly
+            travelDirection3 = (
+                workspace.CurrentCamera.CFrame.LookVector * travelDirection3.z +
+                workspace.CurrentCamera.CFrame.RightVector * travelDirection3.x +
+                workspace.CurrentCamera.CFrame.UpVector * travelDirection3.y
+            ).unit
+
+            -- Apply movement without using a local velocity variable
+            rootPart.Velocity = travelDirection3 * getgenv().speed3
+        end
+    end
+end)
+
+-- Toggle Fly Mode on key press 'B'
+game:GetService("UserInputService").InputEnded:Connect(function(input3)
+    if input3.UserInputType == Enum.UserInputType.Keyboard and input3.KeyCode == Enum.KeyCode.B then
+        getgenv().Fly3 = not getgenv().Fly3
+    end
+end)
+
+print("Script running...")
+
+-- UI flight toggle without using local variables
+charactertab:AddToggle('flight3', {
+    Text = 'Flight',
+    Default = false,
+    Callback = function(state3)
+        getgenv().Fly3 = state3
+    end
+}):AddKeyPicker('flight_key3', {
+    Default = 'nil',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Flight',
+    NoUI = false,
+    Callback = function(value3)
+        -- Empty callback, no additional functionality needed for now
+    end
+})
+
+
     charactertab:AddSlider('flightspeed',
-        { Text = 'flight speed', Default = 5, Min = 0.1, Max = 59, Rounding = 1, Compact = true }):OnChanged(function(
+        { Text = 'flight speed', Default = 23, Min = 1, Max = 35, Rounding = 1, Compact = true }):OnChanged(function(
         first)
-        gamesetting.flightspeed = first
+        getgenv().speed3 = first
     end)
         end
         local players = game:GetService("Players")
