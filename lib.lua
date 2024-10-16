@@ -525,7 +525,7 @@ do
             AnchorPoint = Vector2.new(0, 0.5);
             BorderColor3 = Color3.new(0, 0, 0);
             Size = UDi
-        });
+        })
         local HueSelectorOuter = Library:Create('Frame', {
             BorderColor3 = Color3.new(0, 0, 0);
             Position = UDim2.new(0, 208, 0, 25);
