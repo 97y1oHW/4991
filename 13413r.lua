@@ -4032,7 +4032,7 @@ local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
 
 -- Settings
-local minPrediction = 0.08        -- Slightly higher minimum for short-range prediction stability
+local minPrediction = 0.07        -- Slightly higher minimum for short-range prediction stability
 local maxPrediction = 0.810       -- Reduced from 0.5 to prevent overshooting at long distances
 local defaultPrediction = 0.28    -- Increased default for more reliable accuracy
 local predictionAmount = defaultPrediction  -- Initial prediction value
