@@ -3015,18 +3015,6 @@ Esptab3:AddToggle('flight3', {
 })
 
 
-esptab3:AddSlider('flightspeed', {
-    Text = 'Flight Speed',
-    Default = 23,       -- Initial value for the slider
-    Min = 1,           -- Minimum value
-    Max = 35,          -- Maximum value
-    Rounding = 1,      -- Rounding for the slider value
-    Compact = true     -- Compact display
-}):OnChanged(function(first)
-    getgenv().speed3 = first
-    print("Flight speed changed to:", first)  -- Optional: Print to console for debugging
-end)  -- Make sure this line closes the OnChanged function call
-
 
 
 local fullBrightActive = false -- Track toggle state
