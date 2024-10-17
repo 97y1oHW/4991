@@ -3296,17 +3296,15 @@ function Library:CreateWindow(...)
                 Parent = Container;
             });
 
-            function Groupbox:Resize()
-                local Size = 0;
-
-                for _, Element in next, Groupbox.Container:GetChildren() do
-                    if (not Element:IsA('UIListLayout')) and Element.Visible then
-                        Size = Size + Element.Size.Y.Offset;
-                    end;
-                end;
-
-                BoxOuter.Size = UDim2.new(1, 0, 0, 20 + Size + 2 + 2);
-            end;
+function Groupbox:Resize()
+    local Size = 0
+    for _, Element in next, self.Container:GetChildren() do
+        if (not Element:IsA('UIListLayout')) and Element.Visible then
+            Size = Size + Element.Size.Y.Offset
+        end
+    end
+    BoxOuter.Size = UDim2.new(1, 0, 0, 20 + Size + 2 + 2)
+end
 
             Groupbox.Container = Container;
             setmetatable(Groupbox, BaseGroupbox);
