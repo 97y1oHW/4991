@@ -1,4 +1,22 @@
+--[[
 
+             _nnnn_                      
+        dGGGGMMb     ,"""""""""""""""""".
+       @p~qp~~qMb    | its not chatgpt  |
+       M|@||@) M|   _;..................'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' 
+--]]
 
 
 
@@ -4711,12 +4729,7 @@ game:GetService("RunService").RenderStepped:Connect(function(dt)
     end
 end)
 
--- Toggle Fly Mode on key press 'B'
-game:GetService("UserInputService").InputEnded:Connect(function(input3)
-    if input3.UserInputType == Enum.UserInputType.Keyboard and input3.KeyCode == Enum.KeyCode.B then
-        getgenv().Fly3 = not getgenv().Fly3
-    end
-end)
+
 
 print("Script running...")
 
