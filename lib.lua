@@ -4,6 +4,8 @@ for i,v in pairs(({"Internal","HttpCache","Instances","Signals","Script","Physic
 end
 local InputService = cloneref(game:GetService('UserInputService'));
 local TextService = cloneref(game:GetService('TextService'));
+local CoreGui = cloneref(game:GetService('CoreGui'));
+local Teams = cloneref(game:GetService('Teams'));
 local Players = cloneref(game:GetService('Players'));
 local RunService = cloneref(game:GetService('RunService'));
 local TweenService = cloneref(game:GetService('TweenService'));
@@ -17,6 +19,7 @@ local ScreenGui = Instance.new('ScreenGui');
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
 ScreenGui.Parent = CoreGui;
 
+local Toggles = {};
 local Options = {};
 
 getgenv().Toggles = Toggles;
@@ -65,6 +68,17 @@ table.insert(Library.Signals, RenderStepped:Connect(function(Delta)
     end
 end))
 
+local function GetPlayersString()
+    local PlayerList = Players:GetPlayers();
+
+    for i = 1, #PlayerList do
+        PlayerList[i] = PlayerList[i].Name;
+    end;
+
+    table.sort(PlayerList, function(str1, str2) return str1 < str2 end);
+
+    return PlayerList;
+end;
 
 local function GetTeamsString()
     local TeamList = Teams:GetTeams();
@@ -261,7 +275,17 @@ function Library:OnHighlight(HighlightInstance, Instance, Properties, Properties
     end)
 end;
 
+function Library:MouseIsOverOpenedFrame()
+    for Frame, _ in next, Library.OpenedFrames do
+        local AbsPos, AbsSize = Frame.AbsolutePosition, Frame.AbsoluteSize;
 
+        if Mouse.X >= AbsPos.X and Mouse.X <= AbsPos.X + AbsSize.X
+            and Mouse.Y >= AbsPos.Y and Mouse.Y <= AbsPos.Y + AbsSize.Y then
+
+            return true;
+        end;
+    end;
+end;
 
 function Library:IsMouseOverFrame(Frame)
     local AbsPos, AbsSize = Frame.AbsolutePosition, Frame.AbsoluteSize;
@@ -340,6 +364,7 @@ function Library:UpdateColorsUsingRegistry()
     -- Visible: false => Remove from active list.
 
     -- The above would be especially efficient for a rainbow menu color or live color-changing.
+    -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
 
     for Idx, Object in next, Library.Registry do
         for Property, ColorIdx in next, Object.Properties do
@@ -496,7 +521,7 @@ do
             AnchorPoint = Vector2.new(0.5, 0.5);
             Size = UDim2.new(0, 6, 0, 6);
             BackgroundTransparency = 1;
-            Image = 'http://www.roblox.com/asset/?id=32425678';
+            Image = 'http://www.roblox.com/asset/?id=9619665977';
             ImageColor3 = Color3.new(0, 0, 0);
             ZIndex = 19;
             Parent = SatVibMap;
@@ -506,11 +531,18 @@ do
             Size = UDim2.new(0, CursorOuter.Size.X.Offset - 2, 0, CursorOuter.Size.Y.Offset - 2);
             Position = UDim2.new(0, 1, 0, 1);
             BackgroundTransparency = 1;
-            Image = 'http://www.roblox.com/asset/?id=32425678';
+            Image = 'http://www.roblox.com/asset/?id=9619665977';
             ZIndex = 20;
             Parent = CursorOuter;
         })
 
+        local HueSelectorOuter = Library:Create('Frame', {
+            BorderColor3 = Color3.new(0, 0, 0);
+            Position = UDim2.new(0, 208, 0, 25);
+            Size = UDim2.new(0, 15, 0, 200);
+            ZIndex = 17;
+            Parent = PickerFrameInner;
+        });
 
         local HueSelectorInner = Library:Create('Frame', {
             BackgroundColor3 = Color3.new(1, 1, 1);
@@ -524,15 +556,7 @@ do
             BackgroundColor3 = Color3.new(1, 1, 1);
             AnchorPoint = Vector2.new(0, 0.5);
             BorderColor3 = Color3.new(0, 0, 0);
-            Size = UDi
-         });
-        local HueSelectorOuter = Library:Create('Frame', {
-            BorderColor3 = Color3.new(0, 0, 0);
-            Position = UDim2.new(0, 208, 0, 25);
-            Size = UDim2.new(0, 15, 0, 200);
-            ZIndex = 17;
-            Parent = PickerFrameInner;
-        });m2.new(1, 0, 0, 1);
+            Size = UDim2.new(1, 0, 0, 1);
             ZIndex = 18;
             Parent = HueSelectorInner;
         });
@@ -563,6 +587,23 @@ do
             Parent = HueBoxInner;
         });
 
+        local HueBox = Library:Create('TextBox', {
+            BackgroundTransparency = 1;
+            Position = UDim2.new(0, 5, 0, 0);
+            Size = UDim2.new(1, -5, 1, 0);
+            Font = Library.Font;
+            PlaceholderColor3 = Color3.fromRGB(190, 190, 190);
+            PlaceholderText = 'Hex color',
+            Text = '#FFFFFF',
+            TextColor3 = Library.FontColor;
+            TextSize = 14;
+            TextStrokeTransparency = 0;
+            TextXAlignment = Enum.TextXAlignment.Left;
+            ZIndex = 20,
+            Parent = HueBoxInner;
+        });
+
+        Library:ApplyTextStroke(HueBox);
 
         local RgbBoxBase = Library:Create(HueBoxOuter:Clone(), {
             Position = UDim2.new(0.5, 2, 0, 228),
@@ -581,24 +622,7 @@ do
         if Info.Transparency then 
             TransparencyBoxOuter = Library:Create('Frame', {
                 BorderColor3 = Color3.new(0, 0, 0);
-                Posit        local HueBox = Library:Create('TextBox', {
-            BackgroundTransparency = 1;
-            Position = UDim2.new(0, 5, 0, 0);
-            Size = UDim2.new(1, -5, 1, 0);
-            Font = Library.Font;
-            PlaceholderColor3 = Color3.fromRGB(190, 190, 190);
-            PlaceholderText = 'Hex color',
-            Text = '#FFFFFF',
-            TextColor3 = Library.FontColor;
-            TextSize = 14;
-            TextStrokeTransparency = 0;
-            TextXAlignment = Enum.TextXAlignment.Left;
-            ZIndex = 20,
-            Parent = HueBoxInner;
-        });
-
-        Library:ApplyTextStroke(HueBox);
-ion = UDim2.fromOffset(4, 251);
+                Position = UDim2.fromOffset(4, 251);
                 Size = UDim2.new(1, -8, 0, 15);
                 ZIndex = 19;
                 Parent = PickerFrameInner;
@@ -618,7 +642,7 @@ ion = UDim2.fromOffset(4, 251);
             Library:Create('ImageLabel', {
                 BackgroundTransparency = 1;
                 Size = UDim2.new(1, 0, 1, 0);
-                Image = 'http://www.roblox.com/asset/?id=456456456';
+                Image = 'http://www.roblox.com/asset/?id=12978095818';
                 ZIndex = 20;
                 Parent = TransparencyBoxInner;
             });
@@ -949,7 +973,27 @@ ion = UDim2.fromOffset(4, 251);
             end);
         end;
 
-        
+        Library:GiveSignal(InputService.InputBegan:Connect(function(Input)
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                local AbsPos, AbsSize = PickerFrameOuter.AbsolutePosition, PickerFrameOuter.AbsoluteSize;
+
+                if Mouse.X < AbsPos.X or Mouse.X > AbsPos.X + AbsSize.X
+                    or Mouse.Y < (AbsPos.Y - 20 - 1) or Mouse.Y > AbsPos.Y + AbsSize.Y then
+
+                    ColorPicker:Hide();
+                end;
+
+                if not Library:IsMouseOverFrame(ContextMenu.Container) then
+                    ContextMenu:Hide()
+                end
+            end;
+
+            if Input.UserInputType == Enum.UserInputType.MouseButton2 and ContextMenu.Container.Visible then
+                if not Library:IsMouseOverFrame(ContextMenu.Container) and not Library:IsMouseOverFrame(DisplayFrame) then
+                    ContextMenu:Hide()
+                end
+            end
+        end))
 
         ColorPicker:Display();
         ColorPicker.DisplayFrame = DisplayFrame
@@ -2829,6 +2873,14 @@ function Library:SetWatermark(Text)
     Library.WatermarkText.Text = Text;
 end;
 
+
+-- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+-- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+-- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+-- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+-- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+-- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+-- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
 function Library:Notify(Text, Time)
     local XSize, YSize = Library:GetTextBounds(Text, Library.Font, 14);
 
@@ -3176,7 +3228,12 @@ function Library:CreateWindow(...)
                 Side.CanvasSize = UDim2.fromOffset(0, Side.UIListLayout.AbsoluteContentSize.Y);
             end);
         end;
-    
+        -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+        -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+        -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+        -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+        -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+        -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
         function Tab:ShowTab()
             for _, Tab in next, Window.Tabs do
                 Tab:HideTab();
@@ -3467,6 +3524,11 @@ function Library:CreateWindow(...)
                         Tab:Resize();
                     end;
                 end);
+                -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+                -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+                -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+                -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
+             -- ZGlzY29yZC5nZy9mZW50d2luIHwgaHR0cHM6Ly9kcmFuay5jYw==
 
                 Tab.Container = Container;
                 Tabbox.Tabs[Name] = Tab;
@@ -3649,4 +3711,7 @@ Players.PlayerRemoving:Connect(OnPlayerChange);
 
 getgenv().Library = Library
 
+for i,v in pairs(({"Internal","HttpCache","Instances","Signals","Script","PhysicsCollision","PhysicsParts","GraphicsSolidModels","GraphicsMeshParts","GraphicsParticles","GraphicsParts","GraphicsSpatialHash","GraphicsTerrain","GraphicsTexture","GraphicsTextureCharacter","Sounds","StreamingSounds","TerrainVoxels","Gui","Animation","Navigation","GeometryCSG"})) do
+    memorystats.restore(v)
+end
 return Library, Toggles, Options
