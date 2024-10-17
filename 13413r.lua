@@ -906,11 +906,11 @@ elseif executor == "Wave" or executor == "Wave 5.0" then
     -- New example script written by wally
 -- You can suggest changes with a pull request or something
 
-local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 _esplib = loadstring(game:HttpGet(repo2 .. 'newlib/old/esp'))()
-local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
-local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
-local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
     return -- Stop the script from executing further
 
 elseif executor == "Manti" then
@@ -1172,15 +1172,15 @@ counter = counter + 1
 do
 
 print("repo ok")
-local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 print("repo ok2")
 print("esplib ok")
 print("1")
-local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
 print("1")
-local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 print("1")
-local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
 print("1")
 
 end
@@ -1203,7 +1203,7 @@ local Tabs = {
     Visuals = Window:AddTab('esp 👤'),
     Misc = Window:AddTab('Misc 🔅'),
     Lua = Window:AddTab('Other 🛠️'),
-    Settings = Window:AddTab('UI Settings 🎚️'),
+    Settings = Window:AddTab('Settings 🎚️'),
 }
 
 
@@ -2134,13 +2134,14 @@ toggleTracersForAllPlayersExceptLocal(localPlayer)
 })
 
 
+
+
 print('load_' .. tostring(counter))
 counter = counter + 1
 local WorldTab = Visuals:AddTab('world')
 local Misc = Tabs.Misc:AddLeftGroupbox('misc1')
 local CrosshairTab = Tabs.Misc:AddLeftGroupbox('crosshair')
 local movetab = Tabs.Misc:AddRightGroupbox('misc2')
-local stuffz = Tabs.Settings:AddLeftGroupbox('stuff')
 local luatab = Tabs.Lua:AddRightGroupbox('dogelua');
 do
     local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
@@ -4076,15 +4077,18 @@ local function createFovCircle()
     end
 end
 
--- Update FOV circle position
+-- Update FOV circle position (centered on the screen)
 local function updateFovCircle994()
     if fovCircle then
-        local mousePos = Vector2.new(mouse.X, mouse.Y)
-        fovCircle.Position = mousePos
+        -- Get the center of the screen
+        local screenCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+        
+        -- Set the FOV circle's position to the screen's center
+        fovCircle.Position = screenCenter
         fovCircle.Radius = fovSize -- Update FOV circle size
 
         if debugEnabled then
-            print("FOV circle updated to position:", mousePos, "and size:", fovSize)
+            print("FOV circle updated to position:", screenCenter, "and size:", fovSize)
         end
     else
         if debugEnabled then
@@ -4093,6 +4097,7 @@ local function updateFovCircle994()
         createFovCircle()
     end
 end
+
 
 -- Function to find a target within the FOV
 local function findTargetWithinFovCircle()
@@ -4753,15 +4758,15 @@ end
    
 local localPlayer = players.LocalPlayer
 print("repo ok")
-local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 print("repo ok2")
 print("esplib ok")
 print("1")
-local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
 print("1")
-local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 print("1")
-local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
 print("1")
 
 print("ok")
