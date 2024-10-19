@@ -713,7 +713,7 @@ wait(5)
 print("Server Did Not Responded.")
         Notification:Notify(
             {Title = "DOGE HUB | SOLARA", Description = "SERVER DID NOT RESPONDED"},
-            {OutlineColor = Color3.fromRGB(240, 8, 8), Time = 1, Type = "image"},
+            {OutlineColor = Color3.fromRGB(240, 8, 8), Time = 15, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 return
