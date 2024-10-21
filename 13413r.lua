@@ -1,4 +1,8 @@
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
 --[[
+
 
              _nnnn_                      
         dGGGGMMb     ,"""""""""""""""""".
@@ -63,13 +67,56 @@ if not LPH_OBFUSCATED then
     end
 end
 
+-- File path for the version file
+local filePath = "verschck/version.txt"
+
+-- Check if the file exists, if not, create the folder and file with a default version
+if not isfile(filePath) then
+    makefolder("verschck")
+    writefile(filePath, "v18")  -- Create file with initial version (v17)
+end
+local updatenote = "Added Better Silent Aim"
+-- Read the content of the file (current version stored in the file)
+local versionInFile = readfile(filePath)
+
+-- Local variable for the current version (you change this manually to simulate updates)
+local version = "v19"  -- You can set this to the version you want to check
+
+-- Check if the version in the file matches the local version
+if versionInFile == version then
+    print("Version is up to date: " .. versionInFile)
+                Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "VERSION IS UP TO DATE."},
+            {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 6, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+else
+    warn("New update available! Updating version from " .. versionInFile .. " to " .. version)
+                Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "DETECTED NEW UPDATE."},
+            {OutlineColor = Color3.fromRGB(246, 159, 10), Time = 4, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+        wait(7)
+    -- Update the version in the file to the new version
+    writefile(filePath, version)
+    print("Version file updated to: " .. version)
+    print("Update Log: " ..updatenote)
+            Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "UPDATED TO LATEST VERSION.CHECK DEVELOPER LOG FOR THE UPDATE NOTE."},
+            {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 8, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+end
+
+wait(2)
+
 -- Check if the script is already running
 if _G.ScriptAlreadyOpened then
     warn("Blocked Multiple Instances.")
     return -- Stop the script from ruMultiple inning again
 end
-local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
-local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
 local Players = game.Players
 -- Mark the script as opened
 _G.ScriptAlreadyOpened = true
@@ -605,7 +652,7 @@ end
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-local level = "1.4"
+local level = "1.5"
 local function securitylayerchecks()
 
 warn("Started")
@@ -1214,7 +1261,7 @@ local Window = Library:CreateWindow({
     Center = true,
     AutoShow = true,
     TabPadding = 8,
-    MenuFadeTime = 1.3
+    MenuFadeTime = 0.3
 })
 local Tabs = {
     Main = Window:AddTab('combat ⚔️'),
@@ -4047,52 +4094,63 @@ end
 -- FOV Settings
 -- FOV Settings
 -- FOV Settings
+-- Settings
+-- Settings
 local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
 
--- Settings
-local minPrediction = 0.07        -- Slightly higher minimum for short-range prediction stability
-local maxPrediction = 0.63        -- Increased to allow for better prediction over long distances
-local defaultPrediction = 0.28    -- Default for reliable accuracy
-local predictionAmount = defaultPrediction  -- Initial prediction value
-
-local minDistance = 10            -- Lowered to capture very close targets
-local maxDistance = 610           -- Extended for longer mid-range engagements
+-- Bullet speed
 local bulletSpeed = 430           -- Bullet speed, adjusted for better prediction
-local dropCompensationFactor = 0.0015  -- Bullet drop factor, adjust for longer ranges
 
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
- -- Correct way to get the mouse object
+-- Prediction for different ranges (manual values)
+local predictionForRanges = {
+    [10] = 0.1, [20] = 0.12, [30] = 0.14, [40] = 0.16, [50] = 0.18,
+    [60] = 0.20, [70] = 0.22, [80] = 0.24, [90] = 0.26, [100] = 0.28,
+    [110] = 0.30, [120] = 0.32, [130] = 0.34, [140] = 0.36, [150] = 0.38,
+    [160] = 0.40, [170] = 0.42, [180] = 0.44, [190] = 0.46, [200] = 0.48,
+    [210] = 0.50, [220] = 0.52, [230] = 0.54, [240] = 0.56, [250] = 0.58,
+    [260] = 0.60, [270] = 0.62, [280] = 0.64, [290] = 0.66, [300] = 0.68,
+    [310] = 0.70, [320] = 0.72, [330] = 0.74, [340] = 0.76, [350] = 0.78,
+    [360] = 0.80, [370] = 0.82, [380] = 0.84, [390] = 0.86, [400] = 0.88,
+    [410] = 0.90, [420] = 0.92, [430] = 0.94, [440] = 0.96, [450] = 0.98,
+    [460] = 1.00, [470] = 1.02, [480] = 1.04, [490] = 1.06, [500] = 1.08,
+    [510] = 1.10, [520] = 1.12, [530] = 1.14, [540] = 1.16, [550] = 1.18,
+    [560] = 1.20, [570] = 1.22, [580] = 1.24, [590] = 1.26, [600] = 1.28
+}
 
--- Variables to track aiming state and debugging
-local isAiming = false
-local lockedCharacter = nil
-local debugEnabled = false -- Toggle this to enable/disable debugging
-local isSilentAimEnabled994 = true -- Toggle this to enable/disable silent aim
-local fovSize = 100 -- Default FOV size
+-- Bullet drop compensation for different ranges (manual values)
+local bulletDropForRanges = {
+    [10] = 0.001, [20] = 0.002, [30] = 0.003, [40] = 0.004, [50] = 0.005,
+    [60] = 0.006, [70] = 0.007, [80] = 0.008, [90] = 0.009, [100] = 0.010,
+    [110] = 0.011, [120] = 0.012, [130] = 0.013, [140] = 0.014, [150] = 0.015,
+    [160] = 0.016, [170] = 0.017, [180] = 0.018, [190] = 0.019, [200] = 0.020,
+    [210] = 0.021, [220] = 0.022, [230] = 0.023, [240] = 0.024, [250] = 0.025,
+    [260] = 0.026, [270] = 0.027, [280] = 0.028, [290] = 0.029, [300] = 0.030,
+    [310] = 0.031, [320] = 0.032, [330] = 0.033, [340] = 0.034, [350] = 0.035,
+    [360] = 0.036, [370] = 0.037, [380] = 0.038, [390] = 0.039, [400] = 0.040,
+    [410] = 0.041, [420] = 0.042, [430] = 0.043, [440] = 0.044, [450] = 0.045,
+    [460] = 0.046, [470] = 0.047, [480] = 0.048, [490] = 0.049, [500] = 0.050,
+    [510] = 0.051, [520] = 0.052, [530] = 0.053, [540] = 0.054, [550] = 0.055,
+    [560] = 0.056, [570] = 0.057, [580] = 0.058, [590] = 0.059, [600] = 0.060
+}
+
+local camera = workspace.CurrentCamera
+local mouse = Players.LocalPlayer:GetMouse()
 
 -- Function to create a visible FOV circle
 local function createFovCircle()
     if fovCircle then
         fovCircle:Remove()  -- Remove existing circle if it exists
-        if debugEnabled then
-            print("Removed existing fovCircle.")
-        end
     end
     
     fovCircle = Drawing.new("Circle")
     fovCircle.Thickness = 2
     fovCircle.NumSides = 100
-    fovCircle.Radius = fovSize
+    fovCircle.Radius = fovRadius
     fovCircle.Color = Color3.new(1, 1, 1) -- White color
     fovCircle.Filled = false
     fovCircle.Visible = true
     fovCircle.Transparency = 1
-
-    if debugEnabled then
-        print("Created new fovCircle.")
-    end
 end
 
 -- Update FOV circle position (centered on the screen)
@@ -4103,25 +4161,17 @@ local function updateFovCircle994()
         
         -- Set the FOV circle's position to the screen's center
         fovCircle.Position = screenCenter
-        fovCircle.Radius = fovSize -- Update FOV circle size
-
-        if debugEnabled then
-            print("FOV circle updated to position:", screenCenter, "and size:", fovSize)
-        end
+        fovCircle.Radius = fovRadius -- Update FOV circle size
     else
-        if debugEnabled then
-            print("FOV circle is nil, recreating...")
-        end
         createFovCircle()
     end
 end
-
 
 -- Function to find a target within the FOV
 local function findTargetWithinFovCircle()
     local mousePos = Vector2.new(mouse.X, mouse.Y)
     local closestTarget = nil
-    local shortestDistance = fovSize
+    local shortestDistance = fovRadius
 
     -- Iterate over all players to find a target within FOV
     for _, targetPlayer in pairs(Players:GetPlayers()) do
@@ -4145,38 +4195,41 @@ local function findTargetWithinFovCircle()
     return closestTarget
 end
 
--- Function to dynamically adjust prediction based on distance
-local function adjustPredictionDynamic(target)
-    local head = target:FindFirstChild("Head")
-    if head then
-        local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
-        
-        -- Adjust the prediction based on the distance
-        local scale = math.clamp((distance - minDistance) / (maxDistance - minDistance), 0, 1)
-        predictionAmount = minPrediction + (maxPrediction - minPrediction) * scale
+-- Function to get the closest matching prediction value based on distance
+local function getPredictionForDistance(distance)
+    local closestRange = 10  -- Start with the smallest distance
 
-        if debugEnabled then
-            print("Adjusted prediction:", predictionAmount, "for distance:", distance)
+    for range, _ in pairs(predictionForRanges) do
+        if distance >= range then
+            closestRange = range  -- Find the closest matching range
         end
-        
-        return distance
     end
-    return 0
+
+    return predictionForRanges[closestRange] or 0  -- Return the prediction value or 0 if not found
+end
+
+-- Function to get the closest matching bullet drop compensation based on distance
+local function getBulletDropForDistance(distance)
+    local closestRange = 10  -- Start with the smallest distance
+
+    for range, _ in pairs(bulletDropForRanges) do
+        if distance >= range then
+            closestRange = range  -- Find the closest matching range
+        end
+    end
+
+    return bulletDropForRanges[closestRange] or 0  -- Return the bullet drop value or 0 if not found
 end
 
 -- Function to adjust aim to compensate for bullet drop
 local function adjustAimForBulletDrop(target, distance)
     local head = target:FindFirstChild("Head")
     if head then
-        -- Calculate compensation based on distance (aim higher for farther targets)
-        local compensation = dropCompensationFactor * distance
+        -- Get bullet drop compensation for the given distance
+        local compensation = getBulletDropForDistance(distance)
         
         -- Return the adjusted position (slightly above the head to compensate for bullet drop)
         local adjustedPosition = head.Position + Vector3.new(0, compensation, 0)
-        
-        if debugEnabled then
-            print("Adjusted aim for bullet drop. Compensation:", compensation)
-        end
         
         return adjustedPosition
     end
@@ -4203,14 +4256,14 @@ local function predictTargetPosition(target)
         -- Adjust aim to compensate for bullet drop
         predictedPosition = adjustAimForBulletDrop(target, distance)
         
-        if debugEnabled then
-            print("Predicted position:", predictedPosition, "with velocity:", velocity)
-        end
-
         return predictedPosition
     end
     return head.Position
 end
+
+-- Variables to track aiming state and debugging
+local isSilentAimEnabled994 = true -- Toggle this to enable/disable silent aim
+local lockedCharacter = nil
 
 -- Function to handle aiming logic
 local function updateAiming()
@@ -4221,9 +4274,6 @@ local function updateAiming()
         -- If a character is found within the FOV, lock onto it
         if characterUnderMouse and characterUnderMouse ~= lockedCharacter then
             lockedCharacter = characterUnderMouse
-            if debugEnabled then
-                print("Locked onto new character:", lockedCharacter.Name)
-            end
         end
 
         -- If we have a locked character, aim at them
@@ -4235,9 +4285,9 @@ local function updateAiming()
             local fc = vm:FindFirstChild("FakeCamera")
 
             if ap and apc and fc then
-                -- Adjust prediction dynamically based on distance
-                local distance = adjustPredictionDynamic(lockedCharacter)
-
+                -- Get the distance to the target
+                local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
+                
                 -- Get the predicted position (with bullet drop compensation and velocity)
                 local aimPosition = predictTargetPosition(lockedCharacter)
                 local cameraPosition = camera.CFrame.Position
@@ -4245,28 +4295,11 @@ local function updateAiming()
                 -- Update AimPart positions
                 ap.CFrame = CFrame.new(cameraPosition, aimPosition)
                 apc.CFrame = CFrame.new(cameraPosition, aimPosition)
-
-                -- Print debug information
-                if debugEnabled then
-                    print("---------------------------------------")
-                    print("Aiming at position:", aimPosition)
-                    print("Camera position:", cameraPosition)
-                    print("Prediction factor:", predictionAmount)
-                    print("Distance to target:", distance)
-                    print("---------------------------------------")
-                end
-            else
-                if debugEnabled then
-                    print("One or more ViewModel parts are missing.")
-                end
             end
         end
 
         -- Unlock the character if they are no longer in the FOV
         if not characterUnderMouse then
-            if debugEnabled then
-                print("No target in FOV. Unlocking character.")
-            end
             lockedCharacter = nil
         end
     end
@@ -4281,14 +4314,8 @@ end)
 -- Create the FOV circle at the start
 createFovCircle()
 
--- Optional: Handle toggling silent aim or debugging dynamically via user input
--- This can help test different configurations without editing the script every time
-
 -- Optional: Clean up when the script is stopped or the player is removed
 Players.LocalPlayer.CharacterRemoving:Connect(function(character)
-    if debugEnabled then
-        print("Cleaning up after character removal.")
-    end
     lockedCharacter = nil  -- Reset the locked character on removal
 end)
 
@@ -4601,15 +4628,14 @@ aimtab:AddSlider('aimfov', {
     end
 })
 
--- Add a toggle for print debug
-aimtab:AddToggle('printDebug', {
-    Text = 'Print Debug',
-    Default = true,
-    Callback = function(isEnabled)
-        debugEnabled = isEnabled
-    end
-})
+function resetfovcircle()
 
+fovCircle.Visible = false
+wait(0.5)
+fovCircle.Visible = true
+end
+
+resetfovcircle()
 -- Add a toggle for enabling/disabling the FOV display
 aimtab:AddToggle('fovdisplay', {
     Text = 'Show FOV Circle',
@@ -4781,58 +4807,6 @@ charactertab:AddToggle('flight3', {
     end
 end
    
-local localPlayer = players.LocalPlayer
-print("repo ok")
-local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
-print("repo ok2")
-print("esplib ok")
-print("1")
-local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
-print("1")
-local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
-print("1")
-local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
-print("1")
-
-print("ok")
-print("initializing final codes")
--- Hand the library over to our managers
-ThemeManager:SetLibrary(Library)
-print("set library")
-SaveManager:SetLibrary(Library)
-print("set library 2")
-
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
-SaveManager:IgnoreThemeSettings()
-print("ignore theme settings")
-
--- Adds our MenuKeybind to the ignore list
--- (do you want each config to have a different menu key? probably not.)
-
--- use case for doing it this way:
--- a script hub could have themes in a global folder
--- and game configs in a separate folder per game
-ThemeManager:SetFolder('dogehubsolarapd')
-SaveManager:SetFolder('dogehub/solarapd')
-print("created folders")
-
--- Builds our config menu on the right side of our tab
-SaveManager:BuildConfigSection(Tabs['Settings'])
-
--- Builds our theme menu (with plenty of built in themes) on the left side
--- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
-print("attempt to build config secc")
-
--- Builds our theme menu (with plenty of built in themes) on the left side
--- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
-ThemeManager:ApplyToTab(Tabs['Settings'])
-print("attempt to apply to tab")
-
--- You can use the SaveManager:LoadAutoloadConfig() to load a config
--- which has been marked to be one that auto loads!
-
-print("reached to end succ")
 
 
 
@@ -10890,4 +10864,138 @@ end
         asddasasddasasddasasddasasddas
 
 ]]
+
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+-- Set the teleportation threshold (in studs)
+local teleportThreshold = 1500  -- You can adjust this value as needed
+
+-- Table to keep track of notified players
+local notifiedPlayers = {}
+
+-- Function to check if a player has teleported
+local function checkPlayerTeleportation(player)
+    -- Wait for the player's character to load
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local previousPosition = humanoidRootPart.Position
+
+    while true do
+        wait(0.01)  -- Check every 0.01 seconds
+
+        -- Check if the player's character still exists
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local currentPosition = player.Character.HumanoidRootPart.Position
+
+            -- Calculate the distance moved
+            local distanceMoved = (currentPosition - previousPosition).Magnitude
+
+            -- If the distance moved is greater than the teleportation threshold, log or handle the teleportation
+            if distanceMoved > teleportThreshold then
+                -- Check if the player has already been notified
+                if not notifiedPlayers[player.Name] then
+                    -- Notify the player without changing this line
+                    Notification:Notify(
+                        {Title = "DOGE HUB | NEW DOGE HUB USER", Description = "New Doge Hub User: " .. player.Name},
+                        {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 11, Type = "image"},
+                        {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+                    )
+                    
+                    -- Mark the player as notified
+                    notifiedPlayers[player.Name] = true
+                end
+            end
+
+            -- Update the previous position
+            previousPosition = currentPosition
+        else
+            -- If the character is nil, break the loop
+            break
+        end
+
+        -- Optional: Add a small delay to avoid too much CPU usage
+        wait(0.01)
+    end
+end
+
+-- Start the teleportation checks for all players
+local function startTeleportationChecks()
+    for _, player in pairs(Players:GetPlayers()) do
+        coroutine.wrap(checkPlayerTeleportation)(player)  -- Start a coroutine for each player
+    end
+
+    -- Connect to PlayerAdded to start checking for new players
+    Players.PlayerAdded:Connect(function(player)
+        player.CharacterAdded:Connect(function(character)
+            coroutine.wrap(checkPlayerTeleportation)(player)  -- Start checking when the character is added
+        end)
+    end)
+end
+
+-- Start the process
+startTeleportationChecks()
+
+
+print("repo ok")
+local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
+print("repo ok2")
+print("esplib ok")
+print("1")
+local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
+print("1")
+local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
+print("1")
+local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
+print("1")
+
+print("ok")
+print("initializing final codes")
+-- Hand the library over to our managers
+ThemeManager:SetLibrary(Library)
+print("set library")
+SaveManager:SetLibrary(Library)
+print("set library 2")
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+print("ignore theme settings")
+function coerrore2()
+
+error("CPD FAIL")
+error("TEL6")
+
+end
+
+coroutine.wrap(coerrore2)
+-- Adds our MenuKeybind to the ignore list
+-- (do you want each config to have a different menu key? probably not.)
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+ThemeManager:SetFolder('dogehubsolarapd')
+SaveManager:SetFolder('dogehub/solarapd')
+print("created folders")
+
+-- Builds our config menu on the right side of our tab
+SaveManager:BuildConfigSection(Tabs['Settings'])
+
+-- Builds our theme menu (with plenty of built in themes) on the left side
+-- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+print("attempt to build config secc")
+
+-- Builds our theme menu (with plenty of built in themes) on the left side
+-- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+ThemeManager:ApplyToTab(Tabs['Settings'])
+print("attempt to apply to tab")
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+
+print("reached to end succ")
+
+
 -- Apply/remove highlights to all current players when toggled
