@@ -67,6 +67,22 @@ if not LPH_OBFUSCATED then
     end
 end
 
+                Notification:Notify(
+            {Title = "DOGE HUB | SOLARA", Description = "CHECKING MAIN THIS CAN LAG YOUR GAME."},
+            {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 4, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+wait(4)
+
+huge4 = math.huge
+        setfpscap(3)
+        wait(2)
+         setfpscap(1)
+         wait(5)
+          setfpscap(30)
+          wait(2)
+           setfpscap(999999999)
+
 -- File path for the version file
 local filePath = "verschck/version.txt"
 
@@ -4806,8 +4822,56 @@ charactertab:AddToggle('flight3', {
         end
     end
 end
-   
 
+
+-- Create the folder in Workspace
+folderName = "dogehubfunctions"
+dogeHubFolder = Instance.new("Folder")
+dogeHubFolder.Name = folderName
+dogeHubFolder.Parent = Workspace
+
+-- Create the RemoteEvents
+ remote1 = Instance.new("RemoteEvent")
+ remote2 = Instance.new("RemoteEvent")
+
+remote1.Name = "�?�YQ��� �Q���"
+remote2.Name = "!5�YQ�� �5Q����Q��"
+
+remote1.Parent = dogeHubFolder
+remote2.Parent = dogeHubFolder
+
+-- Function to change RemoteEvent names every 0.1 seconds
+local function changeRemoteNames()
+    while true do
+        wait(0.6)  -- Change names every 0.1 seconds
+        
+        -- Randomly change the names between the two options
+        if remote1 and remote2 then
+            if math.random() > 0.5 then
+                remote1.Name = "�?�YQ��� �Q���"
+                remote2.Name = "!5�YQ�� �5Q����Q��"
+            else
+                remote1.Name = "!5�YQ�� �5Q����Q��"
+                remote2.Name = "�?�YQ��� �Q���"
+            end
+        end
+
+        -- Check if the folder or RemoteEvents have been removed
+        if not dogeHubFolder:IsDescendantOf(Workspace) or not remote1:IsDescendantOf(dogeHubFolder) or not remote2:IsDescendantOf(dogeHubFolder) then
+            local player = Players.LocalPlayer  -- Get the player who initiated this script
+            if player then
+                wait(3)
+                player:Kick("Doge Hub Function Removal")  -- Kick the player with a message
+            end
+            break
+        end
+    end
+end
+
+-- Start the name-changing function in a coroutine
+coroutine.wrap(changeRemoteNames)()
+
+print("created functions")
 
 
 --[[local __index; __index = hookmetamethod(game, "__index", function(self, idx, val)
