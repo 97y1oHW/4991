@@ -89,14 +89,14 @@ local filePath = "verschck/version.txt"
 -- Check if the file exists, if not, create the folder and file with a default version
 if not isfile(filePath) then
     makefolder("verschck")
-    writefile(filePath, "v18")  -- Create file with initial version (v17)
+    writefile(filePath, "starterpack1")  -- Create file with initial version (v17)
 end
 local updatenote = "Added Better Silent Aim"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v19"  -- You can set this to the version you want to check
+local version = "v20"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
