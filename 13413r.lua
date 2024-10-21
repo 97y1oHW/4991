@@ -97,7 +97,7 @@ local updatenote = "Added Better Silent Aim"
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v20"  -- You can set this to the version you want to check
+local version = "v21"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
