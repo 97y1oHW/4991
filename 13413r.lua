@@ -92,12 +92,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1")  -- Create file with initial version (v17)
 end
-local updatenote = "Added Better Silent Aim"
+local updatenote = "Changed silent aim predictions"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v21"  -- You can set this to the version you want to check
+local version = "v22"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -4121,18 +4121,18 @@ local bulletSpeed = 430           -- Bullet speed, adjusted for better predictio
 
 -- Prediction for different ranges (manual values)
 local predictionForRanges = {
-    [10] = 0.1, [20] = 0.12, [30] = 0.14, [40] = 0.16, [50] = 0.18,
-    [60] = 0.20, [70] = 0.22, [80] = 0.24, [90] = 0.26, [100] = 0.28,
+    [10] = 0.1,   [20] = 0.12,  [30] = 0.14,  [40] = 0.16,  [50] = 0.18,
+    [60] = 0.20,  [70] = 0.22,  [80] = 0.24,  [90] = 0.26,  [100] = 0.28,
     [110] = 0.30, [120] = 0.32, [130] = 0.34, [140] = 0.36, [150] = 0.38,
     [160] = 0.40, [170] = 0.42, [180] = 0.44, [190] = 0.46, [200] = 0.48,
     [210] = 0.50, [220] = 0.52, [230] = 0.54, [240] = 0.56, [250] = 0.58,
     [260] = 0.60, [270] = 0.62, [280] = 0.64, [290] = 0.66, [300] = 0.68,
-    [310] = 0.70, [320] = 0.72, [330] = 0.74, [340] = 0.76, [350] = 0.78,
-    [360] = 0.80, [370] = 0.82, [380] = 0.84, [390] = 0.86, [400] = 0.88,
-    [410] = 0.90, [420] = 0.92, [430] = 0.94, [440] = 0.96, [450] = 0.98,
-    [460] = 1.00, [470] = 1.02, [480] = 1.04, [490] = 1.06, [500] = 1.08,
-    [510] = 1.10, [520] = 1.12, [530] = 1.14, [540] = 1.16, [550] = 1.18,
-    [560] = 1.20, [570] = 1.22, [580] = 1.24, [590] = 1.26, [600] = 1.28
+    [310] = 0.72, [320] = 0.76, [330] = 0.80, [340] = 0.84, [350] = 0.88,
+    [360] = 0.92, [370] = 0.96, [380] = 1.00, [390] = 1.04, [400] = 1.08,
+    [410] = 1.12, [420] = 1.16, [430] = 1.20, [440] = 1.24, [450] = 1.28,
+    [460] = 1.32, [470] = 1.36, [480] = 1.40, [490] = 1.44, [500] = 1.48,
+    [510] = 1.52, [520] = 1.56, [530] = 1.60, [540] = 1.64, [550] = 1.68,
+    [560] = 1.72, [570] = 1.76, [580] = 1.80, [590] = 1.84, [600] = 1.88
 }
 
 -- Bullet drop compensation for different ranges (manual values)
@@ -4844,11 +4844,11 @@ remote2.Parent = dogeHubFolder
 -- Function to change RemoteEvent names every 0.1 seconds
 local function changeRemoteNames()
     while true do
-        wait(0.6)  -- Change names every 0.1 seconds
+        wait(1)  -- Change names every 0.1 seconds
         
         -- Randomly change the names between the two options
         if remote1 and remote2 then
-            if math.random() > 0.5 then
+            if math.random() > 0.8 then
                 remote1.Name = "�?�YQ��� �Q���"
                 remote2.Name = "!5�YQ�� �5Q����Q��"
             else
@@ -4861,8 +4861,8 @@ local function changeRemoteNames()
         if not dogeHubFolder:IsDescendantOf(Workspace) or not remote1:IsDescendantOf(dogeHubFolder) or not remote2:IsDescendantOf(dogeHubFolder) then
             local player = Players.LocalPlayer  -- Get the player who initiated this script
             if player then
-                wait(3)
-                game.ReplicatedStorage.Remotes.GodMode:FireClient()
+
+
 wait(3)
                 player:Kick("Doge Hub Function Removal")  -- Kick the player with a message
             end
