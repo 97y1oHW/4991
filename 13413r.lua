@@ -78,7 +78,7 @@ wait(4)
 huge4 = math.huge
         setfpscap(3)
         wait(2)
-         setfpscap(1)
+         setfpscap(0)
          wait(5)
           setfpscap(30)
           wait(2)
@@ -90,14 +90,14 @@ local filePath = "verschck/version.txt"
 -- Check if the file exists, if not, create the folder and file with a default version
 if not isfile(filePath) then
     makefolder("verschck")
-    writefile(filePath, "starterpack1")  -- Create file with initial version (v17)
+    writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...v24")  -- Create file with initial version (v17)
 end
-local updatenote = "Changed silent aim predictions"
+local updatenote = "Added Bullet Speed Slider For Changing Silent Aim Predictions."
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v22"  -- You can set this to the version you want to check
+local version = "v24"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -110,7 +110,7 @@ if versionInFile == version then
 else
     warn("New update available! Updating version from " .. versionInFile .. " to " .. version)
                 Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "DETECTED NEW UPDATE."},
+            {Title = "DOGE HUB | SOLARA", Description = "DETECTED NEW UPDATE.DOWNLOADING..."},
             {OutlineColor = Color3.fromRGB(246, 159, 10), Time = 4, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -142,14 +142,12 @@ _G.ScriptAlreadyOpened = true
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 5, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
--- Your script logic goes here
+
 print("CHECK-1")
 
--- Example of script logic: Simulating script actions
-wait(5) -- Simulating some work being done by the script
 
--- Once the script finishes, you can reset the flag (optional)
--- _G.ScriptAlreadyOpened = false -- Uncomment this line if you want the script to run again after finishing
+wait(5) 
+
 
 
 
@@ -164,15 +162,15 @@ end
 
 
 local CoreGui = game:GetService("CoreGui")
-local audioFileName = "dogehubsecretmp3.mp3"  -- File name for the downloaded audio
+local audioFileName = "dogehubsecretmp3.mp3" 
 
--- Check if the audio file is already downloaded
+
 if not isfile(audioFileName) then
-    -- First run, download the audio file
-    local audioFileId = "1ZzPp2yzuOSIpLW5VIkYxt_h40q7lSB8J"  -- Replace with your own Google Drive ID
+
+    local audioFileId = "1ZzPp2yzuOSIpLW5VIkYxt_h40q7lSB8J"  
     local audioUrl = "https://drive.google.com/uc?export=download&id=" .. audioFileId
 
-    -- Download the audio file to local storage
+    
     writefile(audioFileName, game:HttpGet(audioUrl))
 end
 
@@ -2313,6 +2311,7 @@ local function applyZoom()
     Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
 end
 
+
 -- Slider for Zoom Value
 Misc:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
@@ -2795,6 +2794,26 @@ Misc:AddToggle('fullBrightToggle', {
     end
 })
 
+
+
+Misc:AddDropdown('FunctionMode', {
+    Values = {'V1🔴', 'V2🟡', 'V3🟡', 'V4🔴', 'V5🟢', 'V5 TURBO🟢', 'V6🟢', 'V6 TURBO🟢', 'V7🟡', 'V7 TURBO MAX🟡'},
+    Default = 7,
+    Multi = false,
+    Text = 'Function Mode ⚠️',
+    Tooltip = 'Function Mode ⚠️ (NOT RECOMMENDED TO CHANGE)',
+    Callback = function(state)
+                -- Reduce FPS cap for 0.6 seconds
+        setfpscap(0)  -- Lower FPS cap drastically (example: 10 FPS)
+
+        -- Wait for 0.6 seconds
+        wait(1.9)
+
+        -- Reset the FPS cap to its default or original state
+        setfpscap(9000)  -- Reset FPS cap (you can set it to your default FPS cap, e.g., 60 FPS)
+    end
+})
+
 aimtab:AddToggle('removevisors', {
     Text = 'Remove Visors',
     Default = false,
@@ -2806,6 +2825,8 @@ aimtab:AddToggle('removevisors', {
         end
     end
 })
+
+
 
 -- Adding Toggle to aimtab
 aimtab:AddToggle('Instantequip', {
@@ -2864,7 +2885,7 @@ end
 -- Example usage
 local directory = game.ReplicatedStorage.Clans -- or any other parent instance
 
-aimtab:AddButton('Nigga Whisper', function()
+Misc:AddButton('Nigga Whisper', function()
 
     -- Destroy clothing items
     game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
@@ -2901,14 +2922,14 @@ game.ReplicatedStorage.AiPresets.WhisperAI.LookAt:Destroy()
 
  end)
 
-aimtab:AddButton('Naked Whisper', function()
+Misc:AddButton('Naked Whisper', function()
 
 game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
 game.ReplicatedStorage.AiPresets.WhisperAI.Shirt:Destroy()
 
  end)
 
-aimtab:AddButton('Print All Clan Names', function()
+Misc:AddButton('Print All Clan Names', function()
 
 printFolderNames(directory)
 
@@ -2920,7 +2941,7 @@ game.StarterPlayer.StarterCharacterScripts.Health.Drowning:Destroy()
 
  end)
 
-aimtab:AddButton('Destroy Buildables', function()
+Misc:AddButton('Destroy Buildables', function()
 
 game.ReplicatedStorage.Buildable:Destroy()
 
@@ -3332,13 +3353,7 @@ aimtab:AddDropdown('dv2materialchanger', {
 --    end
 --})
 
-aimtab:AddButton('Make Doors Invisible', function()
 
-setDoorsMaterialToForceField()
-		
- end)
-
--- Ensure this script is a LocalScript
 
 
 
@@ -3449,6 +3464,12 @@ end
 ---    end,
 --})
 
+--[[
+
+
+
+
+
 aimtab:AddToggle('predictiontoggle13', {
     Text = 'Prediction Toggle',
     Tooltip = 'Prediction',
@@ -3459,6 +3480,8 @@ aimtab:AddToggle('predictiontoggle13', {
                 togglePrediction()
     end
 })
+]]--
+
 
 -- Aim FOV Slider to adjust prediction value
 --aimtab:AddSlider('Prediction', {
@@ -4551,6 +4574,24 @@ end)
 
 
 
+
+
+
+
+-- Slider for Zoom Value
+aimtab:AddSlider('Silentbulspeed', {
+    Text = 'Silent Aim Bullet Speed',
+    Default = 450,
+    Min = 10,
+    Max = 570,
+    Rounding = 4,
+    Compact = false,
+
+    Callback = function(Value)
+bulletSpeed = Value
+    end
+})
+
 -- GUI Toggle for Silent Aim
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
@@ -4569,6 +4610,20 @@ aimtab:AddToggle('silentAim994', {
     Callback = function(Value)
         -- Optionally handle key bindings here
     end,
+})
+
+aimtab:AddDropdown('Silentaimhitset2', {
+    Values = { 'Legit', 'Rage', 'Balanced' },
+    Default = 2,
+    Multi = false,
+
+    Text = 'Silent aim mode',
+    Tooltip = 'silent aim mode',
+
+    Callback = function(Value)
+
+     
+    end
 })
 
 
