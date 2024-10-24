@@ -4584,7 +4584,7 @@ aimtab:AddSlider('Silentbulspeed', {
     Default = 450,
     Min = 10,
     Max = 570,
-    Rounding = 4,
+    Rounding = 1,
     Compact = false,
 
     Callback = function(Value)
