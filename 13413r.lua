@@ -201,7 +201,7 @@ end
 --IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
 --IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
 --IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
+--IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU 999999mmm0000
 --IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
 --IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
 --IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
@@ -1293,7 +1293,7 @@ loadstring(game:HttpGet("https://pastebin.com/raw/CYqXb6TX"))()
 local autoFireEnabled = false -- Initially disabled
 local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
-local camera = game:GetService("Workspace").CurrentCamera
+
 local RunService = game:GetService("RunService")
 
 
@@ -2222,6 +2222,7 @@ local WorldTab = Visuals:AddTab('world')
 local Misc = Tabs.Misc:AddLeftGroupbox('misc1')
 local CrosshairTab = Tabs.Misc:AddLeftGroupbox('crosshair')
 local movetab = Tabs.Misc:AddRightGroupbox('misc2')
+local Settings = Tabs.Settings:AddLeftGroupbox('Settings')
 local luatab = Tabs.Lua:AddRightGroupbox('dogelua');
 do
     local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
@@ -2796,7 +2797,7 @@ Misc:AddToggle('fullBrightToggle', {
 
 
 
-Misc:AddDropdown('FunctionMode', {
+movetab:AddDropdown('FunctionMode', {
     Values = {'AUTOMATIC', 'V1🔴', 'V2🟡', 'V3🟡', 'V4🔴', 'V5🟢', 'V5 TURBO🟢', 'V6🟢', 'V6 TURBO🟢', 'V7🟡', 'V7 TURBO MAX🟡', 'V7 TURBO🟢', 'V8 TURBO MAX🟢'},
     Default = 7,
     Multi = false,
@@ -3031,7 +3032,7 @@ end
 
  end)
 
-aimtab:AddSlider('hydration', {
+Misc:AddSlider('hydration', {
     Text = 'Hydration Slider',
     Default = 3700,
     Min = 0,
@@ -3048,8 +3049,7 @@ local playerInventory = game.ReplicatedStorage.Players[playerName].Status.Gamepl
 playerInventory.Hydration:SetAttribute("Value", state)
 end)
 
-
-aimtab:AddSlider('radiationslider', {
+Misc:AddSlider('radiationslider', {
     Text = 'Radiation Slider',
     Default = 0,
     Min = 0,
@@ -3067,7 +3067,7 @@ playerInventory.Radiation:SetAttribute("Value", state)
 end)
 
 
-aimtab:AddSlider('legfracture', {
+Misc:AddSlider('legfracture', {
     Text = 'Leg Fracture Slider',
     Default = 0,
     Min = 0,
@@ -3085,7 +3085,7 @@ playerInventory.LegFracture:SetAttribute("Value", state)
 end)
 
 
-aimtab:AddSlider('Bleeding', {
+Misc:AddSlider('Bleeding', {
     Text = 'Bleeding Slider',
     Default = 0,
     Min = 0,
@@ -3103,7 +3103,7 @@ playerInventory.Bleeding:SetAttribute("Value", state)
 end)
 
 
-aimtab:AddSlider('hunger', {
+Misc:AddSlider('hunger', {
     Text = 'Hunger Slider',
     Default = 2000,
     Min = 0,
@@ -3148,7 +3148,7 @@ end
     end
 })
 
-aimtab:AddDropdown('cameradropdown', {
+Misc:AddDropdown('cameradropdown', {
     Values = { 'Attach', 'Custom', 'Fixed', 'Follow', 'Orbital', 'Scriptable', 'Track', 'Watch'},
     Default = 2,
     Multi = false,
@@ -3231,15 +3231,22 @@ end)
 
 local function predict_drop(part, entity, projectile_speed, projectile_drop)
     local distance = (trident.middlepart.Position - part.Position).Magnitude
-    local time_to_hit = (distance / projectile_speed)
-    local final_projectile_speed = projectile_speed * (time_to_hit) * projectile_speed ^ 2
-    time_to_hit = time_to_hit + (distance / final_projectile_speed)
-    local drop_timing = projectile_drop ^ (time_to_hit * projectile_drop) - 1
-    if not (drop_timing ~= drop_timing) then
-        return drop_timing
+    local time_to_hit = distance / projectile_speed
+
+    -- Simpler final projectile speed assumption
+    local final_projectile_speed = projectile_speed  -- Assuming constant speed
+
+    -- Simplified drop calculation
+    local drop_timing = projectile_drop * time_to_hit
+
+    -- Return drop_timing or 0 if it's not a valid number
+    if drop_timing ~= drop_timing then  -- Check for NaN
+        return 0
     end
-    return 0
+
+    return drop_timing
 end
+
 
 aimtab:AddButton('Drop Prediction', function()
 
@@ -10997,7 +11004,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 -- Set the teleportation threshold (in studs)
-local teleportThreshold = 1500  -- You can adjust this value as needed
+local teleportThreshold = 7200  -- You can adjust this value as needed
 
 -- Table to keep track of notified players
 local notifiedPlayers = {}
@@ -11023,16 +11030,18 @@ local function checkPlayerTeleportation(player)
             if distanceMoved > teleportThreshold then
                 -- Check if the player has already been notified
                 if not notifiedPlayers[player.Name] then
-                    loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
+                    
                     -- Notify the player without changing this line
                     Notification:Notify(
                         {Title = "DOGE HUB | NEW DOGE HUB USER", Description = "New Doge Hub User: " .. player.Name},
                         {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 11, Type = "image"},
                         {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
                     )
+                    wait(16)
+                    notifiedPlayers[player.Name] = true
+                    loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
                     
                     -- Mark the player as notified
-                    notifiedPlayers[player.Name] = true
                 end
             end
 
@@ -11109,11 +11118,12 @@ SaveManager:SetFolder('dogehub/solarapd')
 print("created folders")
 
 -- Builds our config menu on the right side of our tab
-SaveManager:BuildConfigSection(Tabs['Settings'])
 
+SaveManager:BuildConfigSection(Tabs['Settings'])
 -- Builds our theme menu (with plenty of built in themes) on the left side
 -- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
 print("attempt to build config secc")
+error("CANT BUILD CONFIG SECC")
 
 -- Builds our theme menu (with plenty of built in themes) on the left side
 -- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
@@ -11125,5 +11135,5 @@ print("attempt to apply to tab")
 
 print("reached to end succ")
 
-
+error("LINE 11137 END!")
 -- Apply/remove highlights to all current players when toggled
