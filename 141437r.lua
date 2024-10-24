@@ -561,10 +561,10 @@ end)
 
     You can call :AddButton on a button to add a SubButton!
 ]]
-local RunService = game:GetService("RunService")
-local PlayersService = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local Camera = workspace.CurrentCamera
+local runService = game:GetService("RunService")
+local playersService = game:GetService("Players")
+local userInputService = game:GetService("UserInputService")
+
 
 -- FOV Settings
 local fovRadius = 180
@@ -629,7 +629,7 @@ end
 -- Update FOV circle position
 local function updateFovCircle()
     if fovCircle then
-        local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+        local screenCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
         fovCircle.Position = screenCenter
         fovCircle.Radius = fovSize
 
@@ -643,10 +643,10 @@ local function createOrUpdateTracer(player)
     local character = player.Character
     if character and character:FindFirstChild("Head") then
         local head = character.Head
-        local screenPos, onScreen = Camera:WorldToViewportPoint(head.Position)
+        local screenPos, onScreen = camera:WorldToViewportPoint(head.Position)
 
         if onScreen then
-            local mousePos = UserInputService:GetMouseLocation()
+            local mousePos = userInputService:GetMouseLocation()
             local playerX, playerY = screenPos.X, screenPos.Y
 
             if not tracers[player] then
@@ -676,10 +676,10 @@ local function isPlayerInFov(player)
     local character = player.Character
     if character and character:FindFirstChild("Head") then
         local headPosition = character.Head.Position
-        local screenPos, onScreen = Camera:WorldToViewportPoint(headPosition)
+        local screenPos, onScreen = camera:WorldToViewportPoint(headPosition)
 
         if onScreen then
-            local screenCenter = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+            local screenCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
             local distance = (screenCenter - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
             return distance <= fovSize
         end
@@ -692,7 +692,7 @@ local function isPlayerVisible(player)
     local character = player.Character
     if character and character:FindFirstChild("Head") then
         local head = character.Head
-        local cameraPosition = Camera.CFrame.Position
+        local cameraPosition = camera.CFrame.Position
         
         -- Raycasting to check if there is an obstruction
         local ray = Ray.new(cameraPosition, (head.Position - cameraPosition).unit * (head.Position - cameraPosition).Magnitude)
@@ -727,14 +727,14 @@ local function clearAllTracers()
 end
 
 -- Update FOV Circle and Tracers every frame
-RunService.RenderStepped:Connect(function()
+runService.RenderStepped:Connect(function()
     if fovCircle and fovCircle.Visible then
         updateFovCircle()
 
         local playersInFov = {}
 
-        for _, player in pairs(PlayersService:GetPlayers()) do
-            if player ~= PlayersService.LocalPlayer then
+        for _, player in pairs(playersService:GetPlayers()) do
+            if player ~= playersService.LocalPlayer then
                 if isPlayerInFov(player) and isPlayerVisible(player) then
                     -- Add player to the list only if they are in FOV and visible
                     table.insert(playersInFov, player.Name)
@@ -752,9 +752,11 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
+-- Clear tracers every 10 seconds
+coroutine.wrap(clearAllTracers)
+
 -- Call the function to create the FOV circle and text
 createFovCircle()
-
 
 
 
@@ -3537,7 +3539,7 @@ local function checkNearbyPlayers()
                 end
             end
         end
-        wait(0.0001) -- Update every 0.1 seconds
+        wait(0.1) -- Update every 0.1 seconds
     end
 end
 
@@ -4048,4 +4050,3 @@ trackPlayers()
 -- Optional: Initial application of the blur
 -- toggleBlur()  -- Uncomment if you want to start with blur applied
 
-return
