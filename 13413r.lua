@@ -92,12 +92,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...v24")  -- Create file with initial version (v17)
 end
-local updatenote = "Added Bullet Speed Slider For Changing Silent Aim Predictions."
+local updatenote = "Changed refresh rate of esp."
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v24"  -- You can set this to the version you want to check
+local version = "v24.2"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -1546,7 +1546,7 @@ local function checkNearbyPlayers()
                 end
             end
         end
-        wait(0.001) -- Update every 0.1 seconds
+        wait(0.00001) -- Update every 0.1 seconds
     end
 end
 
