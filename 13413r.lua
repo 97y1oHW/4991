@@ -4581,7 +4581,7 @@ end)
 -- Slider for Zoom Value
 aimtab:AddSlider('Silentbulspeed', {
     Text = 'Silent Aim Bullet Speed',
-    Default = 450,
+    Default = 401,
     Min = 10,
     Max = 570,
     Rounding = 1,
