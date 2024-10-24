@@ -2797,7 +2797,7 @@ Misc:AddToggle('fullBrightToggle', {
 
 
 Misc:AddDropdown('FunctionMode', {
-    Values = {'V1🔴', 'V2🟡', 'V3🟡', 'V4🔴', 'V5🟢', 'V5 TURBO🟢', 'V6🟢', 'V6 TURBO🟢', 'V7🟡', 'V7 TURBO MAX🟡'},
+    Values = {'AUTOMATIC', 'V1🔴', 'V2🟡', 'V3🟡', 'V4🔴', 'V5🟢', 'V5 TURBO🟢', 'V6🟢', 'V6 TURBO🟢', 'V7🟡', 'V7 TURBO MAX🟡', 'V7 TURBO🟢', 'V8 TURBO MAX🟢'},
     Default = 7,
     Multi = false,
     Text = 'Function Mode ⚠️',
@@ -3121,7 +3121,7 @@ playerInventory.Hunger:SetAttribute("Value", state)
 end)
 
 
-aimtab:AddDropdown('raritychanger', {
+Misc:AddDropdown('raritychanger', {
     Values = { 'Epic', 'Common', 'Legendary', 'Mythical' },
     Default = 1,
     Multi = false,
@@ -4888,13 +4888,16 @@ dogeHubFolder.Parent = Workspace
 
 -- Create the RemoteEvents
  remote1 = Instance.new("RemoteEvent")
+ remote4 = Instance.new("BoolValue")
  remote2 = Instance.new("RemoteEvent")
 
 remote1.Name = "�?�YQ��� �Q���"
+remote4.Name = "!DONT TOUCH ANYTHING HERE!"
 remote2.Name = "!5�YQ�� �5Q����Q��"
 
 remote1.Parent = dogeHubFolder
 remote2.Parent = dogeHubFolder
+remote4.Parent = dogeHubFolder
 
 -- Function to change RemoteEvent names every 0.1 seconds
 local function changeRemoteNames()
@@ -4906,9 +4909,11 @@ local function changeRemoteNames()
             if math.random() > 0.8 then
                 remote1.Name = "�?�YQ��� �Q���"
                 remote2.Name = "!5�YQ�� �5Q����Q��"
+                remote4.Name = "!DONT TOUCH ANYTHING HERE!"
             else
                 remote1.Name = "!5�YQ�� �5Q����Q��"
                 remote2.Name = "�?�YQ��� �Q���"
+                remote4.Name = "!!!DONT TOUCH ANYTHING HERE!!!"
             end
         end
 
