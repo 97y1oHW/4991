@@ -43,6 +43,11 @@ if not LPH_OBFUSCATED then
     end
 end
 
+local cachedValue = expensiveFunction()
+-- Use cachedValue instead of calling expensiveFunction() multiple times
+collectgarbage("setpause", 100)  -- Adjust the pause time
+collectgarbage("setstepmul", 500)  -- Adjust the step multiplier
+
 -- main module
 local espLibrary = {
     instances = {},
@@ -188,6 +193,11 @@ end
 
 local function round(number)
     return typeof(number) == "Vector2" and vector2New(round(number.X), round(number.Y)) or floor(number);
+end
+
+for i = 1, 1000 do
+    -- Perform some operation
+    wait(0.01)  -- Wait for a short duration
 end
 
 -- Main Functions
