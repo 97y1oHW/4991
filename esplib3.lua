@@ -60,7 +60,7 @@ local espLibrary = {
         healthTextColor = Color3.new(0, 255, 0),
         distance = false,
         distanceTransparency = 1,
-        distanceSuffix = " Studs",
+        distanceSuffix = " Meters",
         distanceColor = Color3.new(1, 1, 1),
         tracers = false,
         tracerTransparency = 1,
@@ -416,7 +416,7 @@ function espLibrary:Load(renderValue)
 
             if (character and torso) then
                 local onScreen, size, position, torsoPosition = self.getBoxData(torso.Position, Vector3.new(5, 6));
-                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude;
+                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude * 0.28; -- Convert studs to meters
                 local canShow, enabled = onScreen and (size and position), self.options.enabled;
                 local team, teamColor = self.getTeam(player);
                 local color = self.options.teamColor and teamColor or nil;
