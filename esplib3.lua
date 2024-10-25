@@ -1,52 +1,7 @@
+
 --[[
     made by siper#9938 and mickey#5612
 ]]
-if not LPH_OBFUSCATED then
-    -- Define a series of functions that serve as placeholders when obfuscation is not active.
-    print("3")
-    -- Simple passthrough function for just-in-time (JIT) operations.
-    LPH_JIT = function(...) 
-        print("JIT")
-        return ... 
-    end
-    
-    -- Passthrough function for maximum JIT operations.
-    LPH_JIT_MAX = function(...) 
-        return ... 
-    end
-    
-    -- Function to disable virtualization, simply returns the input function.
-    LPH_NO_VIRTUALIZE = function(f) 
-        return f 
-    end
-    
-    -- Function to remove upvalues, returns a new function that calls the original with the same arguments.
-    LPH_NO_UPVALUES = function(f) 
-        return function(...) 
-            return f(...) 
-        end 
-    end
-    
-    -- Placeholder for string encryption, returns the input string.
-    LPH_ENCSTR = function(...) 
-        return ... 
-    end
-    
-    -- Placeholder for number encryption, returns the input number.
-    LPH_ENCNUM = function(...) 
-        return ... 
-    end
-    
-    -- Function intended to cause a crash, in this case, it prints the traceback.
-    LPH_CRASH = function() 
-        return print(debug.traceback()) 
-    end
-end
-
-local cachedValue = expensiveFunction()
--- Use cachedValue instead of calling expensiveFunction() multiple times
-collectgarbage("setpause", 100)  -- Adjust the pause time
-collectgarbage("setstepmul", 500)  -- Adjust the step multiplier
 
 -- main module
 local espLibrary = {
@@ -66,7 +21,7 @@ local espLibrary = {
         scaleFactorX = 5,
         scaleFactorY = 6,
         boundingBox = false, -- WARNING | Significant Performance Decrease when true
-        boundingBoxDescending = false,
+        boundingBoxDescending = true,
         excludedPartNames = {},
         font = 2,
         fontSize = 13,
@@ -193,11 +148,6 @@ end
 
 local function round(number)
     return typeof(number) == "Vector2" and vector2New(round(number.X), round(number.Y)) or floor(number);
-end
-
-for i = 1, 1000 do
-    -- Perform some operation
-    wait(0.01)  -- Wait for a short duration
 end
 
 -- Main Functions
