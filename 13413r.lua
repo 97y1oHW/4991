@@ -76,6 +76,8 @@ end
 wait(4)
 
 huge4 = math.huge
+
+
         setfpscap(3)
         wait(2)
          setfpscap(0)
@@ -97,7 +99,7 @@ local updatenote "404"
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v24.5"  -- You can set this to the version you want to check
+local version = "v25"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
