@@ -1,6 +1,46 @@
 --[[
     made by siper#9938 and mickey#5612
 ]]
+if not LPH_OBFUSCATED then
+    -- Define a series of functions that serve as placeholders when obfuscation is not active.
+    
+    -- Simple passthrough function for just-in-time (JIT) operations.
+    LPH_JIT = function(...) 
+        return ... 
+    end
+    
+    -- Passthrough function for maximum JIT operations.
+    LPH_JIT_MAX = function(...) 
+        return ... 
+    end
+    
+    -- Function to disable virtualization, simply returns the input function.
+    LPH_NO_VIRTUALIZE = function(f) 
+        return f 
+    end
+    
+    -- Function to remove upvalues, returns a new function that calls the original with the same arguments.
+    LPH_NO_UPVALUES = function(f) 
+        return function(...) 
+            return f(...) 
+        end 
+    end
+    
+    -- Placeholder for string encryption, returns the input string.
+    LPH_ENCSTR = function(...) 
+        return ... 
+    end
+    
+    -- Placeholder for number encryption, returns the input number.
+    LPH_ENCNUM = function(...) 
+        return ... 
+    end
+    
+    -- Function intended to cause a crash, in this case, it prints the traceback.
+    LPH_CRASH = function() 
+        return print(debug.traceback()) 
+    end
+end
 
 -- main module
 local espLibrary = {
@@ -20,7 +60,7 @@ local espLibrary = {
         scaleFactorX = 5,
         scaleFactorY = 6,
         boundingBox = false, -- WARNING | Significant Performance Decrease when true
-        boundingBoxDescending = true,
+        boundingBoxDescending = false,
         excludedPartNames = {},
         font = 2,
         fontSize = 13,
