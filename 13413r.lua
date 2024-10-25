@@ -4165,7 +4165,7 @@ local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
 
 -- Bullet speed
-local bulletSpeed = 430           -- Bullet speed, adjusted for better prediction
+local bulletSpeed = 401          -- Bullet speed, adjusted for better prediction
 
 -- Prediction for different ranges (manual values)
 local predictionForRanges = {
@@ -4327,7 +4327,7 @@ local function predictTargetPosition(target)
 end
 
 -- Variables to track aiming state and debugging
-local isSilentAimEnabled994 = true -- Toggle this to enable/disable silent aim
+local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
 local lockedCharacter = nil
 
 -- Function to handle aiming logic
