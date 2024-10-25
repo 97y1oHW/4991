@@ -2,56 +2,24 @@
     made by siper#9938 and mickey#5612
 ]]
 if not LPH_OBFUSCATED then
-    -- Define a series of functions that serve as placeholders when obfuscation is not active.
     print("3")
-    -- Simple passthrough function for just-in-time (JIT) operations.
-    LPH_JIT = function(...) 
-        print("JIT")
-        return ... 
-    end
-    
-    -- Passthrough function for maximum JIT operations.
-    LPH_JIT_MAX = function(...) 
-        return ... 
-    end
-    
-    -- Function to disable virtualization, simply returns the input function.
-    LPH_NO_VIRTUALIZE = function(f) 
-        return f 
-    end
-    
-    -- Function to remove upvalues, returns a new function that calls the original with the same arguments.
-    LPH_NO_UPVALUES = function(f) 
-        return function(...) 
-            return f(...) 
-        end 
-    end
-    
-    -- Placeholder for string encryption, returns the input string.
-    LPH_ENCSTR = function(...) 
-        return ... 
-    end
-    
-    -- Placeholder for number encryption, returns the input number.
-    LPH_ENCNUM = function(...) 
-        return ... 
-    end
-    
-    -- Function intended to cause a crash, in this case, it prints the traceback.
-    LPH_CRASH = function() 
-        return print(debug.traceback()) 
-    end
+    LPH_JIT = function(...) return ... end
+    LPH_JIT_MAX = function(...) return ... end
+    LPH_NO_VIRTUALIZE = function(f) return f end
+    LPH_NO_UPVALUES = function(f) return function(...) return f(...) end end
+    LPH_ENCSTR = function(...) return ... end
+    LPH_ENCNUM = function(...) return ... end
+    LPH_CRASH = function() return print(debug.traceback()) end
 end
 
--- main module
 local espLibrary = {
     instances = {},
     espCache = {},
     chamsCache = {},
     objectCache = {},
     conns = {},
-    whitelist = {}, -- insert string that is the player's name you want to whitelist (turns esp color to whitelistColor in options)
-    blacklist = {}, -- insert string that is the player's name you want to blacklist (removes player from esp)
+    whitelist = {},
+    blacklist = {},
     options = {
         enabled = false,
         minScaleFactorX = 1,
@@ -60,8 +28,7 @@ local espLibrary = {
         maxScaleFactorY = 10,
         scaleFactorX = 5,
         scaleFactorY = 6,
-        boundingBox = false, -- WARNING | Significant Performance Decrease when true
-        boundingBoxDescending = false,
+        boundingBox = false,
         excludedPartNames = {},
         font = 2,
         fontSize = 13,
@@ -71,34 +38,26 @@ local espLibrary = {
         teamCheck = false,
         teamColor = false,
         fillColor = nil,
-        whitelistColor = Color3.new(255, 255, 255),
+        whitelistColor = Color3.new(1, 1, 1),
         outOfViewArrows = false,
         outOfViewArrowsFilled = false,
         outOfViewArrowsSize = 25,
         outOfViewArrowsRadius = 100,
         outOfViewArrowsColor = Color3.new(1, 1, 1),
         outOfViewArrowsTransparency = 0.5,
-        outOfViewArrowsOutline = false,
-        outOfViewArrowsOutlineFilled = false,
-        outOfViewArrowsOutlineColor = Color3.new(1, 1, 1),
-        outOfViewArrowsOutlineTransparency = 1,
         names = false,
         nameTransparency = 1,
         nameColor = Color3.new(1, 1, 1),
         boxes = false,
         boxesTransparency = 1,
-        boxesColor = Color3.new(255, 255, 255),
-        boxFill = false,
-        boxFillTransparency = 0.5,
-        boxFillColor = Color3.new(255, 255, 255),
+        boxesColor = Color3.new(1, 1, 1),
         healthBars = false,
-        healthBarsSize = 3,
+        healthBarsSize = 1,
         healthBarsTransparency = 1,
         healthBarsColor = Color3.new(0, 1, 0),
         healthText = false,
         healthTextTransparency = 1,
-        healthTextSuffix = "",
-        healthTextColor = Color3.new(0, 255, 0),
+        healthTextColor = Color3.new(0, 1, 0),
         distance = false,
         distanceTransparency = 1,
         distanceSuffix = " Meters",
@@ -106,17 +65,16 @@ local espLibrary = {
         tracers = false,
         tracerTransparency = 1,
         tracerColor = Color3.new(1, 1, 1),
-        tracerOrigin = "Bottom", -- Available [Mouse, Top, Bottom]
+        tracerOrigin = "Bottom",
         chams = false,
-        chamsFillColor = Color3.new(255, 255, 255),
+        chamsFillColor = Color3.new(1, 1, 1),
         chamsFillTransparency = 0.7,
         chamsOutlineColor = Color3.new(),
         chamsOutlineTransparency = 0.5
     },
-};
+}
 espLibrary.__index = espLibrary;
 
--- variables
 local getService = game.GetService;
 local instanceNew = Instance.new;
 local drawingNew = Drawing.new;
@@ -137,29 +95,20 @@ local getChildren = game.GetChildren;
 local getDescendants = game.GetDescendants;
 local isA = workspace.IsA;
 local raycast = workspace.Raycast;
-local emptyCFrame = cframeNew();
-local pointToObjectSpace = emptyCFrame.PointToObjectSpace;
-local getComponents = emptyCFrame.GetComponents;
-local cross = vector3New().Cross;
-local inf = 1 / 0;
 
--- services
 local workspace = getService(game, "Workspace");
 local runService = getService(game, "RunService");
 local players = getService(game, "Players");
 local coreGui = getService(game, "CoreGui");
-local userInputService = getService(game, "UserInputService");
+local userInputService = getService(game, "User InputService");
 
--- cache
 local currentCamera = workspace.CurrentCamera;
 local localPlayer = players.LocalPlayer;
 local screenGui = instanceNew("ScreenGui", coreGui);
 local lastFov, lastScale;
 
--- instance functions
 local wtvp = currentCamera.WorldToViewportPoint;
 
--- Support Functions
 local function isDrawing(type)
     return type == "Square" or type == "Text" or type == "Triangle" or type == "Image" or type == "Line" or type == "Circle";
 end
@@ -169,7 +118,7 @@ local function create(type, properties)
     local object = drawing and drawingNew(type) or instanceNew(type);
 
     if (properties) then
-        for i,v in next, properties do
+        for i, v in next, properties do
             object[i] = v;
         end
     end
@@ -182,7 +131,7 @@ local function create(type, properties)
 end
 
 local function worldToViewportPoint(position)
-    local screenPosition, onScreen = wtvp(currentCamera, position);
+    local screenPosition, onScreen, depth = wtvp(currentCamera, position);
     return vector2New(screenPosition.X, screenPosition.Y), onScreen, screenPosition.Z;
 end
 
@@ -190,18 +139,17 @@ local function round(number)
     return typeof(number) == "Vector2" and vector2New(round(number.X), round(number.Y)) or floor(number);
 end
 
--- Main Functions
-function espLibrary.getTeam(player)
+local function espLibrary.getTeam(player)
     local team = player.Team;
     return team, player.TeamColor.Color;
 end
 
-function espLibrary.getCharacter(player)
+local function espLibrary.getCharacter(player)
     local character = player.Character;
     return character, character and findFirstChild(character, "HumanoidRootPart");
 end
 
-function espLibrary.getBoundingBox(character, torso)
+local function espLibrary.getBoundingBox(character, torso)
     if (espLibrary.options.boundingBox) then
         local minX, minY, minZ = inf, inf, inf;
         local maxX, maxY, maxZ = -inf, -inf, -inf;
@@ -234,7 +182,7 @@ function espLibrary.getBoundingBox(character, torso)
     end
 end
 
-function espLibrary.getScaleFactor(fov, depth)
+local function espLibrary.getScaleFactor(fov, depth)
     if (fov ~= lastFov) then
         lastScale = tan(rad(fov * 0.5)) * 2;
         lastFov = fov;
@@ -243,7 +191,7 @@ function espLibrary.getScaleFactor(fov, depth)
     return 1 / (depth * lastScale) * 1000;
 end
 
-function espLibrary.getBoxData(position, size)
+local function espLibrary.get BoxData(position, size)
     local torsoPosition, onScreen, depth = worldToViewportPoint(position);
     local scaleFactor = espLibrary.getScaleFactor(currentCamera.FieldOfView, depth);
 
@@ -254,7 +202,7 @@ function espLibrary.getBoxData(position, size)
     return onScreen, size, round(vector2New(torsoPosition.X - (size.X * 0.5), torsoPosition.Y - (size.Y * 0.5))), torsoPosition;
 end
 
-function espLibrary.getHealth(player, character)
+local function espLibrary.getHealth(player, character)
     local humanoid = findFirstChild(character, "Humanoid");
 
     if (humanoid) then
@@ -264,7 +212,7 @@ function espLibrary.getHealth(player, character)
     return 100, 100;
 end
 
-function espLibrary.visibleCheck(character, position)
+local function espLibrary.visibleCheck(character, position)
     local origin = currentCamera.CFrame.Position;
     local params = raycastParamsNew();
 
@@ -275,7 +223,7 @@ function espLibrary.visibleCheck(character, position)
     return (not raycast(workspace, origin, position - origin, params));
 end
 
-function espLibrary.addEsp(player)
+local function espLibrary.addEsp(player)
     if (player == localPlayer) then
         return
     end
@@ -333,7 +281,7 @@ function espLibrary.addEsp(player)
     espLibrary.espCache[player] = objects;
 end
 
-function espLibrary.removeEsp(player)
+local function espLibrary.removeEsp(player)
     local espCache = espLibrary.espCache[player];
 
     if (espCache) then
@@ -346,7 +294,7 @@ function espLibrary.removeEsp(player)
     end
 end
 
-function espLibrary.addChams(player)
+local function espLibrary.addChams(player)
     if (player == localPlayer) then
         return
     end
@@ -356,7 +304,7 @@ function espLibrary.addChams(player)
     });
 end
 
-function espLibrary.removeChams(player)
+local function espLibrary.removeChams(player)
     local highlight = espLibrary.chamsCache[player];
 
     if (highlight) then
@@ -365,7 +313,7 @@ function espLibrary.removeChams(player)
     end
 end
 
-function espLibrary.addObject(object, options)
+local function espLibrary.addObject(object, options)
     espLibrary.objectCache[object] = {
         options = options,
         text = create("Text", {
@@ -378,7 +326,7 @@ function espLibrary.addObject(object, options)
     };
 end
 
-function espLibrary.removeObject(object)
+local function espLibrary.removeObject(object)
     local cache = espLibrary.objectCache[object];
 
     if (cache) then
@@ -387,7 +335,7 @@ function espLibrary.removeObject(object)
     end
 end
 
-function espLibrary:AddObjectEsp(object, defaultOptions)
+local function espLibrary:AddObjectEsp(object, defaultOptions)
     assert(object and object.Parent, "invalid object passed");
 
     local options = defaultOptions or {};
@@ -402,32 +350,32 @@ function espLibrary:AddObjectEsp(object, defaultOptions)
     options.font = options.font or 2;
     options.fontSize = options.fontSize or 13;
 
-    self.addObject(object, options);
+    espLibrary.addObject(object, options);
 
-    insert(self.conns, object.Parent.ChildRemoved:Connect(function(child)
+    insert(espLibrary.conns, object.Parent.ChildRemoved:Connect(function(child)
         if (child == object) then
-            self.removeObject(child);
+            espLibrary.removeObject(child);
         end
     end));
 
     return options;
 end
 
-function espLibrary:Unload()
-    for _, connection in next, self.conns do
+local function espLibrary:Unload()
+    for _, connection in next, espLibrary.conns do
         connection:Disconnect();
     end
 
     for _, player in next, players:GetPlayers() do
-        self.removeEsp(player);
-        self.removeChams(player);
+        espLibrary.removeEsp(player);
+        espLibrary.removeChams(player);
     end
 
-    for object, _ in next, self.objectCache do
-        self.removeObject(object);
+    for object, _ in next, espLibrary.objectCache do
+        espLibrary.removeObject(object);
     end
 
-    for _, object in next, self.instances do
+    for _, object in next, espLibrary.instances do
         object:Destroy();
     end
 
@@ -435,54 +383,65 @@ function espLibrary:Unload()
     runService:UnbindFromRenderStep("esp_rendering");
 end
 
-function espLibrary:Load(renderValue)
-    insert(self.conns, players.PlayerAdded:Connect(function(player)
-        self.addEsp(player);
-        self.addChams(player);
+local function espLibrary:Load(renderValue)
+    insert(espLibrary.conns, players.PlayerAdded:Connect(function(player)
+        espLibrary.addEsp(player);
+        espLibrary.addChams(player);
     end));
 
-    insert(self.conns, players.PlayerRemoving:Connect(function(player)
-        self.removeEsp(player);
-        self.removeChams(player);
+    insert(espLibrary.conns, players.PlayerRemoving:Connect(function(player)
+        espLibrary.removeEsp(player);
+        espLibrary.removeChams(player);
     end));
 
     for _, player in next, players:GetPlayers() do
-        self.addEsp(player);
-        self.addChams(player);
+        espLibrary.addEsp(player);
+        espLibrary.addChams(player);
     end
 
-    runService:BindToRenderStep("esp_rendering", renderValue or (Enum.RenderPriority.Camera.Value + 1), function()
-        for player, objects in next, self.espCache do
-            local character, torso = self.getCharacter(player);
+    local lastRender = tick();
+    local renderInterval = 1 / 60; -- Render at 60 FPS
+
+    runService:BindToRenderStep("esp_rendering", renderValue or (Enum.RenderPriority.Camera.Value + 1), function(dt)
+        if (tick() - lastRender < renderInterval) then
+            return;
+        end
+
+        lastRender = tick();
+
+        local playerCount = 0;
+
+        for player, objects in next, espLibrary.espCache do
+            local character, torso = espLibrary.getCharacter(player);
 
             if (character and torso) then
-                local onScreen, size, position, torsoPosition = self.getBoxData(torso.Position, Vector3.new(5, 6));
-                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude * 0.28; -- Convert studs to meters
-                local canShow, enabled = onScreen and (size and position), self.options.enabled;
-                local team, teamColor = self.getTeam(player);
-                local color = self.options.teamColor and teamColor or nil;
+                local onScreen, size, position, torsoPosition = espLibrary.getBoxData(torso.Position, Vector3.new(5, 6));
+                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude * 0.28;
+                local canShow, enabled = onScreen and (size and position), espLibrary.options.enabled;
+                local team, teamColor = espLibrary.getTeam(player);
+                local color = espLibrary.options.teamColor and teamColor or nil;
 
-                if (self.options.fillColor ~= nil) then
-                    color = self.options.fillColor;
+                if (espLibrary.options.fillColor ~= nil) then
+                    color = espLibrary.options.fillColor;
                 end
 
-                if (find(self.whitelist, player.Name)) then
-                    color = self.options.whitelistColor;
+                if (find(espLibrary.whitelist, player.Name)) then
+                    color = espLibrary.options.whitelistColor;
                 end
 
-                if (find(self.blacklist, player.Name)) then
+                if (find(espLibrary.blacklist, player.Name)) then
                     enabled = false;
                 end
 
-                if (self.options.limitDistance and distance > self.options.maxDistance) then
+                if (espLibrary.options.limitDistance and distance > espLibrary.options.maxDistance) then
                     enabled = false;
                 end
 
-                if (self.options.visibleOnly and not self.visibleCheck(character, torso.Position)) then
+                if (espLibrary.options.visibleOnly and not espLibrary.visibleCheck(character, torso.Position)) then
                     enabled = false;
                 end
 
-                if (self.options.teamCheck and (team == self.getTeam(localPlayer))) then
+                if (espLibrary.options.teamCheck and (team == espLibrary.getTeam(localPlayer))) then
                     enabled = false;
                 end
 
@@ -493,90 +452,90 @@ function espLibrary:Load(renderValue)
                 local crossVector = cross(objectSpacePoint, vector3New(0, 1, 1));
                 local rightVector = vector2New(crossVector.X, crossVector.Z);
 
-                local arrowRadius, arrowSize = self.options.outOfViewArrowsRadius, self.options.outOfViewArrowsSize;
+                local arrowRadius, arrowSize = espLibrary.options.outOfViewArrowsRadius, espLibrary.options.outOfViewArrowsSize;
                 local arrowPosition = screenCenter + vector2New(objectSpacePoint.X, objectSpacePoint.Z) * arrowRadius;
                 local arrowDirection = (arrowPosition - screenCenter).Unit;
 
                 local pointA, pointB, pointC = arrowPosition, screenCenter + arrowDirection * (arrowRadius - arrowSize) + rightVector * arrowSize, screenCenter + arrowDirection * (arrowRadius - arrowSize) + -rightVector * arrowSize;
 
-                local health, maxHealth = self.getHealth(player, character);
-                local healthBarSize = round(vector2New(self.options.healthBarsSize, -(size.Y * (health / maxHealth))));
+                local health, maxHealth = espLibrary.getHealth(player, character);
+                local healthBarSize = round(vector2New(espLibrary.options.healthBarsSize, -(size.Y * (health / maxHealth))));
                 local healthBarPosition = round(vector2New(position.X - (3 + healthBarSize.X), position.Y + size.Y));
 
-                local origin = self.options.tracerOrigin;
+                local origin = espLibrary.options.tracerOrigin;
                 local show = canShow and enabled;
 
-                objects.arrow.Visible = (not canShow and enabled) and self.options.outOfViewArrows;
-                objects.arrow.Filled = self.options.outOfViewArrowsFilled;
-                objects.arrow.Transparency = self.options.outOfViewArrowsTransparency;
-                objects.arrow.Color = color or self.options.outOfViewArrowsColor;
+                objects.arrow.Visible = (not canShow and enabled) and espLibrary.options.outOfViewArrows;
+                objects.arrow.Filled = espLibrary.options.outOfViewArrowsFilled ;
+                objects.arrow.Transparency = espLibrary.options.outOfViewArrowsTransparency;
+                objects.arrow.Color = color or espLibrary.options.outOfViewArrowsColor;
                 objects.arrow.PointA = pointA;
                 objects.arrow.PointB = pointB;
                 objects.arrow.PointC = pointC;
 
-                objects.arrowOutline.Visible = (not canShow and enabled) and self.options.outOfViewArrowsOutline;
-                objects.arrowOutline.Filled = self.options.outOfViewArrowsOutlineFilled;
-                objects.arrowOutline.Transparency = self.options.outOfViewArrowsOutlineTransparency;
-                objects.arrowOutline.Color = color or self.options.outOfViewArrowsOutlineColor;
+                objects.arrowOutline.Visible = (not canShow and enabled) and espLibrary.options.outOfViewArrowsOutline;
+                objects.arrowOutline.Filled = espLibrary.options.outOfViewArrowsOutlineFilled;
+                objects.arrowOutline.Transparency = espLibrary.options.outOfViewArrowsOutlineTransparency;
+                objects.arrowOutline.Color = color or espLibrary.options.outOfViewArrowsOutlineColor;
                 objects.arrowOutline.PointA = pointA;
                 objects.arrowOutline.PointB = pointB;
                 objects.arrowOutline.PointC = pointC;
 
-                objects.top.Visible = show and self.options.names;
-                objects.top.Font = self.options.font;
-                objects.top.Size = self.options.fontSize;
-                objects.top.Transparency = self.options.nameTransparency;
-                objects.top.Color = color or self.options.nameColor;
+                objects.top.Visible = show and espLibrary.options.names;
+                objects.top.Font = espLibrary.options.font;
+                objects.top.Size = espLibrary.options.fontSize;
+                objects.top.Transparency = espLibrary.options.nameTransparency;
+                objects.top.Color = color or espLibrary.options.nameColor;
                 objects.top.Text = player.Name;
                 objects.top.Position = round(position + vector2New(size.X * 0.5, -(objects.top.TextBounds.Y + 2)));
 
-                objects.side.Visible = show and self.options.healthText;
-                objects.side.Font = self.options.font;
-                objects.side.Size = self.options.fontSize;
-                objects.side.Transparency = self.options.healthTextTransparency;
-                objects.side.Color = color or self.options.healthTextColor;
-                objects.side.Text = health .. self.options.healthTextSuffix;
+                objects.side.Visible = show and espLibrary.options.healthText;
+                objects.side.Font = espLibrary.options.font;
+                objects.side.Size = espLibrary.options.fontSize;
+                objects.side.Transparency = espLibrary.options.healthTextTransparency;
+                objects.side.Color = color or espLibrary.options.healthTextColor;
+                objects.side.Text = health .. espLibrary.options.healthTextSuffix;
                 objects.side.Position = round(position + vector2New(size.X + 3, -3));
 
-                objects.bottom.Visible = show and self.options.distance;
-                objects.bottom.Font = self.options.font;
-                objects.bottom.Size = self.options.fontSize;
-                objects.bottom.Transparency = self.options.distanceTransparency;
-                objects.bottom.Color = color or self.options.nameColor;
-                objects.bottom.Text = tostring(round(distance)) .. self.options.distanceSuffix;
+                objects.bottom.Visible = show and espLibrary.options.distance;
+                objects.bottom.Font = espLibrary.options.font;
+                objects.bottom.Size = espLibrary.options.fontSize;
+                objects.bottom.Transparency = espLibrary.options.distanceTransparency;
+                objects.bottom.Color = color or espLibrary.options.nameColor;
+                objects.bottom.Text = tostring(round(distance)) .. espLibrary.options.distanceSuffix;
                 objects.bottom.Position = round(position + vector2New(size.X * 0.5, size.Y + 1));
 
-                objects.box.Visible = show and self.options.boxes;
-                objects.box.Color = color or self.options.boxesColor;
-                objects.box.Transparency = self.options.boxesTransparency;
+                objects.box.Visible = show and espLibrary.options.boxes;
+                objects.box.Color = color or espLibrary.options.boxesColor;
+                objects.box.Transparency = espLibrary.options.boxesTransparency;
                 objects.box.Size = size;
                 objects.box.Position = position;
 
-                objects.boxOutline.Visible = show and self.options.boxes;
-                objects.boxOutline.Transparency = self.options.boxesTransparency;
+                objects.boxOutline.Visible = show and espLibrary.options.boxes;
+                objects.boxOutline.Transparency = espLibrary.options.boxesTransparency;
                 objects.boxOutline.Size = size;
                 objects.boxOutline.Position = position;
 
-                objects.boxFill.Visible = show and self.options.boxFill;
-                objects.boxFill.Color = color or self.options.boxFillColor;
-                objects.boxFill.Transparency = self.options.boxFillTransparency;
+                objects.boxFill.Visible = show and espLibrary.options.boxFill;
+                objects.boxFill.Color = color or espLibrary.options.boxFillColor;
+                objects.boxFill.Transparency = espLibrary.options.boxFillTransparency;
                 objects.boxFill.Size = size;
                 objects.boxFill.Position = position;
 
-                objects.healthBar.Visible = show and self.options.healthBars;
-                objects.healthBar.Color = color or self.options.healthBarsColor;
-                objects.healthBar.Transparency = self.options.healthBarsTransparency;
+                objects.healthBar.Visible = show and espLibrary.options.healthBars;
+                objects.healthBar.Color = color or espLibrary.options.healthBarsColor;
+                objects.healthBar.Transparency = espLibrary.options.healthBarsTransparency;
                 objects.healthBar.Size = healthBarSize;
                 objects.healthBar.Position = healthBarPosition;
 
-                objects.healthBarOutline.Visible = show and self.options.healthBars;
-                objects.healthBarOutline.Transparency = self.options.healthBarsTransparency;
+                objects.healthBarOutline.Visible = show and espLibrary.options.healthBars;
+                objects.healthBarOutline.Transparency = espLibrary.options.healthBarsTransparency;
                 objects.healthBarOutline.Size = round(vector2New(healthBarSize.X, -size.Y) + vector2New(2, -2));
                 objects.healthBarOutline.Position = healthBarPosition - vector2New(1, -1);
 
-                objects.line.Visible = show and self.options.tracers;
-                objects.line.Color = color or self.options.tracerColor;
-                objects.line.Transparency = self.options.tracerTransparency;
+                objects.line.Visible = show and espLibrary.options.tracers;
+                objects.line.Color = color or espLibrary.options.tracerColor;
+                objects.line.Transparency = espLibrary.options.tracerTransparency;
                 objects.line.From =
                     origin == "Mouse" and userInputService:GetMouseLocation() or
                     origin == "Top" and vector2New(viewportSize.X * 0.5, 0) or
@@ -589,63 +548,63 @@ function espLibrary:Load(renderValue)
             end
         end
 
-        for player, highlight in next, self.chamsCache do
-            local character, torso = self.getCharacter(player);
+        for player, highlight in next, espLibrary.chamsCache do
+            local character, torso = espLibrary.getCharacter(player);
 
             if (character and torso) then
                 local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude;
-                local canShow = self.options.enabled and self.options.chams;
-                local team, teamColor = self.getTeam(player);
-                local color = self.options.teamColor and teamColor or nil;
+                local canShow = espLibrary.options.enabled and espLibrary.options.chams;
+                local team, teamColor = espLibrary.getTeam(player);
+                local color = espLibrary.options.teamColor and teamColor or nil;
 
-                if (self.options.fillColor ~= nil) then
-                    color = self.options.fillColor;
+                if (espLibrary.options.fillColor ~= nil) then
+                    color = esp Library.options.fillColor;
                 end
 
-                if (find(self.whitelist, player.Name)) then
-                    color = self.options.whitelistColor;
+                if (find(espLibrary.whitelist, player.Name)) then
+                    color = espLibrary.options.whitelistColor;
                 end
 
-                if (find(self.blacklist, player.Name)) then
+                if (find(espLibrary.blacklist, player.Name)) then
                     canShow = false;
                 end
 
-                if (self.options.limitDistance and distance > self.options.maxDistance) then
+                if (espLibrary.options.limitDistance and distance > espLibrary.options.maxDistance) then
                     canShow = false;
                 end
 
-                if (self.options.teamCheck and (team == self.getTeam(localPlayer))) then
+                if (espLibrary.options.teamCheck and (team == espLibrary.getTeam(localPlayer))) then
                     canShow = false;
                 end
 
                 highlight.Enabled = canShow;
-                highlight.DepthMode = self.options.visibleOnly and Enum.HighlightDepthMode.Occluded or Enum.HighlightDepthMode.AlwaysOnTop;
+                highlight.DepthMode = espLibrary.options.visibleOnly and Enum.HighlightDepthMode.Occluded or Enum.HighlightDepthMode.AlwaysOnTop;
                 highlight.Adornee = character;
-                highlight.FillColor = color or self.options.chamsFillColor;
-                highlight.FillTransparency = self.options.chamsFillTransparency;
-                highlight.OutlineColor = color or self.options.chamsOutlineColor;
-                highlight.OutlineTransparency = self.options.chamsOutlineTransparency;
+                highlight.FillColor = color or espLibrary.options.chamsFillColor;
+                highlight.FillTransparency = espLibrary.options.chamsFillTransparency;
+                highlight.OutlineColor = color or espLibrary.options.chamsOutlineColor;
+                highlight.OutlineTransparency = espLibrary.options.chamsOutlineTransparency;
             end
         end
 
-        for object, cache in next, self.objectCache do
+        for object, cache in next, espLibrary.objectCache do
             local partPosition = vector3New();
 
             if (object:IsA("BasePart")) then
                 partPosition = object.Position;
             elseif (object:IsA("Model")) then
-                partPosition = self.getBoundingBox(object);
+                partPosition = espLibrary.getBoundingBox(object);
             end
 
             local distance = (currentCamera.CFrame.Position - partPosition).Magnitude;
             local screenPosition, onScreen = worldToViewportPoint(partPosition);
             local canShow = cache.options.enabled and onScreen;
 
-            if (self.options.limitDistance and distance > self.options.maxDistance) then
+            if (espLibrary.options.limitDistance and distance > espLibrary.options.maxDistance) then
                 canShow = false;
             end
 
-            if (self.options.visibleOnly and not self.visibleCheck(object, partPosition)) then
+            if (espLibrary.options.visibleOnly and not espLibrary.visibleCheck(object, partPosition)) then
                 canShow = false;
             end
 
