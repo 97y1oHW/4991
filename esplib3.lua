@@ -3,9 +3,10 @@
 ]]
 if not LPH_OBFUSCATED then
     -- Define a series of functions that serve as placeholders when obfuscation is not active.
-    
+    print("3")
     -- Simple passthrough function for just-in-time (JIT) operations.
     LPH_JIT = function(...) 
+        print("JIT")
         return ... 
     end
     
