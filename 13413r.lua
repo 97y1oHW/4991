@@ -1,6 +1,7 @@
 
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
 
 --[[
 
@@ -69,7 +70,7 @@ if not LPH_OBFUSCATED then
 end
 
                 Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "CHECKING MAIN THIS CAN LAG YOUR GAME."},
+            {Title = "Nexify | SOLARA", Description = "CHECKING MAIN THIS CAN LAG YOUR GAME."},
             {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 4, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -99,20 +100,20 @@ local updatenote = "just bug fixing"
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v25"  -- You can set this to the version you want to check
+local version = "v26"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
     print("Version is up to date: " .. versionInFile)
                 Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "VERSION IS UP TO DATE."},
+            {Title = "Nexify | SOLARA", Description = "VERSION IS UP TO DATE."},
             {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 6, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 else
     warn("New update available! Updating version from " .. versionInFile .. " to " .. version)
                 Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "DETECTED NEW UPDATE.DOWNLOADING..."},
+            {Title = "Nexify | SOLARA", Description = "DETECTED NEW UPDATE.DOWNLOADING..."},
             {OutlineColor = Color3.fromRGB(246, 159, 10), Time = 4, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -122,7 +123,7 @@ else
     print("Version file updated to: " .. version)
     print("Update Log: " ..updatenote)
             Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "UPDATED TO LATEST VERSION.CHECK DEVELOPER LOG FOR THE UPDATE NOTE."},
+            {Title = "Nexify | SOLARA", Description = "UPDATED TO LATEST VERSION.CHECK DEVELOPER LOG FOR THE UPDATE NOTE."},
             {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 8, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -140,7 +141,7 @@ local Players = game.Players
 -- Mark the script as opened
 _G.ScriptAlreadyOpened = true
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "CHECK-1"},
+            {Title = "Nexify | SOLARA", Description = "CHECK-1"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 5, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -164,7 +165,7 @@ end
 
 
 local CoreGui = game:GetService("CoreGui")
-local audioFileName = "dogehubsecretmp3.mp3" 
+local audioFileName = "nexifysecretmp3.mp3" 
 
 
 if not isfile(audioFileName) then
@@ -177,7 +178,7 @@ if not isfile(audioFileName) then
 end
 
 -- Check if the audio has already been played
-if not isfile("dogehub_played.txt") then
+if not isfile("nexify_played.txt") then
     -- Audio file exists, play the audio
     local soundInstance = Instance.new('Sound', CoreGui)
     soundInstance.SoundId = getcustomasset(audioFileName)
@@ -186,7 +187,7 @@ if not isfile("dogehub_played.txt") then
     soundInstance:Play()
 
     -- Mark that the audio has been played by creating a file as a flag
-    writefile("dogehub_played.txt", "true")
+    writefile("nexify_played.txt", "true")
 
     -- Remove the sound instance after it finishes playing
     soundInstance.Ended:Connect(function()
@@ -674,42 +675,42 @@ local function securitylayerchecks()
 
 warn("Started")
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "MAIN CHECK STARTED"},
+            {Title = "Nexify | SOLARA", Description = "MAIN CHECK STARTED"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 2, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 wait(1)
 print("CHECK 1")
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "CHECK 1"},
+            {Title = "Nexify | SOLARA", Description = "CHECK 1"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 wait(0.7)
 print("CHECK 2")
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "CHECK 2"},
+            {Title = "Nexify | SOLARA", Description = "CHECK 2"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 wait(0.1)
 print("CHECK 3")
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "CHECK 3"},
+            {Title = "Nexify | SOLARA", Description = "CHECK 3"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 wait(2)
 print("CHECK 4")
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "CHECK 4"},
+            {Title = "Nexify | SOLARA", Description = "CHECK 4"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 wait(2)
 print("Verification Level: " .. level .."")
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "Verification Level: " ..level..""},
+            {Title = "Nexify | SOLARA", Description = "Verification Level: " ..level..""},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -776,7 +777,7 @@ else
 wait(5)
 print("Server Did Not Responded.")
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "SERVER DID NOT RESPONDED"},
+            {Title = "Nexify | SOLARA", Description = "SERVER DID NOT RESPONDED"},
             {OutlineColor = Color3.fromRGB(240, 8, 8), Time = 15, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -881,7 +882,7 @@ local function printLoadingBar(percentage)
     local dashes = totalLength - hashMarks          -- Remaining dashes
     
     local loadingBar = string.rep("#", hashMarks) .. string.rep("-", dashes)
-    warn(string.format("Loading Doge Hub V1.7 %%%-3d %s", percentage, loadingBar))
+    warn(string.format("Loading Nexify V1.8 %%%-3d %s", percentage, loadingBar))
 end
 
 -- Function to simulate the loading process
@@ -892,7 +893,7 @@ local function simulateLoading()
     end
 end
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "LOADING SCRIPT"},
+            {Title = "Nexify | SOLARA", Description = "LOADING SCRIPT"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 17.5, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -908,7 +909,7 @@ print("Checking Executor......")
 wait(2)
 
         Notification:Notify(
-            {Title = "DOGE HUB | SOLARA", Description = "A-C"},
+            {Title = "Nexify | SOLARA", Description = "A-C"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 17.5, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
@@ -989,7 +990,7 @@ elseif executor == "Wave" or executor == "Wave 5.0" then
 -- You can suggest changes with a pull request or something
 
 local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
-_esplib = loadstring(game:HttpGet(repo2 .. 'newlib/old/esp'))()
+local espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'),true))()
 local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
@@ -1245,7 +1246,7 @@ end
 
 
 local counter = 0
-print("loading doge hub")
+print("loading Nexify")
 print('load_' .. tostring(counter))
 
 -- Load external script (make sure this is the intended use)
@@ -1274,10 +1275,10 @@ local Window = Library:CreateWindow({
     -- Position and Size are also valid options here
     -- but you do not need to define them unless you are changing them :)
 
-    Title = '                      Doge Hub /\ Solara PD',
+    Title = '                                     Nexify / Solara PD',
     Center = true,
     AutoShow = true,
-    TabPadding = 8,
+    TabPadding = 7.9,
     MenuFadeTime = 0.3
 })
 local Tabs = {
@@ -1623,30 +1624,106 @@ coroutine.wrap(cleanUpBoxes)()
 
 
 
--- Sağlık göstergelerini toggle etmek için bir kısayol belirleme
+alreadyinit=false
+function firstloadesplib()
 
+if alreadyinit==false then
+alreadyinit=true
+wait(0.1)
+espLib:Load()
+end
+
+end
 
 -- UI toggles
 EnemyEspTab:AddToggle('EspSwitch', {
     Text = 'Enable ESP',
     Default = false,
-    Callback = function(first)
-        toggleESP()
+    Callback = function(enabled)
+    firstloadesplib()
+        espLib.options.enabled = enabled
     end
 })
 
--- UI toggles
-
-
-
-EnemyEspTab:AddToggle('ChamsSwitch', {
-    Text = 'Enable Chams',
+EnemyEspTab:AddToggle('boxswitch', {
+    Text = 'Boxes',
     Default = false,
-    Callback = function(first)
-        toggleChams()
+    Callback = function(enabled)
+        espLib.options.boxes = enabled
     end
 })
 
+EnemyEspTab:AddToggle('visiblecheck', {
+    Text = 'Visible Check',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.visibleOnly = enabled
+    end
+})
+
+EnemyEspTab:AddToggle('chamswwt', {
+    Text = 'Chams',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.chams = enabled
+    end
+})
+
+EnemyEspTab:AddToggle('distance', {
+    Text = 'Distance',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.distance = enabled
+    end
+})
+
+EnemyEspTab:AddToggle('healthtext', {
+    Text = 'Health Text',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.healthText = enabled
+    end
+})
+
+EnemyEspTab:AddToggle('healthbar', {
+    Text = 'Health Bar',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.healthBars = enabled
+    end
+})
+
+EnemyEspTab:AddToggle('names', {
+    Text = 'Names',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.names = enabled
+    end
+})
+
+
+
+EnemyEspTab:AddToggle('limitdistance', {
+    Text = 'Limit Distance',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.limitDistance = enabled
+    end
+})
+
+EnemyEspTab:AddSlider('distancelimit', {
+    Text = 'Distance Limit',
+    Default = 900,
+    Min = 10,
+    Max = 1000,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.maxDistance = Value
+        -- Do not apply zoom immediately when the slider is adjusted
+    end
+})
 
 
 
@@ -2250,6 +2327,63 @@ WorldTab:AddButton('no fog', function()
  end
  end)
 
+WorldTab:AddToggle('cartpfurther', { Text = 'teleport most far car', Default = false })
+WorldTab:AddButton("Car Teleport", function()
+    if not plr.Character then return Library:Notify("no character") end
+    local uaz, dist = nil, Toggles["cartpfurther"].Value and 0 or math.huge
+    do
+        for i, v in pairs(workspace:WaitForChild("Vehicles"):GetChildren()) do
+            if v:FindFirstChild("Body") and v.Body:FindFirstChildOfClass("MeshPart") and
+                (Toggles["cartpfurther"].Value and dist < (v.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude or
+                    dist > (v.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude)
+            then
+                dist = (v.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude
+                uaz = v
+            end
+        end
+    end
+
+    if not uaz then return Library:Notify("there is no cars around") end
+    local player = game.Players.LocalPlayer
+
+    for i, v in next, uaz:GetDescendants() do
+        if v:IsA('Seat') and v.Name == 'SeatFR' then
+            v:Sit(player.Character.Humanoid)
+        end
+    end
+
+    wait(0.2)
+
+    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
+        ["Vehicle"] = uaz,
+        ["Action"] = "Enter",
+        ["Door"] = uaz.Body.FRdoor.FR_Door
+    })
+    wait(.2)
+
+    uaz.Remotes.ExitSeat:FireServer()
+    wait(0.1)
+    --[[game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
+        ["Vehicle"] = uaz,
+        ["Action"] = "Exit",
+        ["Door"] = uaz.Body.FRdoor.FR_Door
+    })
+    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
+        ["Vehicle"] = uaz,
+        ["Action"] = "Enter",
+        ["Door"] = uaz.Body.FRdoor.FR_Door
+    })
+    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
+        ["Vehicle"] = uaz,
+        ["Action"] = "Exit",
+        ["Door"] = uaz.Body.FRdoor.FR_Door
+    })]]
+    uaz.Remotes.ExitSeat:FireServer()
+    wait(1)
+    --player.Character:FindFirstChildOfClass('Humanoid'):Move(Vector3.new(0, 10, 0))
+end)
+
+
  
 
 
@@ -2257,7 +2391,7 @@ WorldTab:AddButton('no fog', function()
 
 
 
-makefolder("dogehub661")
+makefolder("nexify661")
 luatab:AddInput('Execute', {
     Default = 'Execute Any Scripts',
     Numeric = false, -- true / false, only allows numbers
@@ -2389,7 +2523,7 @@ counter = counter + 1
 
 WorldTab:AddButton('Delete Solters Anti Cheat', function()
 
-
+--removed
 
 		
  end)
@@ -2404,6 +2538,7 @@ Misc:AddSlider('fpslimiter', {
 }):OnChanged(function(State)
     setfpscap(State)
 end)
+
 
 Misc:AddButton('Rejoin⚡', function()
     if #plrs:GetPlayers() <= 1 then
@@ -2494,8 +2629,8 @@ counter = counter + 1
 
 print('load_' .. tostring(counter))
 counter = counter + 1
-local pdeltatabbox = Tabs.Main:AddLeftTabbox("Project Delta Doge Hub")
-local pdeltatabbox1 = Tabs.Main:AddRightTabbox("Project Delta Doge Hub1")
+local pdeltatabbox = Tabs.Main:AddLeftTabbox("Project Delta Nexify")
+local pdeltatabbox1 = Tabs.Main:AddRightTabbox("Project Delta Nexify")
 local aimtab = pdeltatabbox:AddTab("Combat Features")
 
 
@@ -2582,7 +2717,7 @@ wrap(function()
     end
 end)]]
 
-aimtab:AddLabel("Doge Hub V1.7 Solara", true)
+aimtab:AddLabel("Nexify V1.8 Solara", true)
 
 aimtab:AddToggle('nograss', {
     Text = 'No Grass',
@@ -2615,6 +2750,8 @@ local skins = {
 	HandleAKMN = "Valentine",
     Tortilla = "Blackout",
 	DV2 = "Cutlass",
+    ["DV-2"] = "Cutlass",
+    ["DV-2 Knife"] = "Cutlass",
 	TacticalFrontAKMN = "AnodizedRed",
 	SvdFront = "Permafrost",
 	MuzzleBrakeAKM = "AnodizedRed",
@@ -2643,7 +2780,14 @@ local skins = {
 
 
 
+Misc:AddToggle('antiaim', {
+    Text = 'Tilt Manuplation',
+    Default = false,
 
+    Callback = function(first)
+        game.ReplicatedStorage.Remotes.UpdateTilt:FireServer(first and 0 / 0 or 0)
+    end
+})
 
 aimtab:AddButton('Skin Changer', function()
 
@@ -2817,7 +2961,7 @@ aimtab:AddToggle('nowaterblur', {
 	
 movetab:AddDropdown('FunctionMode', {
     Values = {'AUTOMATIC', 'V1🔴', 'V2🟡', 'V3🟡', 'V4🔴', 'V5🟢', 'V5 TURBO🟢', 'V6🟢', 'V6 TURBO🟢', 'V7🟡', 'V7 TURBO MAX🟡', 'V7 TURBO🟢', 'V8 TURBO MAX🟢'},
-    Default = 7,
+    Default = 9,
     Multi = false,
     Text = 'Function Mode ⚠️',
     Tooltip = 'Function Mode ⚠️ (NOT RECOMMENDED TO CHANGE)',
@@ -4118,7 +4262,7 @@ print('number_' .. tostring(counter))
 counter = counter + 1
 local charactertab = pdeltatabbox1:AddTab("misc")
  
-Library:Notify("Doge Hub V1.7 SOLARA")
+Library:Notify("Nexify V1.8 SOLARA")
 Library:Notify("DOWNLOADED BUG FIXES")
 Library:Notify(executorname33)
 Library:Notify("Optimization Loaded")
@@ -4165,7 +4309,7 @@ local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
 
 -- Bullet speed
-local bulletSpeed = 401          -- Bullet speed, adjusted for better prediction
+local bulletSpeed = 430           -- Bullet speed, adjusted for better prediction
 
 -- Prediction for different ranges (manual values)
 local predictionForRanges = {
@@ -4175,13 +4319,14 @@ local predictionForRanges = {
     [160] = 0.40, [170] = 0.42, [180] = 0.44, [190] = 0.46, [200] = 0.48,
     [210] = 0.50, [220] = 0.52, [230] = 0.54, [240] = 0.56, [250] = 0.58,
     [260] = 0.60, [270] = 0.62, [280] = 0.64, [290] = 0.66, [300] = 0.68,
-    [310] = 0.72, [320] = 0.76, [330] = 0.80, [340] = 0.84, [350] = 0.88,
-    [360] = 0.92, [370] = 0.96, [380] = 1.00, [390] = 1.04, [400] = 1.08,
-    [410] = 1.12, [420] = 1.16, [430] = 1.20, [440] = 1.24, [450] = 1.28,
-    [460] = 1.32, [470] = 1.36, [480] = 1.40, [490] = 1.44, [500] = 1.48,
-    [510] = 1.52, [520] = 1.56, [530] = 1.60, [540] = 1.64, [550] = 1.68,
-    [560] = 1.72, [570] = 1.76, [580] = 1.80, [590] = 1.84, [600] = 1.88
+    [310] = 0.70, [320] = 0.72, [330] = 0.74, [340] = 0.76, [350] = 0.78,
+    [360] = 0.80, [370] = 0.82, [380] = 0.84, [390] = 0.86, [400] = 0.88,
+    [410] = 0.90, [420] = 0.92, [430] = 0.94, [440] = 0.96, [450] = 0.98,
+    [460] = 1.00, [470] = 1.02, [480] = 1.04, [490] = 1.06, [500] = 1.08,
+    [510] = 1.10, [520] = 1.12, [530] = 1.14, [540] = 1.16, [550] = 1.18,
+    [560] = 1.20, [570] = 1.22, [580] = 1.24, [590] = 1.26, [600] = 1.28
 }
+
 
 -- Bullet drop compensation for different ranges (manual values)
 local bulletDropForRanges = {
@@ -4193,8 +4338,8 @@ local bulletDropForRanges = {
     [260] = 0.026, [270] = 0.027, [280] = 0.028, [290] = 0.029, [300] = 0.030,
     [310] = 0.031, [320] = 0.032, [330] = 0.033, [340] = 0.034, [350] = 0.035,
     [360] = 0.036, [370] = 0.037, [380] = 0.038, [390] = 0.039, [400] = 0.040,
-    [410] = 0.041, [420] = 0.042, [430] = 0.043, [440] = 0.044, [450] = 0.045,
-    [460] = 0.046, [470] = 0.047, [480] = 0.048, [490] = 0.049, [500] = 0.050,
+    [410] = 0.045, [420] = 0.046, [430] = 0.047, [440] = 0.049, [450] = 0.050,
+    [460] = 0.052, [470] = 0.053, [480] = 0.054, [490] = 0.049, [500] = 0.050,
     [510] = 0.051, [520] = 0.052, [530] = 0.053, [540] = 0.054, [550] = 0.055,
     [560] = 0.056, [570] = 0.057, [580] = 0.058, [590] = 0.059, [600] = 0.060
 }
@@ -4906,23 +5051,23 @@ end
 
 
 -- Create the folder in Workspace
-folderName = "dogehubfunctions"
-dogeHubFolder = Instance.new("Folder")
-dogeHubFolder.Name = folderName
-dogeHubFolder.Parent = Workspace
+folderName = "Nexifyfunctions"
+NexifyFolder = Instance.new("Folder")
+NexifyFolder.Name = folderName
+NexifyFolder.Parent = Workspace
 
 -- Create the RemoteEvents
  remote1 = Instance.new("RemoteEvent")
  remote4 = Instance.new("BoolValue")
  remote2 = Instance.new("RemoteEvent")
 
-remote1.Name = "�?�YQ��� �Q���"
+remote1.Name = " ? YQ     Q   "
 remote4.Name = "!DONT TOUCH ANYTHING HERE!"
-remote2.Name = "!5�YQ�� �5Q����Q��"
+remote2.Name = "!5 YQ    5Q    Q  "
 
-remote1.Parent = dogeHubFolder
-remote2.Parent = dogeHubFolder
-remote4.Parent = dogeHubFolder
+remote1.Parent = NexifyFolder
+remote2.Parent = NexifyFolder
+remote4.Parent = NexifyFolder
 
 -- Function to change RemoteEvent names every 0.1 seconds
 local function changeRemoteNames()
@@ -4932,24 +5077,24 @@ local function changeRemoteNames()
         -- Randomly change the names between the two options
         if remote1 and remote2 then
             if math.random() > 0.8 then
-                remote1.Name = "�?�YQ��� �Q���"
-                remote2.Name = "!5�YQ�� �5Q����Q��"
+                remote1.Name = " ? YQ     Q   "
+                remote2.Name = "!5 YQ    5Q    Q  "
                 remote4.Name = "!DONT TOUCH ANYTHING HERE!"
             else
-                remote1.Name = "!5�YQ�� �5Q����Q��"
-                remote2.Name = "�?�YQ��� �Q���"
+                remote1.Name = "!5 YQ    5Q    Q  "
+                remote2.Name = " ? YQ     Q   "
                 remote4.Name = "!!!DONT TOUCH ANYTHING HERE!!!"
             end
         end
 
         -- Check if the folder or RemoteEvents have been removed
-        if not dogeHubFolder:IsDescendantOf(Workspace) or not remote1:IsDescendantOf(dogeHubFolder) or not remote2:IsDescendantOf(dogeHubFolder) then
+        if not NexifyFolder:IsDescendantOf(Workspace) or not remote1:IsDescendantOf(NexifyFolder) or not remote2:IsDescendantOf(NexifyFolder) then
             local player = Players.LocalPlayer  -- Get the player who initiated this script
             if player then
 
 
 wait(3)
-                player:Kick("Doge Hub Function Removal")  -- Kick the player with a message
+                player:Kick("Nexify Function Removal")  -- Kick the player with a message
             end
             break
         end
@@ -11022,7 +11167,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
 -- Set the teleportation threshold (in studs)
-local teleportThreshold = 7200  -- You can adjust this value as needed
+local teleportThreshold = 7300  -- You can adjust this value as needed
 
 -- Table to keep track of notified players
 local notifiedPlayers = {}
@@ -11051,12 +11196,13 @@ local function checkPlayerTeleportation(player)
                     
                     -- Notify the player without changing this line
                     Notification:Notify(
-                        {Title = "DOGE HUB | NEW DOGE HUB USER", Description = "New Doge Hub User: " .. player.Name},
+                        {Title = "Nexify | NEW Nexify USER", Description = "New Nexify Hub User: " .. player.Name},
                         {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 11, Type = "image"},
                         {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
                     )
-                    wait(16)
                     notifiedPlayers[player.Name] = true
+                    wait(16)
+                    
                     loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
                     
                     -- Mark the player as notified
@@ -11141,6 +11287,7 @@ SaveManager:BuildConfigSection(Tabs['Settings'])
 -- Builds our theme menu (with plenty of built in themes) on the left side
 -- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
 print("attempt to build config secc")
+
 error("CANT BUILD CONFIG SECC")
 
 -- Builds our theme menu (with plenty of built in themes) on the left side
@@ -11148,7 +11295,7 @@ error("CANT BUILD CONFIG SECC")
 ThemeManager:ApplyToTab(Tabs['Settings'])
 print("attempt to apply to tab")
 
--- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- You can use the SavaeManager:LoadAutoloadConfig() to load a config
 -- which has been marked to be one that auto loads!
 
 print("reached to end succ")
