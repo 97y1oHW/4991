@@ -1,16 +1,7 @@
 --[[
     made by siper#9938 and mickey#5612
 ]]
-if not LPH_OBFUSCATED then
-    print("3")
-    LPH_JIT = function(...) return ... end
-    LPH_JIT_MAX = function(...) return ... end
-    LPH_NO_VIRTUALIZE = function(f) return f end
-    LPH_NO_UPVALUES = function(f) return function(...) return f(...) end end
-    LPH_ENCSTR = function(...) return ... end
-    LPH_ENCNUM = function(...) return ... end
-    LPH_CRASH = function() return print(debug.traceback()) end
-end
+
 
 local espLibrary = {
     instances = {},
