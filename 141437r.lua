@@ -3539,7 +3539,7 @@ local function checkNearbyPlayers()
                 end
             end
         end
-        wait(0.1) -- Update every 0.1 seconds
+        wait(0.001) -- Update every 0.1 seconds
     end
 end
 
