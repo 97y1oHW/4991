@@ -2941,6 +2941,20 @@ Misc:AddToggle('fullBrightToggle', {
     end
 })
 
+
+Misc:AddToggle('noglobshadow', {
+    Text = 'No Global Shadows',
+    Default = false,
+    Callback = function(state)
+        noglobshadowactive = state
+        if noglobshadowactive then
+            game.Lighting.GlobalShadows = false -- Enable full bright
+        else
+            game.Lighting.GlobalShadows = true
+        end
+    end
+})
+
 aimtab:AddToggle('nowaterblur', {
     Text = 'No Water Blur',
     Tooltip = 'No Blur For Water',
@@ -11277,8 +11291,8 @@ coroutine.wrap(coerrore2)
 -- use case for doing it this way:
 -- a script hub could have themes in a global folder
 -- and game configs in a separate folder per game
-ThemeManager:SetFolder('dogehubsolarapd')
-SaveManager:SetFolder('dogehub/solarapd')
+ThemeManager:SetFolder('nexifysolara')
+SaveManager:SetFolder('nexifysolara')
 print("created folders")
 
 -- Builds our config menu on the right side of our tab
