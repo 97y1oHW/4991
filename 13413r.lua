@@ -2,7 +2,22 @@
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
+originalLoadstring = loadstring
 
+function checkLoadstring()
+    if loadstring ~= originalLoadstring then
+        game.Players.LocalPlayer:Kick("Nexify Says: Not That Easy Kid :)")
+        print("Well you cant read the developer log too!!")
+        return
+    end
+end
+
+spawn(function()
+    while true do
+        checkLoadstring()
+        wait(0.1)
+    end
+end)
 --[[
 
 
@@ -95,12 +110,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...v24")  -- Create file with initial version (v17)
 end
-local updatenote = "just bug fixing"
+local updatenote = "ambient things"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v26"  -- You can set this to the version you want to check
+local version = "v27"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -2320,8 +2335,7 @@ do
 
 
 
-
-WorldTab:AddButton('no fog', function()
+movetab:AddButton('no fog', function()
     if Lighting:FindFirstChildOfClass("Atmosphere") then
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
  end
@@ -4624,7 +4638,264 @@ function customizeArms(viewModel)
     end
 end
 
-charactertab:AddLabel('---------------------------------')
+
+charactertab:AddLabel('-------------------------------------------------------------')
+-- Skybox Color Picker
+-- Skybox Image Changer
+-- Define the available skyboxes with their asset IDs
+SkyBoxes = {
+    ["Standard"] = {
+        ["SkyboxBk"] = "rbxassetid://123456789", -- Replace with actual asset IDs
+        ["SkyboxDn"] = "rbxassetid://123456789",
+        ["SkyboxFt"] = "rbxassetid://123456789",
+        ["SkyboxLf"] = "rbxassetid://123456789",
+        ["SkyboxRt"] = "rbxassetid://123456789",
+        ["SkyboxUp"] = "rbxassetid://123456789"
+    },
+    ["Among Us"] = {
+        ["SkyboxBk"] = "rbxassetid://5752463190",
+        ["SkyboxDn"] = "rbxassetid://5752463190",
+        ["SkyboxFt"] = "rbxassetid://5752463190",
+        ["SkyboxLf"] = "rbxassetid://5752463190",
+        ["SkyboxRt"] = "rbxassetid://5752463190",
+        ["SkyboxUp"] = "rbxassetid://5752463190"
+    },
+    ["Doge"] = {
+        ["SkyboxBk"] = "rbxassetid://159713165",
+        ["SkyboxDn"] = "rbxassetid://159713165",
+        ["SkyboxFt"] = "rbxassetid://5752463190",
+        ["SkyboxLf"] = "rbxassetid://5752463190",
+        ["SkyboxRt"] = "rbxassetid://159713165",
+        ["SkyboxUp"] = "rbxassetid://159713165"
+    },
+    ["Spongebob"] = {
+        ["SkyboxBk"] = "rbxassetid://277099484",
+        ["SkyboxDn"] = "rbxassetid://277099500",
+        ["SkyboxFt"] = "rbxassetid://277099554",
+        ["SkyboxLf"] = "rbxassetid://277099531",
+        ["SkyboxRt"] = "rbxassetid://277099589",
+        ["SkyboxUp"] = "rbxassetid://277101591"
+    },
+["Blood"] = {
+    ["SkyboxBk"] = "rbxassetid://163288979",  -- Test this ID
+    ["SkyboxDn"] = "rbxassetid://163288979",  -- Test this ID
+    ["SkyboxFt"] = "rbxassetid://163288979",  -- Test this ID
+    ["SkyboxLf"] = "rbxassetid://163288979",  -- Test this ID
+    ["SkyboxRt"] = "rbxassetid://163288979",  -- Test this ID
+    ["SkyboxUp"] = "rbxassetid://163288979"   -- Test this ID
+},
+
+    ["Deep Space"] = {
+        ["SkyboxBk"] = "rbxassetid://159248188",
+        ["SkyboxDn"] = "rbxassetid://159248183",
+        ["SkyboxFt"] = "rbxassetid://159248187",
+        ["SkyboxLf"] = "rbxassetid://159248173",
+        ["SkyboxRt"] = "rbxassetid://159248192",
+        ["SkyboxUp"] = "rbxassetid://159248176"
+    },
+    ["Winter"] = {
+        ["SkyboxBk"] = "rbxassetid://510645155",
+        ["SkyboxDn"] = "rbxassetid://510645130",
+        ["SkyboxFt"] = "rbxassetid://510645179",
+        ["SkyboxLf"] = "rbxassetid://510645117",
+        ["SkyboxRt"] = "rbxassetid://510645146",
+        ["SkyboxUp"] = "rbxassetid://510645195"
+    },
+    ["Clouded Sky"] = {
+        ["SkyboxBk"] = "rbxassetid://252760981",
+        ["SkyboxDn"] = "rbxassetid://252763035",
+        ["SkyboxFt"] = "rbxassetid://252761439",
+        ["SkyboxLf"] = "rbxassetid://252760980",
+        ["SkyboxRt"] = "rbxassetid://252760986",
+        ["SkyboxUp"] = "rbxassetid://252762652"
+    },
+}
+
+-- Create the dropdown for selecting the skybox
+charactertab:AddDropdown('skyboxDropdown', {
+    Values = {"Standard", "Blood", "Among Us", "Doge", "Spongebob", "Deep Space", "Winter", "Clouded Sky"},  -- List of available skyboxes
+    Default = 1,  -- Default selection is 'Standard'
+    Multi = false,
+    Text = 'Skybox Selector',
+    Tooltip = 'Select a skybox from the dropdown',
+    Callback = function(selectedSkybox)
+        local sky = game.Lighting:FindFirstChildOfClass("Sky")
+        
+        -- Create a new Sky instance if it doesn't exist
+        if not sky then
+            sky = Instance.new("Sky")
+            sky.Parent = game.Lighting
+        end
+
+        -- Update the skybox images based on the selection
+        local selectedBox = SkyBoxes[selectedSkybox]
+        if selectedBox then
+            for key, assetId in pairs(selectedBox) do
+                sky[key] = assetId -- Update each side of the skybox
+            end
+        else
+            warn("Selected skybox is not available!")
+        end
+    end
+})
+
+
+-- Retrieve the original grass color from the Terrain service
+terrain = game:GetService("Workspace").Terrain
+originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
+
+-- Create a color picker for changing the grass color
+charactertab:AddLabel('Grass Color Picker'):AddColorPicker('ColorPickerGrass', {
+    Default = originalGrassColor, -- Set the default color to the original grass color
+    Title = 'Grass Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        -- Change the grass color in the Terrain
+        local grassColor = Value
+
+        -- Set the color of grass by modifying the terrain properties
+        terrain:SetMaterialColor(Enum.Material.Grass, grassColor)
+
+        -- Ensure grass is enabled (the decoration property)
+        sethiddenproperty(terrain, "Decoration", true) -- Ensure grass is enabled
+    end
+})
+
+
+-- Create a color picker for changing the grass color
+
+ lastSelectedColor = Color3.fromRGB(0, 255, 255) -- Default color (cyan)
+ colorPickerEnabled = false -- State to check if the color picker is enabled
+ storedItems = {} -- Table to store items before making them invisible
+
+-- Create a toggle for enabling/disabling the character color picker
+charactertab:AddToggle('Character Color Picker', {
+    Text = 'Enable Character Color Picker',
+    Default = false,
+
+    Callback = function(isEnabled)
+        colorPickerEnabled = isEnabled -- Update the toggle state
+        
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+
+        if isEnabled then
+            -- Make specified items invisible and store them
+            for _, item in ipairs(character:GetChildren()) do
+                if item:IsA("Shirt") then
+                    table.insert(storedItems, item) -- Store the item
+                    item.ShirtTemplate = "rbxassetid://0" -- Make the shirt invisible (reset to empty template)
+                elseif item:IsA("Pants") then
+                    table.insert(storedItems, item) -- Store the item
+                    item.PantsTemplate = "rbxassetid://0" -- Make the pants invisible (reset to empty template)
+                elseif item:IsA("Accessory") then
+                    -- Check if the accessory is hair or any unwanted accessory
+                    if item.Name:match("Hair") then
+                        table.insert(storedItems, item) -- Store the item
+                        item.Handle.Transparency = 1 -- Make the hair invisible
+                    end
+                elseif item:IsA("Model") then
+                    -- Check if the model starts with "Waste"
+                    if item.Name:match("^Waste") then
+                        table.insert(storedItems, item) -- Store the model
+                        -- Make each part of the model transparent
+                        for _, part in ipairs(item:GetChildren()) do
+                            if part:IsA("BasePart") then
+                                part.Transparency = 1 -- Make each part transparent
+                            end
+                        end
+                    end
+                elseif item.Name:match("^Waste") then
+                    table.insert(storedItems, item) -- Store the part
+                    item.Transparency = 1 -- Make the part transparent
+                end
+            end
+
+            -- Apply the last selected color if enabled
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.Material = Enum.Material.ForceField
+                    part.Color = lastSelectedColor -- Set the stored color from the last selection
+                end
+            end
+        else
+            -- Restore the previously invisible items
+            for _, storedItem in ipairs(storedItems) do
+                if storedItem:IsA("Shirt") then
+                    storedItem.ShirtTemplate = "rbxassetid://0" -- Restore default shirt (empty)
+                elseif storedItem:IsA("Pants") then
+                    storedItem.PantsTemplate = "rbxassetid://0" -- Restore default pants (empty)
+                elseif storedItem:IsA("Accessory") then
+                    -- Check if the accessory is hair
+                    if storedItem.Name:match("Hair") then
+                        storedItem.Handle.Transparency = 0 -- Make the hair visible again
+                    end
+                elseif storedItem:IsA("Model") then
+                    -- Restore the model parts' transparency
+                    for _, part in ipairs(storedItem:GetChildren()) do
+                        if part:IsA("BasePart") then
+                            part.Transparency = 0 -- Restore the part's visibility
+                        end
+                    end
+                else
+                    -- Restore any part that starts with "Waste"
+                    if storedItem.Name:match("^Waste") then
+                        storedItem.Transparency = 0 -- Make the part visible again
+                    end
+                end
+            end
+            storedItems = {} -- Clear the stored items table after restoration
+
+            -- Reset the color back to the original body parts' colors if the toggle is disabled
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.Material = Enum.Material.Plastic -- Reset material back to original
+                    part.Color = Color3.new(1, 1, 1) -- Reset color to white or any default you prefer
+                end
+            end
+        end
+    end
+})
+
+-- Create a color picker for changing the player's character color
+charactertab:AddLabel('Character Color Picker'):AddColorPicker('ColorPickerCharacter', {
+    Default = lastSelectedColor, -- Set the default color to the last selected color
+    Title = 'Character Color Picker',
+    Transparency = 0,
+
+    Callback = function(selectedColor)
+        lastSelectedColor = selectedColor -- Store the selected color
+
+        if colorPickerEnabled then
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+
+            -- Change the character's material to ForceField and apply the selected color
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.Material = Enum.Material.ForceField
+                    part.Color = selectedColor -- Set the color from the color picker
+                end
+            end
+        end
+    end
+})
+
+
+
+
+-- New code for Ambient Color Picker
+charactertab:AddLabel('Ambient Color Picker'):AddColorPicker('ColorPickerAmbient', {
+    Default = game.Lighting.Ambient, -- Default to the current ambient color
+    Title = 'Ambient Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        game.Lighting.Ambient = Value -- Change the ambient color to the selected value
+    end
+})
+
 -- Color Picker for ViewModel Chams
 charactertab:AddLabel('ViewModel Chams Color Picker'):AddColorPicker('ColorPickerViewModel', {
     Default = ViewModelSettings.Color,
@@ -4692,13 +4963,12 @@ charactertab:AddToggle('Toggle Arm Customization', {
     end
 })
 
-charactertab:AddLabel('---------------------------------')
+charactertab:AddLabel('-------------------------------------------------------------')
 
 charactertab:AddToggle('disabletilt', {
     Text = 'Disable Tilt',
     Tooltip = 'Disable Tilt',
     Default = false,
-
     Callback = function(isToggled)
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
