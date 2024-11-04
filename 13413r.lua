@@ -4765,9 +4765,9 @@ charactertab:AddLabel('Grass Color Picker'):AddColorPicker('ColorPickerGrass', {
 
 -- Create a color picker for changing the grass color
 
- lastSelectedColor = Color3.fromRGB(0, 255, 255) -- Default color (cyan)
- colorPickerEnabled = false -- State to check if the color picker is enabled
- storedItems = {} -- Table to store items before making them invisible
+lastSelectedColor = Color3.fromRGB(0, 255, 255) -- Default color (cyan)
+colorPickerEnabled = false -- State to check if the color picker is enabled
+storedItems = {} -- Table to store items before making them invisible
 
 -- Create a toggle for enabling/disabling the character color picker
 charactertab:AddToggle('Character Color Picker', {
@@ -4796,8 +4796,8 @@ charactertab:AddToggle('Character Color Picker', {
                         item.Handle.Transparency = 1 -- Make the hair invisible
                     end
                 elseif item:IsA("Model") then
-                    -- Check if the model starts with "Waste"
-                    if item.Name:match("^Waste") then
+                    -- Check if the model starts with "Waste" or "Camo"
+                    if item.Name:match("^Waste") or item.Name:match("^Camo") then
                         table.insert(storedItems, item) -- Store the model
                         -- Make each part of the model transparent
                         for _, part in ipairs(item:GetChildren()) do
@@ -4806,7 +4806,7 @@ charactertab:AddToggle('Character Color Picker', {
                             end
                         end
                     end
-                elseif item.Name:match("^Waste") then
+                elseif item.Name:match("^Waste") or item.Name:match("^Camo") then
                     table.insert(storedItems, item) -- Store the part
                     item.Transparency = 1 -- Make the part transparent
                 end
@@ -4839,8 +4839,8 @@ charactertab:AddToggle('Character Color Picker', {
                         end
                     end
                 else
-                    -- Restore any part that starts with "Waste"
-                    if storedItem.Name:match("^Waste") then
+                    -- Restore any part that starts with "Waste" or "Camo"
+                    if storedItem.Name:match("^Waste") or storedItem.Name:match("^Camo") then
                         storedItem.Transparency = 0 -- Make the part visible again
                     end
                 end
@@ -4881,7 +4881,6 @@ charactertab:AddLabel('Character Color Picker'):AddColorPicker('ColorPickerChara
         end
     end
 })
-
 
 
 
@@ -11250,6 +11249,7 @@ end
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
+        asddasasddasasddasasddasasddas I am a bad scripter 
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
@@ -11271,8 +11271,7 @@ end
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
-        asddasasddasasddasasddasasddas
-        asddasasddasasddasasddasasddas
+        asddasasddasasddasasddasasddas no clue why did it
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
