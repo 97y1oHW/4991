@@ -27,11 +27,10 @@ originalLoadstring = loadstring
 if response.StatusCode == 200 then
     local result = game:GetService("HttpService"):JSONDecode(response.Body)
     if result.status == "success" then
-        print("Authenticated successfully!")
-        print("Country:", result.country)
-        print("IP:", result.ip)
+
+print("succ")
     else
-        print("Authentication failed:", result.message)
+        print("error")
     end
 else
     print("Error:", response.StatusCode, response.Body)
