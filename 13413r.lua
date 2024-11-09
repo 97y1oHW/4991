@@ -3,6 +3,39 @@ local NotificationHolder = loadstring(game:HttpGet("https://raw.githubuserconten
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
 originalLoadstring = loadstring
+ license_key = "BYPASSED LIC KEY"
+ executor_name = "Should Be Solara Lol"
+ server_url = "https://85e1-146-70-246-140.ngrok-free.app/authenticate"
+
+ data = {
+    license_key = license_key,
+    executor_name = executor_name
+}
+
+ json_data = game:GetService("HttpService"):JSONEncode(data)
+
+
+ response = http_request({
+    Url = server_url,
+    Method = "POST",
+    Headers = {
+        ["Content-Type"] = "application/json"
+    },
+    Body = json_data
+})
+
+if response.StatusCode == 200 then
+    local result = game:GetService("HttpService"):JSONDecode(response.Body)
+    if result.status == "success" then
+        print("Authenticated successfully!")
+        print("Country:", result.country)
+        print("IP:", result.ip)
+    else
+        print("Authentication failed:", result.message)
+    end
+else
+    print("Error:", response.StatusCode, response.Body)
+end
 
 function checkLoadstring()
     if loadstring ~= originalLoadstring then
