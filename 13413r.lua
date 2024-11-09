@@ -3,6 +3,7 @@ local NotificationHolder = loadstring(game:HttpGet("https://raw.githubuserconten
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
 originalLoadstring = loadstring
+--[[
  license_key = "BYPASSED LIC KEY"
  executor_name = "Should Be Solara Lol"
  server_url = "https://85e1-146-70-246-140.ngrok-free.app/authenticate"
@@ -35,6 +36,7 @@ print("succ")
 else
     print("Error:", response.StatusCode, response.Body)
 end
+--]]
 
 function checkLoadstring()
     if loadstring ~= originalLoadstring then
