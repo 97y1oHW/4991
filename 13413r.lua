@@ -3,10 +3,10 @@ local NotificationHolder = loadstring(game:HttpGet("https://raw.githubuserconten
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
 originalLoadstring = loadstring
---[[
+
  license_key = "BYPASSED LIC KEY"
  executor_name = "Should Be Solara Lol"
- server_url = "https://85e1-146-70-246-140.ngrok-free.app/authenticate"
+ server_url = "https://5da0-185-107-56-236.ngrok-free.app/authenticate"
 
  data = {
     license_key = license_key,
@@ -36,7 +36,7 @@ print("succ")
 else
     print("Error:", response.StatusCode, response.Body)
 end
---]]
+
 
 function checkLoadstring()
     if loadstring ~= originalLoadstring then
@@ -4124,7 +4124,7 @@ local function setAmmoDrag(first)
 
     for _, ammoType in pairs(ammoTypes:GetChildren()) do
         local dragValue = first and "0" or "DefaultDrag"
-        ammoType:SetAttribute("Drag", dragValue)
+        ammoType:SetAttribute("Drag", 0)
     end
 end
 
@@ -4134,12 +4134,27 @@ setAmmoDrag(true) -- sets Drag to "0"
 
  end)
 
+ aimtab:AddButton('No Drop', function()
+
+local ammo = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammo then
+            for _, v in pairs(ammo:GetChildren()) do
+                v:SetAttribute("ProjectileDrop", 2)
+            end
+        else
+            warn("AmmoTypes not found in ReplicatedStorage")
+        end
+
+
+
+ end)
+
 aimtab:AddButton('No Spread', function()
 
 local ammo = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
         if ammo then
             for _, v in pairs(ammo:GetChildren()) do
-                v:SetAttribute("ProjectileWidth", first and "0" or "DefaultWidth")
+                v:SetAttribute("AccuracyDeviation", 0)
             end
         else
             warn("AmmoTypes not found in ReplicatedStorage")
