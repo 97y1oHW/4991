@@ -208,7 +208,7 @@ local NotificationHolder = loadstring(game:HttpGet("https://raw.githubuserconten
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
 originalLoadstring = loadstring
-
+--[[
  license_key = "BYPASSED LIC KEY"
  executor_name = "Should Be Solara Lol"
  server_url = "https://5da0-185-107-56-236.ngrok-free.app/authenticate"
@@ -257,6 +257,7 @@ spawn(function()
         wait(0.1)
     end
 end)
+--]]
 --[[
 
 
