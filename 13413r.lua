@@ -1,3 +1,44 @@
+if not LPH_OBFUSCATED then
+    -- Define a series of functions that serve as placeholders when obfuscation is not active.
+    
+    -- Simple passthrough function for just-in-time (JIT) operations.
+    LPH_JIT = function(...) 
+        return ... 
+    end
+    
+    -- Passthrough function for maximum JIT operations.
+    LPH_JIT_MAX = function(...) 
+        return ... 
+    end
+    
+    -- Function to disable virtualization, simply returns the input function.
+    LPH_NO_VIRTUALIZE = function(f) 
+        return f 
+    end
+    
+    -- Function to remove upvalues, returns a new function that calls the original with the same arguments.
+    LPH_NO_UPVALUES = function(f) 
+        return function(...) 
+            return f(...) 
+        end 
+    end
+    
+    -- Placeholder for string encryption, returns the input string.
+    LPH_ENCSTR = function(...) 
+        return ... 
+    end
+    
+    -- Placeholder for number encryption, returns the input number.
+    LPH_ENCNUM = function(...) 
+        return ... 
+    end
+    
+    -- Function intended to cause a crash, in this case, it prints the traceback.
+    LPH_CRASH = function() 
+        return print(debug.traceback()) 
+    end
+end
+print("int")
 
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
@@ -77,46 +118,7 @@ _)      \.___.,|     .'
 
 --ibet opti bimbambu
 
-if not LPH_OBFUSCATED then
-    -- Define a series of functions that serve as placeholders when obfuscation is not active.
-    
-    -- Simple passthrough function for just-in-time (JIT) operations.
-    LPH_JIT = function(...) 
-        return ... 
-    end
-    
-    -- Passthrough function for maximum JIT operations.
-    LPH_JIT_MAX = function(...) 
-        return ... 
-    end
-    
-    -- Function to disable virtualization, simply returns the input function.
-    LPH_NO_VIRTUALIZE = function(f) 
-        return f 
-    end
-    
-    -- Function to remove upvalues, returns a new function that calls the original with the same arguments.
-    LPH_NO_UPVALUES = function(f) 
-        return function(...) 
-            return f(...) 
-        end 
-    end
-    
-    -- Placeholder for string encryption, returns the input string.
-    LPH_ENCSTR = function(...) 
-        return ... 
-    end
-    
-    -- Placeholder for number encryption, returns the input number.
-    LPH_ENCNUM = function(...) 
-        return ... 
-    end
-    
-    -- Function intended to cause a crash, in this case, it prints the traceback.
-    LPH_CRASH = function() 
-        return print(debug.traceback()) 
-    end
-end
+
 
                 Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECKING MAIN THIS CAN LAG YOUR GAME."},
@@ -1040,7 +1042,7 @@ elseif executor == "Wave" or executor == "Wave 5.0" then
 
 local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 local espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'),true))()
-local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
+local Library = loadstring(game:HttpGet(repo .. 'libbet.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
     return -- Stop the script from executing further
@@ -1302,13 +1304,23 @@ print('load_' .. tostring(counter))
 loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
 counter = counter + 1
 do
-
+counter4= "X1"
 print("repo ok")
 local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 print("repo ok2")
+print(counter4)
+print(counter4)
+print(counter4)
+wait(0.2)
+print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+
 print("esplib ok")
 print("1")
-local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
+local Library = loadstring(game:HttpGet(repo .. 'libbet.lua'))()
 print("1")
 local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 print("1")
@@ -1324,7 +1336,7 @@ local Window = Library:CreateWindow({
     -- Position and Size are also valid options here
     -- but you do not need to define them unless you are changing them :)
 
-    Title = '                       Nexify / Solara PD',
+    Title = 'Nexify / Solara PD',
     Center = true,
     AutoShow = true,
     TabPadding = 7.9,
@@ -4510,17 +4522,35 @@ local function updateFovCircle994()
     end
 end
 
--- Function to find a target within the FOV
-local function findTargetWithinFovCircle()
-    local mousePos = Vector2.new(mouse.X, mouse.Y)
+ Players = game:GetService("Players")
+ LocalPlayer = Players.LocalPlayer
+Mouse = LocalPlayer:GetMouse()
+ Camera = game.Workspace.CurrentCamera
+ GuiService = game:GetService("GuiService")
+
+-- Initialize Snapline Drawing
+Snapline = Drawing.new("Line")
+Snapline.Visible = false
+Snapline.Thickness = 1
+Snapline.Color = Color3.fromRGB(255, 255, 255) -- Default color; customize as needed
+
+-- Configurable settings
+config = {
+    snapline_enabled = true, -- Toggle snapline on/off
+    snapline_color = Color3.fromRGB(255, 255, 255), -- Change snapline color here
+    fovRadius = 170, -- Set the radius of the field of view (in pixels)
+}
+
+function findTargetWithinFovCircle()
+    local mousePos = Vector2.new(Mouse.X, Mouse.Y)
     local closestTarget = nil
-    local shortestDistance = fovRadius
+    local shortestDistance = config.fovRadius
 
     -- Iterate over all players to find a target within FOV
     for _, targetPlayer in pairs(Players:GetPlayers()) do
         if targetPlayer ~= Players.LocalPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
             local head = targetPlayer.Character.Head
-            local screenPos, onScreen = camera:WorldToScreenPoint(head.Position)
+            local screenPos, onScreen = Camera:WorldToScreenPoint(head.Position)
 
             if onScreen then
                 local screenPoint = Vector2.new(screenPos.X, screenPos.Y)
@@ -4538,6 +4568,29 @@ local function findTargetWithinFovCircle()
     return closestTarget
 end
 
+game:GetService("RunService").RenderStepped:Connect(function()
+    if config.snapline_enabled then
+        local targetCharacter = findTargetWithinFovCircle()
+
+        if targetCharacter then
+            local targetPos, onScreen = Camera:WorldToViewportPoint(targetCharacter.PrimaryPart.Position)
+
+            local mousePos = Vector2.new(
+                Mouse.X,
+                Mouse.Y + GuiService:GetGuiInset().Y
+            )
+
+            -- Update Snapline properties
+            Snapline.From = mousePos
+            Snapline.To = Vector2.new(targetPos.X, targetPos.Y)
+            Snapline.Visible = onScreen -- Only show if target is on screen
+        else
+            Snapline.Visible = false -- Hide Snapline if no target is within FOV
+        end
+    else
+        Snapline.Visible = false
+    end
+end)
 -- Function to get the closest matching prediction value based on distance
 local function getPredictionForDistance(distance)
     local closestRange = 10  -- Start with the smallest distance
@@ -5228,6 +5281,8 @@ aimtab:AddDropdown('SilentAimHitPartjb', {
     end
 })
 
+aimtab:AddLabel("//FOV SETTINGS")
+
 aimtab:AddToggle('fov11outline', {
     Text = 'Fov Outline',
     Default = false,
@@ -5266,6 +5321,7 @@ fovCircle.Visible = true
 end
 
 resetfovcircle()
+
 -- Add a toggle for enabling/disabling the FOV display
 aimtab:AddToggle('fovdisplay', {
     Text = 'Show FOV Circle',
@@ -5276,6 +5332,29 @@ aimtab:AddToggle('fovdisplay', {
         if fovCircle then
             fovCircle.Visible = visible
         end
+    end
+})
+
+-- Add a toggle for enabling/disabling the FOV display
+aimtab:AddToggle('toggletracers', {
+    Text = 'Toggle Tracers',
+    Tooltip = 'Toggle Tracers (FOV)',
+    Default = true,
+    Callback = function(Value)
+        -- Update FOV circle visibility
+config.snapline_enabled = Value
+    end
+})
+
+-- Create a color picker for changing the grass color
+aimtab:AddLabel('Tracers Color'):AddColorPicker('Tracers Color', {
+    Default = Color3.fromRGB(255, 0, 0), -- Set the default color to red
+    Title = 'Tracers Color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        -- Assuming 'Value' is a Color3, directly set the Snapline color
+        Snapline.Color = Value
     end
 })
 
@@ -5400,6 +5479,133 @@ end)
 
 
 print("Script running...")
+-- UI Code
+
+spiderActive = false -- Toggle state for spider climbing
+spiderSpeed = 10 -- Initial climbing speed
+
+-- Function to handle wall climbing
+function climbWalls()
+    while spiderActive do
+        -- Cast ray in the direction the character is facing to detect a wall (front direction)
+        local forwardRay = Ray.new(character.HumanoidRootPart.Position, character.HumanoidRootPart.CFrame.LookVector * 5) -- 5 is the raycast length
+        local hit, position = workspace:FindPartOnRay(forwardRay, character)
+
+        if hit then -- If a wall is detected
+            local climbDirection = Vector3.new(0, 1, 0) -- Climb upwards
+            character.HumanoidRootPart.Velocity = climbDirection * spiderSpeed
+        else
+            -- If no wall is detected, we stop the upward velocity (keep grounded)
+            character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+        end
+
+        -- Check if character is on the ground (raycast downwards to detect ground)
+        local groundRay = Ray.new(character.HumanoidRootPart.Position, Vector3.new(0, -1, 0)) -- Ray to check for ground
+        local groundHit, groundPosition = workspace:FindPartOnRay(groundRay, character)
+
+        if groundHit then
+            -- If on the ground, stop climbing
+            character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+        end
+
+        task.wait(0.03) -- Adjust for smoother climbing
+    end
+end
+
+-- Adding a toggle to enable/disable spider climbing
+charactertab:AddToggle('spiderToggle', {
+    Text = 'Spider Climb',
+    Default = false,
+    Callback = function(state)
+        spiderActive = state
+        if spiderActive then
+            climbWalls() -- Start climbing when toggled on
+        end
+    end
+})
+
+-- Adding a slider for Spider Speed
+charactertab:AddSlider('clisp', {
+    Text = 'Spider Speed',
+    Default = 10,
+    Min = 1,
+    Max = 25,
+    Rounding = 1,
+    Compact = true
+}):OnChanged(function(value)
+    spiderSpeed = value
+end)
+
+
+charactertab:AddToggle('speed3', {
+    Text = 'Speed Hack',
+    Default = false,
+    Callback = function(state3)
+        getgenv().speedHackEnabled = state3 -- Update global toggle state
+        
+        if not state3 then
+            -- If Speed Hack is disabled, remove velocity and disconnect Heartbeat
+            humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+            if getgenv().speedConnection then
+                getgenv().speedConnection:Disconnect()
+                getgenv().speedConnection = nil
+            end
+        else
+            -- If Speed Hack is enabled, reconnect the update function
+            if not getgenv().speedConnection then
+                getgenv().speedConnection = game:GetService("RunService").Heartbeat:Connect(updateVelocity)
+            end
+        end
+    end
+}):AddKeyPicker('flight_key2', {
+    Default = 'nil',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Flight',
+    NoUI = false,
+    Callback = function(value3)
+        -- Flight key callback (optional flight functionality can be added here)
+    end
+})
+
+charactertab:AddSlider('speedhack', {
+    Text = 'Player Speed',
+    Default = 17,
+    Min = 16,
+    Max = 32,
+    Rounding = 1,
+    Compact = true
+}):OnChanged(function(value)
+    getgenv().speedMultiplier = value -- Set global speed value from slider
+end)
+
+-- Set default values
+getgenv().speedMultiplier = 17
+getgenv().speedHackEnabled = false
+
+-- Player references
+ player = game.Players.LocalPlayer
+ character = player.Character or player.CharacterAdded:Wait()
+ humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+ humanoid = character:WaitForChild("Humanoid")
+
+-- Function to update player velocity based on movement direction
+function updateVelocity()
+    if getgenv().speedHackEnabled then
+        local moveDirection = humanoid.MoveDirection
+        if moveDirection.Magnitude > 0 then
+            humanoidRootPart.Velocity = moveDirection * getgenv().speedMultiplier
+        else
+            humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+        end
+    end
+end
+
+-- Enable Speed Hack by connecting to Heartbeat when the toggle is enabled
+if getgenv().speedHackEnabled then
+    getgenv().speedConnection = game:GetService("RunService").Heartbeat:Connect(updateVelocity)
+end
+
 
 -- UI flight toggle without using local variables
 charactertab:AddToggle('flight3', {
@@ -11632,7 +11838,7 @@ local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 print("repo ok2")
 print("esplib ok")
 print("1")
-local Library = loadstring(game:HttpGet(repo .. 'lib.lua'))()
+local Library = loadstring(game:HttpGet(repo .. 'libbet.lua'))()
 print("1")
 local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 print("1")
