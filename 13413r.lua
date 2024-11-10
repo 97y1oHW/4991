@@ -144,12 +144,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...v24")  -- Create file with initial version (v17)
 end
-local updatenote = "ambient things"
+local updatenote = "advancaded"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v27"  -- You can set this to the version you want to check
+local version = "v29"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -1324,7 +1324,7 @@ local Window = Library:CreateWindow({
     -- Position and Size are also valid options here
     -- but you do not need to define them unless you are changing them :)
 
-    Title = '                                     Nexify / Solara PD',
+    Title = '                       Nexify / Solara PD',
     Center = true,
     AutoShow = true,
     TabPadding = 7.9,
@@ -2855,6 +2855,62 @@ end
 
 
  end)
+
+
+aimtab:AddDropdown('DV2SKin', {
+    Values = {'Longsword', 'PlasmaNinjato','Cutlass'},
+    Default = 3,
+    Multi = false,
+    Text = 'Knife Skin Selector',
+    Tooltip = 'Knife Skin Selector',
+    Callback = function(state)
+
+
+
+
+-- Ensure the localPlayer variable is valid
+local localPlayer = game.Players.LocalPlayer
+if not localPlayer then
+    warn("LocalPlayer is not available!")
+    return
+end
+
+local DV2 = game.ReplicatedStorage.ViewModels:FindFirstChild("DV2")
+local Karambit = game.ReplicatedStorage.ViewModels:FindFirstChild(state)
+if DV2 and Karambit then
+    DV2.Name = "DV2real"
+    Karambit.Name = "DV2"
+end
+
+-- Ensure skins table is defined and not nil
+local skins = skins or {}  -- You should define the skins table elsewhere, or use this to prevent errors
+
+-- Check if the "Players" and "localPlayer" objects exist in ReplicatedStorage
+if game.ReplicatedStorage:FindFirstChild("Players") and game.ReplicatedStorage.Players:FindFirstChild(localPlayer.Name) then
+    local plr = game.ReplicatedStorage.Players:FindFirstChild(localPlayer.Name)
+    -- Ensure plr exists before proceeding
+    if plr then
+        -- Loop through the descendants of the player
+        for i, v in pairs(plr:GetDescendants()) do
+            -- Ensure the item has ItemProperties and that the skin exists
+            if v:FindFirstChild("ItemProperties") and skins[v.Name] then
+                v.ItemProperties:SetAttribute("Skin", skins[v.Name])
+            end
+        end
+    else
+        warn("Player not found in ReplicatedStorage")
+    end
+else
+    warn("Players or localPlayer not found in ReplicatedStorage")
+end
+
+
+
+
+
+
+    end
+})
 
 WorldTab:AddButton('Remove SFX', function()
 
