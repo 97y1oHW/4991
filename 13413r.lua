@@ -1,17 +1,14 @@
 if not LPH_OBFUSCATED then
-    -- Define a series of functions that serve as placeholders when obfuscation is not active.
-    
-    -- Simple passthrough function for just-in-time (JIT) operations.
     LPH_JIT = function(...) 
         return ... 
     end
     
-    -- Passthrough function for maximum JIT operations.
+
     LPH_JIT_MAX = function(...) 
         return ... 
     end
     
-    -- Function to disable virtualization, simply returns the input function.
+
     LPH_NO_VIRTUALIZE = function(f) 
         return f 
     end
@@ -316,7 +313,7 @@ local updatenote = "advancaded"
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v29"  -- You can set this to the version you want to check
+local version = "v30"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -1582,7 +1579,10 @@ local function toggleTracer(player)
     end
 end
 
--- Example: Toggling the tracer for all players except the local player
+
+
+
+
 local function toggleTracersForAllPlayersExceptLocal(localPlayer)
     for _, player in pairs(game.Players:GetPlayers()) do
         if player ~= localPlayer then
@@ -3464,6 +3464,12 @@ aimtab:AddDropdown('cameradropdown', {
             SFXDIRECTORY.Hits.HitMarkers.Helmet.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Bodyshot.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Headshot.SoundId = globalhitsounds
+				--vol--um
+	    SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.Volume = 10
+            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.Volume = 10
+            SFXDIRECTORY.Hits.HitMarkers.Helmet.Volume = 10
+            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.Volume = 10
+            SFXDIRECTORY.Hits.HitMarkers.Headshot.Volume = 10
         else
             warn("Selected hit sound is not available!")
         end
@@ -4617,7 +4623,7 @@ end
 -- Settings
 local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
-
+fovradiussnapline=fovRadius
 -- Bullet speed
 local bulletSpeed = 430           -- Bullet speed, adjusted for better prediction
 
@@ -4703,8 +4709,9 @@ Snapline.Color = Color3.fromRGB(255, 255, 255) -- Default color; customize as ne
 config = {
     snapline_enabled = true, -- Toggle snapline on/off
     snapline_color = Color3.fromRGB(255, 255, 255), -- Change snapline color here
-    fovRadius = 170, -- Set the radius of the field of view (in pixels)
+    fovRadius = fovradiussnapline, -- Set the radius of the field of view (in pixels)
 }
+
 
 function findTargetWithinFovCircle()
     local mousePos = Vector2.new(Mouse.X, Mouse.Y)
@@ -5181,7 +5188,10 @@ charactertab:AddToggle('Character Color Picker', {
     end
 })
 
--- Create a color picker for changing the player's character color
+
+
+
+
 charactertab:AddLabel('Character Color Picker'):AddColorPicker('ColorPickerCharacter', {
     Default = lastSelectedColor, -- Set the default color to the last selected color
     Title = 'Character Color Picker',
@@ -5458,25 +5468,25 @@ aimtab:AddToggle('fov11outline', {
 })
 
 
--- Add a slider for adjusting the FOV size
+-- Adjust the slider callback to update fovRadius directly
 aimtab:AddSlider('aimfov', {
     Text = 'Aim FOV Size',
-    Default = 60,
+    Default = 170,
     Min = 60,
-    Max = 360,
+    Max = 190,
     Rounding = 0,
     Compact = false,
     Callback = function(size)
-        fovSize = size
-        -- Update the FOV circle size based on the slider value
+        fovRadius = size   -- Directly update fovRadius
         if fovCircle then
-            fovCircle.Radius = fovSize
+            fovCircle.Radius = fovRadius  -- Update the FOV circle size
         end
         if debugEnabled then
-            print("FOV size updated to:", fovSize)
+            print("FOV size updated to:", fovRadius)
         end
     end
 })
+
 
 function resetfovcircle()
 
@@ -5833,6 +5843,10 @@ charactertab:AddToggle('flight3', {
         end
     end
 end
+
+
+-- Apply/remove highlights to all current players when toggled
+
 
 
 -- Create the folder in Workspace
@@ -12056,11 +12070,7 @@ error("TEL6")
 end
 
 coroutine.wrap(coerrore2)
--- Adds our MenuKeybind to the ignore list
--- (do you want each config to have a different menu key? probably not.)
 
--- use case for doing it this way:
--- a script hub could have themes in a global folder
 -- and game configs in a separate folder per game
 ThemeManager:SetFolder('nexifysolara')
 SaveManager:SetFolder('nexifysolara')
@@ -12073,7 +12083,7 @@ SaveManager:BuildConfigSection(Tabs['Settings'])
 -- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
 print("attempt to build config secc")
 
-error("CANT BUILD CONFIG SECC")
+
 
 -- Builds our theme menu (with plenty of built in themes) on the left side
 -- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
@@ -12085,5 +12095,10 @@ print("attempt to apply to tab")
 
 print("reached to end succ")
 
-error("LINE 11137 END!")
--- Apply/remove highlights to all current players when toggled
+
+
+-- Adds our MenuKeybind to the ignore list
+-- (do you want each config to have a different menu key? probably not.)
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
