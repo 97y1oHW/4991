@@ -1912,6 +1912,18 @@ do
             ToggleInner.BackgroundColor3 = Toggle.Value and Library.AccentColor or Library.MainColor;
             ToggleInner.BorderColor3 = Toggle.Value and Library.AccentColorDark or Library.OutlineColor;
 
+local targetColor = Toggle.Value and Library.AccentColor or Library.MainColor
+    local targetBorderColor = Toggle.Value and Library.AccentColorDark or Library.OutlineColor
+
+    -- Tween for background color
+    TweenService:Create(ToggleInner, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { BackgroundColor3 = targetColor }):Play()
+    
+    -- Tween for border color
+    TweenService:Create(ToggleInner, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { BorderColor3 = targetBorderColor }):Play()
+
+    -- Update the registry
+
+            
             Library.RegistryMap[ToggleInner].Properties.BackgroundColor3 = Toggle.Value and 'AccentColor' or 'MainColor';
             Library.RegistryMap[ToggleInner].Properties.BorderColor3 = Toggle.Value and 'AccentColorDark' or 'OutlineColor';
         end;
