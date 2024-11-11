@@ -423,12 +423,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...v24")  -- Create file with initial version (v17)
 end
-local updatenote = "advancaded"
+local updatenote = "risky colors"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v30"  -- You can set this to the version you want to check
+local version = "v31"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -3122,6 +3122,7 @@ local skins = {
 
 Misc:AddToggle('antiaim', {
     Text = 'Tilt Manuplation',
+    Risky = true,
     Default = false,
 
     Callback = function(first)
@@ -3519,7 +3520,7 @@ Misc:AddButton('Destroy Buildables', function()
 game.ReplicatedStorage.Buildable:Destroy()
 
  end)
-
+--[[
 aimtab:AddToggle('Aimbot', {
     Text = 'Aim Bot',
     Tooltip = 'Locks To Head Or Torso',
@@ -3544,6 +3545,7 @@ aimtab:AddToggle('Aimbot', {
     end,
 })
 
+--]]
 local HitmarkerSounds = {
     ["TF2"]       = "rbxassetid://8255306220",
     ["Gamesense"] = "rbxassetid://4817809188",
@@ -4098,6 +4100,7 @@ end)
 aimtab:AddToggle('Bunnyhop', {
     Text = 'No Jump Cooldown',
     Tooltip = 'Bunny Hop',
+    Risky = true,
     Default = false,
 
     Callback = function(first)
@@ -4569,6 +4572,7 @@ end
 -- Toggle implementation
 aimtab:AddToggle('jesus', {
     Text = 'Walk On Water',
+    Risky = true,
     Tooltip = 'Lets You Walk On Water',
     Default = false,
 
@@ -5414,6 +5418,7 @@ charactertab:AddLabel('---------------------------------------------------------
 
 charactertab:AddToggle('disabletilt', {
     Text = 'Disable Tilt',
+    Risky = true,
     Tooltip = 'Disable Tilt',
     Default = false,
     Callback = function(isToggled)
@@ -5482,6 +5487,7 @@ aimtab:AddSlider('Silentbulspeed', {
     Default = 401,
     Min = 10,
     Max = 570,
+    Risky = true,
     Rounding = 1,
     Compact = false,
 
@@ -5494,6 +5500,7 @@ bulletSpeed = Value
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
     Default = false,
+    Risky = true,
     Callback = function(isEnabled)
         isSilentAimEnabled994 = isEnabled
         lockedCharacter = nil -- Reset locked character when toggling
@@ -5802,6 +5809,7 @@ end
 -- Adding a toggle to enable/disable spider climbing
 charactertab:AddToggle('spiderToggle', {
     Text = 'Spider Climb',
+    Risky = true,
     Default = false,
     Callback = function(state)
         spiderActive = state
@@ -5826,6 +5834,7 @@ end)
 
 charactertab:AddToggle('speed3', {
     Text = 'Speed Hack',
+    Risky = true,
     Default = false,
     Callback = function(state3)
         getgenv().speedHackEnabled = state3 -- Update global toggle state
@@ -5859,12 +5868,54 @@ charactertab:AddSlider('speedhack', {
     Text = 'Player Speed',
     Default = 17,
     Min = 16,
-    Max = 32,
+    Max = 30,
     Rounding = 1,
     Compact = true
 }):OnChanged(function(value)
     getgenv().speedMultiplier = value -- Set global speed value from slider
 end)
+
+Players = game:GetService("Players")
+ Player = Players.LocalPlayer
+ Character = Player.Character or Player.CharacterAdded:Wait()
+ Humanoid = Character:WaitForChild("Humanoid")
+ RootPart = Character:WaitForChild("HumanoidRootPart")
+ Head = Character:WaitForChild("Head")
+ Camera = game:GetService("Workspace").CurrentCamera
+ UserInputService = game:GetService("UserInputService")
+
+antiAimEnabled = false  -- Initial state of anti-aim
+
+ function applyAntiAim()
+    -- Apply anti-aim behavior to the character
+    RootPart.CFrame = RootPart.CFrame * CFrame.Angles(0, math.rad(180), 0)  -- Rotate RootPart
+    local headPos = Head.Position
+    RootPart.Position = Vector3.new(headPos.X, headPos.Y - 2, headPos.Z)  -- Adjust position slightly below the head
+    Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + Camera.CFrame.LookVector)  -- Update camera
+end
+function asswhiletruedo()
+-- Main loop for checking anti-aim toggle
+while true do
+    if antiAimEnabled then
+        applyAntiAim()  -- Apply anti-aim when enabled
+    end
+    wait(0.001)  -- Small delay to prevent freezing
+end
+end
+
+coroutine.wrap(asswhiletruedo)
+-- Toggle for enabling/disabling ViewModel Chams
+charactertab:AddToggle('Anti Aim Level 2', {
+    Text = 'Anti Aim Level 2',
+    Default = false,
+    Risky = true,
+    Callback = function(isEnabled)
+        -- Enable or disable anti-aim based on the toggle
+        antiAimEnabled = isEnabled
+    end
+})
+
+
 
 
 -- Function to check if any part of the player's character is transparent
@@ -5923,6 +5974,7 @@ end
 -- UI flight toggle without using local variables
 charactertab:AddToggle('flight3', {
     Text = 'Flight',
+    Risky = true,
     Default = false,
     Callback = function(state3)
         getgenv().Fly3 = state3
@@ -5970,7 +6022,7 @@ charactertab:AddSlider('Crosshair Thickness', {
     Default = 1,
     Min = 1,
     Max = 4,
-    Rounding = 1,
+    Rounding = 0,
     Compact = false,
 
     Callback = function(Value)
@@ -12237,5 +12289,4 @@ print("attempt to apply to tab")
 
 
 print("reached to end succ")
-
 
