@@ -37,6 +37,78 @@ if not LPH_OBFUSCATED then
 end
 
 
+ function API_Check()
+    if Drawing == nil then
+        return "No"
+    else
+        return "Yes"
+    end
+end
+
+ Find_Required = API_Check()
+
+if Find_Required == "No" then
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title = "Nexify";
+        Text = "Crosshair script could not be loaded because your exploit is unsupported.";
+        Duration = math.huge;
+        Button1 = "OK"
+    })
+
+    return
+end
+
+ Players = game:GetService("Players")
+ RunService = game:GetService("RunService")
+ UserInputService = game:GetService("UserInputService")
+ Camera = workspace.CurrentCamera
+
+ Typing = false
+
+ ViewportSize_ = Camera.ViewportSize / 2
+ Axis_X, Axis_Y = ViewportSize_.X, ViewportSize_.Y
+
+ HorizontalLine = Drawing.new("Line")
+ VerticalLine = Drawing.new("Line")
+
+-- Simplified crosshair toggle variable
+_G.CrosshairEnabled = false  -- If true, the crosshair will be visible. If false, it won't be visible.
+
+ Real_Size = 20 / 2  -- Default crosshair size
+
+-- Crosshair properties
+HorizontalLine.Thickness = 1
+VerticalLine.Thickness = 1
+HorizontalLine.Color = Color3.fromRGB(0, 255, 0)
+VerticalLine.Color = Color3.fromRGB(0, 255, 0)
+HorizontalLine.Transparency = 1
+VerticalLine.Transparency = 1
+
+RunService.RenderStepped:Connect(function()
+    if _G.CrosshairEnabled then
+        HorizontalLine.Visible = true
+        VerticalLine.Visible = true
+        
+        if _G.ToMouse then
+            local MousePos = UserInputService:GetMouseLocation()
+            HorizontalLine.From = Vector2.new(MousePos.X - Real_Size, MousePos.Y)
+            HorizontalLine.To = Vector2.new(MousePos.X + Real_Size, MousePos.Y)
+            
+            VerticalLine.From = Vector2.new(MousePos.X, MousePos.Y - Real_Size)
+            VerticalLine.To = Vector2.new(MousePos.X, MousePos.Y + Real_Size)
+        else
+            HorizontalLine.From = Vector2.new(Axis_X - Real_Size, Axis_Y)
+            HorizontalLine.To = Vector2.new(Axis_X + Real_Size, Axis_Y)
+        
+            VerticalLine.From = Vector2.new(Axis_X, Axis_Y - Real_Size)
+            VerticalLine.To = Vector2.new(Axis_X, Axis_Y + Real_Size)
+        end
+    else
+        HorizontalLine.Visible = false
+        VerticalLine.Visible = false
+    end
+end)
+
 
 
 
@@ -5404,9 +5476,6 @@ end)
 
 
 
-
-
-
 -- Slider for Zoom Value
 aimtab:AddSlider('Silentbulspeed', {
     Text = 'Silent Aim Bullet Speed',
@@ -5886,7 +5955,42 @@ charactertab:AddToggle('flight3', {
         end
     end
 end
+charactertab:AddToggle('Toggle Crosshair', {
+    Text = 'Toggle Crosshair',
+    Default = false,
+    Callback = function(isEnabled)
+        _G.CrosshairEnabled = isEnabled  -- Sets _G.CrosshairEnabled to the current state of the toggle (true or false)
+    end
+    -- You may add additional conditions here to disable the toggle if needed, such as checking if ViewModel Chams is enabled
+})
 
+-- Slider for Zoom Value
+charactertab:AddSlider('Crosshair Thickness', {
+    Text = 'Crosshair Thicknes',
+    Default = 1,
+    Min = 1,
+    Max = 4,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+VerticalLine.Thickness = Value
+HorizontalLine.Thickness = Value
+    end
+})
+
+-- Color Picker for ViewModel Chams
+charactertab:AddLabel('Crosshair Color Picker'):AddColorPicker('Crosshair Color Picker', {
+    Default = ViewModelSettings.Color,
+    Title = 'Crosshair Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        
+        HorizontalLine.Color = Value
+        VerticalLine.Color = Value
+    end
+})
 
 -- Apply/remove highlights to all current players when toggled
 
@@ -12128,20 +12232,10 @@ print("attempt to build config secc")
 
 
 
--- Builds our theme menu (with plenty of built in themes) on the left side
--- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
 ThemeManager:ApplyToTab(Tabs['Settings'])
 print("attempt to apply to tab")
 
--- You can use the SavaeManager:LoadAutoloadConfig() to load a config
--- which has been marked to be one that auto loads!
 
 print("reached to end succ")
 
 
-
--- Adds our MenuKeybind to the ignore list
--- (do you want each config to have a different menu key? probably not.)
-
--- use case for doing it this way:
--- a script hub could have themes in a global folder
