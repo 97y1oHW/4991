@@ -164,43 +164,32 @@ function Library:CreateLabel(Properties, IsHud)
 end;
 
 function Library:MakeDraggable(Instance, Cutoff)
-    Instance.Active = true
+    Instance.Active = true;
 
-    local dragging = false
-    local dragInput
-    local startPos
+    Instance.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local ObjPos = Vector2.new(
+                Mouse.X - Instance.AbsolutePosition.X,
+                Mouse.Y - Instance.AbsolutePosition.Y
+            );
 
-    local function onInputChanged(input)
-        if dragging then
-            local delta = input.Position - dragInput
-            local newPosition = UDim2.new(0, startPos.X.Offset + delta.X, 0, startPos.Y.Offset + delta.Y)
-            Instance.Position = newPosition
-        end
-    end
+            if ObjPos.Y > (Cutoff or 40) then
+                return;
+            end;
 
-    local function onInputEnded(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-            -- Bounce effect when releasing the drag
-            Instance:TweenPosition(Instance.Position + UDim2.new(0, 0, 0, 10), Enum.EasingDirection.Out, Enum.EasingStyle.Bounce, 0.2, true)
-        end
-    end
+            while InputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+                Instance.Position = UDim2.new(
+                    0,
+                    Mouse.X - ObjPos.X + (Instance.Size.X.Offset * Instance.AnchorPoint.X),
+                    0,
+                    Mouse.Y - ObjPos.Y + (Instance.Size.Y.Offset * Instance.AnchorPoint.Y)
+                );
 
-    Instance.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragInput = input.Position
-            startPos = Instance.Position
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    onInputEnded(input)
-                end
-            end)
-        end
+                RenderStepped:Wait();
+            end;
+        end;
     end)
-
-    game:GetService("User InputService").InputChanged:Connect(onInputChanged)
-end
+end;
 
 function Library:AddToolTip(InfoStr, HoverInstance)
     local X, Y = Library:GetTextBounds(InfoStr, Library.Font, 14);
