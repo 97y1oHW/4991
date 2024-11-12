@@ -6089,7 +6089,59 @@ charactertab:AddLabel('Crosshair Color Picker'):AddColorPicker('Crosshair Color 
     end
 })
 
--- Apply/remove highlights to all current players when toggled
+charactertab:AddLabel("Viewmodel Offset")
+
+charactertab:AddToggle('viewq131425346yjrurefwgergrfgtjyuksedvgrtjh', {
+    Text = 'Viewmodel Toggle',
+    Default = false,
+
+    Callback = function(isEnabled)
+    
+    end
+
+})
+
+charactertab:AddSlider('X', {
+    Text = 'X Value',
+    Default = 0,
+    Min = -5,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+
+    end
+})
+
+charactertab:AddSlider('Y', {
+    Text = 'Y Value',
+    Default = 0,
+    Min = -5,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+
+    end
+})
+
+
+charactertab:AddSlider('Z', {
+    Text = 'Z Value',
+    Default = 0,
+    Min = -5,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+
+    end
+})
+
+
 
 
 
