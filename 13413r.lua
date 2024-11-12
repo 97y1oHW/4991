@@ -35,8 +35,14 @@ if not LPH_OBFUSCATED then
         return print(debug.traceback()) 
     end
 end
-
-
+ecp_key="1 2 2 2 2 3 4 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 9 9 9 9 9 9"
+_haq="1 2 2 2 2 3 4 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 9 9 9 9 9 9"
+if ecp_key==_haq then
+print("con")
+else
+warn("con (2)")
+return
+end
  function API_Check()
     if Drawing == nil then
         return "No"
@@ -421,14 +427,14 @@ local filePath = "verschck/version.txt"
 -- Check if the file exists, if not, create the folder and file with a default version
 if not isfile(filePath) then
     makefolder("verschck")
-    writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...v24")  -- Create file with initial version (v17)
+    writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  -- Create file with initial version (v17)
 end
 local updatenote = "risky colors"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v31"  -- You can set this to the version you want to check
+local version = "v32"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -1205,7 +1211,7 @@ local aimingTarget = nil
 
 -- Function to print the loading bar with percentage and hash marks
 local function printLoadingBar(percentage)
-    local totalLength = 35
+    local totalLength = 31
     local hashMarks = math.floor(percentage / 3.6)  -- Number of hash marks
     local dashes = totalLength - hashMarks          -- Remaining dashes
     
@@ -1986,6 +1992,19 @@ EnemyEspTab:AddToggle('EspSwitch', {
     end
 })
 
+EnemyEspTab:AddLabel('Box Esp Color Picker'):AddColorPicker('Box Esp Color Picker', {
+    Default = Color3.fromRGB(255, 255, 255),  -- Use Color3 for the default color format
+    Title = 'Box Esp Color Picker',
+    Transparency = 0,                         -- Transparency setting (if supported)
+
+    Callback = function(Value)
+        -- Set the box color to the selected color from the color picker
+        espLib.options.boxesColor = Value     -- `Value` should be a Color3 object
+    end
+})
+
+
+
 EnemyEspTab:AddToggle('boxswitch', {
     Text = 'Boxes',
     Default = false,
@@ -2001,6 +2020,19 @@ EnemyEspTab:AddToggle('visiblecheck', {
         espLib.options.visibleOnly = enabled
     end
 })
+
+
+EnemyEspTab:AddLabel('Chams Esp Color Picker'):AddColorPicker('Chams Esp Color Picker', {
+    Default = Color3.fromRGB(255, 255, 255),  -- Use Color3 for the default color format
+    Title = 'Chams Esp Color Picker',
+    Transparency = 0,                         -- Transparency setting (if supported)
+
+    Callback = function(Value)
+        -- Set the box color to the selected color from the color picker
+        espLib.options.chamsFillColor = Value     -- `Value` should be a Color3 object
+    end
+})
+
 
 EnemyEspTab:AddToggle('chamswwt', {
     Text = 'Chams',
@@ -2018,11 +2050,24 @@ EnemyEspTab:AddToggle('distance', {
     end
 })
 
+
+
 EnemyEspTab:AddToggle('healthtext', {
     Text = 'Health Text',
     Default = false,
     Callback = function(enabled)
         espLib.options.healthText = enabled
+    end
+})
+
+EnemyEspTab:AddLabel('Health Esp Color Picker'):AddColorPicker('Health Esp Color Picker', {
+    Default = Color3.fromRGB(0, 255, 0),  -- Use Color3 for the default color format
+    Title = 'Health Esp Color Picker',
+    Transparency = 0,                         -- Transparency setting (if supported)
+
+    Callback = function(Value)
+        -- Set the box color to the selected color from the color picker
+        espLib.options.healthBarsColor = Value     -- `Value` should be a Color3 object
     end
 })
 
@@ -12289,4 +12334,3 @@ print("attempt to apply to tab")
 
 
 print("reached to end succ")
-
