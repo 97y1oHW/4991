@@ -1998,8 +1998,8 @@ EnemyEspTab:AddLabel('Box Esp Color Picker'):AddColorPicker('Box Esp Color Picke
     Transparency = 0,                         -- Transparency setting (if supported)
 
     Callback = function(Value)
-        -- Set the box color to the selected color from the color picker
-        espLib.options.boxesColor = Value     -- `Value` should be a Color3 object
+
+        espLib.options.boxesColor = Value     
     end
 })
 
@@ -4001,7 +4001,9 @@ aimtab:AddSlider('fovslider', {
 }):OnChanged(function(State)
     -- Check if the camera is available
     if camera then
+        
         camera.FieldOfView = State -- Update the FOV of the camera
+
     else
         warn("Camera not found!")
     end
@@ -4679,6 +4681,8 @@ Misc:AddButton('Remove Scope From Gun', function()
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):Destroy()
 
  end)
+
+
 
 Misc:AddButton('Disable OKP7 SCOPE GUI', function()
 
@@ -6089,18 +6093,49 @@ charactertab:AddLabel('Crosshair Color Picker'):AddColorPicker('Crosshair Color 
     end
 })
 
-charactertab:AddLabel("Viewmodel Offset")
 
+viewmodelEnabled = false
+xOffset, yOffset, zOffset = 0, 0, 0
+
+-- Function to update the ViewModel position smoothly
+function updateViewmodelOffset()
+    -- Ensure that the ViewModel exists
+    local viewmodel = game.Workspace.Camera:FindFirstChild("ViewModel")
+    if viewmodel then
+        local camera = game.Workspace.CurrentCamera
+        -- Update the ViewModel position relative to the camera position
+        if camera and viewmodel then
+            local newPosition = camera.CFrame.Position + camera.CFrame:VectorToWorldSpace(Vector3.new(xOffset, yOffset, zOffset))
+            
+            -- Set all parts in the ViewModel to the new position
+            for _, part in pairs(viewmodel:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CFrame = CFrame.new(newPosition)
+                end
+            end
+        end
+    end
+end
+
+-- Toggle button callback to enable/disable viewmodel offset
 charactertab:AddToggle('viewq131425346yjrurefwgergrfgtjyuksedvgrtjh', {
     Text = 'Viewmodel Toggle',
     Default = false,
-
     Callback = function(isEnabled)
-    
+        -- Set the viewmodel toggle state
+        viewmodelEnabled = isEnabled
+        
+        -- Start applying offsets every frame if enabled
+        if viewmodelEnabled then
+            -- Continuously update the viewmodel position every frame
+            game:GetService("RunService").Heartbeat:Connect(function()
+                updateViewmodelOffset()
+            end)
+        end
     end
-
 })
 
+-- X Slider callback to update X position of viewmodel
 charactertab:AddSlider('X', {
     Text = 'X Value',
     Default = 0,
@@ -6108,12 +6143,12 @@ charactertab:AddSlider('X', {
     Max = 5,
     Rounding = 1,
     Compact = false,
-
     Callback = function(Value)
 
     end
 })
 
+-- Y Slider callback to update Y position of viewmodel
 charactertab:AddSlider('Y', {
     Text = 'Y Value',
     Default = 0,
@@ -6121,13 +6156,12 @@ charactertab:AddSlider('Y', {
     Max = 5,
     Rounding = 1,
     Compact = false,
-
     Callback = function(Value)
 
     end
 })
 
-
+-- Z Slider callback to update Z position of viewmodel
 charactertab:AddSlider('Z', {
     Text = 'Z Value',
     Default = 0,
@@ -6135,15 +6169,44 @@ charactertab:AddSlider('Z', {
     Max = 5,
     Rounding = 1,
     Compact = false,
-
     Callback = function(Value)
-
+        -- Update Z offset
+        zOffset = Value
+        -- Apply the change to the viewmodel if the toggle is enabled
+        if viewmodelEnabled then
+            updateViewmodelOffset()
+        end
     end
 })
 
 
+-- Toggle for enabling/disabling Highlight
+charactertab:AddToggle('Remove Clouds', {
+    Text = 'Remove Clouds',
+    Default = false,
+    Callback = function(isEnabled)
+        terrain = game:GetService("Workspace").Terrain
+
+        -- If enabled, remove clouds (set Density to 0)
+        if isEnabled then
+            terrain.Clouds.Density = 0
+        else
+            -- If disabled, restore clouds (set Density to 1)
+            terrain.Clouds.Density = 1
+        end
+    end
+})
 
 
+ charactertab:AddButton('Crash Game', function()
+
+
+while true do
+print("crassshhhh")
+
+    end
+
+ end)
 
 -- Create the folder in Workspace
 folderName = "Nexifyfunctions"
