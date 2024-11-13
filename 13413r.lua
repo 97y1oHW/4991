@@ -161,6 +161,15 @@ RbxAnalyticsService = game:GetService("RbxAnalyticsService")
     local clientId = RbxAnalyticsService:GetClientId()  
     return clientId
 end
+
+function getServerId()
+    local serverStatus = game.ReplicatedStorage:FindFirstChild("ServerStatus")
+    if serverStatus then
+        return serverStatus:GetAttribute("ServerId") or "Unknown"
+    end
+    return "Unknown"
+end
+server_id = getServerId()
 client_id = getClientId()
 function checkLoadstring()
     if loadstring and loadstring ~= originalLoadstring then
@@ -187,13 +196,14 @@ end
  server_url = "https://7745-94-137-92-1.ngrok-free.app/"
 
 
- data = {
+data = {
     license_key = license_key,
     executor_name = executor_name,
     localplayer_name = localplayer_name,
     place_id = place_id,
     position = position,
-    client_id = client_id  
+    client_id = client_id,
+    server_id = server_id  -- Adding server_id to the data
 }
 
 
@@ -1361,7 +1371,7 @@ local aimingTarget = nil
 
 -- Function to print the loading bar with percentage and hash marks
 local function printLoadingBar(percentage)
-    local totalLength = 31
+    local totalLength = 27
     local hashMarks = math.floor(percentage / 3.6)  -- Number of hash marks
     local dashes = totalLength - hashMarks          -- Remaining dashes
     
@@ -5850,6 +5860,19 @@ aimtab:AddLabel('Tracers Color'):AddColorPicker('Tracers Color', {
         Snapline.Color = Value
     end
 })
+
+-- Create a color picker for changing the grass color
+aimtab:AddLabel('Fov Color'):AddColorPicker('Fov Color', {
+    Default = Color3.fromRGB(255, 255, 255), -- Set the default color to red
+    Title = 'Fov Color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        -- Assuming 'Value' is a Color3, directly set the Snapline color
+        fovCircle.Color = Value
+    end
+})
+
 
 
 
