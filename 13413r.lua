@@ -13,24 +13,24 @@ if not LPH_OBFUSCATED then
         return f 
     end
     
-    -- Function to remove upvalues, returns a new function that calls the original with the same arguments.
+
     LPH_NO_UPVALUES = function(f) 
         return function(...) 
             return f(...) 
         end 
     end
     
-    -- Placeholder for string encryption, returns the input string.
+
     LPH_ENCSTR = function(...) 
         return ... 
     end
     
-    -- Placeholder for number encryption, returns the input number.
+
     LPH_ENCNUM = function(...) 
         return ... 
     end
     
-    -- Function intended to cause a crash, in this case, it prints the traceback.
+
     LPH_CRASH = function() 
         return print(debug.traceback()) 
     end
