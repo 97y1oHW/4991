@@ -146,7 +146,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 
-
+--[[
 originalLoadstring = loadstring
 originalGetMetatable = getmetatable
 originalSetMetatable = setmetatable
@@ -275,7 +275,7 @@ spawn(function()
         wait(1) 
     end
 end)
-
+--]]
 --SCRIPT
 
  screenGui = Instance.new("ScreenGui")
