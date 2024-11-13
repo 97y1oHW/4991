@@ -49,7 +49,7 @@ local auth_start_time = tick()  -- Start time (in seconds)
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 
-local license_key = "12345"
+license_key = key
 local executor_name = "Solara"
 local localplayer_name = game.Players.LocalPlayer.Name
 local place_id = game.PlaceId
@@ -144,4 +144,3 @@ spawn(function()
 end)
 
 --SCRIPT
-print("hi")
