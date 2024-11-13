@@ -589,12 +589,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  -- Create file with initial version (v17)
 end
-local updatenote = "risky colors"
+local updatenote = "Fov Adjustments"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v32"  -- You can set this to the version you want to check
+local version = "v33"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -4988,24 +4988,64 @@ local bulletDropForRanges = {
     [560] = 0.056, [570] = 0.057, [580] = 0.058, [590] = 0.059, [600] = 0.060
 }
 
-local camera = workspace.CurrentCamera
-local mouse = Players.LocalPlayer:GetMouse()
+ TweenService = game:GetService("TweenService")
+local fovCircle -- Declare outside the function to be accessible globally
 
--- Function to create a visible FOV circle
-local function createFovCircle()
-    if fovCircle then
-        fovCircle:Remove()  -- Remove existing circle if it exists
+-- Variable to control if RGB transition should happen
+ rgbfov = false -- Set this to `true` for smooth color transition or `false` for static color
+
+-- Create the FOV Circle function with smooth color transition
+function createFovCircle(fovRadius, colorStart, colorEnd, duration)
+    -- Check if fovRadius is a valid number
+    if type(fovRadius) ~= "number" then
+        warn("Invalid fovRadius: " .. tostring(fovRadius))  -- Warn if it's not a valid number
+        return  -- Stop the function if fovRadius is invalid
     end
     
+    -- Remove the existing circle if it exists
+    if fovCircle then
+        fovCircle:Remove()
+    end
+
+    -- Create a new circle
     fovCircle = Drawing.new("Circle")
-    fovCircle.Thickness = 2
-    fovCircle.NumSides = 100
-    fovCircle.Radius = fovRadius
-    fovCircle.Color = Color3.new(1, 1, 1) -- White color
-    fovCircle.Filled = false
-    fovCircle.Visible = true
-    fovCircle.Transparency = 1
+    fovCircle.Thickness = 2         -- Set thickness of the circle's outline
+    fovCircle.NumSides = 100        -- Increase the number of sides for smoother appearance
+    fovCircle.Radius = fovRadius   -- Set the radius of the circle
+    fovCircle.Color = colorStart   -- Initial color
+    fovCircle.Filled = false       -- Make the circle an outline
+    fovCircle.Visible = true       -- Make sure it's visible
+    fovCircle.Transparency = 1     -- Full opacity (1 is fully transparent)
+
+    -- Check if RGB transition is enabled
+    if rgbfov then
+        -- Smoothly interpolate the color from colorStart to colorEnd and back indefinitely
+        local startTime = tick()
+
+        -- Create an update loop to change color over time
+        game:GetService("RunService").Heartbeat:Connect(function()
+            local elapsed = tick() - startTime  -- Get elapsed time since start
+            if elapsed >= duration then
+                startTime = tick()  -- Reset start time for infinite loop
+            end
+
+            -- Calculate alpha for smooth oscillation between 0 and 1
+            local alpha = math.sin(elapsed * math.pi / duration) * 0.5 + 0.5  -- Sine wave for smooth transition
+
+            -- Interpolate between colorStart and colorEnd based on alpha
+            fovCircle.Color = colorStart:Lerp(colorEnd, alpha)
+        end)
+    else
+        -- If RGB is not enabled, use a static white color
+        fovCircle.Color = Color3.fromRGB(255, 255, 255)  -- White color
+    end
 end
+
+-- Example Usage:
+-- Ensure fovRadius has a valid value
+createFovCircle(fovRadius, Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 0, 255), 5)
+
+-- If rgbfov is false, the circle will remain static (white color)
 
 -- Update FOV circle position (centered on the screen)
 local function updateFovCircle994()
@@ -5873,8 +5913,26 @@ aimtab:AddLabel('Fov Color'):AddColorPicker('Fov Color', {
     end
 })
 
-
-
+--[[
+-- Add a toggle for enabling/disabling the FOV display
+aimtab:AddToggle('rgbf', {
+    Text = 'RGB Fov',
+    Tooltip = 'RGB Fov',
+    Default = false, 
+    Callback = function(Value)
+        -- Update rgbfov based on toggle state
+        rgbfov = Value  -- This sets rgbfov to true or false based on toggle state
+        
+        -- Optionally, update the FOV circle immediately when the toggle changes
+        -- You may want to adjust the radius and colors based on your requirements
+        if rgbfov then
+            createFovCircle(175, Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 0, 255), 5)
+        else
+            createFovCircle(175, Color3.fromRGB(255, 255, 255), Color3.fromRGB(255, 255, 255), 0)
+        end
+    end
+})
+--]]
 
 aimtab:AddButton("remove foliage", function()
     for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
