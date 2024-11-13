@@ -2845,7 +2845,6 @@ print('load_' .. tostring(counter))
 counter = counter + 1
 local WorldTab = Visuals:AddTab('world')
 local Misc = Tabs.Misc:AddLeftGroupbox('misc1')
-local CrosshairTab = Tabs.Misc:AddLeftGroupbox('crosshair')
 local movetab = Tabs.Misc:AddRightGroupbox('misc2')
 local Settings = Tabs.Settings:AddLeftGroupbox('Settings')
 local luatab = Tabs.Lua:AddRightGroupbox('dogelua');
@@ -3335,6 +3334,35 @@ Misc:AddToggle('antiaim', {
     end
 })
 
+
+
+movetab:AddToggle('nosunray', {
+    Text = 'No Sun Rays',
+    Default = false,
+
+    Callback = function(first)
+        if first then
+            game.Lighting.SunRays.Enabled = false
+        else
+            game.Lighting.SunRays.Enabled = true
+        end
+    end
+})
+
+movetab:AddToggle('nohurteffect', {
+    Text = 'No Hurt Effect',
+    Default = false,
+
+    Callback = function(first)
+        if first then
+            game.Lighting.HurtEffect.Enabled = false
+        else
+            game.Lighting.HurtEffect.Enabled = true
+        end
+    end
+})
+
+
 aimtab:AddButton('Skin Changer', function()
 
 if rp:FindFirstChild("Players") then
@@ -3544,7 +3572,7 @@ Misc:AddToggle('fullBrightToggle', {
 })
 
 
-Misc:AddToggle('noglobshadow', {
+movetab:AddToggle('noglobshadow', {
     Text = 'No Global Shadows',
     Default = false,
     Callback = function(state)
@@ -3664,7 +3692,7 @@ end
 -- Example usage
 local directory = game.ReplicatedStorage.Clans -- or any other parent instance
 
-Misc:AddButton('Nigga Whisper', function()
+movetab:AddButton('Nigga Whisper', function()
 
     -- Destroy clothing items
     game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
@@ -3701,14 +3729,14 @@ game.ReplicatedStorage.AiPresets.WhisperAI.LookAt:Destroy()
 
  end)
 
-Misc:AddButton('Naked Whisper', function()
+movetab:AddButton('Naked Whisper', function()
 
 game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
 game.ReplicatedStorage.AiPresets.WhisperAI.Shirt:Destroy()
 
  end)
 
-Misc:AddButton('Print All Clan Names', function()
+movetab:AddButton('Print All Clan Names', function()
 
 printFolderNames(directory)
 
@@ -3720,7 +3748,7 @@ game.StarterPlayer.StarterCharacterScripts.Health.Drowning:Destroy()
 
  end)
 
-Misc:AddButton('Destroy Buildables', function()
+movetab:AddButton('Destroy Buildables', function()
 
 game.ReplicatedStorage.Buildable:Destroy()
 
@@ -3933,7 +3961,7 @@ end
     end
 })
 
-Misc:AddDropdown('cameradropdown', {
+movetab:AddDropdown('cameradropdown', {
     Values = { 'Attach', 'Custom', 'Fixed', 'Follow', 'Orbital', 'Scriptable', 'Track', 'Watch'},
     Default = 2,
     Multi = false,
@@ -4835,7 +4863,7 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
-Misc:AddButton('Remove Scope From Gun', function()
+movetab:AddButton('Remove Scope From Gun', function()
 
 
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):Destroy()
@@ -4844,7 +4872,7 @@ game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChi
 
 
 
-Misc:AddButton('Disable OKP7 SCOPE GUI', function()
+movetab:AddButton('Disable OKP7 SCOPE GUI', function()
 
 
 game.workspace:FindFirstChild("Camera"):FindFirstChild("ViewModel"):FindFirstChild("Item"):FindFirstChild("Attachments"):FindFirstChild("Sight"):FindFirstChild("OKP7"):FindFirstChild("Reticle"):FindFirstChild("ScopeGui"):Destroy()
@@ -4957,19 +4985,20 @@ local bulletSpeed = 430           -- Bullet speed, adjusted for better predictio
 
 -- Prediction for different ranges (manual values)
 local predictionForRanges = {
-    [10] = 0.17,   [20] = 0.19,  [30] = 0.21,  [40] = 0.23,  [50] = 0.25,
-    [60] = 0.27,   [70] = 0.29,  [80] = 0.31,  [90] = 0.33,  [100] = 0.35,
-    [110] = 0.37,  [120] = 0.39, [130] = 0.41, [140] = 0.43, [150] = 0.45,
-    [160] = 0.47,  [170] = 0.49, [180] = 0.51, [190] = 0.53, [200] = 0.55,
-    [210] = 0.57,  [220] = 0.59, [230] = 0.61, [240] = 0.63, [250] = 0.65,
-    [260] = 0.67,  [270] = 0.69, [280] = 0.71, [290] = 0.73, [300] = 0.75,
-    [310] = 0.77,  [320] = 0.79, [330] = 0.81, [340] = 0.83, [350] = 0.85,
-    [360] = 0.87,  [370] = 0.89, [380] = 0.91, [390] = 0.93, [400] = 0.95,
-    [410] = 0.97,  [420] = 0.99, [430] = 1.01, [440] = 1.03, [450] = 1.05,
-    [460] = 1.07,  [470] = 1.09, [480] = 1.11, [490] = 1.13, [500] = 1.15,
-    [510] = 1.17,  [520] = 1.19, [530] = 1.21, [540] = 1.23, [550] = 1.25,
-    [560] = 1.27,  [570] = 1.29, [580] = 1.31, [590] = 1.33, [600] = 1.35
+    [10] = 0.187,   [20] = 0.209,  [30] = 0.231,  [40] = 0.253,  [50] = 0.275,
+    [60] = 0.297,   [70] = 0.319,  [80] = 0.341,  [90] = 0.363,  [100] = 0.385,
+    [110] = 0.407,  [120] = 0.429, [130] = 0.451, [140] = 0.473, [150] = 0.495,
+    [160] = 0.517,  [170] = 0.539, [180] = 0.561, [190] = 0.583, [200] = 0.605,
+    [210] = 0.627,  [220] = 0.649, [230] = 0.671, [240] = 0.693, [250] = 0.715,
+    [260] = 0.737,  [270] = 0.759, [280] = 0.781, [290] = 0.803, [300] = 0.825,
+    [310] = 0.847,  [320] = 0.869, [330] = 0.891, [340] = 0.913, [350] = 0.935,
+    [360] = 0.957,  [370] = 0.979, [380] = 1.001, [390] = 1.023, [400] = 1.045,
+    [410] = 1.067,  [420] = 1.089, [430] = 1.111, [440] = 1.133, [450] = 1.155,
+    [460] = 1.177,  [470] = 1.199, [480] = 1.221, [490] = 1.243, [500] = 1.265,
+    [510] = 1.287,  [520] = 1.309, [530] = 1.331, [540] = 1.353, [550] = 1.375,
+    [560] = 1.397,  [570] = 1.419, [580] = 1.441, [590] = 1.463, [600] = 1.485
 }
+
 
 
 -- Bullet drop compensation for different ranges (manual values)
@@ -5768,7 +5797,7 @@ aimtab:AddToggle('silentAim994', {
 
 aimtab:AddDropdown('Silentaimhitset2', {
     Values = { 'Legit', 'Rage', 'Balanced' },
-    Default = 2,
+    Default = 3,
     Multi = false,
 
     Text = 'Silent aim mode',
