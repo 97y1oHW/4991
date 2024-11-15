@@ -5909,9 +5909,9 @@ aimtab:AddToggle('fovdisplay', {
 })
 
 -- Add a toggle for enabling/disabling the FOV display
-aimtab:AddToggle('toggletracers', {
-    Text = 'Toggle Tracers',
-    Tooltip = 'Toggle Tracers (FOV)',
+aimtab:AddToggle('toggletracerssnap', {
+    Text = 'Toggle Snaplines',
+    Tooltip = 'Toggle Snaplines (FOV)',
     Default = true,
     Callback = function(Value)
         -- Update FOV circle visibility
