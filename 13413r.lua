@@ -1,7 +1,5 @@
 --[[                                                                                                                     
 Project Nexify
-Licensed By ObfuscoMatrix
-[ https://obfuscomatrix.com/  ]
 
 NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFFFYYYYYYY       YYYYYYY
 N:::::::N       N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
@@ -148,7 +146,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 
-
+--[[
 originalLoadstring = loadstring
 originalGetMetatable = getmetatable
 originalSetMetatable = setmetatable
@@ -279,7 +277,7 @@ spawn(function()
 end)
 
 --SCRIPT
-
+--]]
  screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
