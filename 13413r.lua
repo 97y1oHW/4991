@@ -589,12 +589,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  -- Create file with initial version (v17)
 end
-local updatenote = "Fov Adjustments"
+local updatenote = "bug fix"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v33"  -- You can set this to the version you want to check
+local version = "v34"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -1259,7 +1259,7 @@ checkForSameScript(hwid)
 
 
 
-local continueexecution = false
+local continueexecution = true
 
 
 if continueexecution == true then
