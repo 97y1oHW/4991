@@ -3157,6 +3157,38 @@ movetab:AddToggle('Third Person', {
     end,
 })
 
+
+movetab:AddToggle('No Server Info', {
+    Text = 'No Server Info',
+    Default = true,
+    Callback = function(value)
+        local player = game.Players.LocalPlayer -- Correct way to get the local player
+        if player and player:FindFirstChild("PlayerGui") then -- Ensure PlayerGui exists
+            local serverInfo = player.PlayerGui:FindFirstChild("ServerInfo") -- Safely find ServerInfo
+            if serverInfo then
+                serverInfo.Enabled = value -- Toggle the visibility
+            else
+                warn("ServerInfo GUI not found in PlayerGui") -- Debug warning
+            end
+        else
+            warn("PlayerGui not found for LocalPlayer") -- Debug warning
+        end
+    end
+})
+
+
+-- UI toggles
+movetab:AddToggle('Menu Blur', {
+    Text = 'Menu Blur',
+    Default = true,
+    Callback = function(value)
+
+game.Lighting.InventoryBlur.Enabled = value
+
+    end
+})
+
+
 print('Fuckers_' .. tostring(counter))
 counter = counter + 2
 
