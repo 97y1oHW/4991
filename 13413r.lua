@@ -3158,8 +3158,8 @@ movetab:AddToggle('Third Person', {
 })
 
 
-movetab:AddToggle('No Server Info', {
-    Text = 'No Server Info',
+movetab:AddToggle('Server Info', {
+    Text = 'Server Info',
     Default = true,
     Callback = function(value)
         local player = game.Players.LocalPlayer -- Correct way to get the local player
