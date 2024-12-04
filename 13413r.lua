@@ -1319,7 +1319,7 @@ if success and response == "bypassed" then
 else
     -- Pastebin returned nil or there's an error, script won't run
     print("Anti-Crack System Trigered!")
-    return
+    print("continue")
 end
 
 		-- Create a function to apply ForceField to all parts in the game and remove SurfaceAppearance
