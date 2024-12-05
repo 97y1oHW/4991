@@ -589,12 +589,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  -- Create file with initial version (v17)
 end
-local updatenote = "bug fix"
+local updatenote = "new silent"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v34"  -- You can set this to the version you want to check
+local version = "v35"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
@@ -5013,7 +5013,7 @@ local fovRadius = 175  -- Increased FOV for slightly better target tracking
 local fovCircle
 fovradiussnapline=fovRadius
 -- Bullet speed
-local bulletSpeed = 430           -- Bullet speed, adjusted for better prediction
+local bulletSpeed2 = 430           -- Bullet speed, adjusted for better prediction
 
 -- Prediction for different ranges (manual values)
 local predictionForRanges = {
@@ -5242,7 +5242,7 @@ local function predictTargetPosition(target)
         local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
         
         -- Time for the bullet to travel to the target
-        local bulletTravelTime = distance / bulletSpeed
+        local bulletTravelTime = distance / bulletSpeed2
 
         -- Calculate the predicted position
         local predictedPosition = head.Position + (velocity * bulletTravelTime)
@@ -5792,18 +5792,99 @@ end)
 
 
 
+camera = workspace.CurrentCamera
+player = game.Players.LocalPlayer
+ userInputService = game:GetService("UserInputService")
+ runService = game:GetService("RunService")
+
+local bulletSpeed = 1000
+ aimEnabled = false
+
+function getClosestEnemyToCrosshair()
+    local closestCharacter = nil
+    local closestDistance = math.huge
+
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local character = otherPlayer.Character
+            local head = character:FindFirstChild("Head")
+
+            if head then
+                local screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
+
+                if onScreen then
+                    local crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+                    local distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+
+                    if distanceFromCrosshair < closestDistance then
+                        closestDistance = distanceFromCrosshair
+                        closestCharacter = character
+                    end
+                end
+            end
+        end
+    end
+
+    return closestCharacter
+end
+
+function aimAtClosestEnemy()
+    if not aimEnabled then return end
+
+    local viewModel = camera:FindFirstChild("ViewModel")
+    if not viewModel then return end
+
+    local closestCharacter = getClosestEnemyToCrosshair()
+    if closestCharacter and closestCharacter:FindFirstChild("Head") then
+        local head = closestCharacter.Head
+        local gun = viewModel:FindFirstChild("AimPart")
+        local arms = viewModel:FindFirstChild("Arms")
+
+        if gun then
+            local aimPosition = head.Position
+            local humanoidRootPart = closestCharacter:FindFirstChild("HumanoidRootPart")
+
+            if humanoidRootPart then
+                local velocity = humanoidRootPart.Velocity
+                local distance = (camera.CFrame.Position - head.Position).Magnitude
+                local timeToImpact = distance / bulletSpeed
+                aimPosition = aimPosition + (velocity * timeToImpact) * 0.6
+            end
+
+            local rightOffset = Vector3.new(0.5, -0.3, -0.3)
+            gun.CFrame = CFrame.new(camera.CFrame.Position, aimPosition) * CFrame.new(rightOffset)
+
+            if arms then
+                arms.CFrame = camera.CFrame * CFrame.new(0, -0.5, 0.3)
+            end
+        end
+    end
+end
+
+ function toggleAim()
+    aimEnabled = not aimEnabled
+end
+
+
+
+runService.RenderStepped:Connect(aimAtClosestEnemy)
+
+
+
+
 -- Slider for Zoom Value
 aimtab:AddSlider('Silentbulspeed', {
     Text = 'Silent Aim Bullet Speed',
-    Default = 401,
+    Default = 1000,
     Min = 10,
-    Max = 570,
+    Max = 1000,
     Risky = true,
     Rounding = 1,
     Compact = false,
 
     Callback = function(Value)
-bulletSpeed = Value
+--bulletSpeed2 = Value
+
     end
 })
 
@@ -5813,9 +5894,10 @@ aimtab:AddToggle('silentAim994', {
     Default = false,
     Risky = true,
     Callback = function(isEnabled)
-        isSilentAimEnabled994 = isEnabled
-        lockedCharacter = nil -- Reset locked character when toggling
-        updateFovCircle994() -- Update the FOV circle when toggling
+
+toggleAim()
+
+
     end
 }):AddKeyPicker('silentAimBind994', {
     Default = 'None',
