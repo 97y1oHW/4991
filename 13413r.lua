@@ -5800,35 +5800,30 @@ runService = game:GetService("RunService")
 local bulletSpeed = 1000
 aimEnabled = false
 
+lastAimedTime = 0
+aimUpdateInterval = 0.01 -- Update aiming logic every 50ms (20 FPS equivalent)
+
 function getClosestEnemyToCrosshair()
     closestCharacter = nil
     closestDistance = math.huge
     crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
-    function processCharacter(character)
-        if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
-            head = character.Head
-            screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
+    -- Process only visible players
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character then
+            character = otherPlayer.Character
+            if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
+                head = character.Head
+                screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
 
-            if onScreen then
-                distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
-                if distanceFromCrosshair < closestDistance then
-                    closestDistance = distanceFromCrosshair
-                    closestCharacter = character
+                if onScreen then
+                    distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+                    if distanceFromCrosshair < closestDistance then
+                        closestDistance = distanceFromCrosshair
+                        closestCharacter = character
+                    end
                 end
             end
-        end
-    end
-
-    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-        if otherPlayer ~= player then
-            processCharacter(otherPlayer.Character)
-        end
-    end
-
-    for _, instance in pairs(workspace:GetChildren()) do
-        if instance:IsA("Model") and not game.Players:FindFirstChild(instance.Name) then
-            processCharacter(instance)
         end
     end
 
@@ -5837,6 +5832,11 @@ end
 
 function aimAtClosestEnemy()
     if not aimEnabled then return end
+
+    currentTime = tick()
+    if currentTime - lastAimedTime < aimUpdateInterval then return end  -- Only update aiming every `aimUpdateInterval` seconds
+
+    lastAimedTime = currentTime
 
     viewModel = camera:FindFirstChild("ViewModel")
     if not viewModel then return end
@@ -5878,18 +5878,18 @@ runService.RenderStepped:Connect(aimAtClosestEnemy)
 
 
 
--- Slider for Zoom Value
-aimtab:AddSlider('Silentbulspeed', {
-    Text = 'Silent Aim Bullet Speed',
-    Default = 1000,
-    Min = 10,
-    Max = 1000,
+
+aimtab:AddSlider('Silent Aim Interval', {
+    Text = 'Silent Aim Interval Speed',
+    Default = 0.01,
+    Min = 0.01,
+    Max = 0.05,
     Risky = true,
-    Rounding = 1,
+    Rounding = 5,
     Compact = false,
 
     Callback = function(Value)
---bulletSpeed2 = Value
+aimUpdateInterval = Value
 
     end
 })
