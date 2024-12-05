@@ -6499,15 +6499,15 @@ charactertab:AddToggle('viewq131425346yjrurefwgergrfgtjyuksedvgrtjh', {
     Default = false,
     Callback = function(isEnabled)
         -- Set the viewmodel toggle state
-        viewmodelEnabled = isEnabled
+     --   viewmodelEnabled = isEnabled
         
         -- Start applying offsets every frame if enabled
-        if viewmodelEnabled then
-            -- Continuously update the viewmodel position every frame
-            game:GetService("RunService").Heartbeat:Connect(function()
-                updateViewmodelOffset()
-            end)
-        end
+     --   if viewmodelEnabled then
+       --     -- Continuously update the viewmodel position every frame
+        --    game:GetService("RunService").Heartbeat:Connect(function()
+        --        updateViewmodelOffset()
+       --     end)
+     --   end
     end
 })
 
