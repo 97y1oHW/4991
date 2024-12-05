@@ -5871,7 +5871,7 @@ runService.RenderStepped:Connect(aimAtClosestEnemy)
 
 
 
-
+--[[
 -- Slider for Zoom Value
 aimtab:AddSlider('Silentbulspeed', {
     Text = 'Silent Aim Bullet Speed',
@@ -5887,6 +5887,7 @@ aimtab:AddSlider('Silentbulspeed', {
 
     end
 })
+--]]
 
 -- GUI Toggle for Silent Aim
 aimtab:AddToggle('silentAim994', {
