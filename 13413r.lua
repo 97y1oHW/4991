@@ -5794,34 +5794,41 @@ end)
 
 camera = workspace.CurrentCamera
 player = game.Players.LocalPlayer
- userInputService = game:GetService("UserInputService")
- runService = game:GetService("RunService")
+userInputService = game:GetService("UserInputService")
+runService = game:GetService("RunService")
 
 local bulletSpeed = 1000
- aimEnabled = false
+aimEnabled = false
 
 function getClosestEnemyToCrosshair()
-    local closestCharacter = nil
-    local closestDistance = math.huge
+    closestCharacter = nil
+    closestDistance = math.huge
+    crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
-    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            local character = otherPlayer.Character
-            local head = character:FindFirstChild("Head")
+    function processCharacter(character)
+        if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
+            head = character.Head
+            screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
 
-            if head then
-                local screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
-
-                if onScreen then
-                    local crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
-                    local distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
-
-                    if distanceFromCrosshair < closestDistance then
-                        closestDistance = distanceFromCrosshair
-                        closestCharacter = character
-                    end
+            if onScreen then
+                distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+                if distanceFromCrosshair < closestDistance then
+                    closestDistance = distanceFromCrosshair
+                    closestCharacter = character
                 end
             end
+        end
+    end
+
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player then
+            processCharacter(otherPlayer.Character)
+        end
+    end
+
+    for _, instance in pairs(workspace:GetChildren()) do
+        if instance:IsA("Model") and not game.Players:FindFirstChild(instance.Name) then
+            processCharacter(instance)
         end
     end
 
@@ -5831,27 +5838,27 @@ end
 function aimAtClosestEnemy()
     if not aimEnabled then return end
 
-    local viewModel = camera:FindFirstChild("ViewModel")
+    viewModel = camera:FindFirstChild("ViewModel")
     if not viewModel then return end
 
-    local closestCharacter = getClosestEnemyToCrosshair()
+    closestCharacter = getClosestEnemyToCrosshair()
     if closestCharacter and closestCharacter:FindFirstChild("Head") then
-        local head = closestCharacter.Head
-        local gun = viewModel:FindFirstChild("AimPart")
-        local arms = viewModel:FindFirstChild("Arms")
+        head = closestCharacter.Head
+        gun = viewModel:FindFirstChild("AimPart")
+        arms = viewModel:FindFirstChild("Arms")
 
         if gun then
-            local aimPosition = head.Position
-            local humanoidRootPart = closestCharacter:FindFirstChild("HumanoidRootPart")
+            aimPosition = head.Position
+            humanoidRootPart = closestCharacter:FindFirstChild("HumanoidRootPart")
 
             if humanoidRootPart then
-                local velocity = humanoidRootPart.Velocity
-                local distance = (camera.CFrame.Position - head.Position).Magnitude
-                local timeToImpact = distance / bulletSpeed
+                velocity = humanoidRootPart.Velocity
+                distance = (camera.CFrame.Position - head.Position).Magnitude
+                timeToImpact = distance / bulletSpeed
                 aimPosition = aimPosition + (velocity * timeToImpact) * 0.6
             end
 
-            local rightOffset = Vector3.new(0.5, -0.3, -0.3)
+            rightOffset = Vector3.new(0.5, -0.3, -0.3)
             gun.CFrame = CFrame.new(camera.CFrame.Position, aimPosition) * CFrame.new(rightOffset)
 
             if arms then
@@ -5861,17 +5868,16 @@ function aimAtClosestEnemy()
     end
 end
 
- function toggleAim()
+function toggleAim()
     aimEnabled = not aimEnabled
 end
-
-
 
 runService.RenderStepped:Connect(aimAtClosestEnemy)
 
 
 
---[[
+
+
 -- Slider for Zoom Value
 aimtab:AddSlider('Silentbulspeed', {
     Text = 'Silent Aim Bullet Speed',
@@ -5887,7 +5893,6 @@ aimtab:AddSlider('Silentbulspeed', {
 
     end
 })
---]]
 
 -- GUI Toggle for Silent Aim
 aimtab:AddToggle('silentAim994', {
@@ -5927,35 +5932,7 @@ aimtab:AddDropdown('Silentaimhitset2', {
 
 
 
-aimtab:AddToggle('silen1w22', {
-    Text = 'npc aim',
-    Tooltip = 'Npc Aim (Cooked)',
-    Default = false,
 
-    Callback = function(first)
-        pdlt.npcsilentaim = first
-    end
-}):AddKeyPicker('npcaimbind', {
-    Default = 'None',
-    SyncToggleState = true,
-
-    Mode = 'Toggle',
-
-    Text = 'npc aim bind',
-    NoUI = false,
-
-    Callback = function(Value)
-    end,
-})
-aimtab:AddToggle('si111123lenw22', {
-    Text = 'wallcheck',
-    Tooltip = 'Wallcheck',
-    Default = false,
-
-    Callback = function(first)
-        pdlt.silentaimwall = first
-    end
-})
 aimtab:AddDropdown('SilentAimHitPartjb', {
     Values = { 'HumanoidRootPart', 'Head' },
     Default = 1,
@@ -6036,7 +6013,7 @@ config.snapline_enabled = Value
 
 -- Create a color picker for changing the grass color
 aimtab:AddLabel('Tracers Color'):AddColorPicker('Tracers Color', {
-    Default = Color3.fromRGB(255, 0, 0), -- Set the default color to red
+    Default = Color3.fromRGB(255, 255, 255), -- Set the default color to red
     Title = 'Tracers Color',
     Transparency = 0,
 
@@ -6499,15 +6476,15 @@ charactertab:AddToggle('viewq131425346yjrurefwgergrfgtjyuksedvgrtjh', {
     Default = false,
     Callback = function(isEnabled)
         -- Set the viewmodel toggle state
-     --   viewmodelEnabled = isEnabled
+        viewmodelEnabled = isEnabled
         
         -- Start applying offsets every frame if enabled
-     --   if viewmodelEnabled then
-       --     -- Continuously update the viewmodel position every frame
-        --    game:GetService("RunService").Heartbeat:Connect(function()
-        --        updateViewmodelOffset()
-       --     end)
-     --   end
+        if viewmodelEnabled then
+            -- Continuously update the viewmodel position every frame
+            game:GetService("RunService").Heartbeat:Connect(function()
+                updateViewmodelOffset()
+            end)
+        end
     end
 })
 
