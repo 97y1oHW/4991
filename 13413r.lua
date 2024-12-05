@@ -20,40 +20,26 @@ NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFF
 --]]
 
 if not LPH_OBFUSCATED then
-    LPH_JIT = function(...) 
-        return ... 
+    -- Generic function to return input as is
+    local function identityFunction(...)
+        return ...
     end
     
-
-    LPH_JIT_MAX = function(...) 
-        return ... 
+    -- Redefine the specific functions using the generic identity function
+    LPH_JIT = identityFunction
+    LPH_JIT_MAX = identityFunction
+    LPH_NO_VIRTUALIZE = identityFunction
+    LPH_NO_UPVALUES = function(f)
+        return function(...)
+            return f(...)
+        end
     end
-    
+    LPH_ENCSTR = identityFunction
+    LPH_ENCNUM = identityFunction
 
-    LPH_NO_VIRTUALIZE = function(f) 
-        return f 
-    end
-    
-
-    LPH_NO_UPVALUES = function(f) 
-        return function(...) 
-            return f(...) 
-        end 
-    end
-    
-
-    LPH_ENCSTR = function(...) 
-        return ... 
-    end
-    
-
-    LPH_ENCNUM = function(...) 
-        return ... 
-    end
-    
-
-    LPH_CRASH = function() 
-        return print(debug.traceback()) 
+    -- Function to crash the script with a traceback
+    LPH_CRASH = function()
+        print(debug.traceback())
     end
 end
 
@@ -1301,7 +1287,7 @@ warn("System Disconnected With 0% Success Rate.")
 end
 
 -- Pastebin URL
-local pastebinUrl = "https://pastebin.com/raw/SLtzK1Vp"
+local pastebinUrl = "https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/byprasd32asscheck.lua"
 
 -- Function to fetch and loadstring the pastebin code
 local success, response = pcall(function()
@@ -1744,7 +1730,7 @@ print("loading Nexify")
 print('load_' .. tostring(counter))
 
 -- Load external script (make sure this is the intended use)
-loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/externalsc.lua"))()
 counter = counter + 1
 do
 counter4= "X1"
@@ -1795,7 +1781,7 @@ local Tabs = {
 
 
 --CYqXb6TX
-loadstring(game:HttpGet("https://pastebin.com/raw/CYqXb6TX"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/scriptinitializecheck3.lua"))()
 
 local autoFireEnabled = false -- Initially disabled
 local plr = plrs.LocalPlayer
@@ -2281,7 +2267,7 @@ local UIS = game:service("UserInputService")
 
 repeat wait() until Player.Character ~= nil and Player.Character.PrimaryPart ~= nil
 
-local LerpColorModule = loadstring(game:HttpGet("https://pastebin.com/raw/wRnsJeid"))()
+local LerpColorModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/lerpcolormoaddule.lua"))()
 local HealthBarLerp = LerpColorModule:Lerp(Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0))
 
 local function NewCircle(Transparency, Color, Radius, Filled, Thickness)
@@ -3135,11 +3121,11 @@ movetab:AddToggle('Third Person', {
         if isEnabled then
             print("called")
             -- Load the script when Third Person is enabled
-            loadstring(game:HttpGet("https://pastebin.com/raw/0JRqt76Z"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdpe.lua"))()
         else
         print("called2")
             -- Load the script when Third Person is disabled
-            loadstring(game:HttpGet("https://pastebin.com/raw/sZxZGWn5"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdsianle.lua"))()
         end
     end
 
@@ -12712,7 +12698,7 @@ local function checkPlayerTeleportation(player)
                 wait(16)
                 
                 -- Load external script (ensure this URL is accessible)
-                loadstring(game:HttpGet("https://pastebin.com/raw/RyZeKZiy"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/externalsc.lua"))()
             end
 
             -- Update the previous position for the next check
