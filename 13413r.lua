@@ -5783,7 +5783,7 @@ player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
 runService = game:GetService("RunService")
 
-local bulletSpeed = 1000
+local bulletSpeed = 1951.6528128824727 -- 762x39mm
 aimEnabled = false
 
 lastAimedTime = 0
