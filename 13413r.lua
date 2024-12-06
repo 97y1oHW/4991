@@ -264,50 +264,42 @@ end)
 
 --SCRIPT
 --]]
- screenGui = Instance.new("ScreenGui")
-screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Create the Frame (background with transparency)
- frame = Instance.new("Frame")
-frame.Size = UDim2.new(0.4, 0, 0.4, 0)  -- Adjust size as needed
-frame.Position = UDim2.new(0.3, 0, 0.3, 0)  -- Center on the screen
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 255)  -- Blue color
-frame.BackgroundTransparency = 1 -- Slight transparency
-frame.Parent = screenGui
 
--- Create the TextLabel (for the animated text)
- textLabel = Instance.new("TextLabel")
-textLabel.Size = UDim2.new(1, 0, 1, 0)  -- Fill the frame
-textLabel.Position = UDim2.new(0.5, 0, 0.5, 0)  -- Center in the frame
-textLabel.AnchorPoint = Vector2.new(0.5, 0.5)  -- Set the anchor to the center
-textLabel.BackgroundTransparency = 1  -- No background
-textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text color
-textLabel.Font = Enum.Font.Code  -- Set the font style
-textLabel.TextSize = 60  -- Adjust size as needed
-textLabel.Text = "\\"  -- Start with the first character
-textLabel.Parent = frame
 
--- Animation function to cycle the text
- function animateText()
-    local characters = {"\\", "|", "/"}  -- The characters for animation
-    local index = 1
+ g = Instance.new("ScreenGui")
+g.Parent = game:GetService("CoreGui")
+ t = Instance.new("TextLabel")
+t.Text = "Nexify"
+t.Font = Enum.Font.Code
+t.TextSize = 50
+t.TextColor3 = Color3.new(1, 1, 1)
+t.BackgroundTransparency = 1
+t.AnchorPoint = Vector2.new(0.5, 0.5)
+t.Position = UDim2.new(0.5, 0, -0.5, 0)
+t.Size = UDim2.new(0, 300, 0, 100)
+t.Parent = g
 
-    while true do
-        textLabel.Text = characters[index]
-        index = index + 1
-        if index > #characters then
-            index = 1  -- Reset to the first character
-        end
-        wait(0.4)  -- Change character every half second
-    end
-end
+tweenService = game:GetService("TweenService")
 
--- Start the animation in a coroutine
-coroutine.wrap(animateText)()
+-- Tween to center
+tweenService:Create(
+    t, 
+    TweenInfo.new(1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), 
+    {Position = UDim2.new(0.5, 0, 0.5, 0)}
+):Play()
 
--- Wait for 4 seconds, then destroy the ScreenGui
-wait(6)
-screenGui:Destroy()
+-- Fade out after 5 seconds
+task.spawn(function()
+    task.wait(5)
+    tweenService:Create(
+        t, 
+        TweenInfo.new(1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), 
+        {TextTransparency = 1, TextStrokeTransparency = 1}
+    ):Play()
+    task.wait(1)
+    g:Destroy()
+end)
 
 
 
