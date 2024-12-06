@@ -20,7 +20,7 @@ NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFF
 --]]
 
 if not LPH_OBFUSCATED then
-    -- Generic function to return input as is
+    
     local function identityFunction(...)
         return ...
     end
@@ -5783,7 +5783,7 @@ player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
 runService = game:GetService("RunService")
 
-local bulletSpeed = 1000 -- 762x39mm
+local bulletSpeed = 1020 -- 762x39mm
 aimEnabled = false
 
 lastAimedTime = 0
