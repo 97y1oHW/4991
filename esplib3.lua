@@ -391,232 +391,156 @@ function espLibrary:Unload()
     runService:UnbindFromRenderStep("esp_rendering");
 end
 
-function espLibrary.isBot(character)
-    -- Here we're checking if the character has a custom "isBot" property.
-    -- You can replace this with any other condition (e.g., specific name, tag, etc.)
-    return character:FindFirstChild("isBot") ~= nil
-end
-
-function espLibrary.addBot(bot)
-    -- Don't add the local player as a bot
-    if bot == localPlayer then return end
-
-    -- Create ESP objects for the bot (same as player ESP objects)
-    local objects = {
-        -- Arrow for out-of-view
-        arrow = create("Triangle", { Thickness = 1 }),
-        arrowOutline = create("Triangle", { Thickness = 1 }),
-        
-        -- Text elements (name, health, distance)
-        top = create("Text", { Center = true, Size = 13, Outline = true, OutlineColor = color3New(), Font = 2 }),
-        side = create("Text", { Size = 13, Outline = true, OutlineColor = color3New(), Font = 2 }),
-        bottom = create("Text", { Center = true, Size = 13, Outline = true, OutlineColor = color3New(), Font = 2 }),
-        
-        -- Box elements (bounding box, filled box)
-        boxFill = create("Square", { Thickness = 1, Filled = true }),
-        boxOutline = create("Square", { Thickness = 3, Color = color3New() }),
-        box = create("Square", { Thickness = 1 }),
-        
-        -- Health bar elements
-        healthBarOutline = create("Square", { Thickness = 1, Color = color3New(), Filled = true }),
-        healthBar = create("Square", { Thickness = 1, Filled = true }),
-        
-        -- Line for tracers
-        line = create("Line")
-    }
-
-    -- Add the bot to the ESP cache
-    espLibrary.espCache[bot] = objects
-end
-
-function espLibrary.removeBot(bot)
-    local espCache = espLibrary.espCache[bot]
-    if espCache then
-        espLibrary.espCache[bot] = nil
-        for _, object in next, espCache do
-            object:Remove()
-        end
-    end
-end
-
 function espLibrary:Load(renderValue)
-    -- Add existing player logic
     insert(self.conns, players.PlayerAdded:Connect(function(player)
-        self.addEsp(player)
-        self.addChams(player)
-    end))
+        self.addEsp(player);
+        self.addChams(player);
+    end));
 
-    
     insert(self.conns, players.PlayerRemoving:Connect(function(player)
-        self.removeEsp(player)
-        self.removeChams(player)
-    end))
-
-        -- Add bots logic
-    insert(self.conns, workspace.ChildAdded:Connect(function(child)
-        -- Check if the child is a bot by using the isBot function
-        if child:IsA("Model") and espLibrary.isBot(child) then
-            espLibrary.addBot(child)
-        end
-    end))
-
-        insert(self.conns, workspace.ChildRemoved:Connect(function(child)
-        if espLibrary.isBot(child) then
-            espLibrary.removeBot(child)
-        end
-    end))
-
-        for _, bot in next, workspace:GetChildren() do
-        if espLibrary.isBot(bot) then
-            espLibrary.addBot(bot)
-        end
-    end
+        self.removeEsp(player);
+        self.removeChams(player);
+    end));
 
     for _, player in next, players:GetPlayers() do
         self.addEsp(player);
         self.addChams(player);
     end
 
-    -- Main ESP rendering loop
     runService:BindToRenderStep("esp_rendering", renderValue or (Enum.RenderPriority.Camera.Value + 1), function()
         for player, objects in next, self.espCache do
-            local character, torso = self.getCharacter(player)
+            local character, torso = self.getCharacter(player);
 
-            if character and torso then
-                local onScreen, size, position, torsoPosition = self.getBoxData(torso.Position, Vector3.new(5, 6))
-                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude * 0.28 -- Convert studs to meters
-                local canShow, enabled = onScreen and (size and position), self.options.enabled
-                local team, teamColor = self.getTeam(player)
-                local color = self.options.teamColor and teamColor or nil
+            if (character and torso) then
+                local onScreen, size, position, torsoPosition = self.getBoxData(torso.Position, Vector3.new(5, 6));
+                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude * 0.28; -- Convert studs to meters
+                local canShow, enabled = onScreen and (size and position), self.options.enabled;
+                local team, teamColor = self.getTeam(player);
+                local color = self.options.teamColor and teamColor or nil;
 
-                -- Handle whitelist and blacklist
-                if find(self.whitelist, player.Name) then
-                    color = self.options.whitelistColor
+                if (self.options.fillColor ~= nil) then
+                    color = self.options.fillColor;
                 end
 
-                if find(self.blacklist, player.Name) then
-                    enabled = false
+                if (find(self.whitelist, player.Name)) then
+                    color = self.options.whitelistColor;
                 end
 
-                -- Handle distance-based hiding
-                if self.options.limitDistance and distance > self.options.maxDistance then
-                    enabled = false
+                if (find(self.blacklist, player.Name)) then
+                    enabled = false;
                 end
 
-                -- Visibility check
-                if self.options.visibleOnly and not self.visibleCheck(character, torso.Position) then
-                    enabled = false
+                if (self.options.limitDistance and distance > self.options.maxDistance) then
+                    enabled = false;
                 end
 
-                -- Handle team-based hiding
-                if self.options.teamCheck and (team == self.getTeam(localPlayer)) then
-                    enabled = false
+                if (self.options.visibleOnly and not self.visibleCheck(character, torso.Position)) then
+                    enabled = false;
                 end
 
-                local viewportSize = currentCamera.ViewportSize
-                local screenCenter = vector2New(viewportSize.X / 2, viewportSize.Y / 2)
-                local objectSpacePoint = (pointToObjectSpace(currentCamera.CFrame, torso.Position) * vector3New(1, 0, 1)).Unit
-                local crossVector = cross(objectSpacePoint, vector3New(0, 1, 1))
-                local rightVector = vector2New(crossVector.X, crossVector.Z)
+                if (self.options.teamCheck and (team == self.getTeam(localPlayer))) then
+                    enabled = false;
+                end
 
-                -- Arrow and outline rendering for out-of-view bots
-                local arrowRadius, arrowSize = self.options.outOfViewArrowsRadius, self.options.outOfViewArrowsSize
-                local arrowPosition = screenCenter + vector2New(objectSpacePoint.X, objectSpacePoint.Z) * arrowRadius
-                local arrowDirection = (arrowPosition - screenCenter).Unit
-                local pointA, pointB, pointC = arrowPosition, screenCenter + arrowDirection * (arrowRadius - arrowSize) + rightVector * arrowSize, screenCenter + arrowDirection * (arrowRadius - arrowSize) + -rightVector * arrowSize
+                local viewportSize = currentCamera.ViewportSize;
 
-                -- Health bar size calculation
-                local health, maxHealth = self.getHealth(player, character)
-                local healthBarSize = round(vector2New(self.options.healthBarsSize, -(size.Y * (health / maxHealth))))
-                local healthBarPosition = round(vector2New(position.X - (3 + healthBarSize.X), position.Y + size.Y))
+                local screenCenter = vector2New(viewportSize.X / 2, viewportSize.Y / 2);
+                local objectSpacePoint = (pointToObjectSpace(currentCamera.CFrame, torso.Position) * vector3New(1, 0, 1)).Unit;
+                local crossVector = cross(objectSpacePoint, vector3New(0, 1, 1));
+                local rightVector = vector2New(crossVector.X, crossVector.Z);
 
-                -- Tracers (if enabled)
-                local origin = self.options.tracerOrigin
-                local show = canShow and enabled
+                local arrowRadius, arrowSize = self.options.outOfViewArrowsRadius, self.options.outOfViewArrowsSize;
+                local arrowPosition = screenCenter + vector2New(objectSpacePoint.X, objectSpacePoint.Z) * arrowRadius;
+                local arrowDirection = (arrowPosition - screenCenter).Unit;
 
-                -- Set object visibility based on options and conditions
-                objects.arrow.Visible = (not canShow and enabled) and self.options.outOfViewArrows
-                objects.arrow.Filled = self.options.outOfViewArrowsFilled
-                objects.arrow.Transparency = self.options.outOfViewArrowsTransparency
-                objects.arrow.Color = color or self.options.outOfViewArrowsColor
-                objects.arrow.PointA = pointA
-                objects.arrow.PointB = pointB
-                objects.arrow.PointC = pointC
+                local pointA, pointB, pointC = arrowPosition, screenCenter + arrowDirection * (arrowRadius - arrowSize) + rightVector * arrowSize, screenCenter + arrowDirection * (arrowRadius - arrowSize) + -rightVector * arrowSize;
 
-                objects.arrowOutline.Visible = (not canShow and enabled) and self.options.outOfViewArrowsOutline
-                objects.arrowOutline.Filled = self.options.outOfViewArrowsOutlineFilled
-                objects.arrowOutline.Transparency = self.options.outOfViewArrowsOutlineTransparency
-                objects.arrowOutline.Color = color or self.options.outOfViewArrowsOutlineColor
-                objects.arrowOutline.PointA = pointA
-                objects.arrowOutline.PointB = pointB
-                objects.arrowOutline.PointC = pointC
+                local health, maxHealth = self.getHealth(player, character);
+                local healthBarSize = round(vector2New(self.options.healthBarsSize, -(size.Y * (health / maxHealth))));
+                local healthBarPosition = round(vector2New(position.X - (3 + healthBarSize.X), position.Y + size.Y));
 
-                -- Display name and health text
-                objects.top.Visible = show and self.options.names
-                objects.top.Font = self.options.font
-                objects.top.Size = self.options.fontSize
-                objects.top.Transparency = self.options.nameTransparency
-                objects.top.Color = color or self.options.nameColor
-                objects.top.Text = player.Name
-                objects.top.Position = round(position + vector2New(size.X * 0.5, -(objects.top.TextBounds.Y + 2)))
+                local origin = self.options.tracerOrigin;
+                local show = canShow and enabled;
 
-                objects.side.Visible = show and self.options.healthText
-                objects.side.Font = self.options.font
-                objects.side.Size = self.options.fontSize
-                objects.side.Transparency = self.options.healthTextTransparency
-                objects.side.Color = color or self.options.healthTextColor
-                objects.side.Text = health .. self.options.healthTextSuffix
-                objects.side.Position = round(position + vector2New(size.X + 3, -3))
+                objects.arrow.Visible = (not canShow and enabled) and self.options.outOfViewArrows;
+                objects.arrow.Filled = self.options.outOfViewArrowsFilled;
+                objects.arrow.Transparency = self.options.outOfViewArrowsTransparency;
+                objects.arrow.Color = color or self.options.outOfViewArrowsColor;
+                objects.arrow.PointA = pointA;
+                objects.arrow.PointB = pointB;
+                objects.arrow.PointC = pointC;
 
-                objects.bottom.Visible = show and self.options.distance
-                objects.bottom.Font = self.options.font
-                objects.bottom.Size = self.options.fontSize
-                objects.bottom.Transparency = self.options.distanceTransparency
-                objects.bottom.Color = color or self.options.nameColor
-                objects.bottom.Text = tostring(round(distance)) .. self.options.distanceSuffix
-                objects.bottom.Position = round(position + vector2New(size.X * 0.5, size.Y + 1))
+                objects.arrowOutline.Visible = (not canShow and enabled) and self.options.outOfViewArrowsOutline;
+                objects.arrowOutline.Filled = self.options.outOfViewArrowsOutlineFilled;
+                objects.arrowOutline.Transparency = self.options.outOfViewArrowsOutlineTransparency;
+                objects.arrowOutline.Color = color or self.options.outOfViewArrowsOutlineColor;
+                objects.arrowOutline.PointA = pointA;
+                objects.arrowOutline.PointB = pointB;
+                objects.arrowOutline.PointC = pointC;
 
-                -- Bounding box rendering
-                objects.box.Visible = show and self.options.boxes
-                objects.box.Color = color or self.options.boxesColor
-                objects.box.Transparency = self.options.boxesTransparency
-                objects.box.Size = size
-                objects.box.Position = position
+                objects.top.Visible = show and self.options.names;
+                objects.top.Font = self.options.font;
+                objects.top.Size = self.options.fontSize;
+                objects.top.Transparency = self.options.nameTransparency;
+                objects.top.Color = color or self.options.nameColor;
+                objects.top.Text = player.Name;
+                objects.top.Position = round(position + vector2New(size.X * 0.5, -(objects.top.TextBounds.Y + 2)));
 
-                -- Box outline
-                objects.boxOutline.Visible = show and self.options.boxes
-                objects.boxOutline.Transparency = self.options.boxesTransparency
-                objects.boxOutline.Size = size
-                objects.boxOutline.Position = position
+                objects.side.Visible = show and self.options.healthText;
+                objects.side.Font = self.options.font;
+                objects.side.Size = self.options.fontSize;
+                objects.side.Transparency = self.options.healthTextTransparency;
+                objects.side.Color = color or self.options.healthTextColor;
+                objects.side.Text = health .. self.options.healthTextSuffix;
+                objects.side.Position = round(position + vector2New(size.X + 3, -3));
 
-                -- Box fill
-                objects.boxFill.Visible = show and self.options.boxFill
-                objects.boxFill.Color = color or self.options.boxFillColor
-                objects.boxFill.Transparency = self.options.boxFillTransparency
-                objects.boxFill.Size = size
-                objects.boxFill.Position = position
+                objects.bottom.Visible = show and self.options.distance;
+                objects.bottom.Font = self.options.font;
+                objects.bottom.Size = self.options.fontSize;
+                objects.bottom.Transparency = self.options.distanceTransparency;
+                objects.bottom.Color = color or self.options.nameColor;
+                objects.bottom.Text = tostring(round(distance)) .. self.options.distanceSuffix;
+                objects.bottom.Position = round(position + vector2New(size.X * 0.5, size.Y + 1));
 
-                -- Health bar rendering
-                objects.healthBar.Visible = show and self.options.healthBars
-                objects.healthBar.Color = color or self.options.healthBarsColor
-                objects.healthBar.Transparency = self.options.healthBarsTransparency
-                objects.healthBar.Size = healthBarSize
-                objects.healthBar.Position = healthBarPosition
+                objects.box.Visible = show and self.options.boxes;
+                objects.box.Color = color or self.options.boxesColor;
+                objects.box.Transparency = self.options.boxesTransparency;
+                objects.box.Size = size;
+                objects.box.Position = position;
 
-                objects.healthBarOutline.Visible = show and self.options.healthBars
-                objects.healthBarOutline.Transparency = self.options.healthBarsTransparency
-                objects.healthBarOutline.Size = round(vector2New(healthBarSize.X, -size.Y) + vector2New(2, -2))
-                objects.healthBarOutline.Position = healthBarPosition - vector2New(1, -1)
+                objects.boxOutline.Visible = show and self.options.boxes;
+                objects.boxOutline.Transparency = self.options.boxesTransparency;
+                objects.boxOutline.Size = size;
+                objects.boxOutline.Position = position;
 
-                -- Tracer line
-                objects.line.Visible = show and self.options.tracers
-                objects.line.Color = color or self.options.tracerColor
-                objects.line.Transparency = self.options.tracerTransparency
-                objects.line.From = origin == "Mouse" and userInputService:GetMouseLocation() or origin == "Top" and vector2New(viewportSize.X * 0.5, 0) or vector2New(viewportSize.X * 0.5, viewportSize.Y)
-                objects.line.To = torsoPosition
+                objects.boxFill.Visible = show and self.options.boxFill;
+                objects.boxFill.Color = color or self.options.boxFillColor;
+                objects.boxFill.Transparency = self.options.boxFillTransparency;
+                objects.boxFill.Size = size;
+                objects.boxFill.Position = position;
+
+                objects.healthBar.Visible = show and self.options.healthBars;
+                objects.healthBar.Color = color or self.options.healthBarsColor;
+                objects.healthBar.Transparency = self.options.healthBarsTransparency;
+                objects.healthBar.Size = healthBarSize;
+                objects.healthBar.Position = healthBarPosition;
+
+                objects.healthBarOutline.Visible = show and self.options.healthBars;
+                objects.healthBarOutline.Transparency = self.options.healthBarsTransparency;
+                objects.healthBarOutline.Size = round(vector2New(healthBarSize.X, -size.Y) + vector2New(2, -2));
+                objects.healthBarOutline.Position = healthBarPosition - vector2New(1, -1);
+
+                objects.line.Visible = show and self.options.tracers;
+                objects.line.Color = color or self.options.tracerColor;
+                objects.line.Transparency = self.options.tracerTransparency;
+                objects.line.From =
+                    origin == "Mouse" and userInputService:GetMouseLocation() or
+                    origin == "Top" and vector2New(viewportSize.X * 0.5, 0) or
+                    origin == "Bottom" and vector2New(viewportSize.X * 0.5, viewportSize.Y);
+                objects.line.To = torsoPosition;
             else
                 for _, object in next, objects do
-                    object.Visible = false
+                    object.Visible = false;
                 end
             end
         end
