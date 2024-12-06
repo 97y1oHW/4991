@@ -5872,6 +5872,32 @@ aimUpdateInterval = Value
     end
 })
 
+-- Library functions
+-- Sets the watermark visibility
+Library:SetWatermarkVisibility(true)
+
+-- Example of dynamically-updating watermark with common traits (fps and ping)
+FrameTimer = tick()
+ FrameCounter = 0;
+ FPS = 60;
+
+ WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+    FrameCounter += 1;
+
+    if (tick() - FrameTimer) >= 1 then
+        FPS = FrameCounter;
+        FrameTimer = tick();
+        FrameCounter = 0;
+    end;
+
+    Library:SetWatermark(('Nexify | Project Dildo | %s fps | %s ms'):format(
+        math.floor(FPS),
+        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
+    ));
+end);
+
+Library.KeybindFrame.Visible = true; -- todo: add a function for this
+
 aimtab:AddSlider('Silent Aim Resp Sped', {
     Text = 'Silent Aim Response Speed',
     Default = 0.04,
