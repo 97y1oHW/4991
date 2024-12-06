@@ -5880,6 +5880,21 @@ aimUpdateInterval = Value
     end
 })
 
+aimtab:AddSlider('Silent Aim Resp Sped', {
+    Text = 'Silent Aim Response Speed',
+    Default = 0.04,
+    Min = 0.01,
+    Max = 0.10,
+    Risky = true,
+    Rounding = 10,
+    Compact = false,
+
+    Callback = function(Value)
+--aimUpdateInterval = Value
+
+    end
+})
+
 -- GUI Toggle for Silent Aim
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
@@ -6256,8 +6271,8 @@ charactertab:AddSlider('speedhack', {
     Text = 'Player Speed',
     Default = 17,
     Min = 16,
-    Max = 30,
-    Rounding = 1,
+    Max = 30.1,
+    Rounding = 2,
     Compact = true
 }):OnChanged(function(value)
     getgenv().speedMultiplier = value -- Set global speed value from slider
