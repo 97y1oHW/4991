@@ -6001,6 +6001,52 @@ aimtab:AddToggle('fovdisplay', {
     end
 })
 
+aimtab:AddSlider('Fov Thickness Slider', {
+    Text = 'Fov Thickness Slider',
+    Default = 2,
+    Min = 1,
+    Max = 4,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+
+fovCircle.Thickness = Value
+
+
+    end
+})
+
+aimtab:AddSlider('Fov Transparency', {
+    Text = 'Fov Transparency',
+    Default = 1,
+    Min = 0.1,
+    Max = 1,
+    Rounding = 2,
+    Compact = false,
+
+    Callback = function(Value)
+
+fovCircle.Transparency = Value
+
+
+    end
+})
+
+-- Add a toggle for enabling/disabling the FOV display
+aimtab:AddToggle('fovcirclefilled', {
+    Text = 'Fill Fov Circle',
+    Tooltip = 'Fill Fov Circle',
+    Default = false,
+    Callback = function(Value)
+
+fovCircle.Filled = Value
+
+    end
+})
+
+ 
+
 -- Add a toggle for enabling/disabling the FOV display
 aimtab:AddToggle('toggletracerssnap', {
     Text = 'Toggle Snaplines',
