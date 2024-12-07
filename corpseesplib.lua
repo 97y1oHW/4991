@@ -1,7 +1,7 @@
 local corpseEspLibrary = {
     corpseCache = {},
     options = {
-        enabled = false,
+        enabled = true,
         corpseColor = Color3.new(1, 0, 0),
         distanceColor = Color3.new(1, 1, 1),
         bracketColor = Color3.new(1, 0.84, 0),
@@ -9,7 +9,8 @@ local corpseEspLibrary = {
         font = 3,
         maxDistance = 500,
         updateInterval = 0.2,
-        limitDistance = true
+        limitDistance = true,
+        corpsePersistTime = 600 -- Set this to the number of seconds (e.g., 8 seconds)
     }
 }
 
@@ -59,7 +60,8 @@ function corpseEspLibrary.addCorpse(corpse)
             Outline = true,
             Font = corpseEspLibrary.options.font,
             Color = corpseEspLibrary.options.bracketColor
-        })
+        }),
+        addedTime = os.clock() -- Track the time when the corpse was added
     }
 
     corpseEspLibrary.corpseCache[corpse] = esp
@@ -77,41 +79,44 @@ function corpseEspLibrary.removeCorpse(corpse)
 end
 
 function corpseEspLibrary.update()
+    local currentTime = os.clock()
+
     for corpse, esp in pairs(corpseEspLibrary.corpseCache) do
-        if not corpse or not corpse.Parent then
-            corpseEspLibrary.removeCorpse(corpse)
-        else
-            local rootPart = corpse:FindFirstChild("HumanoidRootPart")
-            if rootPart then
-                local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(rootPart.Position)
-                local distance = (workspace.CurrentCamera.CFrame.Position - rootPart.Position).Magnitude
+        local rootPart = corpse:FindFirstChild("HumanoidRootPart")
+        if rootPart then
+            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(rootPart.Position)
+            local distance = (workspace.CurrentCamera.CFrame.Position - rootPart.Position).Magnitude
 
-                if onScreen and (not corpseEspLibrary.options.limitDistance or distance <= corpseEspLibrary.options.maxDistance) then
-                    local yOffset = 0
+            if onScreen and (not corpseEspLibrary.options.limitDistance or distance <= corpseEspLibrary.options.maxDistance) then
+                local yOffset = 0
 
-                    esp.nameText.Visible = true
-                    esp.nameText.Text = corpse.Name
-                    esp.nameText.Position = Vector2.new(screenPos.X, screenPos.Y + yOffset)
-                    yOffset = yOffset + 15
+                esp.nameText.Visible = true
+                esp.nameText.Text = corpse.Name
+                esp.nameText.Position = Vector2.new(screenPos.X, screenPos.Y + yOffset)
+                yOffset = yOffset + 15
 
-                    esp.leftBracket.Visible = true
-                    esp.leftBracket.Text = "["
-                    esp.leftBracket.Position = Vector2.new(screenPos.X - 50, screenPos.Y + yOffset)
+                esp.leftBracket.Visible = true
+                esp.leftBracket.Text = "["
+                esp.leftBracket.Position = Vector2.new(screenPos.X - 50, screenPos.Y + yOffset)
 
-                    esp.distanceText.Visible = true
-                    esp.distanceText.Text = string.format("%d studs", math.floor(distance))
-                    esp.distanceText.Position = Vector2.new(screenPos.X, screenPos.Y + yOffset)
+                esp.distanceText.Visible = true
+                esp.distanceText.Text = string.format("%d studs", math.floor(distance))
+                esp.distanceText.Position = Vector2.new(screenPos.X, screenPos.Y + yOffset)
 
-                    esp.rightBracket.Visible = true
-                    esp.rightBracket.Text = "]"
-                    esp.rightBracket.Position = Vector2.new(screenPos.X + 50, screenPos.Y + yOffset)
-                else
-                    esp.nameText.Visible = false
-                    esp.leftBracket.Visible = false
-                    esp.distanceText.Visible = false
-                    esp.rightBracket.Visible = false
-                end
+                esp.rightBracket.Visible = true
+                esp.rightBracket.Text = "]"
+                esp.rightBracket.Position = Vector2.new(screenPos.X + 50, screenPos.Y + yOffset)
+            else
+                esp.nameText.Visible = false
+                esp.leftBracket.Visible = false
+                esp.distanceText.Visible = false
+                esp.rightBracket.Visible = false
             end
+        end
+
+        -- Remove the corpse ESP after `corpsePersistTime` seconds
+        if currentTime - esp.addedTime > corpseEspLibrary.options.corpsePersistTime then
+            corpseEspLibrary.removeCorpse(corpse)
         end
     end
 end
