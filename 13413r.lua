@@ -573,7 +573,7 @@ local updatenote = "new silent"
 local versionInFile = readfile(filePath)
 
 -- Local variable for the current version (you change this manually to simulate updates)
-local version = "v35"  -- You can set this to the version you want to check
+local version = "v36"  -- You can set this to the version you want to check
 
 -- Check if the version in the file matches the local version
 if versionInFile == version then
