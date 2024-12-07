@@ -2870,6 +2870,21 @@ corpseesplib3.limitDistance = value
     end
 })
 
+WorldTab:AddSlider('Corpse Persist Time', {
+    Text = 'Corpse Persist Time',
+    Default = 600,
+    Min = 100,
+    Max = 1000,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        
+corpseesplib3.corpsePersistTime = Value
+
+    end
+})	
+
 WorldTab:AddSlider('Max Distance', {
     Text = 'Max Distance',
     Default = 500,
