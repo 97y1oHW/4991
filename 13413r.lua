@@ -3806,6 +3806,127 @@ local function printFolderNames(parent)
     end
 end
 
+
+ player = game.Players.LocalPlayer
+ mouse = player:GetMouse()
+ ReplicatedStorage = game:GetService("ReplicatedStorage")
+ RunService = game:GetService("RunService")
+UserInputService = game:GetService("UserInputService")  -- Corrected this line
+
+-- Create a simple GUI to display inventory
+screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+ frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 300)  -- Adjust the size of the frame
+frame.Position = UDim2.new(0, 45, 0, 10)  -- Position the frame in the corner of the screen
+frame.BackgroundTransparency = 1
+frame.Visible = false  -- Make it visible initially
+frame.Parent = screenGui
+
+ textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, 0, 1, 0)
+textLabel.Position = UDim2.new(0, 0, 0, 0)
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
+textLabel.TextSize = 14  -- Smaller text size
+textLabel.Font = Enum.Font.Code  -- Set font to "Code" (Font ID 2)
+textLabel.BackgroundTransparency = 1
+textLabel.Text = "=== Inventory Viewer ==="
+textLabel.Parent = frame
+
+-- Variable to toggle the display on/off
+ isInventoryViewerActive = false
+
+-- Function to get closest player to the mouse position
+function getClosestPlayer()
+    local closestPlayer = nil
+    local shortestDistance = math.huge
+
+    for _, plr in pairs(game.Players:GetPlayers()) do
+        if plr ~= player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (plr.Character.HumanoidRootPart.Position - mouse.Hit.p).Magnitude
+            if distance < shortestDistance then
+                closestPlayer = plr
+                shortestDistance = distance
+            end
+        end
+    end
+
+    return closestPlayer
+end
+
+-- Function to update inventory and clothing display
+function updateInventoryDisplay(playerName)
+    local closestPlayer = game.Players:FindFirstChild(playerName)
+    if closestPlayer and closestPlayer.Character then
+        local inventory = ReplicatedStorage.Players:FindFirstChild(closestPlayer.Name).Inventory
+        local clothing = ReplicatedStorage.Players:FindFirstChild(closestPlayer.Name).Clothing
+
+        if inventory or clothing then
+            local inventoryText = "=== Inventory Viewer ===\n" .. closestPlayer.Name .. "'s Inventory\n\n"
+            local itemsFound = false
+
+            -- Check if there are any items in the inventory
+            if inventory then
+                inventoryText = inventoryText .. "Inventory:\n"
+                for _, itemName in pairs(inventory:GetChildren()) do
+                    if itemName:IsA("StringValue") then
+                        inventoryText = inventoryText .. itemName.Name .. "\n"
+                        itemsFound = true
+                    end
+                end
+            end
+
+            -- Check if there are any clothing items
+            if clothing then
+                inventoryText = inventoryText .. "\nClothing:\n\n"
+                for _, clothingItem in pairs(clothing:GetChildren()) do
+                    if clothingItem:IsA("StringValue") then
+                        inventoryText = inventoryText .. clothingItem.Name .. "\n"
+                        itemsFound = true
+                    end
+                end
+            end
+
+            -- If no items are found in either inventory or clothing, display "Empty"
+            if not itemsFound then
+                inventoryText = inventoryText .. "Empty"
+            end
+
+            textLabel.Text = inventoryText
+        else
+            textLabel.Text = "No inventory or clothing found."
+        end
+    else
+        textLabel.Text = "No player found."
+    end
+end
+
+-- Toggle function to turn the inventory viewer on or off
+function toggleInventoryViewer()
+    isInventoryViewerActive = not isInventoryViewerActive
+    frame.Visible = isInventoryViewerActive  -- Show/hide the frame based on the toggle
+end
+
+
+
+-- Use RunService.Heartbeat to update continuously when active
+RunService.Heartbeat:Connect(function()
+    if isInventoryViewerActive then
+        local closestPlayer = getClosestPlayer()
+        if closestPlayer then
+            -- If a player is found, update the inventory display
+            updateInventoryDisplay(closestPlayer.Name)
+        else
+            -- If no player is found, hide the GUI
+            textLabel.Text = "No player found."
+        end
+    end
+end)
+
+
+
+
 -- Example usage
 local directory = game.ReplicatedStorage.Clans -- or any other parent instance
 
@@ -6040,6 +6161,16 @@ toggleAim()
     Callback = function(Value)
         -- Optionally handle key bindings here
     end,
+})
+
+aimtab:AddToggle('Inventory Viewer', {
+    Text = 'Inventory Viewer',
+    Default = false,
+    Risky = true,
+    Tooltip = 'Displays Inventory',
+    Callback = function(first)
+        toggleInventoryViewer()
+    end
 })
 
 aimtab:AddDropdown('Silentaimhitset2', {
