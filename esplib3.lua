@@ -455,7 +455,7 @@ function espLibrary:Load(renderValue)
 
                 local pointA, pointB, pointC = arrowPosition, screenCenter + arrowDirection * (arrowRadius - arrowSize) + rightVector * arrowSize, screenCenter + arrowDirection * (arrowRadius - arrowSize) + -rightVector * arrowSize;
 
-                local health, maxHealth = self.getHealth(player, character);
+                local health, maxHealth = self.getHealth(player, character); do if health < 0 then health = 0 end; end;
                 local healthBarSize = round(vector2New(self.options.healthBarsSize, -(size.Y * (health / maxHealth))));
                 local healthBarPosition = round(vector2New(position.X - (3 + healthBarSize.X), position.Y + size.Y));
 
