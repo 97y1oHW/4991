@@ -463,6 +463,7 @@ print("int")
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
+corpseesplib3 = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/corpseesplib.lua'), true))()
 originalLoadstring = loadstring
 --[[
  license_key = "BYPASSED LIC KEY"
@@ -2849,6 +2850,112 @@ movetab:AddButton('no fog', function()
  end
  end)
 
+WorldTab:AddToggle('Corpse Esp', {
+    Text = 'Corpse Esp',
+    Default = false,
+    Callback = function(value)
+
+corpseesplib3.enabled = value
+
+    end
+})
+
+WorldTab:AddToggle('Limit Distance', {
+    Text = 'Limit Distance Toggle',
+    Default = true,
+    Callback = function(value)
+
+corpseesplib3.limitDistance = value
+
+    end
+})
+
+WorldTab:AddSlider('Max Distance', {
+    Text = 'Max Distance',
+    Default = 500,
+    Min = 100,
+    Max = 790,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        
+corpseesplib3.maxDistance = Value
+
+    end
+})
+WorldTab:AddSlider('Font Size', {
+    Text = 'Font Size',
+    Default = 13,
+    Min = 5,
+    Max = 30,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        
+corpseesplib3.textSize = Value
+
+    end
+})
+
+WorldTab:AddSlider('Update Interval qfaf', {
+    Text = 'Update Interval Corpse Esp',
+    Default = 0.2,
+    Min = 0.01,
+    Max = 1,
+    Rounding = 2,
+    Compact = false,
+
+    Callback = function(Value)
+        
+corpseesplib3.updateInterval = Value
+
+    end
+})
+
+-- New code for Ambient Color Picker
+WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
+    Default = Color3.new(1, 0, 0), -- Default to the current ambient color
+    Title = 'Corpse Color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        corpseesplib3.corpseColor = Value
+    end
+})
+
+WorldTab:AddLabel('Distance Color'):AddColorPicker('Distance Color', {
+    Default = Color3.new(1, 1, 1), -- Default to the current ambient color
+    Title = 'Distance Color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        corpseesplib3.distanceColor = Value
+    end
+})
+
+WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
+    Default = Color3.new(1, 0, 0), -- Default to the current ambient color
+    Title = 'Corpse Color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        corpseesplib3.corpseColor = Value
+    end
+})
+
+WorldTab:AddLabel('Bracket Color'):AddColorPicker('Bracket Color', {
+    Default = Color3.new(1, 0, 0), -- Default to the current ambient color
+    Title = 'Bracket Color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        corpseesplib3.bracketColor = Value
+    end
+})
+
+--7133
 WorldTab:AddToggle('cartpfurther', { Text = 'teleport most far car', Default = false })
 WorldTab:AddButton("Car Teleport", function()
     if not plr.Character then return Library:Notify("no character") end
