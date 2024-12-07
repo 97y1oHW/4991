@@ -1,7 +1,7 @@
 local corpseEspLibrary = {
     corpseCache = {},
     options = {
-        enabled = true,
+        enabled = false,
         corpseColor = Color3.new(1, 0, 0),
         distanceColor = Color3.new(1, 1, 1),
         bracketColor = Color3.new(1, 0.84, 0),
