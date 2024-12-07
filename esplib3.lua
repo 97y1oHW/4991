@@ -617,18 +617,3 @@ function espLibrary:Load(renderValue)
 end
 
 return espLibrary;
-
-
--- Function to update health bar with color and text
-local function updateHealthBar(health, maxHealth, bar)
-    local healthPercentage = math.clamp(health / maxHealth, 0, 1) -- Normalize health between 0 and 1
-    local displayHealth = math.floor(health + 0.5) -- Round health to the nearest whole number
-
-    -- Update the text display with simplified health
-    bar.Text = tostring(displayHealth)
-
-    -- Smooth color transition: Green -> Yellow -> Red
-    local red = (1 - healthPercentage) * 255
-    local green = healthPercentage * 255
-    bar.BackgroundColor3 = Color3.fromRGB(math.floor(red), math.floor(green), 0)
-end
