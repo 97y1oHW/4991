@@ -568,7 +568,7 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  -- Create file with initial version (v17)
 end
-local updatenote = "new silent"
+local updatenote = "bug fix"
 -- Read the content of the file (current version stored in the file)
 local versionInFile = readfile(filePath)
 
