@@ -1,19 +1,18 @@
 local corpseEspLibrary = {
     corpseCache = {},
     options = {
-        enabled = true,
-        corpseColor = Color3.new(1, 0, 0), -- Red for the name text
-        distanceColor = Color3.new(1, 1, 1), -- White for distance number
-        bracketColor = Color3.new(1, 0.84, 0), -- Gold yellow for brackets
+        enabled = false,
+        corpseColor = Color3.new(1, 0, 0),
+        distanceColor = Color3.new(1, 1, 1),
+        bracketColor = Color3.new(1, 0.84, 0),
         textSize = 13,
-        font = 3, -- Font style
-        maxDistance = 500, -- Maximum distance to render corpses
-        updateInterval = 0.2, -- Update corpses every 0.2 seconds
+        font = 3,
+        maxDistance = 500,
+        updateInterval = 0.2,
         limitDistance = true
     }
 }
 
--- Utilities
 local function createDrawing(type, properties)
     local drawing = Drawing.new(type)
     for property, value in pairs(properties or {}) do
@@ -88,30 +87,25 @@ function corpseEspLibrary.update()
                 local distance = (workspace.CurrentCamera.CFrame.Position - rootPart.Position).Magnitude
 
                 if onScreen and (not corpseEspLibrary.options.limitDistance or distance <= corpseEspLibrary.options.maxDistance) then
-                    local yOffset = 0 -- Adjusts vertical spacing
+                    local yOffset = 0
 
-                    -- Name Text
                     esp.nameText.Visible = true
                     esp.nameText.Text = corpse.Name
                     esp.nameText.Position = Vector2.new(screenPos.X, screenPos.Y + yOffset)
-                    yOffset = yOffset + 15 -- Offset for the next line
+                    yOffset = yOffset + 15
 
-                    -- Left Bracket
                     esp.leftBracket.Visible = true
                     esp.leftBracket.Text = "["
                     esp.leftBracket.Position = Vector2.new(screenPos.X - 50, screenPos.Y + yOffset)
 
-                    -- Distance Text
                     esp.distanceText.Visible = true
                     esp.distanceText.Text = string.format("%d studs", math.floor(distance))
                     esp.distanceText.Position = Vector2.new(screenPos.X, screenPos.Y + yOffset)
 
-                    -- Right Bracket
                     esp.rightBracket.Visible = true
                     esp.rightBracket.Text = "]"
                     esp.rightBracket.Position = Vector2.new(screenPos.X + 50, screenPos.Y + yOffset)
                 else
-                    -- Hide all ESP elements if not visible
                     esp.nameText.Visible = false
                     esp.leftBracket.Visible = false
                     esp.distanceText.Visible = false
@@ -130,7 +124,6 @@ function corpseEspLibrary.scanForCorpses()
     end
 end
 
--- Main Loop
 local lastUpdate = 0
 game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
     if corpseEspLibrary.options.enabled then
