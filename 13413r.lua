@@ -133,7 +133,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
-
+--[[
 
 originalLoadstring = loadstring
 originalGetMetatable = getmetatable
@@ -263,7 +263,7 @@ spawn(function()
         wait(1) 
     end
 end)
-
+--]]
 
 
 
