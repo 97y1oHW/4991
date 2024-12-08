@@ -3220,6 +3220,16 @@ Misc:AddSlider('fpslimiter', {
     setfpscap(State)
 end)
 
+Misc:AddToggle('Refresh Silent Aim', {
+    Text = 'Refresh Silent Aim Module',
+    Default = true,
+    Risky = true,
+    Callback = function(isEnabled)
+        
+--lol
+
+    end
+})
 
 Misc:AddButton('Rejoin⚡', function()
     if #plrs:GetPlayers() <= 1 then
@@ -4329,6 +4339,128 @@ aimtab:AddSlider('RecoilStrength', {
             v:SetAttribute("RecoilStrength", State)
         end
     end
+end)
+
+-- Load Services
+ Players = game:GetService("Players")
+ RunService = game:GetService("RunService")
+ UserInputService = game:GetService("UserInputService")
+ Workspace = game:GetService("Workspace")
+
+-- Variables
+ watchingPlayerName = "nobody"
+ isWatching = false
+ watchConnection = nil
+ draggableCamera = false
+
+-- Function to populate player names
+ function getPlayerNames()
+    local names = {"nobody"} -- Add "nobody" as the default option
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(names, player.Name)
+    end
+    return names
+end
+
+-- Function to start watching a player
+ function startWatching(playerName)
+    if playerName == "nobody" then
+        return
+    end
+
+    local targetPlayer = Players:FindFirstChild(playerName)
+    if not targetPlayer then
+        warn("Player not found: " .. playerName)
+        return
+    end
+
+    local targetCharacter = targetPlayer.Character
+    if not targetCharacter then
+        warn("Target player's character not found.")
+        return
+    end
+
+    local targetHumanoidRootPart = targetCharacter:WaitForChild("HumanoidRootPart")
+    isWatching = true
+    Workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+
+    watchConnection = RunService.RenderStepped:Connect(function()
+        if targetHumanoidRootPart and isWatching and not draggableCamera then
+            Workspace.CurrentCamera.CFrame = CFrame.new(targetHumanoidRootPart.Position + Vector3.new(0, 10, -10), targetHumanoidRootPart.Position)
+        end
+    end)
+end
+
+-- Function to stop watching
+ function stopWatching()
+    if isWatching then
+        isWatching = false
+        draggableCamera = false
+        if watchConnection then
+            watchConnection:Disconnect()
+            watchConnection = nil
+        end
+        Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom -- Reset camera
+    end
+end
+
+-- Function to refresh dropdown values
+ function refreshDropdown(dropdown)
+    dropdown:Update({
+        Values = getPlayerNames(),
+    })
+end
+
+-- Add the dropdown
+movetab:AddDropdown('Player Watcher', {
+    Values = getPlayerNames(),
+    Default = 1,
+    Multi = false,
+    Text = 'Player Watcher',
+    Tooltip = 'Press B to Unwatch',
+    Callback = function(state)
+        watchingPlayerName = state
+        stopWatching() -- Stop any ongoing watch
+        if state ~= "nobody" then
+            startWatching(state)
+        end
+    end
+})
+
+-- Key Detection for Stopping and Draggable Mode
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then
+        return
+    end
+
+    -- Toggle draggable camera mode with mouse button
+    if isWatching and (input.UserInputType == Enum.UserInputType.MouseButton2) then
+        draggableCamera = true
+        Workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+    elseif isWatching and input.KeyCode == Enum.KeyCode.B then
+        stopWatching()
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input, gameProcessed)
+    if gameProcessed then
+        return
+    end
+
+    -- Disable draggable camera mode when mouse button is released
+    if isWatching and (input.UserInputType == Enum.UserInputType.MouseButton2) then
+        draggableCamera = false
+        Workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+    end
+end)
+
+-- Refresh dropdown whenever a player joins or leaves
+Players.PlayerAdded:Connect(function()
+    refreshDropdown(movetab.Dropdown.PlayerWatcher)
+end)
+
+Players.PlayerRemoving:Connect(function()
+    refreshDropdown(movetab.Dropdown.PlayerWatcher)
 end)
 
 
