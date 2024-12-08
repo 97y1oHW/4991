@@ -1730,6 +1730,10 @@ counter = counter + 1
 do
 counter4= "X1"
 print("repo ok")
+
+
+
+end
 local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
 print("repo ok2")
 print(counter4)
@@ -1750,8 +1754,6 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 print("1")
 local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
 print("1")
-
-end
 print('sucker_' .. tostring(counter))
 counter = counter + 1
 local Window = Library:CreateWindow({
@@ -1771,8 +1773,41 @@ local Tabs = {
     Visuals = Window:AddTab('esp 👤'),
     Misc = Window:AddTab('Misc 🔅'),
     Lua = Window:AddTab('Other 🛠️'),
-    Settings = Window:AddTab('Settings 🎚️'),
+    ['UI Settings'] = Window:AddTab('UI Settings'),
+  --  Settings = Window:AddTab('Settings 🎚️'),
 }
+
+MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
+
+
+ThemeManager:SetLibrary(Library)
+SaveManager:SetLibrary(Library)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- Adds our MenuKeybind to the ignore list
+-- (do you want each config to have a different menu key? probably not.)
+
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+ThemeManager:SetFolder('Nexify')
+SaveManager:SetFolder('Nexify/ProjectDildo')
+
+-- Builds our config menu on the right side of our tab
+SaveManager:BuildConfigSection(Tabs['UI Settings'])
+
+-- Builds our theme menu (with plenty of built in themes) on the left side
+-- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
+ThemeManager:ApplyToTab(Tabs['UI Settings'])
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
+
 
 
 --CYqXb6TX
@@ -2827,7 +2862,7 @@ counter = counter + 1
 local WorldTab = Visuals:AddTab('world')
 local Misc = Tabs.Misc:AddLeftGroupbox('misc1')
 local movetab = Tabs.Misc:AddRightGroupbox('misc2')
-local Settings = Tabs.Settings:AddLeftGroupbox('Settings')
+--local Settings = Tabs.Settings:AddLeftGroupbox('Settings')
 local luatab = Tabs.Lua:AddRightGroupbox('dogelua');
 do
     local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
@@ -6157,6 +6192,16 @@ aimtab:AddSlider('Silent Aim Resp Sped', {
 
     end
 })
+
+
+print("ignore theme settings")
+
+
+
+-- Builds our config menu on the right side of our tab
+
+
+
 
 -- GUI Toggle for Silent Aim
 aimtab:AddToggle('silentAim994', {
@@ -13061,57 +13106,3 @@ end
 
 -- Start the process
 startTeleportationChecks()
-
-
-print("repo ok")
-local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
-print("repo ok2")
-print("esplib ok")
-print("1")
-local Library = loadstring(game:HttpGet(repo .. 'libbet.lua'))()
-print("1")
-local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
-print("1")
-local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
-print("1")
-
-print("ok")
-print("initializing final codes")
--- Hand the library over to our managers
-ThemeManager:SetLibrary(Library)
-print("set library")
-SaveManager:SetLibrary(Library)
-print("set library 2")
-
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
-SaveManager:IgnoreThemeSettings()
-print("ignore theme settings")
-function coerrore2()
-
-error("CPD FAIL")
-error("TEL6")
-
-end
-
-coroutine.wrap(coerrore2)
-
--- and game configs in a separate folder per game
-ThemeManager:SetFolder('nexifysolara')
-SaveManager:SetFolder('nexifysolara')
-print("created folders")
-
--- Builds our config menu on the right side of our tab
-
-SaveManager:BuildConfigSection(Tabs['Settings'])
--- Builds our theme menu (with plenty of built in themes) on the left side
--- NOTE: you can also call ThemeManager:ApplyToGroupbox to add it to a specific groupbox
-print("attempt to build config secc")
-
-
-
-ThemeManager:ApplyToTab(Tabs['Settings'])
-print("attempt to apply to tab")
-
-
-print("reached to end succ")
