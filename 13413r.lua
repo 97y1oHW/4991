@@ -571,12 +571,12 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  
 end
-local updatenote = "no"
+local updatenote = "esp adjustments"
 
 local versionInFile = readfile(filePath)
 
 
-local version = "v37"  
+local version = "v40"  
 
 
 if versionInFile == version then
@@ -2231,11 +2231,69 @@ EnemyEspTab:AddToggle('boxswitch', {
     end
 })
 
+EnemyEspTab:AddToggle('Outofviewarrors', {
+    Text = 'Out Of View Arrows',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.outOfViewArrows = enabled
+    end
+})
+
+EnemyEspTab:AddToggle('Outofviewarrors', {
+    Text = 'Out Of View Arrows Filled',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.outOfViewArrowsFilled = enabled
+    end
+})
+
+EnemyEspTab:AddSlider('outofviewarrorsslider', {
+    Text = 'Out Of View Arrows Size',
+    Default = 25,
+    Min = 5,
+    Max = 40,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.outOfViewArrowsSize = Value
+        
+    end
+})
+
+EnemyEspTab:AddSlider('outofviewarrorssliderRadius', {
+    Text = 'Out Of View Arrows Radius',
+    Default = 100,
+    Min = 20,
+    Max = 500,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.outOfViewArrowsRadius = Value
+        
+    end
+})
+
+EnemyEspTab:AddSlider('outofviewarrorsslidertRANSPARENCY', {
+    Text = 'Out Of View Arrows Transparency',
+    Default = 0.5,
+    Min = 0.1,
+    Max = 1,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.outOfViewArrowsTransparency = Value
+        
+    end
+})
+
 EnemyEspTab:AddToggle('visiblecheck', {
     Text = 'Visible Check',
     Default = false,
     Callback = function(enabled)
-        espLib.options.visibleOnly = enabled
+      --  espLib.options.visibleOnly = enabled
     end
 })
 
@@ -2928,6 +2986,22 @@ movetab:AddButton('no fog', function()
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
  end
  end)
+
+WorldTab:AddToggle('Outofviewarrowsoutline', {
+    Text = 'Out Of View Arrows Outline',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.outOfViewArrowsOutline = enabled
+    end
+})
+
+WorldTab:AddToggle('OutofviewarrowsFilled', {
+    Text = 'Out Of View Arrows Filled',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.outOfViewArrowsOutlineFilled = enabled
+    end
+})
 
 WorldTab:AddToggle('Corpse Esp', {
     Text = 'Corpse Esp',
@@ -4872,7 +4946,7 @@ end)
 
 player3es.CameraMode = Enum.CameraMode.LockFirstPerson
 
-MenuGroup:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 8.12.2024\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Solara V3", true)
+MenuGroup:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 9.12.2024\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Solara V3", true)
 
 
 
