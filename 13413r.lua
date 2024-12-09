@@ -2145,6 +2145,61 @@ end
 
 end
 
+ player = game.Players.LocalPlayer
+ camera = workspace.CurrentCamera
+
+-- Settings
+ -- Key to toggle X-Ray
+ xrayTransparency = 0.7 -- Level of transparency for X-Ray
+
+-- Function to toggle X-Ray
+ function toggleXRay(enabled)
+    for _, object in pairs(workspace:GetDescendants()) do
+        if object:IsA("BasePart") and not object:IsDescendantOf(player.Character) then
+            -- Adjust transparency
+            if enabled then
+                object.Transparency = xrayTransparency
+            else
+                object.Transparency = object:GetAttribute("OriginalTransparency") or 0
+            end
+        end
+    end
+end
+
+-- Save original transparency values
+for _, object in pairs(workspace:GetDescendants()) do
+    if object:IsA("BasePart") then
+        object:SetAttribute("OriginalTransparency", object.Transparency)
+    end
+end
+
+-- Listen for key presses to toggle X-Ray
+ xrayEnabled = false
+
+
+EnemyEspTab:AddToggle('xraythingyass', {
+    Text = 'Enable X-Ray',
+    Default = false,
+    Risky = true,
+    Callback = function(enabled)
+
+        xrayEnabled = not xrayEnabled
+        toggleXRay(xrayEnabled)
+
+
+    end
+    }):AddKeyPicker('xray', {
+    Default = 'None',
+    SyncToggleState = true,
+
+    Mode = 'Toggle',
+
+    Text = 'X-Ray Toggle Bind',
+    NoUI = false,
+
+    Callback = function(Value)
+    end,
+})
 
 EnemyEspTab:AddToggle('EspSwitch', {
     Text = 'Enable ESP',
@@ -3058,7 +3113,7 @@ end
 
 Misc:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
-    Default = 0,
+    Default = 8.1,
     Min = 0.1,
     Max = 9,
     Rounding = 1,
@@ -3072,7 +3127,7 @@ Misc:AddSlider('ZoomSlider', {
 
 
 Misc:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
-    Default = 'Z',
+    Default = 'X',
     SyncToggleState = false,
     Mode = 'Toggle',
     Text = 'Zoom Keybind',
@@ -6192,6 +6247,17 @@ aimtab:AddToggle('Inventory Viewer', {
     Callback = function(first)
         toggleInventoryViewer()
     end
+    }):AddKeyPicker('invviewerkeybind', {
+    Default = 'None',
+    SyncToggleState = true,
+
+    Mode = 'Toggle',
+
+    Text = 'Inventory Viewer Key Bind',
+    NoUI = false,
+
+    Callback = function(Value)
+    end,
 })
 
 aimtab:AddDropdown('Silentaimhitset2', {
@@ -6578,15 +6644,6 @@ charactertab:AddToggle('speed3', {
                 getgenv().speedConnection = game:GetService("RunService").Heartbeat:Connect(updateVelocity)
             end
         end
-    end
-}):AddKeyPicker('flight_key2', {
-    Default = 'nil',
-    SyncToggleState = true,
-    Mode = 'Toggle',
-    Text = 'Flight',
-    NoUI = false,
-    Callback = function(value3)
-        
     end
 })
 
