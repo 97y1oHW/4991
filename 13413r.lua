@@ -4285,9 +4285,9 @@ aimtab:AddToggle('InstantHit', {
             for _, v in pairs(ammo:GetChildren()) do
                 
                 if enabled then
-                    v:SetAttribute("MuzzleVelocity", 3200)
+                    v:SetAttribute("MuzzleVelocity", 2900)
                 else
-                    v:SetAttribute("MuzzleVelocity", 3100) 
+                    v:SetAttribute("MuzzleVelocity", 2800) 
                 end
             end
         end
