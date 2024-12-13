@@ -1732,6 +1732,19 @@ print(counter4)
 print(counter4)
 print(counter4)
 print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+print(counter4)
+texrfj="return"
+print(texrfj)
+wait(0.9)
+warn("Disabled Client Anti-Cheat Bypass")
+
 
 print("esplib ok")
 print("1")
@@ -3113,6 +3126,9 @@ WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
     end
 })
 
+
+
+
 WorldTab:AddLabel('Bracket Color'):AddColorPicker('Bracket Color', {
     Default = Color3.new(1, 0, 0), 
     Title = 'Bracket Color',
@@ -3787,6 +3803,18 @@ aimtab:AddToggle('removevisors', {
             game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = false
         else
             game.Players.LocalPlayer.PlayerGui.MainGui.MainFrame.ScreenEffects.Visible = true
+        end
+    end
+})
+
+aimtab:AddToggle('removeflashbangs', {
+    Text = 'Remove Flash Effect',
+    Default = false,
+    Callback = function(state)  
+        if state then
+            game.Players.Player.PlayerGui.MainGui.MainFrame.ScreenEffects.Flashbang.Size = UDim2.new(0,0,1,0)
+        else
+                    game.Players.Player.PlayerGui.MainGui.MainFrame.ScreenEffects.Flashbang.Size = UDim2.new(1,0,1,0)
         end
     end
 })
