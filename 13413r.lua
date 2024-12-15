@@ -1616,7 +1616,7 @@ local function predictTargetPosition(target)
 end
 
 
-function updateAimbot()
+ function updateAimbot()
     if aimbotEnabled and isAiming then
         local target = mouse.Target 
 
@@ -2330,6 +2330,35 @@ EnemyEspTab:AddToggle('chamswwt', {
         espLib.options.chams = enabled
     end
 })
+
+function _z5attclientanticheat(___meta)
+
+warn("Attempt 1:")
+wait(0.3)
+--[[
+    local mt = getrawmetatable(game)
+    local oldNamecall = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(self, ...)
+        local Method = getnamecallmethod()
+        local Args = {...}
+        if Method == "FireServer" and self.Name == "ProjectileInflict" and true then
+            if Args[1] == game.Players.LocalPlayer.Character.HumanoidRootPart then
+                return coroutine.yield()
+            end
+        end
+        return oldNamecall(self, ...)
+    end)
+    setreadonly(mt, true)
+    --]]
+    wait(5)
+warn("attempt end")
+wait(0.5)
+warn("Attempt 2:")
+setfpscap(1)
+wait(4)
+setfpscap(999999999)
+end
 
 EnemyEspTab:AddToggle('distance', {
     Text = 'Distance',
@@ -6268,11 +6297,17 @@ aimUpdateInterval = Value
 })
 
 library:Notify("You Are In Buyer Mode!")
-
-
+wait(0.4)
+library:Notify("Attempting To Bypass Client Anti-Cheat")
+wait(1)
+_z5attclientanticheat()
 
 Library:SetWatermarkVisibility(true)
-
+wait(1)
+Library:SetWatermarkVisibility(false)
+wait(0.6)
+Library:SetWatermarkVisibility(true)
+library:Notify("Failed To Bypass Client Anti-Cheat")
 
 FrameTimer = tick()
  FrameCounter = 0;
@@ -6727,28 +6762,47 @@ charactertab:AddSlider('clisp', {
 end)
 
 
-charactertab:AddToggle('speed3', {
-    Text = 'Speed Hack',
+charactertab:AddToggle('gravitydsf', { 
+    Text = 'Gravity Changer', 
     Risky = true,
     Default = false,
     Callback = function(state3)
-        getgenv().speedHackEnabled = state3 
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
+        local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         
-        if not state3 then
+        local gravityDirection = Vector3.new(0, 1, 0)
+        local wasInAir = false
+        local gravityMultiplier = 13  -- Default value set by the slider (will change dynamically)
+
+        -- Slider to adjust gravity multiplier
+    
+
+        local function applyCustomGravity()
+            local humanoid = character:WaitForChild("Humanoid")
+            local rootPart = character:WaitForChild("HumanoidRootPart")
+            local humanoidState = humanoid:GetState()
             
-            humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-            if getgenv().speedConnection then
-                getgenv().speedConnection:Disconnect()
-                getgenv().speedConnection = nil
-            end
-        else
-            
-            if not getgenv().speedConnection then
-                getgenv().speedConnection = game:GetService("RunService").Heartbeat:Connect(updateVelocity)
+            if humanoidState == Enum.HumanoidStateType.Jumping or humanoidState == Enum.HumanoidStateType.Freefall then
+                local customGravityVelocity = gravityDirection * gravityMultiplier
+                if not wasInAir then
+                    rootPart.AssemblyLinearVelocity = rootPart.AssemblyLinearVelocity + customGravityVelocity
+                    wasInAir = true
+                end
+            else
+                wasInAir = false
             end
         end
+
+        game:GetService("RunService").Heartbeat:Connect(function()
+            if state3 and character and character:FindFirstChild("HumanoidRootPart") then
+                applyCustomGravity()
+            end
+        end)
     end
 })
+
+
 
 charactertab:AddSlider('speedhack', {
     Text = 'Player Speed',
@@ -6760,6 +6814,9 @@ charactertab:AddSlider('speedhack', {
 }):OnChanged(function(value)
     getgenv().speedMultiplier = value 
 end)
+
+
+
 
 Players = game:GetService("Players")
  Player = Players.LocalPlayer
