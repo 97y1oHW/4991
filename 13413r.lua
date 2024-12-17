@@ -6201,16 +6201,17 @@ runService = game:GetService("RunService")
 
 local bulletSpeed = 1020 
 aimEnabled = false
+botAimEnabled = false
 
 lastAimedTime = 0
 aimUpdateInterval = 0.01 
+
 
 function getClosestEnemyToCrosshair()
     closestCharacter = nil
     closestDistance = math.huge
     crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
-    
     for _, otherPlayer in pairs(game.Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer.Character then
             character = otherPlayer.Character
@@ -6232,11 +6233,36 @@ function getClosestEnemyToCrosshair()
     return closestCharacter
 end
 
+
+function getClosestBotToCrosshair()
+    closestBot = nil
+    closestDistance = math.huge
+    crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+
+    for _, bot in pairs(workspace.Bots:GetChildren()) do -- Assuming bots are stored in "workspace.Bots"
+        if bot:FindFirstChild("Humanoid") and bot:FindFirstChild("HumanoidRootPart") and bot:FindFirstChild("Head") then
+            head = bot.Head
+            screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
+
+            if onScreen then
+                distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+                if distanceFromCrosshair < closestDistance then
+                    closestDistance = distanceFromCrosshair
+                    closestBot = bot
+                end
+            end
+        end
+    end
+
+    return closestBot
+end
+
+
 function aimAtClosestEnemy()
     if not aimEnabled then return end
 
     currentTime = tick()
-    if currentTime - lastAimedTime < aimUpdateInterval then return end  
+    if currentTime - lastAimedTime < aimUpdateInterval then return end
 
     lastAimedTime = currentTime
 
@@ -6244,14 +6270,18 @@ function aimAtClosestEnemy()
     if not viewModel then return end
 
     closestCharacter = getClosestEnemyToCrosshair()
-    if closestCharacter and closestCharacter:FindFirstChild("Head") then
-        head = closestCharacter.Head
+    closestBot = botAimEnabled and getClosestBotToCrosshair() or nil
+
+    local target = closestBot or closestCharacter
+
+    if target and target:FindFirstChild("Head") then
+        head = target.Head
         gun = viewModel:FindFirstChild("AimPart")
         arms = viewModel:FindFirstChild("Arms")
 
         if gun then
             aimPosition = head.Position
-            humanoidRootPart = closestCharacter:FindFirstChild("HumanoidRootPart")
+            humanoidRootPart = target:FindFirstChild("HumanoidRootPart")
 
             if humanoidRootPart then
                 velocity = humanoidRootPart.Velocity
@@ -6270,12 +6300,20 @@ function aimAtClosestEnemy()
     end
 end
 
+
 function toggleAim()
     aimEnabled = not aimEnabled
 end
 
-runService.RenderStepped:Connect(aimAtClosestEnemy)
+function toggleBotAim()
+    if aimEnabled then
+        botAimEnabled = not botAimEnabled
+        else
+        warn("please enable normal silent aim before enabling bot silent aim...")
+    end
+end
 
+runService.RenderStepped:Connect(aimAtClosestEnemy)
 
 
 
@@ -6340,7 +6378,7 @@ aimtab:AddSlider('Silent Aim Resp Sped', {
     Compact = false,
 
     Callback = function(Value)
-
+--loll
 
     end
 })
@@ -6376,7 +6414,29 @@ toggleAim()
         
     end,
 })
+--[[
+aimtab:AddToggle('silentAim994', {
+    Text = 'Bot Silent Aim',
+    Default = false,
+    Risky = false,
+    Callback = function(isEnabled)
 
+toggleBotAim()
+
+
+    end
+}):AddKeyPicker('silentAimBind995', {
+    Default = 'None',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Bot Silent Aim Bind',
+    NoUI = false,
+    Callback = function(Value)
+        
+    end,
+})
+
+--]]
 aimtab:AddToggle('Inventory Viewer', {
     Text = 'Inventory Viewer',
     Default = false,
