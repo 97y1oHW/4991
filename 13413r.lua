@@ -2351,12 +2351,11 @@ wait(0.3)
     end)
     setreadonly(mt, true)
     --]]
-    wait(5)
 warn("attempt end")
 wait(0.5)
 warn("Attempt 2:")
 setfpscap(1)
-wait(4)
+wait(3)
 setfpscap(999999999)
 end
 
@@ -4090,6 +4089,8 @@ game.ReplicatedStorage.Buildable:Destroy()
 
  end)
 
+ --[[
+
 aimtab:AddToggle('Aimbot', {
     Text = 'Aim Bot',
     Tooltip = 'Locks To Head Or Torso',
@@ -4114,7 +4115,7 @@ aimtab:AddToggle('Aimbot', {
     end,
 })
 
-
+--]]
 local HitmarkerSounds = {
     ["TF2"]       = "rbxassetid://8255306220",
     ["Gamesense"] = "rbxassetid://4817809188",
@@ -4329,6 +4330,8 @@ end
 
 end
 
+--[[
+
 aimtab:AddToggle('InstantHit', {
     Text = 'Instant Hit',
     Tooltip = 'Instant Hit',
@@ -4352,7 +4355,7 @@ aimtab:AddToggle('InstantHit', {
 })
 
 
-
+--]]
 
 
 aimtab:AddSlider('RecoilStrength', {
@@ -6337,7 +6340,6 @@ aimUpdateInterval = Value
 library:Notify("You Are In Buyer Mode!")
 wait(0.4)
 library:Notify("Attempting To Bypass Client Anti-Cheat")
-wait(1)
 _z5attclientanticheat()
 
 Library:SetWatermarkVisibility(true)
@@ -6457,6 +6459,122 @@ aimtab:AddToggle('Inventory Viewer', {
     Callback = function(Value)
     end,
 })
+
+
+
+-- Settings
+local fovewhasd = 150
+local fovewhasd_Radians = math.rad(fovewhasd / 2)
+
+-- Function to check if target is within FOV
+function isWithinFOV(targetPosition)
+    local character = player.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then
+        return false
+    end
+
+    local camera = workspace.CurrentCamera
+    if not camera then
+        return false
+    end
+
+    -- Direction from camera to target
+    local directionToTarget = (targetPosition - camera.CFrame.Position).unit
+
+    -- Camera's LookVector
+    local lookVector = camera.CFrame.LookVector
+
+    -- Angle between the two vectors
+    local angle = math.acos(lookVector:Dot(directionToTarget))
+
+    -- Check if angle is within FOV
+    return angle <= fovewhasd_Radians
+end
+
+-- Function to check if there is a clear line of sight
+function hasLineOfSight(targetPosition, targetCharacter)
+    local character = player.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then
+        return false
+    end
+
+    local rootPart = character.HumanoidRootPart
+    local camera = workspace.CurrentCamera
+    if not camera then
+        return false
+    end
+
+    -- Start position is the camera's position
+    local origin = camera.CFrame.Position
+
+    -- Direction is towards the target position
+    local direction = (targetPosition - origin).unit * (targetPosition - origin).Magnitude
+
+    -- Perform raycast
+    local raycastParams = RaycastParams.new()
+    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+    raycastParams.FilterDescendantsInstances = {character, targetCharacter} -- Ignore player's own character and target character
+    raycastParams.IgnoreWater = true
+
+    local raycastResult = workspace:Raycast(origin, direction, raycastParams)
+
+    -- Check if the ray hits anything before reaching the target position
+    if raycastResult then
+        local hitInstance = raycastResult.Instance
+
+        -- Debugging: Output the name of the object hit
+        print("Ray hit:", hitInstance.Name)
+
+        -- If the hit is not part of the target character, it means an obstruction is present
+        if not targetCharacter:IsAncestorOf(hitInstance) then
+            return false
+        end
+    end
+
+    -- No obstructions
+    return true
+end
+
+
+-- Trigger Bot logic
+function triggerBot()
+    if isTriggerBotEnabled then
+        for _, targetPlayer in pairs(game:GetService("Players"):GetPlayers()) do
+            if targetPlayer ~= player then
+                local targetCharacter = targetPlayer.Character
+                if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") and targetCharacter:FindFirstChild("Humanoid") then
+                    local targetPosition = targetCharacter.HumanoidRootPart.Position
+                    if isWithinFOV(targetPosition) and hasLineOfSight(targetPosition) then
+                        -- Debugging: Confirm target is valid
+                        print("Shooting at target:", targetPlayer.Name)
+                        mouse1press()
+                        wait()
+                        mouse1release()
+                        break
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- Connect Trigger Bot to RenderStepped
+runService.RenderStepped:Connect(triggerBot)
+--[[
+-- UI Toggle for Trigger Bot
+aimtab:AddToggle('trgierrbot', {
+    Text = 'Trigger Bot',
+    Default = false,
+    Risky = true,
+    Tooltip = 'Trigger Bot',
+    Callback = function(state)
+        isTriggerBotEnabled = state
+    end
+})
+--]]
+
+
+
 
 aimtab:AddDropdown('Silentaimhitset2', {
     Values = { 'Legit', 'Rage', 'Balanced' },
@@ -13312,3 +13430,4 @@ end
 --hi
 
 -- I dont use chatgpt or ai :)
+error("mda")
