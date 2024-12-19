@@ -4,7 +4,7 @@ for i,v in pairs(({"Internal","HttpCache","Instances","Signals","Script","Physic
 end
 local hoverSound = Instance.new("Sound")
 hoverSound.SoundId = "rbxassetid://421058925" -- Replace with your sound ID
-hoverSound.Volume = 0.5 -- Adjust volume as needed
+hoverSound.Volume = 1 -- Adjust volume as needed
 local InputService = cloneref(game:GetService('UserInputService'));
 local TextService = cloneref(game:GetService('TextService'));
 local CoreGui = cloneref(game:GetService('CoreGui'));
