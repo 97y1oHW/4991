@@ -47,6 +47,8 @@ end
 
 
 
+
+
 game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
 
 
@@ -4156,6 +4158,25 @@ local function toggleAnimationSpeed(enable)
     end
 end
 
+ LogService = game:GetService("LogService")
+
+
+LogService.MessageOut:Connect(function(message, messageType)
+    if messageType == Enum.MessageType.MessageError then
+        warn("[Suppressed Error]: Notificated")
+        print("error incoming...")
+
+                        Notification:Notify(
+            {Title = "Nexify | Solara", Description = "ERROR HAPPENED PLEASE REPORT IN A TICKET DETAILS:\n" ..message},
+            {OutlineColor = Color3.fromRGB(255, 3, 3), Time = 60, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+    end
+end)
+
+
+warn("Suspender Activated.")
+
 
 local function setSpeedMultiplier(value)
     speedMultiplier = value
@@ -4924,7 +4945,7 @@ UserInputService.InputEnded:Connect(function(input, gameProcessed)
     end
 end)
 
-
+--[[
 Players.PlayerAdded:Connect(function()
     refreshDropdown(movetab.Dropdown.PlayerWatcher)
 end)
@@ -4932,6 +4953,7 @@ end)
 Players.PlayerRemoving:Connect(function()
     refreshDropdown(movetab.Dropdown.PlayerWatcher)
 end)
+--]]
 
 
 local function predict_drop(part, entity, projectile_speed, projectile_drop)
@@ -13861,4 +13883,4 @@ end
 --hi
 
 -- I dont use chatgpt or ai :)
-error("mda")
+error("Silent Aim Refresh Error")
