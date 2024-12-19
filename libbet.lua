@@ -2,6 +2,9 @@ if not memorystats then memorystats={} memorystats.cache=function(a)end memoryst
 for i,v in pairs(({"Internal","HttpCache","Instances","Signals","Script","PhysicsCollision","PhysicsParts","GraphicsSolidModels","GraphicsMeshParts","GraphicsParticles","GraphicsParts","GraphicsSpatialHash","GraphicsTerrain","GraphicsTexture","GraphicsTextureCharacter","Sounds","StreamingSounds","TerrainVoxels","Gui","Animation","Navigation","GeometryCSG"})) do
     memorystats.cache(v)
 end
+local hoverSound = Instance.new("Sound")
+hoverSound.SoundId = "rbxassetid://421058925" -- Replace with your sound ID
+hoverSound.Volume = 0.5 -- Adjust volume as needed
 local InputService = cloneref(game:GetService('UserInputService'));
 local TextService = cloneref(game:GetService('TextService'));
 local CoreGui = cloneref(game:GetService('CoreGui'));
@@ -1898,6 +1901,10 @@ do
             { BorderColor3 = 'AccentColor' },
             { BorderColor3 = 'Black' }
         );
+        
+            ToggleRegion.MouseEnter:Connect(function()
+        hoverSound:Play()
+    end)
 
         function Toggle:UpdateColors()
             Toggle:Display();
