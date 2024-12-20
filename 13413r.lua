@@ -2356,7 +2356,7 @@ end
 
     for _, drawing in pairs(esp) do
         if drawing then
-            drawing:Remove()
+            warn("remove called but not found nigas")
         end
     end
 
@@ -7402,16 +7402,19 @@ charactertab:AddToggle('gravitydsf', {
         local LocalPlayer = Players.LocalPlayer
         local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         
-        local gravityDirection = Vector3.new(0, 1, 0)
+        local gravityDirection = Vector3.new(0, -1, 0)  -- Gravity should pull downwards
         local wasInAir = false
-        local gravityMultiplier = 13  -- Default value set by the slider (will change dynamically)
+        local gravityMultiplier = 11  -- Default value set by the slider (will change dynamically)
 
-        -- Slider to adjust gravity multiplier
-    
+        -- Slider to adjust gravity multiplier (you can implement this as needed)
+
+        local heartbeatConnection
 
         local function applyCustomGravity()
-            local humanoid = character:WaitForChild("Humanoid")
-            local rootPart = character:WaitForChild("HumanoidRootPart")
+            local humanoid = character:FindFirstChild("Humanoid")
+            local rootPart = character:FindFirstChild("HumanoidRootPart")
+            if not humanoid or not rootPart then return end
+            
             local humanoidState = humanoid:GetState()
             
             if humanoidState == Enum.HumanoidStateType.Jumping or humanoidState == Enum.HumanoidStateType.Freefall then
@@ -7425,14 +7428,29 @@ charactertab:AddToggle('gravitydsf', {
             end
         end
 
-        game:GetService("RunService").Heartbeat:Connect(function()
-            if state3 and character and character:FindFirstChild("HumanoidRootPart") then
-                applyCustomGravity()
+        if state3 then
+            -- Start applying custom gravity
+            heartbeatConnection = game:GetService("RunService").Heartbeat:Connect(function()
+                if character and character:FindFirstChild("HumanoidRootPart") then
+                    applyCustomGravity()
+                end
+            end)
+        else
+            -- Stop applying custom gravity
+            if heartbeatConnection then
+                heartbeatConnection:Disconnect()
+                heartbeatConnection = nil
             end
-        end)
+            
+            -- Reset the gravity effect when toggled off
+            local rootPart = character:FindFirstChild("HumanoidRootPart")
+            if rootPart then
+                rootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)  -- Reset velocity
+            end
+            wasInAir = false  -- Reset the air state
+        end
     end
 })
-
 
 
 charactertab:AddSlider('speedhack', {
