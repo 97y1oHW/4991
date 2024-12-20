@@ -3649,19 +3649,23 @@ counter = counter + 1
 
 
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
+local zoomValue = 0
+local defaultFOV = Camera.FieldOfView
+local zoomKey = Enum.KeyCode.Z
+local isZoomed = false
 
-local zoomValue = 0 
-local defaultFOV = Camera.FieldOfView 
-local zoomKey = Enum.KeyCode.Z 
-
-
-local function applyZoom()
-    Camera.FieldOfView = defaultFOV - (zoomValue * 10) 
+ function applyZoom()
+    Camera.FieldOfView = defaultFOV - (zoomValue * 10)
 end
 
+-- Function to reset FOV
+ function resetZoom()
+    Camera.FieldOfView = defaultFOV
+end
 
-
+-- Slider for zoom value
 Misc:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
     Default = 8.1,
@@ -3669,59 +3673,47 @@ Misc:AddSlider('ZoomSlider', {
     Max = 9,
     Rounding = 1,
     Compact = false,
-
     Callback = function(Value)
         zoomValue = Value
-        
     end
 })
 
-
+-- Key picker for zoom toggle key
 Misc:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
-    Default = 'X',
+    Default = 'Z',
     SyncToggleState = false,
     Mode = 'Toggle',
     Text = 'Zoom Keybind',
-
     Callback = function(value)
         print('[cb] Keybind clicked!', value)
     end,
-
     ChangedCallback = function(newKey)
-        zoomKey = newKey 
+        zoomKey = newKey
         print('[cb] Keybind changed!', newKey)
     end
 })
 
-
-local isZoomed = false
-
-
+-- Function to handle key press
 local function onKeyPress(input, gameProcessed)
-    if gameProcessed then return end 
-
-    
+    if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
-        isZoomed = not isZoomed 
-        if isZoomed then
-            applyZoom() 
-        else
-            Camera.FieldOfView = defaultFOV 
+        isZoomed = not isZoomed -- Toggle zoom state
+        if not isZoomed then
+            resetZoom() -- Reset zoom if untoggled
         end
     end
 end
 
-
-UserInputService.InputBegan:Connect(onKeyPress)
-
-
-UserInputService.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
-        if isZoomed then
-            applyZoom() 
-        end
+-- Continuously apply zoom while toggled
+RunService.RenderStepped:Connect(function()
+    if isZoomed then
+        applyZoom()
     end
 end)
+
+-- Connect input events
+UserInputService.InputBegan:Connect(onKeyPress)
+
 
 print('load_' .. tostring(counter))
 counter = counter + 1
