@@ -127,7 +127,7 @@ local function removeEsp(player)
 
     for _, drawing in pairs(esp) do
         if drawing then
-            drawing:Remove()
+            warn("remove called but not found nigas")
         end
     end
 
