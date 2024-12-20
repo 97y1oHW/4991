@@ -6905,7 +6905,55 @@ aimtab:AddToggle('Inventory Viewer', {
     end,
 })
 
+player = game:GetService("Players").LocalPlayer
+mouse = player:GetMouse()
+RunService = game:GetService("RunService")
+toggle = false
 
+function toggleShooting()
+    toggle = not toggle
+end
+
+
+RunService.RenderStepped:Connect(function()
+    if toggle then
+        wait(0.001)
+        for _, target in pairs(game:GetService("Players"):GetPlayers()) do
+            if target ~= player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                targetHRP = target.Character.HumanoidRootPart
+                direction = (targetHRP.Position - player.Character.HumanoidRootPart.Position).unit
+                camera = workspace.CurrentCamera
+                cameraDirection = camera.CFrame.LookVector
+                
+                angle = math.acos(cameraDirection:Dot(direction))
+                fov = math.rad(55)
+
+                if angle <= fov / 2 then
+                    ray = Ray.new(camera.CFrame.Position, (targetHRP.Position - camera.CFrame.Position).unit * 100)
+                    hitPart, hitPosition = workspace:FindPartOnRay(ray, player.Character)
+
+                    if hitPart and hitPart:IsDescendantOf(target.Character) then
+                        mouse1press()
+                        wait()
+                        mouse1release()
+                    end
+                end
+            end
+        end
+    end
+end)
+
+aimtab:AddToggle('trigfuckkk', {
+    Text = 'Trigger Bot',
+    Default = false,
+    Risky = true,
+    Callback = function(isEnabled)
+
+toggleShooting()
+
+
+    end
+})
 
 -- Settings
 local fovewhasd = 150
