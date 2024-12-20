@@ -225,14 +225,13 @@ end)
 
 -- Check the response
 if success and response == "bypassed" then
-    -- Pastebin returned "active", so continue running the main script
+    
     print("A-C SYSTEM RESULT: BYPASS")
 
-    -- Place your main script logic here
-    -- Example: your main exploit code or game feature
+    
 
 else
-    -- Pastebin returned nil or there's an error, script won't run
+    
     print("Anti-Crack System Trigered!")
     return
 end
@@ -242,7 +241,7 @@ print("DIRECTED.")
 -- Function to print the loading bar with percentage and hash marks
 local function printLoadingBar(percentage)
     local totalLength = 33
-    local hashMarks = math.floor(percentage / 3.2)  -- Number of hash marks
+    local hashMarks = math.floor(percentage / 6.2)  -- Number of hash marks
     local dashes = totalLength - hashMarks          -- Remaining dashes
     
     local loadingBar = string.rep("#", hashMarks) .. string.rep("-", dashes)
