@@ -4158,12 +4158,16 @@ LogService.MessageOut:Connect(function(message, messageType)
         warn("[Suppressed Error]: Notificated")
         print("error incoming...")
 
+	--[[
+
                         Notification:Notify(
             {Title = "Nexify | Solara", Description = "ERROR HAPPENED PLEASE REPORT IN A TICKET DETAILS:\n" ..message},
             {OutlineColor = Color3.fromRGB(255, 3, 3), Time = 60, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
+	--]]
     end
+	
 end)
 
 
