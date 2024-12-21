@@ -6888,26 +6888,200 @@ toggleBotAim()
 })
 
 --]]
+
+ScreenGuiForInventory = Instance.new("ScreenGui")
+FrameForInventory = Instance.new("Frame")
+Slot1ForHotbar = Instance.new("ImageLabel")
+Slot2ForHotbar = Instance.new("ImageLabel")
+Slot3ForHotbar = Instance.new("ImageLabel")
+CutterForInventory = Instance.new("TextLabel")
+UICornerForInventory = Instance.new("UICorner")
+UIStrokeForInventory = Instance.new("UIStroke")
+PlayerNameLabelForInventory = Instance.new("TextLabel")  -- New label to display the player's name
+
+ScreenGuiForInventory.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGuiForInventory.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+FrameForInventory.Parent = ScreenGuiForInventory
+FrameForInventory.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+FrameForInventory.BackgroundTransparency = 0.670
+FrameForInventory.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FrameForInventory.BorderSizePixel = 0
+FrameForInventory.Position = UDim2.new(0.5, -398, 0.010, -37)
+FrameForInventory.Size = UDim2.new(0, 796, 0, 74)
+
+Slot1ForHotbar.Name = "Slot1ForHotbar"
+Slot1ForHotbar.BackgroundTransparency = 1
+Slot1ForHotbar.Parent = FrameForInventory
+Slot1ForHotbar.Position = UDim2.new(0.0075, 0, 0.0811, 0)
+Slot1ForHotbar.Size = UDim2.new(0, 49, 0, 44)
+Slot1ForHotbar.Image = ""
+
+Slot2ForHotbar.Name = "Slot2ForHotbar"
+Slot2ForHotbar.BackgroundTransparency = 1
+Slot2ForHotbar.Parent = FrameForInventory
+Slot2ForHotbar.Position = UDim2.new(0.1118, 0, 0.0811, 0)
+Slot2ForHotbar.Size = UDim2.new(0, 49, 0, 44)
+Slot2ForHotbar.Image = ""
+
+Slot3ForHotbar.Name = "Slot3ForHotbar"
+Slot3ForHotbar.BackgroundTransparency = 1
+Slot3ForHotbar.Parent = FrameForInventory
+Slot3ForHotbar.Position = UDim2.new(0.2173, 0, 0.0811, 0)
+Slot3ForHotbar.Size = UDim2.new(0, 49, 0, 44)
+Slot3ForHotbar.Image = ""
+
+CutterForInventory.Name = "CutterForInventory"
+CutterForInventory.Parent = FrameForInventory
+CutterForInventory.BackgroundTransparency = 1
+CutterForInventory.Position = UDim2.new(0.1897, 0, -0.1622, 0)
+CutterForInventory.Size = UDim2.new(0, 200, 0, 79)
+CutterForInventory.Font = Enum.Font.SourceSans
+CutterForInventory.Text = "|"
+CutterForInventory.TextColor3 = Color3.fromRGB(255, 255, 255)
+CutterForInventory.TextScaled = true
+
+UICornerForInventory.Parent = FrameForInventory
+
+UIStrokeForInventory.Parent = FrameForInventory
+UIStrokeForInventory.Color = Color3.fromRGB(255, 152, 35)
+UIStrokeForInventory.Thickness = 1.6
+
+-- Player name label
+PlayerNameLabelForInventory.Name = "PlayerNameLabelForInventory"
+PlayerNameLabelForInventory.Parent = FrameForInventory
+PlayerNameLabelForInventory.BackgroundTransparency = 1
+PlayerNameLabelForInventory.Position = UDim2.new(0, 0, 0, -25)
+PlayerNameLabelForInventory.Size = UDim2.new(0, 796, 0, 30)
+PlayerNameLabelForInventory.Font = Enum.Font.Code
+PlayerNameLabelForInventory.TextColor3 = Color3.fromRGB(255, 255, 255)
+PlayerNameLabelForInventory.TextScaled = true
+PlayerNameLabelForInventory.Text = "No player selected"  -- Default text
+
+-- Toggle state and function to change transparency
+isGuiVisibleForInventory = false  -- This will control the visibility of the ScreenGui
+
+function toggleGuiVisibilityForInventory()
+    if isGuiVisibleForInventory then
+        ScreenGuiForInventory.Enabled = false  -- Hide the ScreenGui
+        isGuiVisibleForInventory = false
+    else
+        ScreenGuiForInventory.Enabled = true  -- Show the ScreenGui
+        isGuiVisibleForInventory = true
+    end
+end
+
+function isPlayerInFOV(localPlayer, otherPlayer, fov)
+    local localCharacter = localPlayer.Character
+    local otherCharacter = otherPlayer.Character
+    if not localCharacter or not otherCharacter then return false end
+
+    local localPosition = localCharacter:FindFirstChild("HumanoidRootPart").Position
+    local otherPosition = otherCharacter:FindFirstChild("HumanoidRootPart").Position
+    local direction = (otherPosition - localPosition).Unit
+
+    local forwardVector = localCharacter:FindFirstChild("HumanoidRootPart").CFrame.LookVector
+    local angle = math.deg(math.acos(direction:Dot(forwardVector)))
+    return angle <= fov / 2
+end
+
+function getClosestPlayerToCrosshair(localPlayer, playersInFOV)
+    local camera = game.Workspace.CurrentCamera
+    local closestPlayer = nil
+    local closestDistance = math.huge
+    
+    for _, player in ipairs(playersInFOV) do
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local rootPart = character.HumanoidRootPart
+            local screenPosition, onScreen = camera:WorldToScreenPoint(rootPart.Position)
+            if onScreen then
+                local distance = (Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2) - Vector2.new(screenPosition.X, screenPosition.Y)).Magnitude
+                if distance < closestDistance then
+                    closestDistance = distance
+                    closestPlayer = player
+                end
+            end
+        end
+    end
+    return closestPlayer
+end
+
+function updateInventorySlotsForInventory(localPlayer, slots)
+    local playersInFOV = {}
+    local fov = 160  -- The FOV angle
+    local players = game.Players:GetPlayers()
+
+    for _, otherPlayer in pairs(players) do
+        if otherPlayer ~= localPlayer and isPlayerInFOV(localPlayer, otherPlayer, fov) then
+            table.insert(playersInFOV, otherPlayer)
+        end
+    end
+
+    closestPlayer = getClosestPlayerToCrosshair(localPlayer, playersInFOV)
+    if closestPlayer then
+        PlayerNameLabelForInventory.Text = closestPlayer.Name .. "'s Inventory"  -- Update the label with the player's name
+    else
+        PlayerNameLabelForInventory.Text = "No player selected"
+    end
+
+    -- Update inventory slots for the closest player
+    for i = 1, #slots do
+        slots[i].Image = ""
+    end
+
+    if closestPlayer then
+        local inventory = game.ReplicatedStorage.Players:FindFirstChild(closestPlayer.Name):FindFirstChild("Inventory")
+        if inventory then
+            local slotIndex = 1
+            for _, item in pairs(inventory:GetChildren()) do
+                if slotIndex <= #slots then
+                    local itemProperties = item:FindFirstChild("ItemProperties")
+                    if itemProperties then
+                        local itemIcon = itemProperties:FindFirstChild("ItemIcon")
+                        if itemIcon then
+                            if itemIcon.ClassName == "ImageLabel" then
+                                slots[slotIndex].Image = itemIcon.Image
+                            elseif itemIcon.ClassName == "StringValue" then
+                                slots[slotIndex].Image = "rbxassetid://" .. itemIcon.Value
+                            else
+                                print("Unsupported ItemIcon type: " .. itemIcon.ClassName)
+                            end
+                            slotIndex += 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+player = game.Players.LocalPlayer
+slots = {Slot1ForHotbar, Slot2ForHotbar, Slot3ForHotbar}
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    updateInventorySlotsForInventory(player, slots)
+end)
+
 aimtab:AddToggle('Inventory Viewer', {
     Text = 'Inventory Viewer',
     Default = false,
     Risky = true,
     Tooltip = 'Displays Inventory',
     Callback = function(first)
-        toggleInventoryViewer()
+        toggleGuiVisibilityForInventory()
     end
-    }):AddKeyPicker('invviewerkeybind', {
+}):AddKeyPicker('invViewerKeyBind', {
     Default = 'None',
     SyncToggleState = true,
-
     Mode = 'Toggle',
-
     Text = 'Inventory Viewer Key Bind',
     NoUI = false,
-
     Callback = function(Value)
     end,
 })
+
+toggleGuiVisibilityForInventory()
 
 player = game:GetService("Players").LocalPlayer
 mouse = player:GetMouse()
@@ -6957,6 +7131,17 @@ toggleShooting()
 
 
     end
+}):AddKeyPicker('triggerbot', {
+    Default = 'None',
+    SyncToggleState = true,
+
+    Mode = 'Toggle',
+
+    Text = 'Trigger Bot Key Bind',
+    NoUI = false,
+
+    Callback = function(Value)
+    end,
 })
 
 -- Settings
