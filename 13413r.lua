@@ -1234,13 +1234,13 @@ checkForSameScript(hwid)
 
 
 
-local continueexecution = true
+local continueexecution = false
 
 
 if continueexecution == true then
 
 print("Value True")
-print("1")
+warn("1")
 
 else
 wait(5)
