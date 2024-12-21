@@ -7060,12 +7060,13 @@ player = game.Players.LocalPlayer
 slots = {Slot1ForHotbar, Slot2ForHotbar, Slot3ForHotbar}
 
 game:GetService("RunService").RenderStepped:Connect(function()
+wait(0.3)
     updateInventorySlotsForInventory(player, slots)
 end)
 
 aimtab:AddToggle('Inventory Viewer', {
     Text = 'Inventory Viewer',
-    Default = false,
+    Default = true,
     Risky = true,
     Tooltip = 'Displays Inventory',
     Callback = function(first)
@@ -7081,7 +7082,7 @@ aimtab:AddToggle('Inventory Viewer', {
     end,
 })
 
-toggleGuiVisibilityForInventory()
+
 
 player = game:GetService("Players").LocalPlayer
 mouse = player:GetMouse()
