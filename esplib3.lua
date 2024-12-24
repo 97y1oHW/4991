@@ -1,4 +1,4 @@
-warn("j")
+
 -- main module
 local espLibrary = {
     instances = {},
@@ -9,7 +9,7 @@ local espLibrary = {
     whitelist = {}, -- insert string that is the player's name you want to whitelist (turns esp color to whitelistColor in options)
     blacklist = {}, -- insert string that is the player's name you want to blacklist (removes player from esp)
     options = {
-        enabled = true,
+        enabled = false,
         minScaleFactorX = 1,
         maxScaleFactorX = 10,
         minScaleFactorY = 1,
@@ -47,7 +47,7 @@ local espLibrary = {
         boxFill = false,
         boxFillTransparency = 0.5,
         boxFillColor = Color3.new(255, 255, 255),
-        healthBars = true,
+        healthBars = false,
         healthBarsSize = 3,
         healthBarsTransparency = 1,
         healthBarsColor = Color3.new(0, 1, 0),
@@ -283,22 +283,8 @@ function espLibrary.addEsp(player)
             Thickness = 1,
             Filled = true
         }),
-         healthBarGradient = Instance.new("UIGradient"), -- Create UIGradient
         line = create("Line")
-    }
-    -- Set up the UIGradient properties
-    objects.healthBarGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green
-        ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow
-        ColorSequenceKeypoint.new(0.75, Color3.new(1, 0.5, 0)), -- Orange
-        ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0)) -- Red
-    })
-    
-    objects.healthBarGradient.Rotation = 90 -- Rotate the gradient if needed
-
-    -- Parent the gradient to the health bar
-    objects.healthBarGradient.Parent = objects.healthBar;
-
+    };
 
     espLibrary.espCache[player] = objects;
 end
@@ -475,11 +461,7 @@ function espLibrary:Load(renderValue)
 
                 local origin = self.options.tracerOrigin;
                 local show = canShow and enabled;
-objects.healthBar.Visible = show and self.options.healthBars;
-objects.healthBar.Color = Color3.new(1, 1, 1) -- Set to white or any color, as the gradient will take over
-objects.healthBar.Transparency = self.options.healthBarsTransparency;
-objects.healthBar.Size = healthBarSize;
-objects.healthBar.Position = healthBarPosition;
+
                 objects.arrow.Visible = (not canShow and enabled) and self.options.outOfViewArrows;
                 objects.arrow.Filled = self.options.outOfViewArrowsFilled;
                 objects.arrow.Transparency = self.options.outOfViewArrowsTransparency;
