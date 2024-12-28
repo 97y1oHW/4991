@@ -455,6 +455,28 @@ print("sent")
 
 
 
+if game.PlaceId == 7336302630 or game.PlaceId == 0 then
+    library:Notify("Game ID: 7336302630", 15)
+elseif game.PlaceId ~= 7336302630 then
+    library:Notify("Game ID does not match the selected one. Canceled loading.", 15)
+    library:Notify("",1)
+    library:Notify("",1)
+    library:Notify("",1)
+    library:Notify("",1)
+    library:Notify("",1)
+    library:Notify("",1)
+    library:Notify("",0.1)
+    library:Notify("",1)
+    library:Notify("",1)
+    library:Notify("",4)
+    error()
+    return
+else
+    library:Notify("Error happened while trying to match Place ID.", 15)
+    library:Notify("",15)
+    error()
+    return
+end
 
 
 
@@ -5026,7 +5048,7 @@ local function detectBan()
                 library:Notify("[UAC] YOU ARE GOING TO GET BANNED.", 25)
             end
         else
-        library:Notify("[UAC] UAC VARIABLE ERROR.")
+        library:Notify("[UAC] UAC VARIABLE ERROR.",15)
             warn("Could not find the UAC status for the player.")
         end
     end
@@ -5035,7 +5057,7 @@ end
 
 coroutine.wrap(detectBan)()
 wait(4)
-library:Notify("[UAC] BAN DETECTOR STARTED!")
+library:Notify("[UAC] BAN DETECTOR STARTED!",2)
 
 
 local materialMapping = {}
@@ -5831,8 +5853,8 @@ print('number_' .. tostring(counter))
 counter = counter + 1
 local charactertab = pdeltatabbox1:AddTab("misc")
  
-library:Notify(executorname33)
-library:Notify("Loaded Script")
+library:Notify(executorname33,2)
+library:Notify("Loaded Script",1)
 
 local function IsTargetVisible(target)
     if not plr.Character then return false end
@@ -6789,9 +6811,9 @@ aimUpdateInterval = Value
     end
 })
 
-library:Notify("You Are In Buyer Mode!")
+library:Notify("You Are In Buyer Mode!",3)
 wait(0.4)
-library:Notify("Attempting To Bypass Client Anti-Cheat")
+library:Notify("Attempting To Bypass Client Anti-Cheat",10)
 _z5attclientanticheat()
 
 Library:SetWatermarkVisibility(true)
@@ -6799,7 +6821,7 @@ wait(1)
 Library:SetWatermarkVisibility(false)
 wait(0.6)
 Library:SetWatermarkVisibility(true)
-library:Notify("Failed To Bypass Client Anti-Cheat")
+library:Notify("Failed To Bypass Client Anti-Cheat",4)
 
 FrameTimer = tick()
  FrameCounter = 0;
