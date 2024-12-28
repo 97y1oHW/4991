@@ -454,7 +454,7 @@ print("sent")
 
 
 
-
+--[[
 if game.PlaceId == 7336302630 or game.PlaceId == 0 then
     library:Notify("Game ID: 7336302630", 15)
 elseif game.PlaceId ~= 7336302630 then
@@ -478,7 +478,7 @@ else
     return
 end
 
-
+--]]
 
 
 
