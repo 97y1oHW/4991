@@ -547,12 +547,51 @@ end
 	Library:Notify("Check 100%")
 
 
+bypassedanticheat = false
 
+ LocalPlayer = game.Players.LocalPlayer
+ Humanoid = LocalPlayer.Character and LocalPlayer.Character:WaitForChild("Humanoid")
 
+if not Humanoid then
+    error("Humanoid not found!")
+end
 
+local Connections = {
+    { "CharacterController", Humanoid:GetPropertyChangedSignal("WalkSpeed") },
+    { "CharacterController", Humanoid:GetPropertyChangedSignal("JumpHeight") },
+    { "CharacterController", Humanoid:GetPropertyChangedSignal("HipHeight") },
+    { "CharacterController", workspace:GetPropertyChangedSignal("Gravity") },
+    { "CharacterController", Humanoid.StateChanged },
+    { "CharacterController", Humanoid.ChildAdded },
+    { "CharacterController", Humanoid.ChildRemoved },
+}
 
+for _, Array in ipairs(Connections) do
+    for _, Connection in ipairs(getconnections(Array[2])) do
+        if type(Connection.Function) == "function" then
+            local Info = debug.getinfo(Connection.Function)
 
+            if Info and string.find(Info.source or "", Array[1]) then
+            warn("internal load")
+        --print("{tostring(Connection.Function)}:", tostring(Array[2]))
+                Connection:Disable()
+                bypassedanticheat = true
+                if bypassedanticheat == true then
+warn("Bypassed Anti Cheat: true")
+else
+warn("Bypassed Anti Cheat: false")
+                end
+                
+            end
+        end
+    end
+end
 
+print("Done")
+
+Library:Notify("Activated semi anti-cheat bypasser")
+
+wait(5)
 
 
 local silent_aim = {
@@ -2229,7 +2268,7 @@ end)
 
 
 
-local zoomValue = 0 -- Default zoom value
+local zoomValue = 8 -- Default zoom value
 local defaultFOV = Camera.FieldOfView -- Get the current FOV from the camera
 local zoomKey = Enum.KeyCode.Z -- Default keybind
 
@@ -2242,7 +2281,7 @@ Esptab3:AddSlider('jump', {
     Text = 'Jump Slider',
     Default = 3.2,
     Min = 0,
-    Max = 5,
+    Max = 15,
     Rounding = 1,
     Compact = false,
 
@@ -2257,6 +2296,35 @@ Esptab3:AddSlider('jump', {
         humanoid.JumpHeight = Value -- Adjust multiplier as necessary
     end
 })
+
+Esptab3:AddToggle('No Fall Damage', {
+    Text = 'No Fall Damage',
+    Default = false,
+    Risky = true,
+    Callback = function(isEnabled)
+        if isEnabled and bypassedanticheat == true then
+           
+            game.Workspace.Gravity = 500
+            
+        else
+            game.Workspace.Gravity = 90
+        end
+    end
+})
+
+antiaimtab:AddSlider('hipheight', {
+    Text = 'Hip Height',
+    Default = 2,
+    Min = 0.2,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+       game.Players.LocalPlayer.Character.Humanoid.HipHeight = Value -- Any Number
+    end
+})
+
 
 
 local UserInputService = game:GetService("UserInputService")
@@ -2279,7 +2347,7 @@ end
 -- Slider for zoom value
 Esptab3:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
-    Default = 8.1,
+    Default = 1,
     Min = 0.1,
     Max = 9,
     Rounding = 1,
@@ -3331,31 +3399,24 @@ player.CharacterAdded:Connect(function(newCharacter)
 end)
 
 -- Adding a slider to control the teleportation speed
-Esptab3:AddSlider('CFrameSpeed', {
-    Text = 'Speed Slider',
-    Default = 0.5, -- Slider için başlangıç değeri
-    Min = 0,
-    Max = 2, -- Maksimum hız değeri
-    Rounding = 3, -- Yuvarlama hassasiyeti
+Esptab3:AddSlider('Speedlocalplayer', {
+    Text = 'Speed Hack',
+    Default = 13, -- Slider için başlangıç değeri
+    Min = 1,
+    Max = 21, 
+    Rounding = 1, 
     Compact = false,
 }):OnChanged(function(State)
-    speed = State -- Slider değeriyle teleport hızını güncelle
+    
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Set walk speed
+humanoid.WalkSpeed = State -- Adjust this value to your desired speed
+
 end)
 
--- Adding a toggle to enable/disable CFrameSpeed
-Esptab3:AddToggle('cframespeed', {
-    Text = 'CFrameSpeed Toggle',
-    Default = false,
-    Callback = function(state)
-        cframeSpeedActive = state
-        if not state then
-            isRunning = false -- Toggle kapalıyken koşmayı devre dışı bırak
-        elseif humanoid and humanoid.MoveDirection.Magnitude > 0 then
-            isRunning = true
-            teleportWhileRunning() -- Hareket ediyorsa teleport etmeye başla
-        end
-    end
-})
 
 
 
@@ -4975,8 +5036,8 @@ SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
 -- use case for doing it this way:
 -- a script hub could have themes in a global folder
 -- and game configs in a separate folder per game
-ThemeManager:SetFolder('dogehubwave')
-SaveManager:SetFolder('dogehub/wavepd')
+ThemeManager:SetFolder('nexifywave')
+SaveManager:SetFolder('nexify/wavepd')
 
 -- Builds our config menu on the right side of our tab
 SaveManager:BuildConfigSection(Tabs['UI Settings'])
