@@ -43,6 +43,129 @@ if not LPH_OBFUSCATED then
     end
 end
 
+
+
+ g = Instance.new("ScreenGui")
+g.Parent = game:GetService("CoreGui")
+ t = Instance.new("TextLabel")
+t.Text = "Nexify /\\ Wave"
+t.Font = Enum.Font.Arcade
+t.TextSize = 50
+t.TextColor3 = Color3.new(1, 1, 1)
+t.BackgroundTransparency = 1
+t.AnchorPoint = Vector2.new(0.5, 0.5)
+t.Position = UDim2.new(0.5, 0, -0.5, 0)
+t.Size = UDim2.new(0, 300, 0, 100)
+t.Parent = g
+
+tweenService = game:GetService("TweenService")
+
+
+tweenService:Create(
+    t, 
+    TweenInfo.new(1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), 
+    {Position = UDim2.new(0.5, 0, 0.5, 0)}
+):Play()
+
+
+task.spawn(function()
+    task.wait(5)
+    tweenService:Create(
+        t, 
+        TweenInfo.new(1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), 
+        {TextTransparency = 1, TextStrokeTransparency = 1}
+    ):Play()
+    task.wait(1)
+    g:Destroy()
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ function API_Check()
+    if Drawing == nil then
+        return "No"
+    else
+        return "Yes"
+    end
+end
+
+ Find_Required = API_Check()
+
+if Find_Required == "No" then
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title = "Nexify";
+        Text = "Crosshair script could not be loaded because your exploit is unsupported.";
+        Duration = math.huge;
+        Button1 = "OK"
+    })
+
+    return
+end
+
+ Players = game:GetService("Players")
+ RunService = game:GetService("RunService")
+ UserInputService = game:GetService("UserInputService")
+ Camera = workspace.CurrentCamera
+
+ Typing = false
+
+ ViewportSize_ = Camera.ViewportSize / 2
+ Axis_X, Axis_Y = ViewportSize_.X, ViewportSize_.Y
+
+ HorizontalLine = Drawing.new("Line")
+ VerticalLine = Drawing.new("Line")
+
+
+_G.CrosshairEnabled = false  
+
+ Real_Size = 20 / 2  
+
+
+HorizontalLine.Thickness = 1
+VerticalLine.Thickness = 1
+HorizontalLine.Color = Color3.fromRGB(0, 255, 0)
+VerticalLine.Color = Color3.fromRGB(0, 255, 0)
+HorizontalLine.Transparency = 1
+VerticalLine.Transparency = 1
+
+RunService.RenderStepped:Connect(function()
+    if _G.CrosshairEnabled then
+        HorizontalLine.Visible = true
+        VerticalLine.Visible = true
+        
+        if _G.ToMouse then
+            local MousePos = UserInputService:GetMouseLocation()
+            HorizontalLine.From = Vector2.new(MousePos.X - Real_Size, MousePos.Y)
+            HorizontalLine.To = Vector2.new(MousePos.X + Real_Size, MousePos.Y)
+            
+            VerticalLine.From = Vector2.new(MousePos.X, MousePos.Y - Real_Size)
+            VerticalLine.To = Vector2.new(MousePos.X, MousePos.Y + Real_Size)
+        else
+            HorizontalLine.From = Vector2.new(Axis_X - Real_Size, Axis_Y)
+            HorizontalLine.To = Vector2.new(Axis_X + Real_Size, Axis_Y)
+        
+            VerticalLine.From = Vector2.new(Axis_X, Axis_Y - Real_Size)
+            VerticalLine.To = Vector2.new(Axis_X, Axis_Y + Real_Size)
+        end
+    else
+        HorizontalLine.Visible = false
+        VerticalLine.Visible = false
+    end
+end)
+
+
 local isfirstrun = true  -- Example variable, you should set this appropriately
 
 if isfirstrun then
@@ -241,11 +364,11 @@ print("DIRECTED.")
 -- Function to print the loading bar with percentage and hash marks
 local function printLoadingBar(percentage)
     local totalLength = 33
-    local hashMarks = math.floor(percentage / 6.2)  -- Number of hash marks
+    local hashMarks = math.floor(percentage / 3.1)  -- Number of hash marks
     local dashes = totalLength - hashMarks          -- Remaining dashes
     
     local loadingBar = string.rep("#", hashMarks) .. string.rep("-", dashes)
-    warn(string.format("Loading Doge Hub V1.8 %%%-3d %s", percentage, loadingBar))
+    warn(string.format("Loading Nexify %%%-3d %s", percentage, loadingBar))
 end
 
 -- Function to simulate the loading process
@@ -268,9 +391,8 @@ warn("end")
 local players = game:GetService("Players")
 local localPlayer = players.LocalPlayer
 print("ok")
-local repo2 = "http://31.210.171.229:3000/new/"
+
 local repo = 'https://raw.githubusercontent.com/97y1oHW/4991/main/'
-_esplib = loadstring(game:HttpGet(repo2 .. 'newlib/old/esp'))()
 local Library = loadstring(game:HttpGet(repo .. 'libbet.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
@@ -285,7 +407,7 @@ local Window = Library:CreateWindow({
     Center = true,
     AutoShow = true,
     TabPadding = 8,
-    MenuFadeTime = 1.3
+    MenuFadeTime = 0.3
 })
 
 -- CALLBACK NOTE:
@@ -297,16 +419,19 @@ local Window = Library:CreateWindow({
 local Tabs = {
     -- Creates a new tab titled Main
     Main = Window:AddTab('combat ⚔️'),
+    esptabreal = Window:AddTab('Esp 👤'),
     antiaimtab = Window:AddTab('Anti-Aim 🛡️'),
-    movetab3 = Window:AddTab('Misc 🔅'),
+    Esptab33 = Window:AddTab('Misc 🔅'),
     ['UI Settings'] = Window:AddTab('UI Settings 🎚️'),
 }
 
 -- Groupbox and Tabbox inherit the same functions
 -- except Tabboxes you have to call the functions on a tab (Tabbox:AddTab(name))
 local antiaimtab = Tabs.antiaimtab:AddLeftGroupbox('Spin')
-local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Groupbox')
-local Esptab3 = Tabs.movetab3:AddLeftGroupbox('Movement')
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Combat')
+local Rightone = Tabs.Main:AddRightGroupbox('Combat2')
+local Esptab3 = Tabs.Esptab33:AddLeftGroupbox('Movement')
+local eaesptabactual = Tabs.esptabreal:AddLeftGroupbox('Esp')
 
 
 -- We can also get our Main tab via the following code:
@@ -332,7 +457,7 @@ local Players = game:GetService("Players")
 -- Function to send a notification
 local function sendNotification(message)
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Doge Hub User Found!";
+        Title = "Nexify User Found!";
         Text = message;
         Duration = 5;
     })
@@ -356,11 +481,11 @@ local function detectTeleportation(player, oldPosition, newPosition)
         if distance >= teleportThresholdLarge and not flaggedPlayers[player.Name] then
             flaggedPlayers[player.Name] = true
             print(player.Name .. " flagged for large teleportation!")
-            sendNotification("Doge Hub User Found: " .. player.Name .. " Executor: Wave")
+            sendNotification("Nexify User Found: " .. player.Name .. " Executor: Wave")
         elseif distance >= teleportThresholdSmall and distance < teleportThresholdLarge and not flaggedPlayers[player.Name] then
             flaggedPlayers[player.Name] = true
             print(player.Name .. " flagged for small teleportation!")
-            sendNotification("Doge Hub User Found: " .. player.Name .. " Executor: Solara")
+            sendNotification(" Nexify User Found: " .. player.Name .. " Executor: Solara")
         end
     end
 end
@@ -433,7 +558,7 @@ end
 local silent_aim = {
     enabled = false,  -- Toggle this to enable/disable silent aim
     fov = true,
-    fovsize = 130,
+    fovsize = 170,
     part = "Head",
     targetai = true
 }
@@ -620,7 +745,7 @@ local function createFovCircle()
     versionText.Center = true
     versionText.Outline = true
     versionText.Color = Color3.new(1, 1, 1) -- White text for version
-    versionText.Text = "Doge Hub V1.8"
+    versionText.Text = "Nexify V1.8"
     versionText.Font = 2
     versionText.Visible = true
 end
@@ -1232,13 +1357,13 @@ end
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if not gameProcessedEvent and input.UserInputType == Enum.UserInputType.Keyboard then
         if input.KeyCode == Enum.KeyCode.RightShift then  -- Check if RightShift is pressed
-            toggleBlur()  -- Call the toggle function
+            warn("disbaled")  -- Call the toggle function
 		wait(1)			
         end
     end
 end)
 
-toggleBlur()
+warn("disbaled")
 
 
 local isFiring = false
@@ -1491,7 +1616,614 @@ end
 -- Start the ban detection coroutine
 coroutine.wrap(detectBan)()
 Library:Notify("[UAC] BAN DETECTOR STARTED!")
+ViewModelSettings = {
+    Color = Color3.new(0.768627, 0.039216, 0.913725), 
+    Material = Enum.Material.Plastic, 
+    IsEnabled = false, 
+    HighlightEnabled = false, 
+    HighlightTransparency = 0.5, 
+    ArmCustomizationEnabled = false 
+}
 
+
+function applySettings(viewModel)
+    if viewModel and ViewModelSettings.IsEnabled then
+        
+        for _, part in ipairs(viewModel:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.Color = ViewModelSettings.Color 
+                part.Material = ViewModelSettings.Material 
+
+                
+                local highlight = part:FindFirstChildOfClass("Highlight")
+                if ViewModelSettings.HighlightEnabled then
+                    if not highlight then
+                        highlight = Instance.new("Highlight")
+                        highlight.Parent = part
+                    end
+                    highlight.FillColor = ViewModelSettings.Color 
+                    highlight.OutlineColor = Color3.new(1, 1, 1) 
+                    highlight.OutlineTransparency = ViewModelSettings.HighlightTransparency 
+                elseif highlight then
+                    highlight:Destroy() 
+                end
+            end
+            
+            
+            if part:IsA("MeshPart") then
+                local surfaceAppearance = part:FindFirstChildOfClass("SurfaceAppearance")
+                if surfaceAppearance then
+                    surfaceAppearance:Destroy() 
+                end
+            end
+        end
+    end
+end
+
+
+function customizeArms(viewModel)
+    if not viewModel then return end
+    
+    
+    local wastelandShirt = viewModel:FindFirstChild("WastelandShirt")
+    if wastelandShirt then
+        wastelandShirt:Destroy()
+    end
+    
+    
+    local armParts = { "LeftLowerArm", "LeftUpperArm", "RightLowerArm", "RightUpperArm" }
+    
+    
+    for _, armName in ipairs(armParts) do
+        local armPart = viewModel:FindFirstChild(armName)
+        if armPart and armPart:IsA("BasePart") then
+            armPart.Material = Enum.Material.ForceField 
+            armPart.Transparency = 0.8 
+
+            
+            local highlight = armPart:FindFirstChildOfClass("Highlight")
+            if not highlight then
+                highlight = Instance.new("Highlight")
+                highlight.Parent = armPart
+            end
+            highlight.FillColor = ViewModelSettings.Color 
+            highlight.OutlineColor = Color3.new(1, 1, 1) 
+            highlight.OutlineTransparency = 0.5 
+        end
+    end
+end
+
+
+Rightone:AddLabel('-------------------------------------------------------------')
+
+
+
+SkyBoxes = {
+    ["Standard"] = {
+        ["SkyboxBk"] = "rbxassetid://123456789", 
+        ["SkyboxDn"] = "rbxassetid://123456789",
+        ["SkyboxFt"] = "rbxassetid://123456789",
+        ["SkyboxLf"] = "rbxassetid://123456789",
+        ["SkyboxRt"] = "rbxassetid://123456789",
+        ["SkyboxUp"] = "rbxassetid://123456789"
+    },
+    ["Among Us"] = {
+        ["SkyboxBk"] = "rbxassetid://5752463190",
+        ["SkyboxDn"] = "rbxassetid://5752463190",
+        ["SkyboxFt"] = "rbxassetid://5752463190",
+        ["SkyboxLf"] = "rbxassetid://5752463190",
+        ["SkyboxRt"] = "rbxassetid://5752463190",
+        ["SkyboxUp"] = "rbxassetid://5752463190"
+    },
+    ["Doge"] = {
+        ["SkyboxBk"] = "rbxassetid://159713165",
+        ["SkyboxDn"] = "rbxassetid://159713165",
+        ["SkyboxFt"] = "rbxassetid://5752463190",
+        ["SkyboxLf"] = "rbxassetid://5752463190",
+        ["SkyboxRt"] = "rbxassetid://159713165",
+        ["SkyboxUp"] = "rbxassetid://159713165"
+    },
+    ["Spongebob"] = {
+        ["SkyboxBk"] = "rbxassetid://277099484",
+        ["SkyboxDn"] = "rbxassetid://277099500",
+        ["SkyboxFt"] = "rbxassetid://277099554",
+        ["SkyboxLf"] = "rbxassetid://277099531",
+        ["SkyboxRt"] = "rbxassetid://277099589",
+        ["SkyboxUp"] = "rbxassetid://277101591"
+    },
+["Blood"] = {
+    ["SkyboxBk"] = "rbxassetid://163288979",  
+    ["SkyboxDn"] = "rbxassetid://163288979",  
+    ["SkyboxFt"] = "rbxassetid://163288979",  
+    ["SkyboxLf"] = "rbxassetid://163288979",  
+    ["SkyboxRt"] = "rbxassetid://163288979",  
+    ["SkyboxUp"] = "rbxassetid://163288979"   
+},
+
+    ["Deep Space"] = {
+        ["SkyboxBk"] = "rbxassetid://159248188",
+        ["SkyboxDn"] = "rbxassetid://159248183",
+        ["SkyboxFt"] = "rbxassetid://159248187",
+        ["SkyboxLf"] = "rbxassetid://159248173",
+        ["SkyboxRt"] = "rbxassetid://159248192",
+        ["SkyboxUp"] = "rbxassetid://159248176"
+    },
+    ["Winter"] = {
+        ["SkyboxBk"] = "rbxassetid://510645155",
+        ["SkyboxDn"] = "rbxassetid://510645130",
+        ["SkyboxFt"] = "rbxassetid://510645179",
+        ["SkyboxLf"] = "rbxassetid://510645117",
+        ["SkyboxRt"] = "rbxassetid://510645146",
+        ["SkyboxUp"] = "rbxassetid://510645195"
+    },
+    ["Clouded Sky"] = {
+        ["SkyboxBk"] = "rbxassetid://252760981",
+        ["SkyboxDn"] = "rbxassetid://252763035",
+        ["SkyboxFt"] = "rbxassetid://252761439",
+        ["SkyboxLf"] = "rbxassetid://252760980",
+        ["SkyboxRt"] = "rbxassetid://252760986",
+        ["SkyboxUp"] = "rbxassetid://252762652"
+    },
+}
+
+
+Rightone:AddDropdown('skyboxDropdown', {
+    Values = {"Standard", "Blood", "Among Us", "Doge", "Spongebob", "Deep Space", "Winter", "Clouded Sky"},  
+    Default = 1,  
+    Multi = false,
+    Text = 'Skybox Selector',
+    Tooltip = 'Select a skybox from the dropdown',
+    Callback = function(selectedSkybox)
+        local sky = game.Lighting:FindFirstChildOfClass("Sky")
+        
+        
+        if not sky then
+            sky = Instance.new("Sky")
+            sky.Parent = game.Lighting
+        end
+
+        
+        local selectedBox = SkyBoxes[selectedSkybox]
+        if selectedBox then
+            for key, assetId in pairs(selectedBox) do
+                sky[key] = assetId 
+            end
+        else
+            warn("Selected skybox is not available!")
+        end
+    end
+})
+
+
+
+terrain = game:GetService("Workspace").Terrain
+originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
+
+
+Rightone:AddLabel('Grass Color Picker'):AddColorPicker('ColorPickerGrass', {
+    Default = originalGrassColor, 
+    Title = 'Grass Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        
+        local grassColor = Value
+
+        
+        terrain:SetMaterialColor(Enum.Material.Grass, grassColor)
+
+        
+        sethiddenproperty(terrain, "Decoration", true) 
+    end
+})
+
+
+
+
+lastSelectedColor = Color3.fromRGB(0, 255, 255) 
+colorPickerEnabled = false 
+storedItems = {} 
+
+
+Rightone:AddToggle('Character Color Picker', {
+    Text = 'Enable Character Color Picker',
+    Default = false,
+
+    Callback = function(isEnabled)
+        colorPickerEnabled = isEnabled 
+        
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+
+        if isEnabled then
+            
+            for _, item in ipairs(character:GetChildren()) do
+                if item:IsA("Shirt") then
+                    table.insert(storedItems, item) 
+                    item.ShirtTemplate = "rbxassetid://0" 
+                elseif item:IsA("Pants") then
+                    table.insert(storedItems, item) 
+                    item.PantsTemplate = "rbxassetid://0" 
+                elseif item:IsA("Accessory") then
+                    
+                    if item.Name:match("Hair") then
+                        table.insert(storedItems, item) 
+                        item.Handle.Transparency = 1 
+                    end
+                elseif item:IsA("Model") then
+                    
+                    if item.Name:match("^Waste") or item.Name:match("^Camo") then
+                        table.insert(storedItems, item) 
+                        
+                        for _, part in ipairs(item:GetChildren()) do
+                            if part:IsA("BasePart") then
+                                part.Transparency = 1 
+                            end
+                        end
+                    end
+                elseif item.Name:match("^Waste") or item.Name:match("^Camo") then
+                    table.insert(storedItems, item) 
+                    item.Transparency = 1 
+                end
+            end
+
+            
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.Material = Enum.Material.ForceField
+                    part.Color = lastSelectedColor 
+                end
+            end
+        else
+            
+            for _, storedItem in ipairs(storedItems) do
+                if storedItem:IsA("Shirt") then
+                    storedItem.ShirtTemplate = "rbxassetid://0" 
+                elseif storedItem:IsA("Pants") then
+                    storedItem.PantsTemplate = "rbxassetid://0" 
+                elseif storedItem:IsA("Accessory") then
+                    
+                    if storedItem.Name:match("Hair") then
+                        storedItem.Handle.Transparency = 0 
+                    end
+                elseif storedItem:IsA("Model") then
+                    
+                    for _, part in ipairs(storedItem:GetChildren()) do
+                        if part:IsA("BasePart") then
+                            part.Transparency = 0 
+                        end
+                    end
+                else
+                    
+                    if storedItem.Name:match("^Waste") or storedItem.Name:match("^Camo") then
+                        storedItem.Transparency = 0 
+                    end
+                end
+            end
+            storedItems = {} 
+
+            
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.Material = Enum.Material.Plastic 
+                    part.Color = Color3.new(1, 1, 1) 
+                end
+            end
+        end
+    end
+})
+
+
+
+
+
+Rightone:AddLabel('Character Color Picker'):AddColorPicker('ColorPickerCharacter', {
+    Default = lastSelectedColor, 
+    Title = 'Character Color Picker',
+    Transparency = 0,
+
+    Callback = function(selectedColor)
+        lastSelectedColor = selectedColor 
+
+        if colorPickerEnabled then
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+
+            
+            for _, part in ipairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.Material = Enum.Material.ForceField
+                    part.Color = selectedColor 
+                end
+            end
+        end
+    end
+})
+
+
+
+
+Rightone:AddLabel('Ambient Color Picker'):AddColorPicker('ColorPickerAmbient', {
+    Default = game.Lighting.Ambient, 
+    Title = 'Ambient Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        game.Lighting.Ambient = Value 
+    end
+})
+
+
+Rightone:AddLabel('ViewModel Chams Color Picker'):AddColorPicker('ColorPickerViewModel', {
+    Default = ViewModelSettings.Color,
+    Title = 'ViewModel Chams Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        ViewModelSettings.Color = Value 
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) 
+    end
+})
+
+Rightone:AddDropdown('MaterialDropdown', {
+    Values = { 'Plastic', 'ForceField', 'Neon' },
+    Default = 1, 
+    Multi = false, 
+
+    Text = 'Select Material',
+    Tooltip = 'Change the material of the ViewModel parts',
+
+    Callback = function(Value)
+        ViewModelSettings.Material = Enum.Material[Value] 
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) 
+    end
+})
+
+
+Rightone:AddToggle('Toggle ViewModel Chams', {
+    Text = 'Enable ViewModel Chams',
+    Default = false,
+    Callback = function(isEnabled)
+        ViewModelSettings.IsEnabled = isEnabled 
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) 
+    end
+})
+
+
+
+
+Rightone:AddToggle('Toggle Highlight', {
+    Text = 'Enable Highlight',
+    Default = false,
+    Callback = function(isEnabled)
+        ViewModelSettings.HighlightEnabled = isEnabled 
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        applySettings(viewModel) 
+    end,
+    
+    ConditionalEnabled = function() return ViewModelSettings.IsEnabled end
+})
+
+
+Rightone:AddToggle('Toggle Arm Customization', {
+    Text = 'Enable Arm Customization',
+    Default = false,
+    Callback = function(isEnabled)
+        ViewModelSettings.ArmCustomizationEnabled = isEnabled 
+        local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+        if isEnabled then
+            customizeArms(viewModel) 
+        end
+    end
+})
+
+Rightone:AddLabel('-------------------------------------------------------------')
+
+Rightone:AddToggle('disabletilt', {
+    Text = 'Disable Tilt',
+    Risky = true,
+    Tooltip = 'Disable Tilt',
+    Default = false,
+    Callback = function(isToggled)
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local characterTilt = character:FindFirstChild("CharacterTilt")
+
+        if characterTilt then
+            if isToggled then
+                characterTilt.Disabled = true
+                print("enabled = false")
+            else
+                characterTilt.Enabled = true
+                print("enabled = true")
+            end
+        else
+            warn("CharacterTilt not found in character.")
+        end
+    end
+})
+
+Rightone:AddToggle('Toggle Crosshair', {
+    Text = 'Toggle Crosshair',
+    Default = false,
+    Callback = function(isEnabled)
+        _G.CrosshairEnabled = isEnabled  
+    end
+    
+})
+
+
+Rightone:AddSlider('Crosshair Thickness', {
+    Text = 'Crosshair Thicknes',
+    Default = 1,
+    Min = 1,
+    Max = 4,
+    Rounding = 0,
+    Compact = false,
+
+    Callback = function(Value)
+VerticalLine.Thickness = Value
+HorizontalLine.Thickness = Value
+    end
+})
+
+
+Rightone:AddLabel('Crosshair Color Picker'):AddColorPicker('Crosshair Color Picker', {
+    Default = ViewModelSettings.Color,
+    Title = 'Crosshair Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+        
+        HorizontalLine.Color = Value
+        VerticalLine.Color = Value
+    end
+})
+
+
+viewmodelEnabled = false
+xOffset, yOffset, zOffset = 0, 0, 0
+
+
+function updateViewmodelOffset()
+    
+    local viewmodel = game.Workspace.Camera:FindFirstChild("ViewModel")
+    if viewmodel then
+        local camera = game.Workspace.CurrentCamera
+        
+        if camera and viewmodel then
+            local newPosition = camera.CFrame.Position + camera.CFrame:VectorToWorldSpace(Vector3.new(xOffset, yOffset, zOffset))
+            
+            
+            for _, part in pairs(viewmodel:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CFrame = CFrame.new(newPosition)
+                end
+            end
+        end
+    end
+end
+
+
+Rightone:AddToggle('viewq131425346yjrurefwgergrfgtjyuksedvgrtjh', {
+    Text = 'Viewmodel Toggle',
+    Default = false,
+    Callback = function(isEnabled)
+        
+        viewmodelEnabled = isEnabled
+        
+        
+        if viewmodelEnabled then
+            
+            game:GetService("RunService").Heartbeat:Connect(function()
+                updateViewmodelOffset()
+            end)
+        end
+    end
+})
+
+
+Rightone:AddSlider('X', {
+    Text = 'X Value',
+    Default = 0,
+    Min = -5,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+    Callback = function(Value)
+
+    end
+})
+
+
+Rightone:AddSlider('Y', {
+    Text = 'Y Value',
+    Default = 0,
+    Min = -5,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+    Callback = function(Value)
+
+    end
+})
+
+
+Rightone:AddSlider('Z', {
+    Text = 'Z Value',
+    Default = 0,
+    Min = -5,
+    Max = 5,
+    Rounding = 1,
+    Compact = false,
+    Callback = function(Value)
+        
+        zOffset = Value
+        
+        if viewmodelEnabled then
+            updateViewmodelOffset()
+        end
+    end
+})
+
+
+
+Rightone:AddToggle('Remove Clouds', {
+    Text = 'Remove Clouds',
+    Default = false,
+    Callback = function(isEnabled)
+        terrain = game:GetService("Workspace").Terrain
+
+        
+        if isEnabled then
+            terrain.Clouds.Density = 0
+        else
+            
+            terrain.Clouds.Density = 1
+        end
+    end
+})
+
+
+function onViewModelSpawned()
+    local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+    applySettings(viewModel) 
+    if ViewModelSettings.ArmCustomizationEnabled then
+        customizeArms(viewModel) 
+    end
+end
+
+
+onViewModelSpawned()
+
+
+game.Workspace.Camera.ChildAdded:Connect(function(child)
+    if child.Name == "ViewModel" then
+        wait(0.5) 
+        onViewModelSpawned() 
+    end
+end)
+
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid").Died:Wait() 
+    wait(0.5) 
+    onViewModelSpawned() 
+end)
+
+
+game:GetService("RunService").Stepped:Connect(function()
+    local viewModel = game.Workspace.Camera:FindFirstChild("ViewModel")
+    if viewModel then
+        applySettings(viewModel) 
+        if ViewModelSettings.ArmCustomizationEnabled then
+            customizeArms(viewModel) 
+        end
+    end
+end)
 
 -- Zoom functionality
 
@@ -1527,68 +2259,73 @@ Esptab3:AddSlider('jump', {
 })
 
 
--- Slider for Zoom Value
-LeftGroupBox:AddSlider('ZoomSlider', {
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local zoomValue = 0
+local defaultFOV = Camera.FieldOfView
+local zoomKey = Enum.KeyCode.Z
+local isZoomed = false
+
+ function applyZoom()
+    Camera.FieldOfView = defaultFOV - (zoomValue * 10)
+end
+
+-- Function to reset FOV
+ function resetZoom()
+    Camera.FieldOfView = defaultFOV
+end
+
+-- Slider for zoom value
+Esptab3:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
-    Default = 0,
+    Default = 8.1,
     Min = 0.1,
     Max = 9,
     Rounding = 1,
     Compact = false,
-
     Callback = function(Value)
         zoomValue = Value
-        -- Apply zoom every time the slider changes
-        applyZoom() -- Apply zoom immediately when the slider is adjusted
     end
 })
 
--- Keybind for Zoom
-LeftGroupBox:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
+-- Key picker for zoom toggle key
+Esptab3:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
     Default = 'Z',
     SyncToggleState = false,
     Mode = 'Toggle',
     Text = 'Zoom Keybind',
-    
     Callback = function(value)
         print('[cb] Keybind clicked!', value)
     end,
-
     ChangedCallback = function(newKey)
-        zoomKey = newKey -- Update the zoom key when a new key is selected
+        zoomKey = newKey
         print('[cb] Keybind changed!', newKey)
     end
 })
 
--- Variable to track zoom state
-local isZoomed = false
-
--- Function to handle input for zooming
+-- Function to handle key press
 local function onKeyPress(input, gameProcessed)
-    if gameProcessed then return end -- Prevent if the input is processed by the game
-
-    -- Check if the input is the zoom key
+    if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
         isZoomed = not isZoomed -- Toggle zoom state
-        if isZoomed then
-            applyZoom() -- Apply zoom when enabled
-        else
-            Camera.FieldOfView = defaultFOV -- Reset to default FOV when disabled
+        if not isZoomed then
+            resetZoom() -- Reset zoom if untoggled
         end
     end
 end
 
--- Connect the key press event
-UserInputService.InputBegan:Connect(onKeyPress)
-
--- Ensure zoom is applied when the slider is adjusted
-UserInputService.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
-        if isZoomed then
-            applyZoom() -- Reapply zoom if the key is currently held down
-        end
+-- Continuously apply zoom while toggled
+RunService.RenderStepped:Connect(function()
+    if isZoomed then
+        applyZoom()
     end
 end)
+
+-- Connect input events
+UserInputService.InputBegan:Connect(onKeyPress)
+
+
         local player = game.Players.LocalPlayer
 -- Path to the ReplicatedStorage and Player's inventory
 local replicatedStorage = game:GetService("ReplicatedStorage")
@@ -1667,6 +2404,7 @@ end
 LeftGroupBox:AddToggle('unlckfrmodsxfrewfrwesdgfrytuı8oıuykıj67ytrhg', {
     Text = 'Unlock Fire Modes',
     Tooltip = 'Unlock Fire Modes',
+    Risky = true,
     Default = false, -- Initialize with the current state
     Callback = function(enabled)
     Library:Notify("Unlocked")
@@ -1694,6 +2432,7 @@ LeftGroupBox:AddToggle('nowaterblur', {
 
 LeftGroupBox:AddToggle('Experiementalsettingon', {
     Text = 'Developer Mode',
+    Risky = true,
     Tooltip = '0',
     Default = tracersEnabled, -- Initialize with the current state
     Callback = function(value)
@@ -1855,7 +2594,7 @@ local function UpdateRadarVisibility(visible)
     end
 end
 
--- Add the toggle to the EnemyEspTab
+-- Add the toggle to the eaesptabactual
 if LeftGroupBox and LeftGroupBox.AddToggle then
     LeftGroupBox:AddToggle('minimap', {
         Text = 'Minimap',
@@ -1866,7 +2605,7 @@ if LeftGroupBox and LeftGroupBox.AddToggle then
         end
     })
 else
-    warn("EnemyEspTab or AddToggle method not found")
+    warn("eaesptabactual or AddToggle method not found")
 end
 
 -- Optional: Initialize the radar visibility based on the default toggle state
@@ -1878,7 +2617,7 @@ if LeftGroupBox and LeftGroupBox.GetToggleState then
         warn("Failed to get toggle state for 'minimap'")
     end
 else
-    warn("EnemyEspTab or GetToggleState method not found")
+    warn("eaesptabactual or GetToggleState method not found")
 end
 
 -- Loop
@@ -2009,8 +2748,8 @@ end
 
 local function sendNotification3()
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Welcome To Doge Hub V1.8";
-        Text = "Welcome To V1.8 Report Bugs";
+        Title = "Welcome To Nexify";
+        Text = "Welcome To Nexify. Report Bugs";
         Duration = 6;
     })
 end
@@ -2140,6 +2879,7 @@ end
 LeftGroupBox:AddToggle('InstantReload', {
     Text = 'Instant Reload',
     Tooltip = 'Instant Reload',
+    Risky = true,
     Default = false,
     
     Callback = function(isToggled)
@@ -2269,6 +3009,7 @@ end
 -- Adding a toggle to enable/disable rapid fire
 LeftGroupBox:AddToggle('rapidfire', { 
     Text = 'Rapid Fire', 
+    Risky = true,
     Default = false,
     Callback = function(state)
         if state then
@@ -2288,6 +3029,7 @@ LeftGroupBox:AddLabel('You Have To Equip your gun again to enable rapid fire.', 
 -- Adding a toggle to enable/disable faster aiming
 LeftGroupBox:AddToggle('fasteraim', { 
     Text = 'Instant Aim', 
+    Risky = true,
     Default = false,
     Callback = function(state)
         -- Iterate through each weapon in the local player's inventory
@@ -2347,34 +3089,12 @@ game.ReplicatedStorage.Buildable:Destroy()
 
  end)
 
-LeftGroupBox:AddToggle('disabletilt', {
-    Text = 'Disable Tilt',
-    Tooltip = 'Disable Tilt',
-    Default = false,
-
-    Callback = function(isToggled)
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local characterTilt = character:FindFirstChild("CharacterTilt")
-
-        if characterTilt then
-            if isToggled then
-                characterTilt.Disabled = true
-                print("enabled = false")
-            else
-                characterTilt.Enabled = true
-                print("enabled = true")
-            end
-        else
-            warn("CharacterTilt not found in character.")
-        end
-    end
-})
 
 
 LeftGroupBox:AddToggle('Bunnyhop', {
     Text = 'No Jump Cooldown',
     Tooltip = 'Bunny Hop',
+    Risky = true,
     Default = false,
 
     Callback = function(first)
@@ -2766,7 +3486,7 @@ local head = character:WaitForChild("Head")
 
 local billboards = {} -- Table to keep track of Billboard GUIs
 
-LeftGroupBox:AddToggle('exitesppdlt', {
+Rightone:AddToggle('exitesppdlt', {
     Text = 'Exit ESP',
     Tooltip = 'Shows Exits',
     Default = false,
@@ -2930,12 +3650,64 @@ local function toggleThirdPerson(enable)
 end
 
 -- Add toggle to the UI
-Esptab3:AddToggle('ThirdPerson', {
+Esptab3:AddToggle('Third Person', {
     Text = 'Third Person',
     Default = false,
 
     Callback = function(isEnabled)
-        toggleThirdPerson(isEnabled)
+        if isEnabled then
+            print("called")
+            
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdpe.lua"))()
+        else
+        print("called2")
+            
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdsianle.lua"))()
+        end
+    end
+
+
+}):AddKeyPicker('thirdpersonkeybind', {
+    Default = 'None',
+    SyncToggleState = true,
+
+    Mode = 'Toggle',
+
+    Text = 'Third Person Keybind',
+    NoUI = false,
+
+    Callback = function(Value)
+    end,
+})
+
+
+Esptab3:AddToggle('Server Info', {
+    Text = 'Server Info',
+    Default = true,
+    Callback = function(value)
+        local player = game.Players.LocalPlayer 
+        if player and player:FindFirstChild("PlayerGui") then 
+            local serverInfo = player.PlayerGui:FindFirstChild("ServerInfo") 
+            if serverInfo then
+                serverInfo.Enabled = value 
+            else
+                warn("ServerInfo GUI not found in PlayerGui") 
+            end
+        else
+            warn("PlayerGui not found for LocalPlayer") 
+        end
+    end
+})
+
+
+
+Esptab3:AddToggle('Menu Blur', {
+    Text = 'Menu Blur',
+    Default = true,
+    Callback = function(value)
+
+game.Lighting.InventoryBlur.Enabled = value
+
     end
 })
 
@@ -3268,6 +4040,7 @@ end
 
 LeftGroupBox:AddToggle('nosway', {
     Text = 'No Sway',
+    Risky = true,
     Default = false,
     Callback = function(first)
         toggleSway()
@@ -3281,11 +4054,221 @@ LeftGroupBox:AddToggle('skeletonesp', {
         ToggleESP()
     end
 })
+
+ScreenGuiForInventory = Instance.new("ScreenGui")
+FrameForInventory = Instance.new("Frame")
+Slot1ForHotbar = Instance.new("ImageLabel")
+Slot2ForHotbar = Instance.new("ImageLabel")
+Slot3ForHotbar = Instance.new("ImageLabel")
+CutterForInventory = Instance.new("TextLabel")
+UICornerForInventory = Instance.new("UICorner")
+UIStrokeForInventory = Instance.new("UIStroke")
+PlayerNameLabelForInventory = Instance.new("TextLabel")  -- New label to display the player's name
+
+ScreenGuiForInventory.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGuiForInventory.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+FrameForInventory.Parent = ScreenGuiForInventory
+FrameForInventory.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+FrameForInventory.BackgroundTransparency = 0.670
+FrameForInventory.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FrameForInventory.BorderSizePixel = 0
+FrameForInventory.Position = UDim2.new(0.5, -398, 0.010, -37)
+FrameForInventory.Size = UDim2.new(0, 796, 0, 74)
+
+Slot1ForHotbar.Name = "Slot1ForHotbar"
+Slot1ForHotbar.BackgroundTransparency = 1
+Slot1ForHotbar.Parent = FrameForInventory
+Slot1ForHotbar.Position = UDim2.new(0.0075, 0, 0.0811, 0)
+Slot1ForHotbar.Size = UDim2.new(0, 49, 0, 44)
+Slot1ForHotbar.Image = ""
+
+Slot2ForHotbar.Name = "Slot2ForHotbar"
+Slot2ForHotbar.BackgroundTransparency = 1
+Slot2ForHotbar.Parent = FrameForInventory
+Slot2ForHotbar.Position = UDim2.new(0.1118, 0, 0.0811, 0)
+Slot2ForHotbar.Size = UDim2.new(0, 49, 0, 44)
+Slot2ForHotbar.Image = ""
+
+Slot3ForHotbar.Name = "Slot3ForHotbar"
+Slot3ForHotbar.BackgroundTransparency = 1
+Slot3ForHotbar.Parent = FrameForInventory
+Slot3ForHotbar.Position = UDim2.new(0.2173, 0, 0.0811, 0)
+Slot3ForHotbar.Size = UDim2.new(0, 49, 0, 44)
+Slot3ForHotbar.Image = ""
+
+CutterForInventory.Name = "CutterForInventory"
+CutterForInventory.Parent = FrameForInventory
+CutterForInventory.BackgroundTransparency = 1
+CutterForInventory.Position = UDim2.new(0.1897, 0, -0.1622, 0)
+CutterForInventory.Size = UDim2.new(0, 200, 0, 79)
+CutterForInventory.Font = Enum.Font.SourceSans
+CutterForInventory.Text = "|"
+CutterForInventory.TextColor3 = Color3.fromRGB(255, 255, 255)
+CutterForInventory.TextScaled = true
+
+UICornerForInventory.Parent = FrameForInventory
+
+UIStrokeForInventory.Parent = FrameForInventory
+UIStrokeForInventory.Color = Color3.fromRGB(255, 152, 35)
+UIStrokeForInventory.Thickness = 1.6
+
+-- Player name label
+PlayerNameLabelForInventory.Name = "PlayerNameLabelForInventory"
+PlayerNameLabelForInventory.Parent = FrameForInventory
+PlayerNameLabelForInventory.BackgroundTransparency = 1
+PlayerNameLabelForInventory.Position = UDim2.new(0, 0, 0, -25)
+PlayerNameLabelForInventory.Size = UDim2.new(0, 796, 0, 30)
+PlayerNameLabelForInventory.Font = Enum.Font.Code
+PlayerNameLabelForInventory.TextColor3 = Color3.fromRGB(255, 255, 255)
+PlayerNameLabelForInventory.TextScaled = true
+PlayerNameLabelForInventory.Text = "No player selected"  -- Default text
+
+-- Toggle state and function to change transparency
+isGuiVisibleForInventory = false  -- This will control the visibility of the ScreenGui
+
+function toggleGuiVisibilityForInventory()
+    if isGuiVisibleForInventory then
+        ScreenGuiForInventory.Enabled = false  -- Hide the ScreenGui
+        isGuiVisibleForInventory = false
+    else
+        ScreenGuiForInventory.Enabled = true  -- Show the ScreenGui
+        isGuiVisibleForInventory = true
+    end
+end
+
+function isPlayerInFOV(localPlayer, otherPlayer, fov)
+    local localCharacter = localPlayer.Character
+    local otherCharacter = otherPlayer.Character
+    if not localCharacter or not otherCharacter then return false end
+
+    local localPosition = localCharacter:FindFirstChild("HumanoidRootPart").Position
+    local otherPosition = otherCharacter:FindFirstChild("HumanoidRootPart").Position
+    local direction = (otherPosition - localPosition).Unit
+
+    local forwardVector = localCharacter:FindFirstChild("HumanoidRootPart").CFrame.LookVector
+    local angle = math.deg(math.acos(direction:Dot(forwardVector)))
+    return angle <= fov / 2
+end
+
+function getClosestPlayerToCrosshair(localPlayer, playersInFOV)
+    local camera = game.Workspace.CurrentCamera
+    local closestPlayer = nil
+    local closestDistance = math.huge
+    
+    for _, player in ipairs(playersInFOV) do
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local rootPart = character.HumanoidRootPart
+            local screenPosition, onScreen = camera:WorldToScreenPoint(rootPart.Position)
+            if onScreen then
+                local distance = (Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2) - Vector2.new(screenPosition.X, screenPosition.Y)).Magnitude
+                if distance < closestDistance then
+                    closestDistance = distance
+                    closestPlayer = player
+                end
+            end
+        end
+    end
+    return closestPlayer
+end
+
+function updateInventorySlotsForInventory(localPlayer, slots)
+    local playersInFOV = {}
+    local fov = 160  -- The FOV angle
+    local players = game.Players:GetPlayers()
+
+    for _, otherPlayer in pairs(players) do
+        if otherPlayer ~= localPlayer and isPlayerInFOV(localPlayer, otherPlayer, fov) then
+            table.insert(playersInFOV, otherPlayer)
+        end
+    end
+
+    closestPlayer = getClosestPlayerToCrosshair(localPlayer, playersInFOV)
+    if closestPlayer then
+        PlayerNameLabelForInventory.Text = closestPlayer.Name .. "'s Inventory"  -- Update the label with the player's name
+    else
+        PlayerNameLabelForInventory.Text = "No player selected"
+    end
+
+    -- Update inventory slots for the closest player
+    for i = 1, #slots do
+        slots[i].Image = ""
+    end
+
+    if closestPlayer then
+        local inventory = game.ReplicatedStorage.Players:FindFirstChild(closestPlayer.Name):FindFirstChild("Inventory")
+        if inventory then
+            local slotIndex = 1
+            for _, item in pairs(inventory:GetChildren()) do
+                if slotIndex <= #slots then
+                    local itemProperties = item:FindFirstChild("ItemProperties")
+                    if itemProperties then
+                        local itemIcon = itemProperties:FindFirstChild("ItemIcon")
+                        if itemIcon then
+                            if itemIcon.ClassName == "ImageLabel" then
+                                slots[slotIndex].Image = itemIcon.Image
+                            elseif itemIcon.ClassName == "StringValue" then
+                                slots[slotIndex].Image = "rbxassetid://" .. itemIcon.Value
+                            else
+                                print("Unsupported ItemIcon type: " .. itemIcon.ClassName)
+                            end
+                            slotIndex += 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+player = game.Players.LocalPlayer
+slots = {Slot1ForHotbar, Slot2ForHotbar, Slot3ForHotbar}
+
+game:GetService("RunService").RenderStepped:Connect(function()
+wait(0.3)
+    updateInventorySlotsForInventory(player, slots)
+end)
+
+LeftGroupBox:AddToggle('Inventory Viewer', {
+    Text = 'Inventory Viewer',
+    Default = false,
+    Risky = true,
+    Tooltip = 'Displays Inventory',
+    Callback = function(first)
+        toggleGuiVisibilityForInventory()
+    end
+}):AddKeyPicker('invViewerKeyBind', {
+    Default = 'None',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Inventory Viewer Key Bind',
+    NoUI = false,
+    Callback = function(Value)
+    end,
+})
+
+LeftGroupBox:AddSlider('Silent Aim Resp Sped', {
+    Text = 'Silent Aim Response Speed',
+    Default = 0.04,
+    Min = 0.01,
+    Max = 0.10,
+    Risky = true,
+    Rounding = 10,
+    Compact = false,
+
+    Callback = function(Value)
+--loll
+
+    end
+})
+
 -- GUI Toggle Integration
 LeftGroupBox:AddToggle('Silentim', {
     Text = 'Silent Aim',
     Default = false, -- Default value (true / false)
-    Tooltip = 'Working Silent', -- Information shown when you hover over the toggle
+    Risky = true,
+    Tooltip = 'Silent Aim that will fuck everybody from ass', -- Information shown when you hover over the toggle
     Callback = function(Value)
                 silent_aim.enabled = not silent_aim.enabled
         print("Silent Aim " .. (silent_aim.enabled and "Enabled" or "Disabled"))
@@ -3567,16 +4550,211 @@ players.PlayerAdded:Connect(function(player)
     end)
 end)
 
--- Example of how to toggle ESP
-LeftGroupBox:AddToggle('EspSwitch', {
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+skidespLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/skid.lua'), true))()
+espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
+corpseesplib3 = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/corpseesplib.lua'), true))()
+
+alreadyinit=false
+function firstloadesplib()
+
+if alreadyinit==false then
+alreadyinit=true
+wait(0.1)
+espLib:Load()
+end
+
+end
+
+eaesptabactual:AddToggle('EspSwitch', {
     Text = 'Enable ESP',
     Default = false,
-    Callback = function(first)
-        toggleESP()
+    Risky = true,
+    Callback = function(enabled)
+    firstloadesplib()
+        espLib.options.enabled = enabled
+    end
+})
+
+eaesptabactual:AddLabel('Box Esp Color Picker'):AddColorPicker('Box Esp Color Picker', {
+    Default = Color3.fromRGB(255, 255, 255),  
+    Title = 'Box Esp Color Picker',
+    Transparency = 0,                         
+
+    Callback = function(Value)
+
+        espLib.options.boxesColor = Value     
     end
 })
 
 
+
+eaesptabactual:AddToggle('boxswitch', {
+    Text = 'Boxes',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.boxes = enabled
+    end
+})
+
+eaesptabactual:AddToggle('Outofviewarrors', {
+    Text = 'Out Of View Arrows',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.outOfViewArrows = enabled
+    end
+})
+
+eaesptabactual:AddToggle('Outofviewarrors', {
+    Text = 'Out Of View Arrows Filled',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.outOfViewArrowsFilled = enabled
+    end
+})
+
+eaesptabactual:AddSlider('outofviewarrorsslider', {
+    Text = 'Out Of View Arrows Size',
+    Default = 25,
+    Min = 5,
+    Max = 40,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.outOfViewArrowsSize = Value
+        
+    end
+})
+
+eaesptabactual:AddSlider('outofviewarrorssliderRadius', {
+    Text = 'Out Of View Arrows Radius',
+    Default = 100,
+    Min = 20,
+    Max = 500,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.outOfViewArrowsRadius = Value
+        
+    end
+})
+
+eaesptabactual:AddSlider('outofviewarrorsslidertRANSPARENCY', {
+    Text = 'Out Of View Arrows Transparency',
+    Default = 0.5,
+    Min = 0.1,
+    Max = 1,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.outOfViewArrowsTransparency = Value
+        
+    end
+})
+
+eaesptabactual:AddToggle('visiblecheck', {
+    Text = 'Visible Check',
+    Default = false,
+    Callback = function(enabled)
+      --  espLib.options.visibleOnly = enabled
+    end
+})
+
+
+eaesptabactual:AddLabel('Chams Esp Color Picker'):AddColorPicker('Chams Esp Color Picker', {
+    Default = Color3.fromRGB(255, 255, 255),  
+    Title = 'Chams Esp Color Picker',
+    Transparency = 0,                         
+
+    Callback = function(Value)
+        
+        espLib.options.chamsFillColor = Value     
+    end
+})
+
+
+eaesptabactual:AddToggle('chamswwt', {
+    Text = 'Chams',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.chams = enabled
+    end
+})
+
+eaesptabactual:AddToggle('distance', {
+    Text = 'Distance',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.distance = enabled
+    end
+})
+
+
+
+eaesptabactual:AddToggle('healthtext', {
+    Text = 'Health Text',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.healthText = enabled
+    end
+})
+
+eaesptabactual:AddLabel('Health Esp Color Picker'):AddColorPicker('Health Esp Color Picker', {
+    Default = Color3.fromRGB(0, 255, 0),  
+    Title = 'Health Esp Color Picker',
+    Transparency = 0,                         
+
+    Callback = function(Value)
+        
+        espLib.options.healthBarsColor = Value     
+    end
+})
+
+eaesptabactual:AddToggle('healthbar', {
+    Text = 'Health Bar',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.healthBars = enabled
+    end
+})
+
+eaesptabactual:AddToggle('names', {
+    Text = 'Names',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.names = enabled
+    end
+})
+
+
+
+eaesptabactual:AddToggle('limitdistance', {
+    Text = 'Limit Distance',
+    Default = false,
+    Callback = function(enabled)
+        espLib.options.limitDistance = enabled
+    end
+})
+
+eaesptabactual:AddSlider('distancelimit', {
+    Text = 'Distance Limit',
+    Default = 900,
+    Min = 10,
+    Max = 1000,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.maxDistance = Value
+        
+    end
+})
+
+eaesptabactual:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 28.12.2024\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\n--- Performance Metrics ---\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Wave\nExecution Time (Avg): <0.5ms\n--- Security Details ---\nAnticheat Bypass: Failed\nDebugging Protections: Enabled\nExploit Protections: High\nTelemetry Blocking: Active\n\n--- User Environment ---\nExecutor Version: Wave\nCustom Themes: Supported\n\n--- Additional Info ---\nSupport Contact: .crazyniga (Discord)\nLicense Type: Buyer / Standart", true)
 
 
 local character = player.Character or player.CharacterAdded:Wait()
@@ -3713,7 +4891,7 @@ LeftGroupBox:AddToggle('removevisors', {
 LeftGroupBox:AddToggle('fovdisplay', {
     Text = 'Show FOV Circle',
     Tooltip = 'Toggle the visibility of the FOV circle',
-    Default = true,
+    Default = false,
     Callback = function(visible)
         -- Update FOV circle visibility
         if fovCircle then
@@ -3731,232 +4909,6 @@ LeftGroupBox:AddToggle('debugPrint', {
         print("Debug Print " .. (debugEnabled and "Enabled" or "Disabled"))
     end
 })
-
--- Create the FOV Circle initially
-
-
-
-local MyButton = LeftGroupBox:AddButton({
-    Text = 'Button',
-    Func = function()
-        print('You clicked a button!')
-    end,
-    DoubleClick = false,
-    Tooltip = 'This is the main button'
-})
-
-local MyButton2 = MyButton:AddButton({
-    Text = 'Sub button',
-    Func = function()
-        print('You clicked a sub button!')
-    end,
-    DoubleClick = true, -- You will have to click this button twice to trigger the callback
-    Tooltip = 'This is the sub button (double click me!)'
-})
-
---[[
-    NOTE: You can chain the button methods!
-    EXAMPLE:
-
-    LeftGroupBox:AddButton({ Text = 'Kill all', Func = Functions.KillAll, Tooltip = 'This will kill everyone in the game!' })
-        :AddButton({ Text = 'Kick all', Func = Functions.KickAll, Tooltip = 'This will kick everyone in the game!' })
-]]
-
--- Groupbox:AddLabel
--- Arguments: Text, DoesWrap
-LeftGroupBox:AddLabel('This is a label')
-LeftGroupBox:AddLabel('This is a label\n\nwhich wraps its text!', true)
-
--- Groupbox:AddDivider
--- Arguments: None
-LeftGroupBox:AddDivider()
-
---[[
-    Groupbox:AddSlider
-    Arguments: Idx, SliderOptions
-
-    SliderOptions: {
-        Text = string,
-        Default = number,
-        Min = number,
-        Max = number,
-        Suffix = string,
-        Rounding = number,
-        Compact = boolean,
-        HideMax = boolean,
-    }
-
-    Text, Default, Min, Max, Rounding must be specified.
-    Suffix is optional.
-    Rounding is the number of decimal places for precision.
-
-    Compact will hide the title label of the Slider
-
-    HideMax will only display the value instead of the value & max value of the slider
-    Compact will do the same thing
-]]
-LeftGroupBox:AddSlider('MySlider', {
-    Text = 'This is my slider!',
-    Default = 0,
-    Min = 0,
-    Max = 5,
-    Rounding = 1,
-    Compact = false,
-
-    Callback = function(Value)
-        
-    end
-})
-
--- Options is a table added to getgenv() by the library
--- You index Options with the specified index, in this case it is 'MySlider'
--- To get the value of the slider you do slider.Value
-
-
-
--- Groupbox:AddInput
--- Arguments: Idx, Info
-LeftGroupBox:AddInput('MyTextbox', {
-    Default = 'My textbox!',
-    Numeric = false, -- true / false, only allows numbers
-    Finished = false, -- true / false, only calls callback when you press enter
-
-    Text = 'This is a textbox',
-    Tooltip = 'This is a tooltip', -- Information shown when you hover over the textbox
-
-    Placeholder = 'Placeholder text', -- placeholder text when the box is empty
-    -- MaxLength is also an option which is the max length of the text
-
-    Callback = function(Value)
-        print('[cb] Text updated. New text:', Value)
-    end
-})
-
-Options.MyTextbox:OnChanged(function()
-    print('Text updated. New text:', Options.MyTextbox.Value)
-end)
-
--- Groupbox:AddDropdown
--- Arguments: Idx, Info
-
-LeftGroupBox:AddDropdown('MyDropdown', {
-    Values = { 'This', 'is', 'a', 'dropdown' },
-    Default = 1, -- number index of the value / string
-    Multi = false, -- true / false, allows multiple choices to be selected
-
-    Text = 'A dropdown',
-    Tooltip = 'This is a tooltip', -- Information shown when you hover over the dropdown
-
-    Callback = function(Value)
-        print('[cb] Dropdown got changed. New value:', Value)
-    end
-})
-
-Options.MyDropdown:OnChanged(function()
-    print('Dropdown got changed. New value:', Options.MyDropdown.Value)
-end)
-
-Options.MyDropdown:SetValue('This')
-
--- Multi dropdowns
-LeftGroupBox:AddDropdown('MyMultiDropdown', {
-    -- Default is the numeric index (e.g. "This" would be 1 since it if first in the values list)
-    -- Default also accepts a string as well
-
-    -- Currently you can not set multiple values with a dropdown
-
-    Values = { 'This', 'is', 'a', 'dropdown' },
-    Default = 1,
-    Multi = true, -- true / false, allows multiple choices to be selected
-
-    Text = 'A dropdown',
-    Tooltip = 'This is a tooltip', -- Information shown when you hover over the dropdown
-
-    Callback = function(Value)
-        print('[cb] Multi dropdown got changed:', Value)
-    end
-})
-
-Options.MyMultiDropdown:OnChanged(function()
-    -- print('Dropdown got changed. New value:', )
-    print('Multi dropdown got changed:')
-    for key, value in next, Options.MyMultiDropdown.Value do
-        print(key, value) -- should print something like This, true
-    end
-end)
-
-Options.MyMultiDropdown:SetValue({
-    This = true,
-    is = true,
-})
-
-LeftGroupBox:AddDropdown('MyPlayerDropdown', {
-    SpecialType = 'Player',
-    Text = 'A player dropdown',
-    Tooltip = 'This is a tooltip', -- Information shown when you hover over the dropdown
-
-    Callback = function(Value)
-        print('[cb] Player dropdown got changed:', Value)
-    end
-})
-
--- Label:AddColorPicker
--- Arguments: Idx, Info
-
--- You can also ColorPicker & KeyPicker to a Toggle as well
-
-LeftGroupBox:AddLabel('Color'):AddColorPicker('ColorPicker', {
-    Default = Color3.new(0, 1, 0), -- Bright green
-    Title = 'Some color', -- Optional. Allows you to have a custom color picker title (when you open it)
-    Transparency = 0, -- Optional. Enables transparency changing for this color picker (leave as nil to disable)
-
-    Callback = function(Value)
-        
-    end
-})
-
-
-
--- Label:AddKeyPicker
--- Arguments: Idx, Info
-
- -- Sets keybind to MB2, mode to Hold
-
--- Long text label to demonstrate UI scrolling behaviour.
-local LeftGroupBox2 = Tabs.Main:AddLeftGroupbox('Groupbox #2');
-LeftGroupBox2:AddLabel('Oh no...\nThis label spans multiple lines!\n\nWe\'re gonna run out of UI space...\nJust kidding! Scroll down!\n\n\nHello from below!', true)
-
-local TabBox = Tabs.Main:AddRightTabbox() -- Add Tabbox on right side
-
--- Anything we can do in a Groupbox, we can do in a Tabbox tab (AddToggle, AddSlider, AddLabel, etc etc...)
-local Tab1 = TabBox:AddTab('Tab 1')
-Tab1:AddToggle('Tab1Toggle', { Text = 'Tab1 Toggle' });
-
-local Tab2 = TabBox:AddTab('Tab 2')
-Tab2:AddToggle('Tab2Toggle', { Text = 'Tab2 Toggle' });
-
--- Dependency boxes let us control the visibility of UI elements depending on another UI elements state.
--- e.g. we have a 'Feature Enabled' toggle, and we only want to show that features sliders, dropdowns etc when it's enabled!
--- Dependency box example:
-local RightGroupbox = Tabs.Main:AddRightGroupbox('Groupbox #3');
-RightGroupbox:AddToggle('ControlToggle', { Text = 'Dependency box toggle' });
-
-local Depbox = RightGroupbox:AddDependencyBox();
-Depbox:AddToggle('DepboxToggle', { Text = 'Sub-dependency box toggle' });
-
--- We can also nest dependency boxes!
--- When we do this, our SupDepbox automatically relies on the visiblity of the Depbox - on top of whatever additional dependencies we set
-local SubDepbox = Depbox:AddDependencyBox();
-SubDepbox:AddSlider('DepboxSlider', { Text = 'Slider', Default = 50, Min = 0, Max = 100, Rounding = 0 });
-SubDepbox:AddDropdown('DepboxDropdown', { Text = 'Dropdown', Default = 1, Values = {'a', 'b', 'c'} });
-
-Depbox:SetupDependencies({
-    { Toggles.ControlToggle, true } -- We can also pass `false` if we only want our features to show when the toggle is off!
-});
-
-SubDepbox:SetupDependencies({
-    { Toggles.DepboxToggle, true }
-});
 
 -- Library functions
 -- Sets the watermark visibility
@@ -3976,7 +4928,7 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
         FrameCounter = 0;
     end;
 
-Library:SetWatermark(('Doge Hub /\ Wave | %s fps | %s ms | %s | %s'):format(
+Library:SetWatermark(('Nexify /\ Wave | %s fps | %s ms | %s | %s'):format(
     math.floor(FPS),
     math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
     os.date("%H:%M:%S"),  -- Current time
@@ -4048,4 +5000,3 @@ trackPlayers()
 
 -- Optional: Initial application of the blur
 -- toggleBlur()  -- Uncomment if you want to start with blur applied
-
