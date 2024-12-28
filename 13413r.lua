@@ -48,6 +48,7 @@ end
 
 
 
+messagebox("Loaded Nexify Solara.\n\n\n- By mafaka.", "Nexify Solara", 0)
 
 game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
 
