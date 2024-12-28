@@ -2304,7 +2304,7 @@ Esptab3:AddToggle('No Fall Damage', {
     Callback = function(isEnabled)
         if isEnabled and bypassedanticheat == true then
            
-            game.Workspace.Gravity = 99999
+            game.Workspace.Gravity = 999999999
             
         else
             game.Workspace.Gravity = 90
