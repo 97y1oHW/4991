@@ -45,6 +45,8 @@ end
 
 
 
+
+messagebox("Loaded Nexify Wave.\n\n\n- By mafaka.", "Nexify Wave", 0)
  g = Instance.new("ScreenGui")
 g.Parent = game:GetService("CoreGui")
  t = Instance.new("TextLabel")
