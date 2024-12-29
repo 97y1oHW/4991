@@ -137,7 +137,7 @@ Modules.InvalidLoad("Nexify", "Red", 0.05, "#")
 
 
 
-messagebox("Loaded Nexify Wave.\n\n\n- By mafaka.", "Nexify Wave", 0)
+--messagebox("Loaded Nexify Wave.\n\n\n- By mafaka.", "Nexify Wave", 0)
  g = Instance.new("ScreenGui")
 g.Parent = game:GetService("CoreGui")
  t = Instance.new("TextLabel")
@@ -2397,7 +2397,7 @@ Esptab3:AddToggle('No Fall Damage', {
     Callback = function(isEnabled)
         if isEnabled and bypassedanticheat == true then
            
-            game.Workspace.Gravity = 999999999
+            game.Workspace.Gravity = math.huge
             
         else
             game.Workspace.Gravity = 90
@@ -3186,6 +3186,68 @@ LeftGroupBox:AddToggle('rapidfire', {
 })
 
 LeftGroupBox:AddLabel('You Have To Equip your gun again to enable rapid fire.', true)
+
+
+player = game:GetService("Players").LocalPlayer
+mouse = player:GetMouse()
+RunService = game:GetService("RunService")
+toggle = false
+
+function toggleShooting()
+    toggle = not toggle
+end
+
+
+RunService.RenderStepped:Connect(function()
+    if toggle then
+        wait(0.001)
+        for _, target in pairs(game:GetService("Players"):GetPlayers()) do
+            if target ~= player and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                targetHRP = target.Character.HumanoidRootPart
+                direction = (targetHRP.Position - player.Character.HumanoidRootPart.Position).unit
+                camera = workspace.CurrentCamera
+                cameraDirection = camera.CFrame.LookVector
+                
+                angle = math.acos(cameraDirection:Dot(direction))
+                fov = math.rad(55)
+
+                if angle <= fov / 2 then
+                    ray = Ray.new(camera.CFrame.Position, (targetHRP.Position - camera.CFrame.Position).unit * 100)
+                    hitPart, hitPosition = workspace:FindPartOnRay(ray, player.Character)
+
+                    if hitPart and hitPart:IsDescendantOf(target.Character) then
+                        mouse1press()
+                        wait()
+                        mouse1release()
+                    end
+                end
+            end
+        end
+    end
+end)
+
+LeftGroupBox:AddToggle('trigfuckkk', {
+    Text = 'Trigger Bot',
+    Default = false,
+    Risky = true,
+    Callback = function(isEnabled)
+
+toggleShooting()
+
+
+    end
+}):AddKeyPicker('triggerbot', {
+    Default = 'None',
+    SyncToggleState = true,
+
+    Mode = 'Toggle',
+
+    Text = 'Trigger Bot Key Bind',
+    NoUI = false,
+
+    Callback = function(Value)
+    end,
+})
 
 -- Adding a toggle to enable/disable faster aiming
 LeftGroupBox:AddToggle('fasteraim', { 
@@ -4219,6 +4281,12 @@ UICornerForInventory = Instance.new("UICorner")
 UIStrokeForInventory = Instance.new("UIStroke")
 PlayerNameLabelForInventory = Instance.new("TextLabel")  -- New label to display the player's name
 
+-- Adding 8 clothing slots
+ClothingSlots = {}
+for i = 1, 8 do
+    ClothingSlots[i] = Instance.new("ImageLabel")
+end
+
 ScreenGuiForInventory.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGuiForInventory.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -4254,8 +4322,8 @@ Slot3ForHotbar.Image = ""
 CutterForInventory.Name = "CutterForInventory"
 CutterForInventory.Parent = FrameForInventory
 CutterForInventory.BackgroundTransparency = 1
-CutterForInventory.Position = UDim2.new(0.1897, 0, -0.1622, 0)
-CutterForInventory.Size = UDim2.new(0, 200, 0, 79)
+CutterForInventory.Position = UDim2.new(0.325, 0, 0.0811, 0)  -- Adjusted position to align properly
+CutterForInventory.Size = UDim2.new(0, 20, 0, 44)
 CutterForInventory.Font = Enum.Font.SourceSans
 CutterForInventory.Text = "|"
 CutterForInventory.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -4278,6 +4346,16 @@ PlayerNameLabelForInventory.TextColor3 = Color3.fromRGB(255, 255, 255)
 PlayerNameLabelForInventory.TextScaled = true
 PlayerNameLabelForInventory.Text = "No player selected"  -- Default text
 
+-- Clothing slots
+for i, slot in ipairs(ClothingSlots) do
+    slot.Name = "ClothingSlot" .. i
+    slot.BackgroundTransparency = 1
+    slot.Parent = FrameForInventory
+    slot.Position = UDim2.new(0.35 + (i - 1) * 0.075, 0, 0.0811, 0)  -- Positions slots with spacing
+    slot.Size = UDim2.new(0, 49, 0, 44)
+    slot.Image = ""
+end
+
 -- Toggle state and function to change transparency
 isGuiVisibleForInventory = false  -- This will control the visibility of the ScreenGui
 
@@ -4294,14 +4372,18 @@ end
 function isPlayerInFOV(localPlayer, otherPlayer, fov)
     local localCharacter = localPlayer.Character
     local otherCharacter = otherPlayer.Character
-    if not localCharacter or not otherCharacter then return false end
 
-    local localPosition = localCharacter:FindFirstChild("HumanoidRootPart").Position
-    local otherPosition = otherCharacter:FindFirstChild("HumanoidRootPart").Position
+    -- Check if both players' characters and HumanoidRootPart exist
+    if not localCharacter or not otherCharacter then return false end
+    if not localCharacter:FindFirstChild("HumanoidRootPart") or not otherCharacter:FindFirstChild("HumanoidRootPart") then return false end
+
+    local localPosition = localCharacter.HumanoidRootPart.Position
+    local otherPosition = otherCharacter.HumanoidRootPart.Position
     local direction = (otherPosition - localPosition).Unit
 
-    local forwardVector = localCharacter:FindFirstChild("HumanoidRootPart").CFrame.LookVector
+    local forwardVector = localCharacter.HumanoidRootPart.CFrame.LookVector
     local angle = math.deg(math.acos(direction:Dot(forwardVector)))
+
     return angle <= fov / 2
 end
 
@@ -4309,7 +4391,7 @@ function getClosestPlayerToCrosshair(localPlayer, playersInFOV)
     local camera = game.Workspace.CurrentCamera
     local closestPlayer = nil
     local closestDistance = math.huge
-    
+
     for _, player in ipairs(playersInFOV) do
         local character = player.Character
         if character and character:FindFirstChild("HumanoidRootPart") then
@@ -4327,48 +4409,60 @@ function getClosestPlayerToCrosshair(localPlayer, playersInFOV)
     return closestPlayer
 end
 
-function updateInventorySlotsForInventory(localPlayer, slots)
+function updateInventorySlotsForInventory(localPlayer, equipmentSlots, clothingSlots)
     local playersInFOV = {}
     local fov = 160  -- The FOV angle
     local players = game.Players:GetPlayers()
 
     for _, otherPlayer in pairs(players) do
-        if otherPlayer ~= localPlayer and isPlayerInFOV(localPlayer, otherPlayer, fov) then
-            table.insert(playersInFOV, otherPlayer)
+        -- Skip the local player and players without valid characters
+        if otherPlayer ~= localPlayer and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if isPlayerInFOV(localPlayer, otherPlayer, fov) then
+                table.insert(playersInFOV, otherPlayer)
+            end
         end
     end
 
-    closestPlayer = getClosestPlayerToCrosshair(localPlayer, playersInFOV)
+    local closestPlayer = getClosestPlayerToCrosshair(localPlayer, playersInFOV)
     if closestPlayer then
         PlayerNameLabelForInventory.Text = closestPlayer.Name .. "'s Inventory"  -- Update the label with the player's name
     else
         PlayerNameLabelForInventory.Text = "No player selected"
     end
 
-    -- Update inventory slots for the closest player
-    for i = 1, #slots do
-        slots[i].Image = ""
+    -- Clear equipment and clothing slots
+    for i = 1, #equipmentSlots do
+        equipmentSlots[i].Image = ""
+    end
+    for i = 1, #clothingSlots do
+        clothingSlots[i].Image = ""
     end
 
+    -- Update slots for the closest player
     if closestPlayer then
-        local inventory = game.ReplicatedStorage.Players:FindFirstChild(closestPlayer.Name):FindFirstChild("Inventory")
-        if inventory then
-            local slotIndex = 1
-            for _, item in pairs(inventory:GetChildren()) do
-                if slotIndex <= #slots then
-                    local itemProperties = item:FindFirstChild("ItemProperties")
-                    if itemProperties then
-                        local itemIcon = itemProperties:FindFirstChild("ItemIcon")
-                        if itemIcon then
-                            if itemIcon.ClassName == "ImageLabel" then
-                                slots[slotIndex].Image = itemIcon.Image
-                            elseif itemIcon.ClassName == "StringValue" then
-                                slots[slotIndex].Image = "rbxassetid://" .. itemIcon.Value
-                            else
-                                print("Unsupported ItemIcon type: " .. itemIcon.ClassName)
+        local playerData = game.ReplicatedStorage.Players:FindFirstChild(closestPlayer.Name)
+        if playerData then
+            local inventory = playerData:FindFirstChild("Inventory")
+            if inventory then
+                local slotIndex = 1
+                for _, item in pairs(inventory:GetChildren()) do
+                    local slots = slotIndex <= #equipmentSlots and equipmentSlots or clothingSlots
+                    local slot = slots[slotIndex]
+                    if slot then
+                        local itemProperties = item:FindFirstChild("ItemProperties")
+                        if itemProperties then
+                            local itemIcon = itemProperties:FindFirstChild("ItemIcon")
+                            if itemIcon then
+                                if itemIcon.ClassName == "ImageLabel" then
+                                    slot.Image = itemIcon.Image
+                                elseif itemIcon.ClassName == "StringValue" then
+                                    slot.Image = "rbxassetid://" .. itemIcon.Value
+                                else
+                                    print("Unsupported ItemIcon type: " .. itemIcon.ClassName)
+                                end
                             end
-                            slotIndex += 1
                         end
+                        slotIndex += 1
                     end
                 end
             end
@@ -4376,13 +4470,17 @@ function updateInventorySlotsForInventory(localPlayer, slots)
     end
 end
 
-player = game.Players.LocalPlayer
-slots = {Slot1ForHotbar, Slot2ForHotbar, Slot3ForHotbar}
+-- Regularly update inventory slots
+local player = game.Players.LocalPlayer
+local equipmentSlots = {Slot1ForHotbar, Slot2ForHotbar, Slot3ForHotbar}
+local clothingSlots = ClothingSlots
 
 game:GetService("RunService").RenderStepped:Connect(function()
-wait(0.3)
-    updateInventorySlotsForInventory(player, slots)
+    pcall(function()  -- Wrap in pcall to catch and prevent runtime errors
+        updateInventorySlotsForInventory(player, equipmentSlots, clothingSlots)
+    end)
 end)
+
 
 LeftGroupBox:AddToggle('Inventory Viewer', {
     Text = 'Inventory Viewer',
