@@ -362,7 +362,7 @@ local level = "1.4"
 local function securitylayerchecks()
 
 warn("Started")
-wait(1)
+wait(0.2)
 print("CHECK 1")
 
 print("CHECK 2")
@@ -713,7 +713,7 @@ print("Done")
 
 Library:Notify("Activated semi anti-cheat bypasser")
 
-wait(5)
+wait(0.3)
 
 
 local silent_aim = {
