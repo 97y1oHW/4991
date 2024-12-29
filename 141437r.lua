@@ -43,6 +43,31 @@ if not LPH_OBFUSCATED then
     end
 end
 
+key="123456"
+ecp_key="1 2 2 2 2 3 4 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 9 9 9 9 9 9"
+_haq="1 2 2 2 2 3 4 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 9 9 9 9 9 9"
+if ecp_key==_haq then
+print("con")
+else
+warn("con (2)")
+return
+end
+ function API_Check()
+    if Drawing == nil then
+        return "No"
+    else
+        return "Yes"
+    end
+end
+
+
+
+if _G.ScriptAlreadyOpened then
+    warn("Blocked Multiple Instances.")
+     return
+end
+
+_G.ScriptAlreadyOpened = true
 
 loadmes = [[
 
@@ -948,15 +973,19 @@ local function isPlayerVisible(player)
     local character = player.Character
     if character and character:FindFirstChild("Head") then
         local head = character.Head
-        local cameraPosition = camera.CFrame.Position
+        local cameraPosition = workspace.CurrentCamera.CFrame.Position
         
         -- Raycasting to check if there is an obstruction
-        local ray = Ray.new(cameraPosition, (head.Position - cameraPosition).unit * (head.Position - cameraPosition).Magnitude)
-        local hitPart, hitPosition = workspace:FindPartOnRay(ray, character) -- Include the character in the raycast filtering
-
-        -- Ensure hitPart is not the character's head
-        if hitPart and hitPart:IsDescendantOf(character) then
-            return false -- Not visible if the ray hits any part of the character
+        local direction = (head.Position - cameraPosition).unit * (head.Position - cameraPosition).Magnitude
+        local raycastResult = workspace:Raycast(cameraPosition, direction)
+        
+        -- Check if the ray hit something
+        if raycastResult then
+            local hitPart = raycastResult.Instance
+            -- Ensure the hitPart is not the player's own character or their head
+            if hitPart:IsDescendantOf(character) then
+                return false -- Not visible if the ray hits any part of the character
+            end
         end
         
         return true -- If ray didn't hit anything or only hit the head, the player is visible
@@ -4271,18 +4300,18 @@ LeftGroupBox:AddToggle('skeletonesp', {
     end
 })
 
-ScreenGuiForInventory = Instance.new("ScreenGui")
-FrameForInventory = Instance.new("Frame")
-Slot1ForHotbar = Instance.new("ImageLabel")
-Slot2ForHotbar = Instance.new("ImageLabel")
-Slot3ForHotbar = Instance.new("ImageLabel")
-CutterForInventory = Instance.new("TextLabel")
-UICornerForInventory = Instance.new("UICorner")
-UIStrokeForInventory = Instance.new("UIStroke")
-PlayerNameLabelForInventory = Instance.new("TextLabel")  -- New label to display the player's name
+ ScreenGuiForInventory = Instance.new("ScreenGui")
+ FrameForInventory = Instance.new("Frame")
+ Slot1ForHotbar = Instance.new("ImageLabel")
+ Slot2ForHotbar = Instance.new("ImageLabel")
+ Slot3ForHotbar = Instance.new("ImageLabel")
+ CutterForInventory = Instance.new("TextLabel")
+ UICornerForInventory = Instance.new("UICorner")
+ UIStrokeForInventory = Instance.new("UIStroke")
+ PlayerNameLabelForInventory = Instance.new("TextLabel")  -- New label to display the player's name
 
 -- Adding 8 clothing slots
-ClothingSlots = {}
+ ClothingSlots = {}
 for i = 1, 8 do
     ClothingSlots[i] = Instance.new("ImageLabel")
 end
@@ -4322,7 +4351,7 @@ Slot3ForHotbar.Image = ""
 CutterForInventory.Name = "CutterForInventory"
 CutterForInventory.Parent = FrameForInventory
 CutterForInventory.BackgroundTransparency = 1
-CutterForInventory.Position = UDim2.new(0.325, 0, 0.0811, 0)  -- Adjusted position to align properly
+CutterForInventory.Position = UDim2.new(0.325, 0, 0.0811, 0)
 CutterForInventory.Size = UDim2.new(0, 20, 0, 44)
 CutterForInventory.Font = Enum.Font.SourceSans
 CutterForInventory.Text = "|"
@@ -4351,29 +4380,23 @@ for i, slot in ipairs(ClothingSlots) do
     slot.Name = "ClothingSlot" .. i
     slot.BackgroundTransparency = 1
     slot.Parent = FrameForInventory
-    slot.Position = UDim2.new(0.35 + (i - 1) * 0.075, 0, 0.0811, 0)  -- Positions slots with spacing
+    slot.Position = UDim2.new(0.35 + (i - 1) * 0.075, 0, 0.0811, 0)  -- Adjust spacing
     slot.Size = UDim2.new(0, 49, 0, 44)
     slot.Image = ""
 end
 
 -- Toggle state and function to change transparency
-isGuiVisibleForInventory = false  -- This will control the visibility of the ScreenGui
+local isGuiVisibleForInventory = false  -- This will control the visibility of the ScreenGui
 
 function toggleGuiVisibilityForInventory()
-    if isGuiVisibleForInventory then
-        ScreenGuiForInventory.Enabled = false  -- Hide the ScreenGui
-        isGuiVisibleForInventory = false
-    else
-        ScreenGuiForInventory.Enabled = true  -- Show the ScreenGui
-        isGuiVisibleForInventory = true
-    end
+    ScreenGuiForInventory.Enabled = isGuiVisibleForInventory
+    isGuiVisibleForInventory = not isGuiVisibleForInventory
 end
 
 function isPlayerInFOV(localPlayer, otherPlayer, fov)
     local localCharacter = localPlayer.Character
     local otherCharacter = otherPlayer.Character
 
-    -- Check if both players' characters and HumanoidRootPart exist
     if not localCharacter or not otherCharacter then return false end
     if not localCharacter:FindFirstChild("HumanoidRootPart") or not otherCharacter:FindFirstChild("HumanoidRootPart") then return false end
 
@@ -4415,7 +4438,6 @@ function updateInventorySlotsForInventory(localPlayer, equipmentSlots, clothingS
     local players = game.Players:GetPlayers()
 
     for _, otherPlayer in pairs(players) do
-        -- Skip the local player and players without valid characters
         if otherPlayer ~= localPlayer and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
             if isPlayerInFOV(localPlayer, otherPlayer, fov) then
                 table.insert(playersInFOV, otherPlayer)
@@ -4425,12 +4447,11 @@ function updateInventorySlotsForInventory(localPlayer, equipmentSlots, clothingS
 
     local closestPlayer = getClosestPlayerToCrosshair(localPlayer, playersInFOV)
     if closestPlayer then
-        PlayerNameLabelForInventory.Text = closestPlayer.Name .. "'s Inventory"  -- Update the label with the player's name
+        PlayerNameLabelForInventory.Text = closestPlayer.Name .. "'s Inventory"
     else
         PlayerNameLabelForInventory.Text = "No player selected"
     end
 
-    -- Clear equipment and clothing slots
     for i = 1, #equipmentSlots do
         equipmentSlots[i].Image = ""
     end
@@ -4438,7 +4459,6 @@ function updateInventorySlotsForInventory(localPlayer, equipmentSlots, clothingS
         clothingSlots[i].Image = ""
     end
 
-    -- Update slots for the closest player
     if closestPlayer then
         local playerData = game.ReplicatedStorage.Players:FindFirstChild(closestPlayer.Name)
         if playerData then
@@ -4446,8 +4466,14 @@ function updateInventorySlotsForInventory(localPlayer, equipmentSlots, clothingS
             if inventory then
                 local slotIndex = 1
                 for _, item in pairs(inventory:GetChildren()) do
-                    local slots = slotIndex <= #equipmentSlots and equipmentSlots or clothingSlots
-                    local slot = slots[slotIndex]
+                    local slots = nil
+                    if slotIndex <= #equipmentSlots then
+                        slots = equipmentSlots
+                    elseif slotIndex - #equipmentSlots <= #clothingSlots then
+                        slots = clothingSlots
+                        slotIndex = slotIndex - #equipmentSlots
+                    end
+                    local slot = slots and slots[slotIndex]
                     if slot then
                         local itemProperties = item:FindFirstChild("ItemProperties")
                         if itemProperties then
@@ -4457,13 +4483,11 @@ function updateInventorySlotsForInventory(localPlayer, equipmentSlots, clothingS
                                     slot.Image = itemIcon.Image
                                 elseif itemIcon.ClassName == "StringValue" then
                                     slot.Image = "rbxassetid://" .. itemIcon.Value
-                                else
-                                    print("Unsupported ItemIcon type: " .. itemIcon.ClassName)
                                 end
                             end
                         end
-                        slotIndex += 1
                     end
+                    slotIndex += 1
                 end
             end
         end
@@ -4473,11 +4497,10 @@ end
 -- Regularly update inventory slots
 local player = game.Players.LocalPlayer
 local equipmentSlots = {Slot1ForHotbar, Slot2ForHotbar, Slot3ForHotbar}
-local clothingSlots = ClothingSlots
 
 game:GetService("RunService").RenderStepped:Connect(function()
-    pcall(function()  -- Wrap in pcall to catch and prevent runtime errors
-        updateInventorySlotsForInventory(player, equipmentSlots, clothingSlots)
+    pcall(function()
+        updateInventorySlotsForInventory(player, equipmentSlots, ClothingSlots)
     end)
 end)
 
