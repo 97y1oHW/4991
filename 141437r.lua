@@ -44,6 +44,97 @@ if not LPH_OBFUSCATED then
 end
 
 
+loadmes = [[
+
+                                     ============================
+                                      [ Nexify Wave Loader ]
+                                      Version: v1.9
+                                      Key: Paid
+                                     ============================
+]]
+
+warn(loadmes)
+wait(3)
+local Modules = {
+    Colors =  {
+        ["Green"] = "0,255,0", 
+        ["Red"] = "255,0,0",
+        ["White"] = "255,255,255",
+        ["Pink"] = "255,102,153",
+    },
+    Services = {
+        RunService = game:GetService("RunService"),
+        CoreGui = game:GetService("CoreGui")
+    }
+}
+
+Modules.ChangeColor = function() 
+    local Loop
+    Loop = Modules.Services.RunService.Heartbeat:Connect(function()
+        local success, err = pcall(function()
+            local devConsole = Modules.Services.CoreGui:FindFirstChild("DevConsoleMaster")
+            if not devConsole then
+                Loop:Disconnect()
+                return
+            end
+
+            for _, label in pairs(devConsole:GetDescendants()) do 
+                if label:IsA("TextLabel") then 
+                    label.RichText = true 
+                end 
+            end
+        end)
+
+        if not success then 
+            warn("Error in ChangeColor: ", err)
+            Loop:Disconnect()
+        end 
+    end)
+end
+
+Modules.InvalidLoad = function(watermark, color, delay, loadingsymbol)
+    delay = delay or 0.1
+    local Text = watermark..tostring(math.random(500, 20000))
+    print(Text)
+
+    local loadingLabel = nil
+    local progress = ""
+    local timeout = os.clock() + 5 -- 5-second timeout
+
+    repeat
+        task.wait()
+        for _, label in pairs(Modules.Services.CoreGui:FindFirstChild("DevConsoleMaster"):GetDescendants()) do 
+            if label:IsA("TextLabel") and string.find(label.Text:lower(), Text:lower()) then 
+                loadingLabel = label 
+                break
+            end
+        end
+    until loadingLabel or os.clock() > timeout
+
+    if not loadingLabel then
+        warn("Loading label not found within the timeout.")
+        return
+    end
+
+    for i = 1, 50 do
+        progress = progress .. loadingsymbol
+        loadingLabel.Text = string.format(
+            "<font color='rgb(%s)' size='15'>[%s] [%d%% loaded] %s</font>",
+            Modules.Colors["Pink"], watermark, i * 2, progress
+        )
+        task.wait(delay)
+    end
+
+    loadingLabel.Text = string.format(
+        "<font color='rgb(%s)' size='15'>[%s] Anti-Tamper Enabled Loading Further... </font>",
+        Modules.Colors["Green"], watermark
+    )
+end
+
+-- Call the functions
+Modules.ChangeColor()
+Modules.InvalidLoad("Nexify", "Red", 0.05, "#")
+
 
 
 messagebox("Loaded Nexify Wave.\n\n\n- By mafaka.", "Nexify Wave", 0)
@@ -244,13 +335,13 @@ local function securitylayerchecks()
 warn("Started")
 wait(1)
 print("CHECK 1")
-wait(0.7)
+
 print("CHECK 2")
-wait(0.1)
+
 print("CHECK 3")
-wait(2)
+
 print("CHECK 4")
-wait(2)
+
 print("Verification Level: " .. level .."")
 warn("CONTINUE")
 
@@ -362,7 +453,7 @@ else
 end
 print(".")
 print("DIRECTED.")
-
+--[[
 -- Function to print the loading bar with percentage and hash marks
 local function printLoadingBar(percentage)
     local totalLength = 33
@@ -383,7 +474,7 @@ end
 
 -- Run the simulation
 simulateLoading()
-
+--]]
 print("If script ui not appears try spawning and waiting for 2 min")
 warn("Silent Check 5")
 wait(0.2)
@@ -537,14 +628,14 @@ end
 	Library:Notify("CHECK 1")
 	wait(0.6)
 	Library:Notify("Locked")
-	wait(1)
+
 	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
 	Library:Notify("Unlocked")
 	Library:Notify("CHECK 2")
-	wait(0.1)
+
 	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
 	Library:Notify("CHECK 3")
-	wait(1)
+
 	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
 	Library:Notify("Check 100%")
 
@@ -4817,7 +4908,7 @@ eaesptabactual:AddSlider('distancelimit', {
     end
 })
 
-eaesptabactual:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 28.12.2024\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\n--- Performance Metrics ---\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Wave\nExecution Time (Avg): <0.5ms\n--- Security Details ---\nAnticheat Bypass: Failed\nDebugging Protections: Enabled\nExploit Protections: High\nTelemetry Blocking: Active\n\n--- User Environment ---\nExecutor Version: Wave\nCustom Themes: Supported\n\n--- Additional Info ---\nSupport Contact: .crazyniga (Discord)\nLicense Type: Buyer / Standart", true)
+eaesptabactual:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 28.12.2024\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\n--- Performance Metrics ---\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Wave\nExecution Time (Avg): <0.5ms\n--- Security Details ---\nAnticheat Bypass: Semi Bypassed A-C\nDebugging Protections: Enabled\nExploit Protections: High\nTelemetry Blocking: Active\n\n--- User Environment ---\nExecutor Version: Wave\nCustom Themes: Supported\n\n--- Additional Info ---\nSupport Contact: .crazyniga (Discord)\nLicense Type: Buyer / Standart", true)
 
 
 local character = player.Character or player.CharacterAdded:Wait()
