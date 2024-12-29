@@ -4566,40 +4566,37 @@ local HitmarkerSounds = {
     ["Osu!"]      = "rbxassetid://7151989073",
 }
 
--- Create the dropdown for selecting hit sounds
 LeftGroupBox:AddDropdown('cameradropdown', {
-    Values = { 'TF2', 'Gamesense', 'Rust', 'Neverlose', 'Bubble', 'Quake', 'Among-Us', 'Ding', 'Minecraft', 'Blackout', 'Osu!' },  -- Add all the options
-    Default = 3,  -- Default selection is 'Rust'
+    Values = { 'TF2', 'Gamesense', 'Rust', 'Neverlose', 'Bubble', 'Quake', 'Among-Us', 'Ding', 'Minecraft', 'Blackout', 'Osu!' },  
+    Default = 3,  
     Multi = false,
     Text = 'Hit Sounds', 
     Tooltip = 'Hit Sounds', 
     Callback = function(state)
-        -- Get the selected sound ID from the HitmarkerSounds table
+        
         local globalhitsounds = HitmarkerSounds[state]
         
-        -- Ensure the sound ID is valid and exists
+        
         if globalhitsounds then
             local SFXDIRECTORY = game.ReplicatedStorage.SFX
 
-            -- Assign the selected sound ID to all relevant sounds
+            
             SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Helmet.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Bodyshot.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Headshot.SoundId = globalhitsounds
-            ---------------------------------------------------------------
-            SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.Volume = 3
-            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.Volume = 4
-            SFXDIRECTORY.Hits.HitMarkers.Helmet.Volume = 4
-            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.Volume = 4.5
-            SFXDIRECTORY.Hits.HitMarkers.Headshot.Volume = 4
+				
+	    SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.Volume = 10
+            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.Volume = 10
+            SFXDIRECTORY.Hits.HitMarkers.Helmet.Volume = 10
+            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.Volume = 10
+            SFXDIRECTORY.Hits.HitMarkers.Headshot.Volume = 10
         else
             warn("Selected hit sound is not available!")
         end
     end
 })
-
-
 
 -- Services
 -- Services
