@@ -53,7 +53,8 @@ messagebox("Loaded Nexify Solara.\n\n\n- By mafaka.", "Nexify Solara", 0)
 game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
 
 
-loadstring(game:HttpGet("https://pastebin.com/KQt4Xque"))()
+loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
+
 
 key="123456"
 ecp_key="1 2 2 2 2 3 4 4 4 4 5 5 5 6 6 6 7 7 7 8 8 8 9 9 9 9 9 9 9 9 9"
