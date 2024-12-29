@@ -79,6 +79,7 @@ loadmes = [[
 ]]
 
 warn(loadmes)
+--[[
 wait(3)
 local Modules = {
     Colors =  {
@@ -160,7 +161,7 @@ end
 Modules.ChangeColor()
 Modules.InvalidLoad("Nexify", "Red", 0.05, "#")
 
-
+--]]
 
 --messagebox("Loaded Nexify Wave.\n\n\n- By mafaka.", "Nexify Wave", 0)
  g = Instance.new("ScreenGui")
