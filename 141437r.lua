@@ -482,6 +482,70 @@ else
 end
 print(".")
 print("DIRECTED.")
+
+
+-- Variables for the UI elements
+ player = game.Players.LocalPlayer
+ ammoTextLabel = player.PlayerGui.MainGui.MainFrame.InteractionFrame.EquippedItem.Frame.Ammo
+
+-- Variable to track whether the ammo check is enabled
+ isAmmoCheckEnabled = false
+
+-- Local variable to store the ammo value
+ currentAmmo = 0
+ maxAmmo = 0
+
+-- Custom threshold for when to trigger reload
+ reloadThreshold = 3  -- Default value, can be changed
+
+-- Function to update the ammo values
+ function updateAmmoValues()
+    -- Get the ammo text (e.g., "10/30")
+    local ammoText = ammoTextLabel.Text
+    
+    -- Try to split the ammo text into current ammo and max ammo
+    local ammoCurrent, ammoMax = ammoText:match("(%d+)/(%d+)")
+    
+    -- If the ammo text is valid (both current and max ammo found)
+    if ammoCurrent and ammoMax then
+        currentAmmo = tonumber(ammoCurrent)
+        maxAmmo = tonumber(ammoMax)
+    end
+end
+
+-- Function to check ammo and trigger reload if it's below the threshold
+ function checkAmmo()
+    -- Update ammo values
+    updateAmmoValues()
+
+    -- Check if current ammo is below the custom threshold
+    if currentAmmo <= reloadThreshold then
+        -- Fire the reload event
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Reload"):InvokeServer()
+        print("Reload triggered!")
+    end
+end
+
+-- Function to toggle the ammo check on or off
+ function toggleAmmoCheck()
+    isAmmoCheckEnabled = not isAmmoCheckEnabled
+    if isAmmoCheckEnabled then
+        -- Start checking ammo every 0.01 seconds if it's enabled
+        while isAmmoCheckEnabled do
+            checkAmmo()
+            wait(0.01)  -- Wait 0.01 seconds before checking again
+        end
+        print("Ammo check enabled.")
+    else
+        print("Ammo check disabled.")
+    end
+end
+
+
+
+-- Example usage: calling toggleAmmoCheck to enable or disable ammo checking
+
+
 --[[
 -- Function to print the loading bar with percentage and hash marks
 local function printLoadingBar(percentage)
@@ -2437,6 +2501,29 @@ Esptab3:AddToggle('No Fall Damage', {
         end
     end
 })
+
+Esptab3:AddToggle('Automatic Instant Reload', {
+    Text = 'Automatic Instant Reload',
+    Default = false,
+    Risky = true,
+    Callback = function(Value)
+       toggleAmmoCheck()
+    end
+})
+
+Esptab3:AddSlider('Reloadtheresold', {
+    Text = 'Automatic Reload Threshold',
+    Default = 3,
+    Min = 3,
+    Max = 10,
+    Rounding = 0,
+    Compact = false,
+
+    Callback = function(number)
+       reloadThreshold = number
+    end
+})
+
 
 antiaimtab:AddSlider('hipheight', {
     Text = 'Hip Height',
