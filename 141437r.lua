@@ -2512,6 +2512,17 @@ Esptab3:AddToggle('Automatic Instant Reload', {
     end
 })
 
+Esptab3:AddToggle('antiaim', {
+    Text = 'Tilt Manuplation',
+    Risky = true,
+    Default = false,
+
+    Callback = function(first)
+        game.ReplicatedStorage.Remotes.UpdateTilt:FireServer(first and 0 / 0 or 0)
+    end
+})
+
+
 Esptab3:AddSlider('Reloadtheresold', {
     Text = 'Automatic Reload Threshold',
     Default = 3,
