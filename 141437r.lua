@@ -44,6 +44,495 @@ if not LPH_OBFUSCATED then
     end
 end
 
+
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+  ScreenGui = Instance.new("ScreenGui")
+  Frame = Instance.new("Frame")
+  decorat1 = Instance.new("Frame")
+  UIGradient = Instance.new("UIGradient")
+  decorat2 = Instance.new("Frame")
+  UIGradient_2 = Instance.new("UIGradient")
+  TextLabel = Instance.new("TextLabel")
+  UIGradient_3 = Instance.new("UIGradient")
+  innerframe = Instance.new("Frame")
+  TextLabel_2 = Instance.new("TextLabel")
+  TextButton = Instance.new("TextButton")
+  updatelogs = Instance.new("Frame")
+  title = Instance.new("TextLabel")
+  UIGradient_4 = Instance.new("UIGradient")
+  plus1 = Instance.new("TextLabel")
+  UIGradient_5 = Instance.new("UIGradient")
+  plusnotif = Instance.new("TextLabel")
+  UIGradient_6 = Instance.new("UIGradient")
+  plusnotif2 = Instance.new("TextLabel")
+  UIGradient_7 = Instance.new("UIGradient")
+  plus2 = Instance.new("TextLabel")
+  UIGradient_8 = Instance.new("UIGradient")
+  plusnotif3 = Instance.new("TextLabel")
+  UIGradient_9 = Instance.new("UIGradient")
+  plus3 = Instance.new("TextLabel")
+  UIGradient_10 = Instance.new("UIGradient")
+  plusnotif5 = Instance.new("TextLabel")
+  UIGradient_11 = Instance.new("UIGradient")
+  plus5 = Instance.new("TextLabel")
+  UIGradient_12 = Instance.new("UIGradient")
+  plus4 = Instance.new("TextLabel")
+  UIGradient_13 = Instance.new("UIGradient")
+  plusnotif4 = Instance.new("TextLabel")
+  UIGradient_14 = Instance.new("UIGradient")
+  CloseButt = Instance.new("TextButton")
+  ImageLabel = Instance.new("ImageLabel")
+
+--Properties:
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.179119751, 0, 0.0990259722, 0)
+Frame.Size = UDim2.new(0, 627, 0, 493)
+
+decorat1.Name = "decorat1"
+decorat1.Parent = Frame
+decorat1.BackgroundColor3 = Color3.fromRGB(160, 6, 255)
+decorat1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+decorat1.BorderSizePixel = 0
+decorat1.Size = UDim2.new(0, 627, 0, 6)
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(115, 15, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 153))}
+UIGradient.Parent = decorat1
+
+decorat2.Name = "decorat2"
+decorat2.Parent = Frame
+decorat2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+decorat2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+decorat2.BorderSizePixel = 0
+decorat2.Position = UDim2.new(0, 0, 0.0121703856, 0)
+decorat2.Size = UDim2.new(0, 627, 0, 25)
+
+UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(56, 0, 74))}
+UIGradient_2.Parent = decorat2
+
+TextLabel.Parent = decorat2
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.816586912, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 115, 0, 25)
+TextLabel.Font = Enum.Font.Arcade
+TextLabel.Text = "Nexify"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+UIGradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 238, 56)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(56, 0, 74))}
+UIGradient_3.Parent = TextLabel
+
+innerframe.Name = "innerframe"
+innerframe.Parent = Frame
+innerframe.BackgroundColor3 = Color3.fromRGB(8, 8, 8)
+innerframe.BorderColor3 = Color3.fromRGB(0, 0, 0)
+innerframe.BorderSizePixel = 0
+innerframe.Position = UDim2.new(0.0334928222, 0, 0.0628803223, 0)
+innerframe.Size = UDim2.new(0, 585, 0, 435)
+
+TextLabel_2.Parent = innerframe
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.BackgroundTransparency = 1.000
+TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_2.BorderSizePixel = 0
+TextLabel_2.Position = UDim2.new(0.328205138, 0, 0.0137931034, 0)
+TextLabel_2.Size = UDim2.new(0, 200, 0, 50)
+TextLabel_2.Font = Enum.Font.Arcade
+TextLabel_2.Text = "Nexify Loader"
+TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.TextSize = 40.000
+TextLabel_2.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+
+TextButton.Parent = innerframe
+TextButton.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(-0.0239316244, 0, 0.266666681, 0)
+TextButton.Size = UDim2.new(0, 252, 0, 50)
+TextButton.Font = Enum.Font.Arcade
+TextButton.Text = "Project Delta | 🟢"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextSize = 20.000
+
+updatelogs.Name = "updatelogs"
+updatelogs.Parent = Frame
+updatelogs.BackgroundColor3 = Color3.fromRGB(8, 8, 8)
+updatelogs.BorderColor3 = Color3.fromRGB(0, 0, 0)
+updatelogs.BorderSizePixel = 0
+updatelogs.Position = UDim2.new(0.465709716, 0, 0.176470593, 0)
+updatelogs.Size = UDim2.new(0, 314, 0, 395)
+
+title.Name = "title"
+title.Parent = updatelogs
+title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+title.BackgroundTransparency = 1.000
+title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+title.BorderSizePixel = 0
+title.Position = UDim2.new(-0.0018843147, 0, 0, 0)
+title.Size = UDim2.new(0, 321, 0, 25)
+title.Font = Enum.Font.Arcade
+title.Text = "Nexify"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.TextSize = 14.000
+title.TextWrapped = true
+
+UIGradient_4.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 238, 56)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(56, 0, 74))}
+UIGradient_4.Parent = title
+
+plus1.Name = "plus1"
+plus1.Parent = updatelogs
+plus1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plus1.BackgroundTransparency = 1.000
+plus1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plus1.BorderSizePixel = 0
+plus1.Position = UDim2.new(0.0192878861, 0, 0.112527274, 0)
+plus1.Size = UDim2.new(0, 40, 0, 50)
+plus1.Font = Enum.Font.Arcade
+plus1.Text = "[+]"
+plus1.TextColor3 = Color3.fromRGB(255, 255, 255)
+plus1.TextSize = 20.000
+plus1.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plus1.TextWrapped = true
+
+UIGradient_5.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(253, 207, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 0, 0))}
+UIGradient_5.Parent = plus1
+
+plusnotif.Name = "plusnotif"
+plusnotif.Parent = updatelogs
+plusnotif.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif.BackgroundTransparency = 1.000
+plusnotif.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plusnotif.BorderSizePixel = 0
+plusnotif.Position = UDim2.new(0.0797974393, 0, 0.112527274, 0)
+plusnotif.Size = UDim2.new(0, 288, 0, 50)
+plusnotif.Font = Enum.Font.Arcade
+plusnotif.Text = "Semi-Anti Cheat Bypasser"
+plusnotif.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif.TextSize = 17.000
+plusnotif.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plusnotif.TextWrapped = true
+
+UIGradient_6.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 248, 153)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(169, 108, 255))}
+UIGradient_6.Parent = plusnotif
+
+plusnotif2.Name = "plusnotif2"
+plusnotif2.Parent = updatelogs
+plusnotif2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif2.BackgroundTransparency = 1.000
+plusnotif2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plusnotif2.BorderSizePixel = 0
+plusnotif2.Position = UDim2.new(0.0192878861, 0, 0.206198156, 0)
+plusnotif2.Size = UDim2.new(0, 288, 0, 50)
+plusnotif2.Font = Enum.Font.Arcade
+plusnotif2.Text = "Updated Wave Version"
+plusnotif2.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif2.TextSize = 17.000
+plusnotif2.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plusnotif2.TextWrapped = true
+
+UIGradient_7.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 248, 153)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(169, 108, 255))}
+UIGradient_7.Parent = plusnotif2
+
+plus2.Name = "plus2"
+plus2.Parent = updatelogs
+plus2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plus2.BackgroundTransparency = 1.000
+plus2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plus2.BorderSizePixel = 0
+plus2.Position = UDim2.new(0.0192878861, 0, 0.206198156, 0)
+plus2.Size = UDim2.new(0, 40, 0, 50)
+plus2.Font = Enum.Font.Arcade
+plus2.Text = "[+]"
+plus2.TextColor3 = Color3.fromRGB(255, 255, 255)
+plus2.TextSize = 20.000
+plus2.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plus2.TextWrapped = true
+
+UIGradient_8.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(253, 207, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 0, 0))}
+UIGradient_8.Parent = plus2
+
+plusnotif3.Name = "plusnotif3"
+plusnotif3.Parent = updatelogs
+plusnotif3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif3.BackgroundTransparency = 1.000
+plusnotif3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plusnotif3.BorderSizePixel = 0
+plusnotif3.Position = UDim2.new(0.0479503088, 0, 0.309995621, 0)
+plusnotif3.Size = UDim2.new(0, 269, 0, 50)
+plusnotif3.Font = Enum.Font.Arcade
+plusnotif3.Text = "New Inventory Viewer"
+plusnotif3.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif3.TextSize = 17.000
+plusnotif3.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plusnotif3.TextWrapped = true
+
+UIGradient_9.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 248, 153)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(169, 108, 255))}
+UIGradient_9.Parent = plusnotif3
+
+plus3.Name = "plus3"
+plus3.Parent = updatelogs
+plus3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plus3.BackgroundTransparency = 1.000
+plus3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plus3.BorderSizePixel = 0
+plus3.Position = UDim2.new(0.0192878861, 0, 0.309995621, 0)
+plus3.Size = UDim2.new(0, 40, 0, 50)
+plus3.Font = Enum.Font.Arcade
+plus3.Text = "[+]"
+plus3.TextColor3 = Color3.fromRGB(255, 255, 255)
+plus3.TextSize = 20.000
+plus3.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plus3.TextWrapped = true
+
+UIGradient_10.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(253, 207, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 0, 0))}
+UIGradient_10.Parent = plus3
+
+plusnotif5.Name = "plusnotif5"
+plusnotif5.Parent = updatelogs
+plusnotif5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif5.BackgroundTransparency = 1.000
+plusnotif5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plusnotif5.BorderSizePixel = 0
+plusnotif5.Position = UDim2.new(0.0797974393, 0, 0.512527287, 0)
+plusnotif5.Size = UDim2.new(0, 288, 0, 50)
+plusnotif5.Font = Enum.Font.Arcade
+plusnotif5.Text = "NEW SILENT AIM FOR SOLARA"
+plusnotif5.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif5.TextSize = 17.000
+plusnotif5.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plusnotif5.TextWrapped = true
+
+UIGradient_11.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(165, 55, 255)), ColorSequenceKeypoint.new(0.46, Color3.fromRGB(26, 205, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 4))}
+UIGradient_11.Parent = plusnotif5
+
+plus5.Name = "plus5"
+plus5.Parent = updatelogs
+plus5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plus5.BackgroundTransparency = 1.000
+plus5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plus5.BorderSizePixel = 0
+plus5.Position = UDim2.new(0.0192878861, 0, 0.512527287, 0)
+plus5.Size = UDim2.new(0, 40, 0, 50)
+plus5.Font = Enum.Font.Arcade
+plus5.Text = "[+]"
+plus5.TextColor3 = Color3.fromRGB(255, 255, 255)
+plus5.TextSize = 20.000
+plus5.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plus5.TextWrapped = true
+
+UIGradient_12.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(253, 207, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 0, 0))}
+UIGradient_12.Parent = plus5
+
+plus4.Name = "plus4"
+plus4.Parent = updatelogs
+plus4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plus4.BackgroundTransparency = 1.000
+plus4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plus4.BorderSizePixel = 0
+plus4.Position = UDim2.new(0.0192878861, 0, 0.408729792, 0)
+plus4.Size = UDim2.new(0, 40, 0, 50)
+plus4.Font = Enum.Font.Arcade
+plus4.Text = "[+]"
+plus4.TextColor3 = Color3.fromRGB(255, 255, 255)
+plus4.TextSize = 20.000
+plus4.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plus4.TextWrapped = true
+
+UIGradient_13.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(253, 207, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 0, 0))}
+UIGradient_13.Parent = plus4
+
+plusnotif4.Name = "plusnotif4"
+plusnotif4.Parent = updatelogs
+plusnotif4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif4.BackgroundTransparency = 1.000
+plusnotif4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+plusnotif4.BorderSizePixel = 0
+plusnotif4.Position = UDim2.new(-0.0030051067, 0, 0.408729792, 0)
+plusnotif4.Size = UDim2.new(0, 288, 0, 50)
+plusnotif4.Font = Enum.Font.Arcade
+plusnotif4.Text = "Remove Clouds Added"
+plusnotif4.TextColor3 = Color3.fromRGB(255, 255, 255)
+plusnotif4.TextSize = 17.000
+plusnotif4.TextStrokeColor3 = Color3.fromRGB(172, 172, 172)
+plusnotif4.TextWrapped = true
+
+UIGradient_14.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 248, 153)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(169, 108, 255))}
+UIGradient_14.Parent = plusnotif4
+
+CloseButt.Name = "CloseButt"
+CloseButt.Parent = Frame
+CloseButt.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CloseButt.BackgroundTransparency = 1.000
+CloseButt.BorderColor3 = Color3.fromRGB(0, 0, 0)
+CloseButt.BorderSizePixel = 0
+CloseButt.Position = UDim2.new(-0.132376403, 0, -0.0141987829, 0)
+CloseButt.Size = UDim2.new(0, 200, 0, 50)
+CloseButt.Font = Enum.Font.Unknown
+CloseButt.Text = "X"
+CloseButt.TextColor3 = Color3.fromRGB(255, 0, 4)
+CloseButt.TextSize = 17.000
+
+ImageLabel.Parent = Frame
+ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Position = UDim2.new(0.613237619, 0, 0.534482777, 0)
+ImageLabel.Rotation = 90.000
+ImageLabel.Size = UDim2.new(0, 128, 0, 297)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=6910383029"
+-- Add UIStroke to the UpdateLog Frame
+  uiStroke = Instance.new("UIStroke")
+uiStroke.Parent = updatelogs
+uiStroke.Thickness = 1
+uiStroke.Color = Color3.fromRGB(255, 255, 255) -- White color for the stroke
+-- Scripts:
+
+  function XHBSJP_fake_script() -- TextButton.Script 
+	 local script = Instance.new('Script', TextButton)
+
+	script.Parent.MouseButton1Click:Connect(function(__index)
+
+		warn("continue")
+        script.Parent.Parent.Parent:Destroy()	
+        Camera = game:GetService("Workspace").Camera
+ RunService = game:GetService("RunService")
+ Mouse = game:GetService("Players").LocalPlayer:GetMouse()
+ InputService = game:GetService("UserInputService")
+ TweenService = game:GetService("TweenService")
+ 
+ 
+   library = {
+    Title = 'anti.font color="rgb(645, 66, 230)">solutions</font> | <font color="rgb(245, 66, 230)">Pre-Build</font>',
+    AnimatedText = false,
+    keybind = Enum.KeyCode.End,
+    Colors = {
+        libColor = Color3.new(0.952941, 0.356863, 0.874510),
+        riskyColor = Color3.fromRGB(255, 0, 0),
+        FontColor = Color3.fromRGB(255, 255, 255),
+        MainColor = Color3.fromRGB(14, 14, 14),
+        AccentColor = Color3.new(0.952941, 0.356863, 0.874510),
+        OutlineColor = Color3.fromRGB(15, 15, 15),
+    },
+    Enabled = true,
+    colorpicking = false,
+    scrolling = true,
+    multiZindex = 200,
+    blacklisted = {
+ Enum.KeyCode.W,
+ Enum.KeyCode.A,
+ Enum.KeyCode.S,
+ Enum.KeyCode.D,
+ Enum.UserInputType.MouseMovement
+    },
+    tabbuttons = {},
+    tabs = {},
+    options = {},
+    flags = {},
+    toInvis = {},
+    Registry = {},
+    RegistryMap = {},
+    HudRegistry = {}
+ }
+  
+ menu = game:GetObjects("rbxassetid://17090554797")[1] 
+ tabholder = menu.bg.bg.bg.bg.bg.bg.main.group
+ tabviewer = menu.bg.bg.bg.bg.bg.bg.tabbuttons
+ 
+     function library:Create(Class, Properties)
+ if library.Enabled == false then return end;
+ local _Instance = Class;
+ if type(Class) == 'string' then _Instance = Instance.new(Class); end;
+ for Property, Value in next, Properties do _Instance[Property] = Value; end;
+ return _Instance;
+ end;
+ ProtectGui = protectgui or (syn and syn.protect_gui) or (function() end)
+ ScreenGui = Instance.new('ScreenGui')
+ ProtectGui(ScreenGui)
+ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+ ScreenGui.Parent = game.CoreGui
+ ScreenGui.Name = "huh_menu"
+ menu.bg.pre.Text = ""
+ menu.bg.Position = UDim2.new(0.5,-menu.bg.Size.X.Offset/2,0.5,-menu.bg.Size.Y.Offset/2)
+
+
+ keynames = {
+    [Enum.KeyCode.LeftAlt] = 'LALT',
+    [Enum.KeyCode.RightAlt] = 'RALT',
+    [Enum.KeyCode.LeftControl] = 'LCTRL',
+    [Enum.KeyCode.RightControl] = 'RCTRL',
+    [Enum.KeyCode.LeftShift] = 'LSHIFT',
+    [Enum.KeyCode.RightShift] = 'RSHIFT',
+    [Enum.KeyCode.Underscore] = '_',
+    [Enum.KeyCode.Minus] = '-',
+    [Enum.KeyCode.Plus] = '+',
+    [Enum.KeyCode.Period] = '.',
+    [Enum.KeyCode.Slash] = '/',
+    [Enum.KeyCode.BackSlash] = '\\',
+    [Enum.KeyCode.Question] = '?',
+    [Enum.UserInputType.MouseButton1] = '[MB1]',
+    [Enum.UserInputType.MouseButton2] = '[MB2]',
+    [Enum.UserInputType.MouseButton3] = '[MB3]'
+ }
+ function library:GetTextBounds(Text, Font, Size, Resolution)
+    local Bounds = game:GetService('TextService'):GetTextSize(Text, Size, Font, Resolution or Vector2.new(1920, 1080))
+    return Bounds.X, Bounds.Y
+    end;
+     function library:AddToRegistry(Instance, Properties, IsHud)
+     Idx = #library.Registry + 3
+     Data = {Instance = Instance;Properties = Properties;Idx = Idx}
+    table.insert(library.Registry, Data);
+    library.RegistryMap[Instance] = Data;
+    if IsHud then table.insert(library.HudRegistry, Data) end;
+    end;
+    function library:CreateLabel(Properties, IsHud)
+ local _Instance = library:Create('TextLabel', {BackgroundTransparency = 1;Font = Enum.Font.Code;TextColor3 = library.Colors.FontColor;TextSize = 16;TextStrokeTransparency = 0});
+ library:AddToRegistry(_Instance, {TextColor3 = 'FontColor'}, IsHud);
+ return library:Create(_Instance, Properties);
+ end;
+ library.NotificationArea = library:Create('Frame', {BackgroundTransparency = 1;Position = UDim2.new(0.003, 0, 0, 40);Size = UDim2.new(0, 300, 0, 200);ZIndex = 100;Parent = ScreenGui});
+ library:Create('UIListLayout', {Padding = UDim.new(0, 4);FillDirection = Enum.FillDirection.Vertical;SortOrder = Enum.SortOrder.LayoutOrder;Parent = library.NotificationArea});
+ function library:Notify(Text, Time)
+    local XSize, YSize = library:GetTextBounds(Text, Enum.Font.Code, 14);YSize = YSize + 7
+    local NotifyOuter = library:Create('Frame', {BorderColor3 = Color3.new(189, 172, 255);Position = UDim2.new(0, 100, 0, 10);Size = UDim2.new(0, 0, 0, YSize);ClipsDescendants = true;Transparency = 0,ZIndex = 100;Parent = library.NotificationArea});
+    library:Create('UIGradient', {Color = ColorSequence.new{ColorSequenceKeypoint.new(0, library.Colors.MainColor), ColorSequenceKeypoint.new(0.1, library.Colors.MainColor), ColorSequenceKeypoint.new(0.6, library.Colors.MainColor), ColorSequenceKeypoint.new(1, library.Colors.MainColor)},Rotation = -120;Parent = NotifyOuter});
+    local NotifyInner = library:Create('Frame', {BackgroundColor3 = library.Colors.MainColor;BorderColor3 = library.Colors.OutlineColor;BorderMode = Enum.BorderMode.Inset;Size = UDim2.new(1, 0, 1, 0);ZIndex = 101;Parent = NotifyOuter});
+    local InnerFrame = library:Create('Frame', {BackgroundColor3 = Color3.new(1, 1, 1);BorderSizePixel = 0;Position = UDim2.new(0, 1, 0, 1);Size = UDim2.new(1, -2, 1, -2);ZIndex = 102;Parent = NotifyInner;});
+    local Line = library:Create('Frame', {BackgroundColor3 = library.Colors.AccentColor;BorderSizePixel = 0;Position = UDim2.new(1, 0, 0.97, 0);Size = UDim2.new(-0.999, -0.5, 0, 1.9);ZIndex = 102;Parent = NotifyInner;});
+    local LeftColor = library:Create('Frame', {BackgroundColor3 = library.Colors.AccentColor;BorderSizePixel = 0;Position = UDim2.new(0, -1, 0, 22);Size = UDim2.new(0, 2, -1.2, 0);ZIndex = 104;Parent = NotifyOuter;});
+    local Gradient = library:Create('UIGradient', {Color = ColorSequence.new({ColorSequenceKeypoint.new(0, library.Colors.MainColor),ColorSequenceKeypoint.new(1, library.Colors.MainColor)});Rotation = -90;Parent = InnerFrame});
+    library:AddToRegistry(NotifyInner, {BackgroundColor3 = 'MainColor';BorderColor3 = 'OutlineColor';}, true);
+    library:AddToRegistry(Gradient, {Color = function() return ColorSequence.new({ColorSequenceKeypoint.new(0, library.Colors.MainColor),ColorSequenceKeypoint.new(1, library.Colors.MainColor)}); end});
+    library:CreateLabel({Position = UDim2.new(0, 6, 0, 0);Size = UDim2.new(1, -4, 1, 0);Text = Text;TextXAlignment = Enum.TextXAlignment.Left;TextSize = 14;ZIndex = 103;Parent = InnerFrame});
+    pcall(NotifyOuter.TweenSize, NotifyOuter, UDim2.new(0, XSize + 8 + 4, 0, YSize), 'Out', 'Quad', 0.6, true);
+    pcall(LeftColor.TweenSize, LeftColor, UDim2.new(0, 2, 0, 0), 'Out', 'Linear', 1, true);
+    wait(0.9)
+    pcall(Line.TweenSize, Line, UDim2.new(0, 0, 0, 2), 'Out', 'Linear', Time, true);
+    task.spawn(function()
+    wait(Time or 5);
+    pcall(NotifyOuter.TweenSize, NotifyOuter, UDim2.new(0, 0, 0, YSize), 'Out', 'Quad', 0.4, true);
+    wait(0.4);
+    NotifyOuter:Destroy();
+    end);
+    end;
+
+
+
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 
 
@@ -5358,15 +5847,46 @@ ThemeManager:ApplyToTab(Tabs['UI Settings'])
 -- You can use the SaveManager:LoadAutoloadConfig() to load a config
 -- which has been marked to be one that auto loads!
 SaveManager:LoadAutoloadConfig()
+task.wait(5)
+library:Notify("Cacthing Gun Images",3)
+task.wait(1.2)
+library:Notify("Catched Gun Images",1)
+library:Notify("Cacthing Esp Arrow Images",3)
+task.wait(1.2)
+library:Notify("Catched <{Esp}> Images",1)
+library:Notify("#0*",3)
+task.wait(1.2)
+library:Notify(math.pi,1)
+library:Notify(math.pi+5*2-9,1)
+asad={
+
+hook="pi";
+f=true;
+
+
+
+
+}
+library:Notify(math.pi+5*2-9+10-3-4+1-1+66-55+10+11+33-80,2)
+library:Notify(asad,5)
 trackPlayers()
 
 
--- Create a ScreenGui to hold the blur effect
+	end)
+end
+coroutine.wrap(XHBSJP_fake_script)()
+  function LGCG_fake_script() -- CloseButt.Script 
+	 local script = Instance.new('Script', CloseButt)
 
--- Define the necessary services
+	script.Parent.MouseButton1Click:Connect(function()
+
+		script.Parent.Parent.Parent:Destroy()	
 
 
 
+	end)
+end
+coroutine.wrap(LGCG_fake_script)()
 
--- Optional: Initial application of the blur
--- toggleBlur()  -- Uncomment if you want to start with blur applied
+
+ 
