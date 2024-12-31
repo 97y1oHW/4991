@@ -1,5 +1,6 @@
 
 
+
 --ibet opti bimbambu
 
 if not LPH_OBFUSCATED then
@@ -4095,11 +4096,6 @@ game:GetService("RunService").RenderStepped:Connect(function(dt)
 end)
 
 -- Toggle Fly Mode on key press 'B'
-game:GetService("UserInputService").InputEnded:Connect(function(input3)
-    if input3.UserInputType == Enum.UserInputType.Keyboard and input3.KeyCode == Enum.KeyCode.B then
-        getgenv().Fly3 = not getgenv().Fly3
-    end
-end)
 
 print("Script running...")
 
