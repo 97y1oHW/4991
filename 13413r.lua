@@ -1792,7 +1792,7 @@ local Window = Library:CreateWindow({
     
     
 
-    Title = 'Nexify / Solara PD',
+    Title = '<font color="rgb(255, 255, 255)">Ne</font><font color="rgb(128, 0, 128)">x</font><font color="rgb(255, 255, 255)">ify / Solara </font><font color="rgb(255, 0, 0)">PD</font>',
     Center = true,
     AutoShow = true,
     TabPadding = 7.9,
