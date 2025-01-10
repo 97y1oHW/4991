@@ -1,4 +1,5 @@
 
+
 -- main module
 local espLibrary = {
     instances = {},
@@ -271,9 +272,8 @@ function espLibrary.addEsp(player)
             Thickness = 3,
             Color = color3New()
         }),
-        boxStroke = create("Square", {  -- Add this line for box stroke
-            Thickness = 1,
-            Color = color3New(1, 1, 1),  -- White color
+        box = create("Square", {
+            Thickness = 1
         }),
         healthBarOutline = create("Square", {
             Thickness = 1,
@@ -283,10 +283,6 @@ function espLibrary.addEsp(player)
         healthBar = create("Square", {
             Thickness = 1,
             Filled = true
-        }),
-        healthBarStroke = create("Square", {  -- Add this line for health bar stroke
-            Thickness = 1,
-            Color = color3New(1, 1, 1),  -- White color
         }),
         line = create("Line")
     };
@@ -422,7 +418,6 @@ function espLibrary:Load(renderValue)
                 local canShow, enabled = onScreen and (size and position), self.options.enabled;
                 local team, teamColor = self.getTeam(player);
                 local color = self.options.teamColor and teamColor or nil;
-                    
 
                 if (self.options.fillColor ~= nil) then
                     color = self.options.fillColor;
@@ -476,16 +471,6 @@ function espLibrary:Load(renderValue)
                 objects.arrow.PointB = pointB;
                 objects.arrow.PointC = pointC;
 
-
-                    -- For the box stroke
-objects.boxStroke.Visible = show and self.options.boxes;  -- Set visibility
-objects.boxStroke.Size = size;  -- Set size
-objects.boxStroke.Position = position;  -- Set position
-
--- For the health bar stroke
-objects.healthBarStroke.Visible = show and self.options.healthBars;  -- Set visibility
-objects.healthBarStroke.Size = round(vector2New(healthBarSize.X + 2, -size.Y + 2));  -- Set size (slightly larger than health bar)
-objects.healthBarStroke.Position = healthBarPosition - vector2New(1, -1);  -- Set position (slightly offset)
                 objects.arrowOutline.Visible = (not canShow and enabled) and self.options.outOfViewArrowsOutline;
                 objects.arrowOutline.Filled = self.options.outOfViewArrowsOutlineFilled;
                 objects.arrowOutline.Transparency = self.options.outOfViewArrowsOutlineTransparency;
