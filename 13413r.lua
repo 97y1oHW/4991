@@ -601,13 +601,29 @@ if not isfile(filePath) then
     makefolder("verschck")
     writefile(filePath, "starterpack1,3v1,v2,v3,v4,v5,v6,v7...vcur")  
 end
-local updatenote = "Corner Box Shit thingy"
+local updatenote = ""
 
 local versionInFile = readfile(filePath)
 
 
 local version = "v41"  
 
+a4hd = math.random(1,7)
+
+if a4hd == 2 then
+
+	                Notification:Notify(
+            {Title = "Nexify | SOLARA", Description = "A Error Occured While Loading. Tip: Try Again"},
+            {OutlineColor = Color3.fromRGB(255, 7, 7), Time = 30, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+error("Loader Error")
+return
+else
+
+print("")
+
+end
 
 if versionInFile == version then
     print("Version is up to date: " .. versionInFile)
