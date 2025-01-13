@@ -21,6 +21,9 @@ NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFF
 --]]
 
 
+camera = game.workspace.Camera
+Camera = game.workspace.Camera
+
 if not LPH_OBFUSCATED then
     
     local function identityFunction(...)
