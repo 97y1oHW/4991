@@ -51,7 +51,6 @@ end
 
 
 
-messagebox("Loaded Nexify Solara.\n\n\n- By mafaka.", "Nexify Solara", 0)
 
 game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
 
@@ -280,7 +279,7 @@ end)
 g.Parent = game:GetService("CoreGui")
  t = Instance.new("TextLabel")
 t.Text = "Nexify"
-t.Font = Enum.Font.Code
+t.Font = Enum.Font.Arcade
 t.TextSize = 50
 t.TextColor3 = Color3.new(1, 1, 1)
 t.BackgroundTransparency = 1
@@ -608,12 +607,12 @@ local versionInFile = readfile(filePath)
 
 local version = "v41"  
 
-a4hd = math.random(1,7)
+a4hd = math.random(2,7)
 
-if a4hd == 2 then
+if a4hd == 4 then
 
 	                Notification:Notify(
-            {Title = "Nexify | SOLARA", Description = "A Error Occured While Loading. Tip: Try Again"},
+            {Title = "Nexify | SOLARA", Description = "A Error Occured While Loading. Tip: Try Again Executing Again Sorry."},
             {OutlineColor = Color3.fromRGB(255, 7, 7), Time = 30, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
