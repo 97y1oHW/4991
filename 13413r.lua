@@ -1457,7 +1457,7 @@ local function detectExecutor()
         elseif executorName == "Scythex" then
             return "Wave"
         elseif executorName == "MacSploit" then
-            return "Wave"   
+            return "Solara"   
         elseif executorName == "Manti" then
             return "Manti"
         elseif executorName == "Wave" then
