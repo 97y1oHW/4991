@@ -2366,7 +2366,7 @@ EnemyEspTab:AddToggle('EspSwitch2', {
 
 EnemyEspTab:AddSlider('boxfilltr', {
     Text = 'Box Fill Transparency',
-    Default = 0.8,
+    Default = 0.2,
     Min = 0,
     Max = 1,
     Rounding = 3,
@@ -2378,7 +2378,7 @@ EnemyEspTab:AddSlider('boxfilltr', {
     end
 })
 
-        espLib.options.boxFillTransparency = 0.8
+        espLib.options.boxFillTransparency = 0.2
 
 EnemyEspTab:AddLabel('Fill Box Color Picker'):AddColorPicker('Fill Box Color Picker', {
     Default = Color3.fromRGB(255, 255, 255),  
