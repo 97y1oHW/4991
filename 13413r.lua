@@ -2272,6 +2272,42 @@ EnemyEspTab:AddToggle('EspSwitch', {
     end
 })
 
+EnemyEspTab:AddToggle('EspSwitch2', {
+    Text = 'Box Fill',
+    Default = false,
+    Risky = false,
+    Callback = function(enabled)
+        espLib.options.boxFill = enabled
+    end
+})
+
+EnemyEspTab:AddSlider('boxfilltr', {
+    Text = 'Box Fill Transparency',
+    Default = 0.8,
+    Min = 0,
+    Max = 1,
+    Rounding = 3,
+    Compact = false,
+
+    Callback = function(Value)
+        espLib.options.boxFillTransparency = Value
+        
+    end
+})
+
+        espLib.options.boxFillTransparency = 0.8
+
+EnemyEspTab:AddLabel('Fill Box Color Picker'):AddColorPicker('Fill Box Color Picker', {
+    Default = Color3.fromRGB(255, 255, 255),  
+    Title = 'Fill Box Color Picker',
+    Transparency = 0,                         
+
+    Callback = function(Value)
+
+        espLib.options.boxFillColor = Value     
+    end
+})
+
 -- esp.lua
 --// Variables
  Players = game:GetService("Players")
