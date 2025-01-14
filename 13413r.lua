@@ -6736,7 +6736,7 @@ player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
 runService = game:GetService("RunService")
 
-local bulletSpeed = 1020 
+local bulletSpeed = 1001
 aimEnabled = false
 botAimEnabled = false
 
@@ -7057,18 +7057,29 @@ function toggleGuiVisibilityForInventory()
 end
 
 function isPlayerInFOV(localPlayer, otherPlayer, fov)
+    -- Ensure both players have a Character
     local localCharacter = localPlayer.Character
     local otherCharacter = otherPlayer.Character
     if not localCharacter or not otherCharacter then return false end
 
-    local localPosition = localCharacter:FindFirstChild("HumanoidRootPart").Position
-    local otherPosition = otherCharacter:FindFirstChild("HumanoidRootPart").Position
+    -- Ensure both Characters have a HumanoidRootPart
+    local localHRP = localCharacter:FindFirstChild("HumanoidRootPart")
+    local otherHRP = otherCharacter:FindFirstChild("HumanoidRootPart")
+    if not localHRP or not otherHRP then return false end
+
+    -- Get positions and calculate direction
+    local localPosition = localHRP.Position
+    local otherPosition = otherHRP.Position
     local direction = (otherPosition - localPosition).Unit
 
-    local forwardVector = localCharacter:FindFirstChild("HumanoidRootPart").CFrame.LookVector
+    -- Get forward vector and calculate angle
+    local forwardVector = localHRP.CFrame.LookVector
     local angle = math.deg(math.acos(direction:Dot(forwardVector)))
+
+    -- Return true if within FOV
     return angle <= fov / 2
 end
+
 
 function getClosestPlayerToCrosshair(localPlayer, playersInFOV)
     local camera = game.Workspace.CurrentCamera
@@ -7345,7 +7356,7 @@ aimtab:AddToggle('trgierrbot', {
 
 
 aimtab:AddDropdown('Silentaimhitset2', {
-    Values = { 'Legit', 'Rage', 'Balanced' },
+    Values = { 'Legit', 'Rage', 'Balanced', '' },
     Default = 3,
     Multi = false,
 
