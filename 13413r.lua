@@ -607,7 +607,7 @@ local versionInFile = readfile(filePath)
 
 local version = "v41"  
 
-a4hd = math.random(2,7)
+a4hd = math.random(2,19)
 
 if a4hd == 4 then
 
@@ -616,12 +616,19 @@ if a4hd == 4 then
             {OutlineColor = Color3.fromRGB(255, 7, 7), Time = 30, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
+
+	
 error("Loader Error")
 return
 else
 
 print("")
 
+end
+
+if _G.ScriptAlreadyOpened then
+    warn("Blocked Multiple Instances.")
+     return
 end
 
 if versionInFile == version then
@@ -653,10 +660,7 @@ end
 wait(2)
 
 
-if _G.ScriptAlreadyOpened then
-    warn("Blocked Multiple Instances.")
-     return
-end
+
 
 local Players = game.Players
 
@@ -1810,7 +1814,7 @@ local Window = Library:CreateWindow({
     
     
 
-    Title = '<font color="rgb(255, 255, 255)">Ne</font><font color="rgb(128, 0, 128)">x</font><font color="rgb(255, 255, 255)">ify / Solara </font><font color="rgb(255, 0, 0)">PD</font>',
+    Title = '<font color="rgb(255, 255, 255)">Ne</font><font color="rgb(128, 0, 128)">x</font><font color="rgb(255, 255, 255)">ify / Solara </font><font color="rgb(255, 0, 0)">Project Delta</font>',
     Center = true,
     AutoShow = true,
     TabPadding = 7.9,
