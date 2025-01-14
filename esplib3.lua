@@ -42,7 +42,7 @@ local espLibrary = {
         names = false,
         nameTransparency = 1,
         nameColor = Color3.new(1, 1, 1),
-        boxes = trur,
+        boxes = false,
         boxesTransparency = 1,
         boxesColor = Color3.new(255, 255, 255),
         boxFill = false,
@@ -232,16 +232,6 @@ function espLibrary.visibleCheck(character, position)
     return (not raycast(workspace, origin, position - origin, params));
 end
 
-local function applyGradient(object)
-    local gradient = Instance.new("UIGradient")
-    gradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green at the start
-        ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow in the middle
-        ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red at the end
-    }
-    gradient.Parent = object
-end
-
 function espLibrary.addEsp(player)
     if (player == localPlayer) then
         return
@@ -297,17 +287,18 @@ function espLibrary.addEsp(player)
         line = create("Line")
     };
 
-    espLibrary.espCache[player] = objects;
-end
-
-local healthbargradientforreal = Instance.New("UiGradient")
-    healthbargradientforreal.Color = ColorSequence.new{
+    -- Add UIGradient to the health bar
+    local gradient = Instance.new("UIGradient") -- Correct instance creation
+    gradient.Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green at the start
         ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow in the middle
         ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red at the end
-    }
+    })
+    gradient.Parent = objects.healthBar -- Parent the gradient to the health bar
 
-    healthbargradientforreal.Parent = objects.healthBar
+    -- Cache the ESP objects for the player
+    espLibrary.espCache[player] = objects;
+end
 
 function espLibrary.removeEsp(player)
     local espCache = espLibrary.espCache[player];
