@@ -533,7 +533,8 @@ function espLibrary:Load(renderValue)
                 objects.boxFill.Position = position;
 
                 objects.healthBar.Visible = show and self.options.healthBars;
-                objects.healthBar.Color = color or self.options.healthBarsColor;
+                objects.healthBar.BackgroundColor3 = color or self.options.healthBarsColor;
+
                 objects.healthBar.Transparency = self.options.healthBarsTransparency;
                 objects.healthBar.Size = healthBarSize;
                 objects.healthBar.Position = healthBarPosition;
