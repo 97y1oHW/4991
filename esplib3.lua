@@ -280,27 +280,15 @@ function espLibrary.addEsp(player)
             Color = color3New(),
             Filled = true
         }),
-        -- Ensure healthBar is a Roblox UI Instance
-        healthBar = create("Frame", { -- Change to a valid Roblox Instance
-            BackgroundColor3 = Color3.new(0, 1, 0), -- Default color (Green)
-            Size = UDim2.new(1, 0, 0, 10) -- Example size
+        healthBar = create("Square", {
+            Thickness = 1,
+            Filled = true
         }),
         line = create("Line")
     };
 
-    -- Apply UIGradient to healthBar
-    local gradient = Instance.new("UIGradient") -- Create a new gradient
-    gradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green
-        ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow
-        ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red
-    })
-    gradient.Parent = objects.healthBar -- Parent gradient to healthBar
-
-    -- Cache the ESP objects for the player
     espLibrary.espCache[player] = objects;
 end
-
 
 function espLibrary.removeEsp(player)
     local espCache = espLibrary.espCache[player];
@@ -533,8 +521,7 @@ function espLibrary:Load(renderValue)
                 objects.boxFill.Position = position;
 
                 objects.healthBar.Visible = show and self.options.healthBars;
-                objects.healthBar.BackgroundColor3 = color or self.options.healthBarsColor;
-
+                objects.healthBar.Color = color or self.options.healthBarsColor;
                 objects.healthBar.Transparency = self.options.healthBarsTransparency;
                 objects.healthBar.Size = healthBarSize;
                 objects.healthBar.Position = healthBarPosition;
