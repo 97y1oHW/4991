@@ -49,7 +49,85 @@ if not LPH_OBFUSCATED then
 end
 
 
+ Modules = {
+    Colors =  {
+        ["Green"] = "0,255,0", 
+        ["Red"] = "255,0,0",
+        ["White"] = "255,255,255",
+        ["Pink"] = "255,102,153",
+    },
+    Services = {
+        RunService = game:GetService("RunService"),
+        CoreGui = game:GetService("CoreGui")
+    }
+}
 
+Modules.ChangeColor = function() 
+    local Loop
+    Loop = Modules.Services.RunService.Heartbeat:Connect(function()
+        local success, err = pcall(function()
+            local devConsole = Modules.Services.CoreGui:FindFirstChild("DevConsoleMaster")
+            if not devConsole then
+                Loop:Disconnect()
+                return
+            end
+
+            for _, label in pairs(devConsole:GetDescendants()) do 
+                if label:IsA("TextLabel") then 
+                    label.RichText = true 
+                end 
+            end
+        end)
+
+        if not success then 
+            warn("Error in ChangeColor: ", err)
+            Loop:Disconnect()
+        end 
+    end)
+end
+
+Modules.InvalidLoad = function(watermark, color, delay, loadingsymbol)
+    delay = delay or 0.1
+    local Text = watermark..tostring(math.random(500, 20000))
+    print(Text)
+
+    local loadingLabel = nil
+    local progress = ""
+    local timeout = os.clock() + 5 -- 5-second timeout
+
+    repeat
+        task.wait()
+        for _, label in pairs(Modules.Services.CoreGui:FindFirstChild("DevConsoleMaster"):GetDescendants()) do 
+            if label:IsA("TextLabel") and string.find(label.Text:lower(), Text:lower()) then 
+                loadingLabel = label 
+                break
+            end
+        end
+    until loadingLabel or os.clock() > timeout
+
+    if not loadingLabel then
+        warn("Loading label not found within the timeout.")
+        return
+    end
+
+    for i = 1, 50 do
+        progress = progress .. loadingsymbol
+        loadingLabel.Text = string.format(
+            "<font color='rgb(%s)' size='15'>[%s] [%d%% loaded] %s</font>",
+            Modules.Colors["White"], watermark, i * 2, progress
+        )
+        task.wait(delay)
+    end
+
+    loadingLabel.Text = string.format(
+        "<font color='rgb(%s)' size='15'>[%s] Anti-Tamper Enabled Loading Further... </font>",
+        Modules.Colors["Green"], watermark
+    )
+end
+
+-- Call the functions
+Modules.ChangeColor()
+Modules.InvalidLoad("Nexify", "Red", 0.05, "#")
 
 
 game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
