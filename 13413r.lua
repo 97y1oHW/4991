@@ -1484,6 +1484,7 @@ local function simulateLoading()
         wait(0.002)  
     end
 end
+
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "LOADING SCRIPT"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 17.5, Type = "image"},
@@ -1492,7 +1493,7 @@ end
 
 
 
-simulateLoading()
+--simulateLoading()
 
 print("If script ui not appears try spawning and waiting for 2 min")
 wait(1)
