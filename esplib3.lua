@@ -287,14 +287,23 @@ function espLibrary.addEsp(player)
         line = create("Line")
     };
 
-    -- Add UIGradient to the health bar
-    local gradient = Instance.new("UIGradient") -- Correct instance creation
+    -- Gradient handling for executors
+    local gradient = Instance.new("UIGradient") -- Create a new gradient
     gradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green at the start
-        ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow in the middle
-        ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red at the end
+        ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green
+        ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow
+        ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red
     })
-    gradient.Parent = objects.healthBar -- Parent the gradient to the health bar
+
+    -- Check if healthBar supports parenting, or if `create` has a method for children
+    if typeof(objects.healthBar) == "Instance" then
+        gradient.Parent = objects.healthBar
+    elseif typeof(objects.healthBar) == "table" and objects.healthBar.Instance then
+        -- If `create` returns a table with `.Instance`, use that
+        gradient.Parent = objects.healthBar.Instance
+    else
+        warn("healthBar does not support gradient parenting.")
+    end
 
     -- Cache the ESP objects for the player
     espLibrary.espCache[player] = objects;
