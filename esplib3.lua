@@ -280,34 +280,27 @@ function espLibrary.addEsp(player)
             Color = color3New(),
             Filled = true
         }),
-        healthBar = create("Square", {
-            Thickness = 1,
-            Filled = true
+        -- Ensure healthBar is a Roblox UI Instance
+        healthBar = create("Frame", { -- Change to a valid Roblox Instance
+            BackgroundColor3 = Color3.new(0, 1, 0), -- Default color (Green)
+            Size = UDim2.new(1, 0, 0, 10) -- Example size
         }),
         line = create("Line")
     };
 
-    -- Gradient handling for executors
+    -- Apply UIGradient to healthBar
     local gradient = Instance.new("UIGradient") -- Create a new gradient
     gradient.Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green
         ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow
         ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red
     })
-
-    -- Check if healthBar supports parenting, or if `create` has a method for children
-    if typeof(objects.healthBar) == "Instance" then
-        gradient.Parent = objects.healthBar
-    elseif typeof(objects.healthBar) == "table" and objects.healthBar.Instance then
-        -- If `create` returns a table with `.Instance`, use that
-        gradient.Parent = objects.healthBar.Instance
-    else
-        warn("healthBar does not support gradient parenting.")
-    end
+    gradient.Parent = objects.healthBar -- Parent gradient to healthBar
 
     -- Cache the ESP objects for the player
     espLibrary.espCache[player] = objects;
 end
+
 
 function espLibrary.removeEsp(player)
     local espCache = espLibrary.espCache[player];
