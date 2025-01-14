@@ -294,14 +294,20 @@ function espLibrary.addEsp(player)
             Thickness = 1,
             Filled = true
         }),
-        applyGradient(objects.healthBar),
         line = create("Line")
     };
 
     espLibrary.espCache[player] = objects;
 end
 
+local healthbargradientforreal = Instance.New("UiGradient")
+    healthbargradientforreal.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green at the start
+        ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 0)), -- Yellow in the middle
+        ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red at the end
+    }
 
+    healthbargradientforreal.Parent = objects.healthBar
 
 function espLibrary.removeEsp(player)
     local espCache = espLibrary.espCache[player];
