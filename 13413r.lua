@@ -690,7 +690,7 @@ a4hd = math.random(2,19)
 if a4hd == 4 then
 
 	                Notification:Notify(
-            {Title = "Nexify | SOLARA", Description = "A Error Occured While Loading. Tip: Try Again Executing Again Sorry."},
+            {Title = "Nexify | SOLARA", Description = "A Error Occured While Loading. Tip: Try Again Executing. Sorry."},
             {OutlineColor = Color3.fromRGB(255, 7, 7), Time = 30, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
