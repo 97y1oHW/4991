@@ -7978,6 +7978,17 @@ charactertab:AddToggle('Anti Aim Level 2', {
         enabled = isEnabled
         toggleantiaim2level3()
     end
+    }):AddKeyPicker('antiaimlevel2', {
+    Default = 'None',
+    SyncToggleState = true,
+
+    Mode = 'Toggle',
+
+    Text = 'Anti Aim Level 2 Keybind',
+    NoUI = false,
+
+    Callback = function(Value)
+    end,
 })
 
 
