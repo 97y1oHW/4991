@@ -3643,6 +3643,8 @@ movetab:AddButton('no fog', function()
  end
  end)
 
+
+
 WorldTab:AddToggle('Outofviewarrowsoutline', {
     Text = 'Out Of View Arrows Outline',
     Default = false,
@@ -4029,6 +4031,13 @@ counter = counter + 1
 WorldTab:AddButton('Delete Solters Anti Cheat', function()
 
 
+
+		
+ end)
+
+ WorldTab:AddButton('Delete Nexify Functions ⚠️', function()
+
+game.workspace.nexify661:Destrpy()
 
 		
  end)
