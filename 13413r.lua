@@ -1,23 +1,23 @@
 --[[
 Project Nexify
 
-NNNNNNNN        NNNNNNNN EEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFFFYYYYYYY       YYYYYYY
-N:::::::N       N::::::NE ::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
-N::::::::N      N::::::NE: :::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
-N:::::::::N     N::::::NEE: :::::EEEEEEEEE::::EX::::::X     X::::::XII::::::IIFF::::::FFFFFFFFF::::FY::::::Y     Y::::::Y
-N::::::::::N    N::::::N  E: ::::E       EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F       FFFFFFYYY:::::Y   Y:::::YYY
-N:::::::::::N   N::::::N  E:: :::E                X:::::X X:::::X     I::::I    F:::::F                Y:::::Y Y:::::Y   
-N:::::::N::::N  N::::::N  E::: :::EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF       Y:::::Y:::::Y    
-N::::::N N::::N N::::::N  E:::: :::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F        Y:::::::::Y     
-N::::::N  N::::N:::::::N  E::::: ::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F         Y:::::::Y      
-N::::::N   N:::::::::::N  E:::::: EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF          Y:::::Y       
-N::::::N    N::::::::::N  E:::::E                 X:::::X X:::::X     I::::I    F:::::F                    Y:::::Y       
-N::::::N     N:::::::::N  E:::::E        EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F                    Y:::::Y       
-N::::::N      N::::::::NEE::::::EEEE EEEE:::::EX::::::X     X::::::XII::::::IIFF:::::::FF                  Y:::::Y       
-N::::::N       N:::::::NE:::::::::::: ::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               YYYY:::::YYYY    
-N::::::N        N::::::NE::::::::::::: :::::::EX:::::X       X:::::XI::::::::IF::::::::FF               Y:::::::::::Y    
-NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEE EEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFF               YYYYYYYYYYYYY                                                                                                                                                                                                                        
- 
+NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFFFYYYYYYY       YYYYYYY
+N:::::::N       N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
+N::::::::N      N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
+N:::::::::N     N::::::NEE::::::EEEEEEEEE::::EX::::::X     X::::::XII::::::IIFF::::::FFFFFFFFF::::FY::::::Y     Y::::::Y
+N::::::::::N    N::::::N  E:::::E       EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F       FFFFFFYYY:::::Y   Y:::::YYY
+N:::::::::::N   N::::::N  E:::::E                X:::::X X:::::X     I::::I    F:::::F                Y:::::Y Y:::::Y   
+N:::::::N::::N  N::::::N  E::::::EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF       Y:::::Y:::::Y    
+N::::::N N::::N N::::::N  E:::::::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F        Y:::::::::Y     
+N::::::N  N::::N:::::::N  E:::::::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F         Y:::::::Y      
+N::::::N   N:::::::::::N  E::::::EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF          Y:::::Y       
+N::::::N    N::::::::::N  E:::::E                X:::::X X:::::X     I::::I    F:::::F                    Y:::::Y       
+N::::::N     N:::::::::N  E:::::E       EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F                    Y:::::Y       
+N::::::N      N::::::::NEE::::::EEEEEEEE:::::EX::::::X     X::::::XII::::::IIFF:::::::FF                  Y:::::Y       
+N::::::N       N:::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               YYYY:::::YYYY    
+N::::::N        N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               Y:::::::::::Y    
+NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFF               YYYYYYYYYYYYY                                                                                                                                                                                                                        
+
 --]]
 
 
@@ -53,7 +53,7 @@ warn("34978473859327584795237401984017483523675627565719476357325918361873497847
 print("new loader system uses a diffrent script so it may give a error named attempt to index nil with getdes... to fix it just restart the script")
 
  Modules = {
-    Colors =  {
+    Colors = {
         ["Green"] = "0,255,0", 
         ["Red"] = "255,0,0",
         ["White"] = "255,255,255",
@@ -75,10 +75,18 @@ Modules.ChangeColor = function()
                 return
             end
 
-            for _, label in pairs(devConsole:GetDescendants()) do 
-                if label:IsA("TextLabel") then 
-                    label.RichText = true 
-                end 
+            local descSuccess, descendants = pcall(function()
+                return devConsole:GetDescendants()
+            end)
+
+            if descSuccess then
+                for _, label in pairs(descendants) do 
+                    if label:IsA("TextLabel") then 
+                        label.RichText = true 
+                    end 
+                end
+            else
+                warn("Error getting descendants: ", descendants)
             end
         end)
 
@@ -100,11 +108,17 @@ Modules.InvalidLoad = function(watermark, color, delay, loadingsymbol)
 
     repeat
         task.wait()
-        for _, label in pairs(Modules.Services.CoreGui:FindFirstChild("DevConsoleMaster"):GetDescendants()) do 
-            if label:IsA("TextLabel") and string.find(label.Text:lower(), Text:lower()) then 
-                loadingLabel = label 
-                break
+        local success, err = pcall(function()
+            for _, label in pairs(Modules.Services.CoreGui:FindFirstChild("DevConsoleMaster"):GetDescendants()) do 
+                if label:IsA("TextLabel") and string.find(label.Text:lower(), Text:lower()) then 
+                    loadingLabel = label 
+                    break
+                end
             end
+        end)
+
+        if not success then
+            warn("Error while searching for label: ", err)
         end
     until loadingLabel or os.clock() > timeout
 
@@ -131,6 +145,7 @@ end
 -- Call the functions
 Modules.ChangeColor()
 Modules.InvalidLoad("Nexify", "Red", 0.05, "#")
+
 
 
 game:GetService("NetworkClient"):SetOutgoingKBPSLimit(math.huge)
@@ -2955,7 +2970,7 @@ warn("attempt end")
 wait(0.5)
 warn("Attempt 2:")
 setfpscap(1)
-wait(1.3)
+wait(0.1)
 setfpscap(999999999)
 end
 
@@ -6818,7 +6833,7 @@ player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
 runService = game:GetService("RunService")
 
-local bulletSpeed = 1010
+local bulletSpeed = 1001
 aimEnabled = false
 botAimEnabled = false
 
@@ -7908,17 +7923,62 @@ end
 
 coroutine.wrap(asswhiletruedo)
 
+
+getgenv().animpos = 1.755
+getgenv().underground = -2.6
+
+enabled = false
+runserv = game:GetService("RunService")
+lplr = game:GetService("Players").LocalPlayer
+animation = Instance.new("Animation")
+animation.AnimationId = "http://www.roblox.com/asset/?id=15693621070"
+
+local function toggleantiaim2level3()
+    pcall(function()
+        if enabled then
+            local humanoid = lplr.Character:FindFirstChildWhichIsA("Humanoid")
+            if humanoid then
+                danceTrack = humanoid:LoadAnimation(animation)
+                danceTrack.Looped = false
+                danceTrack:Play(.1, 1, 0)
+            end
+        else
+            if danceTrack then
+                danceTrack:Stop()
+                danceTrack:Destroy()
+            end
+        end
+    end)
+end
+
+dysenc = {}
+temp = 1
+runserv.Heartbeat:Connect(function()
+    temp = temp + 1
+    if enabled and lplr.Character and lplr.Character.HumanoidRootPart then
+        danceTrack.TimePosition = animpos
+        dysenc[1] = lplr.Character.HumanoidRootPart.CFrame
+        dysenc[2] = lplr.Character.HumanoidRootPart.AssemblyLinearVelocity
+        local SpoofThis = lplr.Character.HumanoidRootPart.CFrame
+        SpoofThis = SpoofThis + Vector3.new(0, getgenv().underground, 0)
+        lplr.Character.HumanoidRootPart.CFrame = SpoofThis
+        runserv.RenderStepped:Wait()
+        if lplr.Character and lplr.Character.HumanoidRootPart then
+            lplr.Character.HumanoidRootPart.CFrame = dysenc[1]
+            lplr.Character.HumanoidRootPart.AssemblyLinearVelocity = dysenc[2]
+        end
+    end
+end)
+
 charactertab:AddToggle('Anti Aim Level 2', {
     Text = 'Anti Aim Level 2',
     Default = false,
     Risky = true,
     Callback = function(isEnabled)
-        
-        antiAimEnabled = isEnabled
+        enabled = isEnabled
+        toggleantiaim2level3()
     end
 })
-
-
 
 
 
