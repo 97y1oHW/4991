@@ -3783,11 +3783,96 @@ WorldTab:AddLabel('Bracket Color'):AddColorPicker('Bracket Color', {
 })
 
 
+WorldTab:AddLabel("-------------------------------")
 
+players = game:GetService("Players")
+player = players.LocalPlayer
+camera = workspace.CurrentCamera
+botesplegacy = false
+updateCoroutine = nil -- Reference for the coroutine
 
+function isNPC(model)
+    return model:FindFirstChild("Humanoid") 
+       and model:FindFirstChild("HumanoidRootPart") 
+       and not players:GetPlayerFromCharacter(model)
+end
 
+function createLabel(npc)
+    local billboardGui = Instance.new("BillboardGui")
+    billboardGui.Name = "NPCLabel"
+    billboardGui.Parent = npc:FindFirstChild("HumanoidRootPart") or npc.PrimaryPart
+    billboardGui.Size = UDim2.new(0, 100, 0, 25)
+    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+    billboardGui.AlwaysOnTop = true
 
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Parent = billboardGui
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textLabel.Font = Enum.Font.Arcade
+    textLabel.TextScaled = true
+    textLabel.TextStrokeTransparency = 0
 
+    return textLabel
+end
+
+function updateLabel(npc, textLabel)
+    local distance = (npc.PrimaryPart.Position - player.Character.PrimaryPart.Position).Magnitude
+    textLabel.Text = string.format("%s\n%.1f meters", npc.Name, distance)
+end
+
+function updateNPCLabels()
+    for _, npc in ipairs(workspace:GetDescendants()) do
+        if npc:IsA("Model") and isNPC(npc) then
+            local label = npc:FindFirstChild("HumanoidRootPart"):FindFirstChild("NPCLabel")
+            if not label then
+                local textLabel = createLabel(npc)
+                updateLabel(npc, textLabel)
+            else
+                updateLabel(npc, label.TextLabel)
+            end
+        end
+    end
+end
+
+function removeNPCLabels()
+    for _, npc in ipairs(workspace:GetDescendants()) do
+        if npc:IsA("Model") and isNPC(npc) then
+            local label = npc:FindFirstChild("HumanoidRootPart"):FindFirstChild("NPCLabel")
+            if label then
+                label:Destroy() -- Destroy the label
+            end
+        end
+    end
+end
+
+function toggleNPCLabels()
+    botesplegacy = not botesplegacy
+    if botesplegacy then
+        -- Start the coroutine
+        updateCoroutine = coroutine.wrap(function()
+            while botesplegacy do
+                updateNPCLabels()
+                task.wait(0.1)
+            end
+        end)
+        updateCoroutine() -- Start the coroutine immediately
+    else
+        -- Stop the coroutine and remove the labels
+        removeNPCLabels() -- Clean up the labels
+    end
+end
+
+WorldTab:AddToggle('Bot Esp', {
+    Text = 'Bot Esp Toggle',
+    Default = false,
+    Callback = function(value)
+        toggleNPCLabels()
+    end
+})
+
+WorldTab:AddLabel("-------------------------------")
 
 
 makefolder("nexify661")
