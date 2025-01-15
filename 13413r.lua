@@ -1,23 +1,23 @@
 --[[
 Project Nexify
 
-NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFFFYYYYYYY       YYYYYYY
-N:::::::N       N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
-N::::::::N      N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
-N:::::::::N     N::::::NEE::::::EEEEEEEEE::::EX::::::X     X::::::XII::::::IIFF::::::FFFFFFFFF::::FY::::::Y     Y::::::Y
-N::::::::::N    N::::::N  E:::::E       EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F       FFFFFFYYY:::::Y   Y:::::YYY
-N:::::::::::N   N::::::N  E:::::E                X:::::X X:::::X     I::::I    F:::::F                Y:::::Y Y:::::Y   
-N:::::::N::::N  N::::::N  E::::::EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF       Y:::::Y:::::Y    
-N::::::N N::::N N::::::N  E:::::::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F        Y:::::::::Y     
-N::::::N  N::::N:::::::N  E:::::::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F         Y:::::::Y      
-N::::::N   N:::::::::::N  E::::::EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF          Y:::::Y       
-N::::::N    N::::::::::N  E:::::E                X:::::X X:::::X     I::::I    F:::::F                    Y:::::Y       
-N::::::N     N:::::::::N  E:::::E       EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F                    Y:::::Y       
-N::::::N      N::::::::NEE::::::EEEEEEEE:::::EX::::::X     X::::::XII::::::IIFF:::::::FF                  Y:::::Y       
-N::::::N       N:::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               YYYY:::::YYYY    
-N::::::N        N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               Y:::::::::::Y    
-NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFF               YYYYYYYYYYYYY                                                                                                                                                                                                                        
-
+NNNNNNNN        NNNNNNNN EEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFFFYYYYYYY       YYYYYYY
+N:::::::N       N::::::NE ::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
+N::::::::N      N::::::NE: :::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
+N:::::::::N     N::::::NEE: :::::EEEEEEEEE::::EX::::::X     X::::::XII::::::IIFF::::::FFFFFFFFF::::FY::::::Y     Y::::::Y
+N::::::::::N    N::::::N  E: ::::E       EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F       FFFFFFYYY:::::Y   Y:::::YYY
+N:::::::::::N   N::::::N  E:: :::E                X:::::X X:::::X     I::::I    F:::::F                Y:::::Y Y:::::Y   
+N:::::::N::::N  N::::::N  E::: :::EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF       Y:::::Y:::::Y    
+N::::::N N::::N N::::::N  E:::: :::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F        Y:::::::::Y     
+N::::::N  N::::N:::::::N  E::::: ::::::::::E        X:::::::::X       I::::I    F:::::::::::::::F         Y:::::::Y      
+N::::::N   N:::::::::::N  E:::::: EEEEEEEEEE       X:::::X:::::X      I::::I    F::::::FFFFFFFFFF          Y:::::Y       
+N::::::N    N::::::::::N  E:::::E                 X:::::X X:::::X     I::::I    F:::::F                    Y:::::Y       
+N::::::N     N:::::::::N  E:::::E        EEEEEEXXX:::::X   X:::::XXX  I::::I    F:::::F                    Y:::::Y       
+N::::::N      N::::::::NEE::::::EEEE EEEE:::::EX::::::X     X::::::XII::::::IIFF:::::::FF                  Y:::::Y       
+N::::::N       N:::::::NE:::::::::::: ::::::::EX:::::X       X:::::XI::::::::IF::::::::FF               YYYY:::::YYYY    
+N::::::N        N::::::NE::::::::::::: :::::::EX:::::X       X:::::XI::::::::IF::::::::FF               Y:::::::::::Y    
+NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEE EEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFF               YYYYYYYYYYYYY                                                                                                                                                                                                                        
+ 
 --]]
 
 
@@ -6818,7 +6818,7 @@ player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
 runService = game:GetService("RunService")
 
-local bulletSpeed = 1001
+local bulletSpeed = 1010
 aimEnabled = false
 botAimEnabled = false
 
