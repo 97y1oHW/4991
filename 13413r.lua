@@ -3797,6 +3797,8 @@ function isNPC(model)
        and not players:GetPlayerFromCharacter(model)
 end
 
+fontforbotesp = Enum.Font.Arcade
+
 function createLabel(npc)
     local billboardGui = Instance.new("BillboardGui")
     billboardGui.Name = "NPCLabel"
@@ -3810,7 +3812,7 @@ function createLabel(npc)
     textLabel.Size = UDim2.new(1, 0, 1, 0)
     textLabel.BackgroundTransparency = 1
     textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    textLabel.Font = Enum.Font.Arcade
+    textLabel.Font = fontforbotesp
     textLabel.TextScaled = true
     textLabel.TextStrokeTransparency = 0
 
@@ -3847,6 +3849,8 @@ function removeNPCLabels()
     end
 end
 
+waittimeforbotesp = 1
+
 function toggleNPCLabels()
     botesplegacy = not botesplegacy
     if botesplegacy then
@@ -3854,7 +3858,7 @@ function toggleNPCLabels()
         updateCoroutine = coroutine.wrap(function()
             while botesplegacy do
                 updateNPCLabels()
-task.wait(1)  -- Update every 0.5 seconds instead of 0.1 seconds
+task.wait(waittimeforbotesp)  -- Update every 0.5 seconds instead of 0.1 seconds
 
             end
         end)
@@ -3873,6 +3877,34 @@ WorldTab:AddToggle('Bot Esp', {
         toggleNPCLabels()
     end
 })
+
+WorldTab:AddSlider('Bot Esp Renew Time', {
+    Text = 'Bot Esp Renew Interval',
+    Default = 1,
+    Min = 0.1,
+    Max = 10,
+    Rounding = 2,
+    Compact = false,
+
+    Callback = function(Value)
+        
+waittimeforbotesp = Value
+
+    end
+})
+
+WorldTab:AddDropdown('Bot Esp Font', {
+    Values = {'Arcade', 'Code'},
+    Default = 1,
+    Multi = false,
+    Text = 'Bot Esp Font',
+    Tooltip = 'Font Selector',
+    Callback = function(state)
+                
+fontforbotesp = state
+    end
+})
+
 
 WorldTab:AddLabel("-------------------------------")
 
