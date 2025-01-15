@@ -3854,9 +3854,11 @@ function toggleNPCLabels()
         updateCoroutine = coroutine.wrap(function()
             while botesplegacy do
                 updateNPCLabels()
-                task.wait(0.1)
+task.wait(1)  -- Update every 0.5 seconds instead of 0.1 seconds
+
             end
         end)
+        wait(0.6)
         updateCoroutine() -- Start the coroutine immediately
     else
         -- Stop the coroutine and remove the labels
