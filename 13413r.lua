@@ -3643,6 +3643,53 @@ movetab:AddButton('no fog', function()
  end
  end)
 
+movetab:AddButton('car tp', function()
+    if not game.Players.LocalPlayer.Character then
+        return game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Error",
+            Text = "No character found",
+            Duration = 3
+        })
+    end
+
+    local player = game.Players.LocalPlayer
+    local closestCar, closestDist = nil, math.huge
+
+    for _, vehicle in pairs(workspace:WaitForChild("Vehicles"):GetChildren()) do
+        if vehicle:FindFirstChild("Body") and vehicle.Body:FindFirstChildOfClass("MeshPart") then
+            local distance = (vehicle.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude
+            if distance < closestDist then
+                closestDist = distance
+                closestCar = vehicle
+            end
+        end
+    end
+
+    if not closestCar then
+        return game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Error",
+            Text = "No cars nearby",
+            Duration = 3
+        })
+    end
+
+    -- Attempt to teleport the character to the car
+    for _, seat in pairs(closestCar:GetDescendants()) do
+        if seat:IsA("Seat") and seat.Name == "SeatFR" then
+            seat:Sit(player.Character:FindFirstChildOfClass("Humanoid"))
+        end
+    end
+
+    wait(0.2)
+
+    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
+        ["Vehicle"] = closestCar,
+        ["Action"] = "Enter",
+        ["Door"] = closestCar.Body.FRdoor.FR_Door
+    })
+end)
+
+
 
 
 WorldTab:AddToggle('Outofviewarrowsoutline', {
