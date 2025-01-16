@@ -3642,6 +3642,7 @@ do
 
 
 
+
 movetab:AddButton('no fog', function()
     if Lighting:FindFirstChildOfClass("Atmosphere") then
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
@@ -6565,6 +6566,57 @@ function customizeArms(viewModel)
 end
 
 
+Misc:AddToggle('makesadf', { 
+    Text = 'Make Ammos Compatitable With Silent', 
+    Default = false,
+    Risky = true,
+    Callback = function(isEnabled)
+        -- Check if the toggle is enabled
+        if isEnabled then
+            -- Define the target AmmoType file
+            local targetAmmoName = "762x39Tracer"
+            local ammoTypes = game.ReplicatedStorage.AmmoTypes
+
+            -- Ensure the target file exists
+            local targetAmmo = ammoTypes:FindFirstChild(targetAmmoName)
+            if not targetAmmo then
+                warn("Target ammo type '" .. targetAmmoName .. "' not found!")
+                return
+            end
+
+            -- Get all attributes from the target file
+            local attributes = targetAmmo:GetAttributes()
+
+            -- Define attributes to exclude
+            local excludedAttributes = {
+                CallSign = true,
+                Tracer = true,
+                Damage = true,
+                ArmorPen = true,
+            }
+
+            -- Iterate through all children of AmmoTypes
+            for _, ammo in pairs(ammoTypes:GetChildren()) do
+                if ammo:IsA("Folder") or ammo:IsA("ModuleScript") or ammo:IsA("Instance") then
+                    -- Apply each attribute from the target file, except excluded ones
+                    for attrName, attrValue in pairs(attributes) do
+                        if not excludedAttributes[attrName] then
+                            ammo:SetAttribute(attrName, attrValue)
+                        end
+                    end
+                end
+            end
+
+            print("Attributes from '" .. targetAmmoName .. "' applied to all AmmoTypes, excluding 'CallSign' and 'Tracer'.")
+        else
+            print("Silent Aim compatibility toggle is disabled.")
+        end
+    end
+})
+
+
+
+
 charactertab:AddLabel('-------------------------------------------------------------')
 
 
@@ -7170,9 +7222,11 @@ aimtab:AddToggle('forcetracer', {
     end
 })
 
+aimtab:AddLabel('Default Muzzle Velocity For Silent Aim \n is 2145')
+
 aimtab:AddSlider('Muzzle Velocity', {
     Text = 'Muzzle Velocity',
-    Default = 2500,
+    Default = 2145,
     Min = 1,
     Max = 3000,
     Risky = true,
