@@ -701,7 +701,7 @@ local updatenote = ""
 local versionInFile = readfile(filePath)
 
 
-local version = "v41"  
+local version = "v52"  
 
 a4hd = math.random(2,40)
 
@@ -5955,57 +5955,7 @@ aimtab:AddToggle('tracers', {
     end
 })
 
-aimtab:AddButton('No Drag', function()
 
-
-local function setAmmoDrag(first)
-    local ammoTypes = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
-    if not ammoTypes then
-        warn("AmmoTypes not found in ReplicatedStorage")
-        return
-    end
-
-    for _, ammoType in pairs(ammoTypes:GetChildren()) do
-        local dragValue = first and "0" or "DefaultDrag"
-        ammoType:SetAttribute("Drag", 0)
-    end
-end
-
-
-setAmmoDrag(true) 
-
-
- end)
-
- aimtab:AddButton('No Drop', function()
-
-local ammo = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
-        if ammo then
-            for _, v in pairs(ammo:GetChildren()) do
-                v:SetAttribute("ProjectileDrop", 2)
-            end
-        else
-            warn("AmmoTypes not found in ReplicatedStorage")
-        end
-
-
-
- end)
-
-aimtab:AddButton('No Spread', function()
-
-local ammo = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
-        if ammo then
-            for _, v in pairs(ammo:GetChildren()) do
-                v:SetAttribute("AccuracyDeviation", 0)
-            end
-        else
-            warn("AmmoTypes not found in ReplicatedStorage")
-        end
-
-
-
- end)
 
 local jesusEnabled = false
 local jesusFolder = workspace:FindFirstChild("JesusFolder") or Instance.new("Folder", workspace)
@@ -7194,6 +7144,27 @@ aimtab:AddSlider('Silent Aim Resp Sped', {
     end
 })
 
+aimtab:AddToggle('forcetracer', {
+    Text = 'Force Tracer Bullets',
+    Default = false,
+    Risky = false,
+    Callback = function(isEnabled)
+
+        local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("Tracer", isEnabled)
+                end
+            end
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end
+
+
+    end
+})
+
 aimtab:AddSlider('Muzzle Velocity', {
     Text = 'Muzzle Velocity',
     Default = 2500,
@@ -7209,6 +7180,122 @@ aimtab:AddSlider('Muzzle Velocity', {
             for _, item in ipairs(ammoTypesFolder:GetChildren()) do
                 if item:IsA("Instance") then
                     item:SetAttribute("MuzzleVelocity", Value)
+                end
+            end
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end
+    end
+})
+
+aimtab:AddSlider('Projectile Width', {
+    Text = 'Projectile Width',
+    Default = 0.5,
+    Min = 0,
+    Max = 100,
+    Risky = true,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("ProjectileWidth", Value)
+                end
+            end
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end
+    end
+})
+
+
+aimtab:AddSlider('Projectile Drop', {
+    Text = 'Projectile Drop',
+    Default = 4.6,
+    Min = 0,
+    Max = 200,
+    Risky = true,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("ProjectileDrop", Value)
+                end
+            end
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end
+    end
+})
+
+aimtab:AddSlider('Drag', {
+    Text = 'Drag',
+    Default = 0.013,
+    Min = 0.013,
+    Max = 10,
+    Risky = true,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("Drag", Value)
+                end
+            end
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end
+    end
+})
+
+aimtab:AddSlider('Armor Penetration', {
+    Text = 'Armor Penetration ',
+    Default = 17,
+    Min = 1,
+    Max = 128,
+    Risky = true,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("ArmorPen", Value)
+                end
+            end
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end
+    end
+})
+
+aimtab:AddSlider('Damage', {
+    Text = 'Damage',
+    Default = 50,
+    Min = 1,
+    Max = 120,
+    Risky = true,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("Damage", Value)
                 end
             end
         else
