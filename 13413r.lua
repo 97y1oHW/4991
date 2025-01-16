@@ -7515,7 +7515,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
-
+--[[
 aimtab:AddToggle('trigfuckkk', {
     Text = 'Trigger Bot',
     Default = false,
@@ -7539,6 +7539,7 @@ toggleShooting()
     end,
 })
 
+--]]
 -- Settings
 local fovewhasd = 150
 local fovewhasd_Radians = math.rad(fovewhasd / 2)
