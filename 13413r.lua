@@ -7146,7 +7146,7 @@ aimUpdateInterval = Value
 library:Notify("You Are In Buyer Mode!",3)
 wait(0.4)
 library:Notify("Attempting To Bypass Client Anti-Cheat",10)
-_z5attclientanticheat()
+--_z5attclientanticheat()
 
 Library:SetWatermarkVisibility(true)
 wait(1)
@@ -7171,8 +7171,8 @@ library:Notify("Failed To Bypass Client Anti-Cheat",4)
 Library:SetWatermark(('Nexify /\ Solara | %s fps | %s ms | %s | %s'):format(
     math.floor(FPS),
     math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
-    os.date("%H:%M:%S"),  -- Current time
-    os.date("%Y-%m-%d")   -- Current date in YYYY-MM-DD format
+    os.date("%H:%M:%S"),   
+    os.date("%Y-%m-%d")   
 ));
 end);
 
@@ -7191,6 +7191,29 @@ aimtab:AddSlider('Silent Aim Resp Sped', {
     Callback = function(Value)
 --loll
 
+    end
+})
+
+aimtab:AddSlider('Muzzle Velocity', {
+    Text = 'Muzzle Velocity',
+    Default = 2500,
+    Min = 1,
+    Max = 3000,
+    Risky = true,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("MuzzleVelocity", Value)
+                end
+            end
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end
     end
 })
 
@@ -7493,8 +7516,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
---[[
-
 aimtab:AddToggle('trigfuckkk', {
     Text = 'Trigger Bot',
     Default = false,
@@ -7517,8 +7538,6 @@ toggleShooting()
     Callback = function(Value)
     end,
 })
-
---]]
 
 -- Settings
 local fovewhasd = 150
