@@ -7550,6 +7550,14 @@ wait(0.3)
     updateInventorySlotsForInventory(player, slots)
 end)
 
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+    wait(1) -- Give time for the PlayerGui to reinitialize
+    ScreenGuiForInventory:Destroy() -- Clean up the old GUI
+    -- Reparent the GUI to the player's PlayerGui again
+    ScreenGuiForInventory.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+end)
+
+
 aimtab:AddToggle('Inventory Viewer', {
     Text = 'Inventory Viewer',
     Default = true,
