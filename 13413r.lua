@@ -2345,8 +2345,13 @@ EnemyEspTab:AddToggle('xraythingyass', {
     Risky = true,
     Callback = function(enabled)
 
-        xrayEnabled = not xrayEnabled
-        toggleXRay(xrayEnabled)
+
+                Notification:Notify(
+            {Title = "Nexify | SOLARA", Description = "Disabled X-RAY due to major config bugs."},
+            {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 10, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
+
 
 
     end
