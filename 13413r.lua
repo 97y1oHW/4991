@@ -6606,10 +6606,11 @@ Misc:AddToggle('makesadf', {
                     end
                 end
             end
-
+ library:Notify('Made Ammos Compatitable With Silent Aim \n it means you will be able to shoot \n clearly while using another gun',10)
             print("Attributes from '" .. targetAmmoName .. "' applied to all AmmoTypes, excluding 'CallSign' and 'Tracer'.")
         else
             print("Silent Aim compatibility toggle is disabled.")
+            library:Notify('Disabled Silent Aim Compatitability but I think its a bad idea to disable it... \n btw thanks for buying Nexify ❤️',10)
         end
     end
 })
