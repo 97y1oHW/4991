@@ -703,7 +703,7 @@ local versionInFile = readfile(filePath)
 
 local version = "v41"  
 
-a4hd = math.random(2,19)
+a4hd = math.random(2,40)
 
 if a4hd == 4 then
 
