@@ -48,6 +48,16 @@ setNameAttributesToZero()
 camera = game.workspace.Camera
 Camera = game.workspace.Camera
 
+game.ReplicatedStorage.Binds.NotificationMessageClient:Fire("Hacked By N<E<X<I<F<Y",12)
+
+
+
+    for i = 1, 5 do
+        print("c x  z  c", i, ".")
+        wait(0.01)
+    end
+
+
 
 print("new loader system uses a diffrent script so it may give a error named attempt to index nil with getdes... to fix it just restart the script")
 
