@@ -284,17 +284,8 @@ function espLibrary.addEsp(player)
             Thickness = 1,
             Filled = true
         }),
-                healthBarGradient = instanceNew("UIGradient"), -- Create the UIGradient
         line = create("Line")
     };
-
-    -- Set up the gradient
-    objects.healthBarGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.new(0, 1, 0)), -- Green
-        ColorSequenceKeypoint.new(1, Color3.new(1, 0, 0))  -- Red
-    });
-    objects.healthBarGradient.Rotation = 90; -- Set the rotation if needed
-    objects.healthBarGradient.Parent = objects.healthBar; -- Parent the gradient to the health bar
 
     espLibrary.espCache[player] = objects;
 end
