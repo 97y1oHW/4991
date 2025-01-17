@@ -1321,6 +1321,10 @@ print("CHECK 4")
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 wait(2)
+
+
+
+wait(3)
 print("Verification Level: " .. level .."")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "Verification Level: " ..level..""},
@@ -1359,6 +1363,44 @@ local hwids = {
     "another_hwid_example_2"
 }
 
+
+ versiontonechecked = 0.346
+
+if versiontonechecked == 0.256 then
+    Notification:Notify(
+        {
+            Title = "Nexify | SOLARA",
+            Description = "Version Check Completed"
+        },
+        {
+            OutlineColor = Color3.fromRGB(10, 246, 33),
+            Time = 10,
+            Type = "image"
+        },
+        {
+            Image = "http://www.roblox.com/asset/?id=2592670449",
+            ImageColor = Color3.fromRGB(255, 84, 84)
+        }
+    )
+else
+    wait(2)
+    Notification:Notify(
+        {
+            Title = "Nexify | SOLARA",
+            Description = "Version Mismatch With Project Delta (return)"
+        },
+        {
+            OutlineColor = Color3.fromRGB(245, 29, 29),
+            Time = 15,
+            Type = "image"
+        },
+        {
+            Image = "http://www.roblox.com/asset/?id=2592670449",
+            ImageColor = Color3.fromRGB(255, 84, 84)
+        }
+    )
+    return
+end
 
 
 local function checkForSameScript(hwid)
