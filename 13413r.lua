@@ -6616,6 +6616,76 @@ Misc:AddToggle('makesadf', {
 })
 
 
+Misc:AddToggle('infdurability', {
+    Text = 'Infinite Attachment Durability',
+    Default = false,
+    Risky = false,
+    Callback = function(enabled)
+
+-- Reference to the Local Player
+local player = game.Players.LocalPlayer
+
+-- Ensure player is loaded
+if not player then
+    warn("Local player not found!")
+    return
+end
+
+-- Navigate to the player's data in ReplicatedStorage
+local playerData = game.ReplicatedStorage.Players:FindFirstChild(player.Name)
+if not playerData then
+    warn("Player data not found in ReplicatedStorage!")
+    return
+end
+
+-- Navigate to the Inventory
+local inventory = playerData:FindFirstChild("Inventory")
+if not inventory then
+    warn("Inventory not found!")
+    return
+end
+
+-- Iterate over all guns in Inventory
+for _, gun in pairs(inventory:GetChildren()) do
+    -- Ensure the gun is a value, not a model
+    if gun:IsA("ValueBase") then
+        -- Navigate to Attachments -> Muzzle
+        local attachments = gun:FindFirstChild("Attachments")
+        if attachments then
+            local muzzle = attachments:FindFirstChild("Muzzle")
+            if muzzle then
+                -- Iterate over all values in Muzzle
+                for _, attachment in pairs(muzzle:GetChildren()) do
+                    -- Navigate to ItemProperties
+                    local itemProperties = attachment:FindFirstChild("ItemProperties")
+                    if itemProperties then
+                        -- Check and set the Durability attribute
+                        if itemProperties:GetAttribute("Durability") ~= nil then
+                            itemProperties:SetAttribute("Durability", 1000)
+                            print("Set Durability to 1000 for:", attachment.Name)
+                        else
+                            warn("Durability attribute not found for:", attachment.Name)
+                        end
+                    else
+                        warn("ItemProperties not found for:", attachment.Name)
+                    end
+                end
+            else
+                warn("Muzzle not found for:", gun.Name)
+            end
+        else
+            warn("Attachments not found for:", gun.Name)
+        end
+    else
+        warn("Gun is not a ValueBase:", gun.Name)
+    end
+end
+
+
+    end
+})
+
+
 
 
 charactertab:AddLabel('-------------------------------------------------------------')
