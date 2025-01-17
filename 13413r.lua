@@ -8394,21 +8394,21 @@ runserv.Heartbeat:Connect(function()
     end
 end)
 
-charactertab:AddToggle('Anti Aim Level 2', {
-    Text = 'Anti Aim Level 2',
+charactertab:AddToggle('Anti  2', {
+    Text = 'Invisible',
     Default = false,
     Risky = true,
     Callback = function(isEnabled)
         enabled = isEnabled
         toggleantiaim2level3()
     end
-    }):AddKeyPicker('antiaimlevel2', {
+    }):AddKeyPicker('Invisible', {
     Default = 'None',
     SyncToggleState = true,
 
     Mode = 'Toggle',
 
-    Text = 'Anti Aim Level 2 Keybind',
+    Text = 'Invisible',
     NoUI = false,
 
     Callback = function(Value)
