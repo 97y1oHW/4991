@@ -1356,7 +1356,7 @@ local hwids = {
 }
 
 
- versiontonechecked = 0.346
+ versiontonechecked = 0.256
 
 if versiontonechecked == 0.256 then
     Notification:Notify(
