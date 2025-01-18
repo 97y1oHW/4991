@@ -7130,7 +7130,7 @@ player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
 runService = game:GetService("RunService")
 
-local bulletSpeed = 999
+local bulletSpeed = 1000
 aimEnabled = false
 botAimEnabled = false
 
