@@ -6729,6 +6729,27 @@ end
     end
 })
 
+Misc:AddToggle('dsa1', {
+    Text = 'No Gun Fire Sound',
+    Default = false,
+    Risky = true,
+    Callback = function(enabled)
+        -- Iterate through all descendants in the workspace
+        for _, sound in ipairs(workspace:GetDescendants()) do
+            -- Check if the object is a Sound and has the name "FireSound"
+            if sound:IsA("Sound") and sound.Name == "FireSound" then
+                if enabled then
+                    -- Set volume to 0 when toggle is enabled
+                    sound.Volume = 0
+                else
+                    -- Restore the volume to a default value (adjust as needed) when toggle is disabled
+                    sound.Volume = 1
+                end
+            end
+        end
+    end
+})
+
 
 
 
