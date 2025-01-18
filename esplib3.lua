@@ -39,7 +39,7 @@ local espLibrary = {
         outOfViewArrowsOutlineFilled = false,
         outOfViewArrowsOutlineColor = Color3.new(1, 1, 1),
         outOfViewArrowsOutlineTransparency = 1,
-        names = false,
+        names = true,
         nameTransparency = 1,
         nameColor = Color3.new(1, 1, 1),
         boxes = false,
@@ -287,8 +287,18 @@ function espLibrary.addEsp(player)
         line = create("Line")
     };
 
+    -- Create a UIGradient for the health bar
+    local healthBarGradient = Instance.new("UIGradient")
+    healthBarGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 0)),  -- Green
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 0)),  -- Yellow
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))  -- Red
+    })
+    healthBarGradient.Parent = objects.healthBar
+
     espLibrary.espCache[player] = objects;
 end
+
 
 function espLibrary.removeEsp(player)
     local espCache = espLibrary.espCache[player];
