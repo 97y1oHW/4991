@@ -20,7 +20,8 @@ NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFF
 
 --]]
 
-asciiart=[[
+asciiart=[[ 
+    
 NNNNNNNN        NNNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFFFYYYYYYY       YYYYYYY
 N:::::::N       N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
 N::::::::N      N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::::::::::::::::::::FY:::::Y       Y:::::Y
