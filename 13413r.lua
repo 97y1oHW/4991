@@ -8517,7 +8517,7 @@ runserv.Heartbeat:Connect(function()
         end
     end
 end)
-
+--[[
 charactertab:AddToggle('Anti  2', {
     Text = 'Invisible',
     Default = false,
@@ -8538,7 +8538,7 @@ charactertab:AddToggle('Anti  2', {
     Callback = function(Value)
     end,
 })
-
+]]
 
 
 function isPlayerTransparent(player)
