@@ -7215,7 +7215,6 @@ end)
 
 
 
-
 camera = workspace.CurrentCamera
 player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
@@ -7225,9 +7224,16 @@ local bulletSpeed = 1000
 aimEnabled = false
 botAimEnabled = false
 
-lastAimedTime = 0
-aimUpdateInterval = 0.01 
+targetpartsilentaim = "Head" -- Default target part
+randomTarget = false -- Flag for random targeting
 
+lastAimedTime = 0
+aimUpdateInterval = 0.01
+
+function getRandomTargetPart()
+    local parts = {"Head", "HumanoidRootPart"}
+    return parts[math.random(#parts)]
+end
 
 function getClosestEnemyToCrosshair()
     closestCharacter = nil
@@ -7238,14 +7244,17 @@ function getClosestEnemyToCrosshair()
         if otherPlayer ~= player and otherPlayer.Character then
             character = otherPlayer.Character
             if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
-                head = character.Head
-                screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
+                local partToTarget = randomTarget and getRandomTargetPart() or targetpartsilentaim
+                targetPart = character:FindFirstChild(partToTarget)
+                if targetPart then
+                    screenPoint, onScreen = camera:WorldToScreenPoint(targetPart.Position)
 
-                if onScreen then
-                    distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
-                    if distanceFromCrosshair < closestDistance then
-                        closestDistance = distanceFromCrosshair
-                        closestCharacter = character
+                    if onScreen then
+                        distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+                        if distanceFromCrosshair < closestDistance then
+                            closestDistance = distanceFromCrosshair
+                            closestCharacter = character
+                        end
                     end
                 end
             end
@@ -7255,7 +7264,6 @@ function getClosestEnemyToCrosshair()
     return closestCharacter
 end
 
-
 function getClosestBotToCrosshair()
     closestBot = nil
     closestDistance = math.huge
@@ -7263,14 +7271,17 @@ function getClosestBotToCrosshair()
 
     for _, bot in pairs(workspace.Bots:GetChildren()) do -- Assuming bots are stored in "workspace.Bots"
         if bot:FindFirstChild("Humanoid") and bot:FindFirstChild("HumanoidRootPart") and bot:FindFirstChild("Head") then
-            head = bot.Head
-            screenPoint, onScreen = camera:WorldToScreenPoint(head.Position)
+            local partToTarget = randomTarget and getRandomTargetPart() or targetpartsilentaim
+            targetPart = bot:FindFirstChild(partToTarget)
+            if targetPart then
+                screenPoint, onScreen = camera:WorldToScreenPoint(targetPart.Position)
 
-            if onScreen then
-                distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
-                if distanceFromCrosshair < closestDistance then
-                    closestDistance = distanceFromCrosshair
-                    closestBot = bot
+                if onScreen then
+                    distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+                    if distanceFromCrosshair < closestDistance then
+                        closestDistance = distanceFromCrosshair
+                        closestBot = bot
+                    end
                 end
             end
         end
@@ -7278,7 +7289,6 @@ function getClosestBotToCrosshair()
 
     return closestBot
 end
-
 
 function aimAtClosestEnemy()
     if not aimEnabled then return end
@@ -7296,27 +7306,32 @@ function aimAtClosestEnemy()
 
     local target = closestBot or closestCharacter
 
-    if target and target:FindFirstChild("Head") then
-        head = target.Head
-        gun = viewModel:FindFirstChild("AimPart")
-        arms = viewModel:FindFirstChild("Arms")
+    if target then
+        -- Get target part (either random or chosen)
+        local partToTarget = randomTarget and getRandomTargetPart() or targetpartsilentaim
+        local targetPart = target:FindFirstChild(partToTarget)
 
-        if gun then
-            aimPosition = head.Position
-            humanoidRootPart = target:FindFirstChild("HumanoidRootPart")
+        if targetPart then
+            gun = viewModel:FindFirstChild("AimPart")
+            arms = viewModel:FindFirstChild("Arms")
 
-            if humanoidRootPart then
-                velocity = humanoidRootPart.Velocity
-                distance = (camera.CFrame.Position - head.Position).Magnitude
-                timeToImpact = distance / bulletSpeed
-                aimPosition = aimPosition + (velocity * timeToImpact) * 0.6
-            end
+            if gun then
+                aimPosition = targetPart.Position
+                humanoidRootPart = target:FindFirstChild("HumanoidRootPart")
 
-            rightOffset = Vector3.new(0.5, -0.3, -0.3)
-            gun.CFrame = CFrame.new(camera.CFrame.Position, aimPosition) * CFrame.new(rightOffset)
+                if humanoidRootPart then
+                    velocity = humanoidRootPart.Velocity
+                    distance = (camera.CFrame.Position - targetPart.Position).Magnitude
+                    timeToImpact = distance / bulletSpeed
+                    aimPosition = aimPosition + (velocity * timeToImpact) * 0.6
+                end
 
-            if arms then
-                arms.CFrame = camera.CFrame * CFrame.new(0, -0.5, 0.3)
+                rightOffset = Vector3.new(0.5, -0.3, -0.3)
+                gun.CFrame = CFrame.new(camera.CFrame.Position, aimPosition) * CFrame.new(rightOffset)
+
+                if arms then
+                    arms.CFrame = camera.CFrame * CFrame.new(0, -0.5, 0.3)
+                end
             end
         end
     end
@@ -7330,14 +7345,12 @@ end
 function toggleBotAim()
     if aimEnabled then
         botAimEnabled = not botAimEnabled
-        else
+    else
         warn("please enable normal silent aim before enabling bot silent aim...")
     end
 end
 
 runService.RenderStepped:Connect(aimAtClosestEnemy)
-
-
 
 
 
@@ -8032,15 +8045,20 @@ aimtab:AddDropdown('Silentaimhitset2', {
 
 
 aimtab:AddDropdown('SilentAimHitPartjb', {
-    Values = { 'HumanoidRootPart', 'Head' },
-    Default = 1,
+    Values = { 'HumanoidRootPart', 'Head', 'Random' },
+    Default = 2,
     Multi = false,
 
     Text = 'silent aim part',
-    Tooltip = 'select part',
+    Tooltip = 'select a part for silent aim aiming',
 
     Callback = function(Value)
-        pdlt.silentaimpart = Value
+        if Value == "Random" then
+            randomTarget = true
+        else
+            randomTarget = false
+            targetpartsilentaim = Value
+        end
     end
 })
 
