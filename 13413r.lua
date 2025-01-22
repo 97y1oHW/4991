@@ -1333,39 +1333,38 @@ warn("Started")
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 2, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-wait(1)
-print("CHECK 1")
+        print("CHECK 1")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECK 1"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-wait(0.7)
+
 print("CHECK 2")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECK 2"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-wait(0.1)
+
 print("CHECK 3")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECK 3"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-wait(2)
+
 print("CHECK 4")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECK 4"},
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-wait(2)
 
 
 
-wait(3)
+
+
 print("Verification Level: " .. level .."")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "Verification Level: " ..level..""},
