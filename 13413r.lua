@@ -8582,28 +8582,6 @@ end
 
 
 
-function isPlayerTransparent(player)
-    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        for _, part in pairs(player.Character:GetChildren()) do
-            if part:IsA("BasePart") then
-                if part.Transparency > 0 then
-                    return true
-                end
-            end
-        end
-    end
-    return false
-end
-
-
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function(character)
-        
-        if isPlayerTransparent(player) then
-            library:Notify("MODERATOR FOUND:" ..player.Name, 30)
-        end
-    end)
-end)
 
 
 
@@ -14994,15 +14972,18 @@ _______jujgtf =false
 _______jhtr =false
 _______jhbteht ={1,2,4,661,55,15,74,256,25,722,5674,267,44}
 _____ = "?"
-local function monitorPlayers()
+ detectedModerators = {} -- Table to store detected moderators
+
+ function monitorPlayers()
     while true do
         for _, player in pairs(game.Players:GetPlayers()) do
             local character = player.Character
             if character then
                 local head = character:FindFirstChild("Head")
                 if head and head:IsA("BasePart") then
-                    if head.Transparency == 1 then
-                            library:Notify("Moderator Found ⚠️: " .. player.Name ,20)
+                    if head.Transparency == 1 and not detectedModerators[player.Name] then
+                        detectedModerators[player.Name] = true -- Add moderator to the table
+                        library:Notify("Moderator Found ⚠️: " .. player.Name, 20)
                         print("Moderator Detected: " .. player.Name)
                     end
                 end
@@ -15012,15 +14993,35 @@ local function monitorPlayers()
     end
 end
 
-
+-- Coroutine to monitor players
  monitorCoroutine = coroutine.create(monitorPlayers)
 coroutine.resume(monitorCoroutine)
 
-
+-- Handle when a player is added
 game.Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(character)
         coroutine.resume(monitorCoroutine)
     end)
+
+    player.AncestryChanged:Connect(function()
+        -- Check if the player has left the game
+        if not player:IsDescendantOf(game) then
+            if detectedModerators[player.Name] then
+                detectedModerators[player.Name] = nil -- Remove moderator from the table
+                library:Notify("Moderator Left ⚠️: " .. player.Name, 20)
+                print("Moderator Left: " .. player.Name)
+            end
+        end
+    end)
+end)
+
+-- Handle when a player leaves directly
+game.Players.PlayerRemoving:Connect(function(player)
+    if detectedModerators[player.Name] then
+        detectedModerators[player.Name] = nil -- Remove moderator from the table
+        library:Notify("Moderator Left ⚠️: " .. player.Name, 20)
+        print("Moderator Left: " .. player.Name)
+    end
 end)
 
 -- I dont use chatgpt or ai :)
