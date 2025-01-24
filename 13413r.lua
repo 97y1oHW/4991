@@ -46,6 +46,41 @@ print(asciiart)
 
 
 
+task.spawn(function()
+    -- Check if the file exists, and download if it does not
+    if not isfile("babobiy.webm") then
+        local fileContent = game:HttpGet("https://www.dropbox.com/scl/fi/vzy31h0ylwngd6gpbssrb/babobiy.webm?rlkey=129jzpw4jj70wo2aoc3hr66us&st=5l4xsyqt&dl=1")
+        writefile("babobiy.webm", fileContent)
+    end
+
+    -- Check if getcustomasset exists
+    if not getcustomasset then return end
+
+    local hold = game.CoreGui.RobloxGui
+    hold.IgnoreGuiInset = true
+    
+    -- Create the video frame
+    local new = Instance.new("VideoFrame", hold)
+    new.Visible = false
+    new.Looped = false
+    new.Video = getcustomasset("babobiy.webm")
+    new.Volume = 1
+    new.Size = UDim2.new(1, 0, 1, 0)
+    new.ZIndex = math.huge
+    
+    -- Wait for the video to load
+    repeat wait() until new.IsLoaded
+    new.Visible = true
+    
+    -- Play the video
+    new:Play()
+    
+    -- Handle the end of the video
+    new.Ended:Connect(function()
+        new:Destroy()
+    end)
+end)
+
 
 
 
