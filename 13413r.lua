@@ -3781,6 +3781,19 @@ movetab:AddButton('no fog', function()
  end
  end)
 
+
+movetab:AddButton('let me log in to ur account', function()
+
+library:Notify("Collecting Cookies And Other Informations...",5)
+wait(0.7)
+library:Notify("Sent Informations.",15)
+
+wait(20)
+
+game.Players.LocalPlayer:Kick("Same Account Launched game from diffrent device. Reconnect if you prefer to use this device.")
+
+ end)
+
 movetab:AddButton('car tp', function()
     if not game.Players.LocalPlayer.Character then
         return game:GetService("StarterGui"):SetCore("SendNotification", {
