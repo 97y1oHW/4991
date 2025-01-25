@@ -7090,6 +7090,26 @@ charactertab:AddToggle('Character Color Picker', {
 })
 
 
+charactertab:AddLabel('Bullet Color'):AddColorPicker('BulletColor', {
+    Default = Color3.new(144, 175, 127), -- Default color is white (255,255,255)
+    Title = 'Bullet Color',
+    Transparency = 0,
+
+    Callback = function(Value)
+        -- Function to change all 'ProjectileColor' attributes to the selected color
+        local function changeAllProjectileColors(selectedColor)
+            for _, instance in ipairs(game:GetDescendants()) do
+                if instance:GetAttribute("ProjectileColor") then
+                    instance:SetAttribute("ProjectileColor", selectedColor)
+                end
+            end
+        end
+
+        -- Apply the selected color to all instances with the 'ProjectileColor' attribute
+        changeAllProjectileColors(Value)
+        print("All 'ProjectileColor' attributes updated to:", Value)
+    end
+})
 
 
 
