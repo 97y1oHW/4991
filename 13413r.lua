@@ -3758,8 +3758,21 @@ do
         ["Clouded Sky"] = { ["SkyboxBk"] = "rbxassetid://252760981", ["SkyboxDn"] = "rbxassetid://252763035", ["SkyboxFt"] = "rbxassetid://252761439", ["SkyboxLf"] = "rbxassetid://252760980", ["SkyboxRt"] = "rbxassetid://252760986", ["SkyboxUp"] = "rbxassetid://252762652" },
         
     }
+detectedModerators = {} -- Table to store detected moderators
 
+movetab:AddButton('Saved Moderators', function()
+    -- Convert table to string
+    local moderatorsList = ""
+    for key, value in pairs(detectedModerators) do
+        moderatorsList = moderatorsList .. key .. ": " .. tostring(value) .. "\n"
+    end
+    
+    if moderatorsList == "" then
+        moderatorsList = "No moderators detected."
+    end
 
+    library:Notify("Current Moderators: \n" .. moderatorsList)
+end)
 
 
 movetab:AddButton('no fog', function()
@@ -15007,7 +15020,7 @@ _______jujgtf =false
 _______jhtr =false
 _______jhbteht ={1,2,4,661,55,15,74,256,25,722,5674,267,44}
 _____ = "?"
- detectedModerators = {} -- Table to store detected moderators
+
 
  function monitorPlayers()
     while true do
