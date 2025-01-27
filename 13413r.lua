@@ -3329,10 +3329,11 @@ end
 game:GetService("Players").PlayerAdded:Connect(function(v)
     v.CharacterAdded:Wait() -- Wait until the player's character loads
     coroutine.wrap(ESP)(v)
-end);
-
-    end;
+      end);
+   end;
 end;
+
+
 
 function _z5attclientanticheat(___meta)
 
