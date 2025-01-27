@@ -2905,7 +2905,7 @@ local Workspace, RunService, Players, CoreGui, Lighting = cloneref(game:GetServi
 local ESP = {
     Enabled = false,
     TeamCheck = false,
-    MaxDistance = 800,
+    MaxDistance = 1200,
     FontSize = 11,
     FadeOut = {
         OnDistance = true,
@@ -3018,7 +3018,7 @@ do
     end
     --
     function Functions:FadeOutOnDist(element, distance)
-        local transparency = math.max(0.1, 1 - (distance / ESP.MaxDistance))
+        local transparency = math.clamp(1 - (distance / ESP.MaxDistance), 0.2, 1) -- Minimum transparency of 0.2
         if element:IsA("TextLabel") then
             element.TextTransparency = 1 - transparency
         elseif element:IsA("ImageLabel") then
@@ -3313,10 +3313,24 @@ do -- Initalize
                 coroutine.wrap(ESP)(v)
             end      
         end
+
+        local function WaitForCharacterParts(character)
+    while not character:FindFirstChild("HumanoidRootPart") or not character:FindFirstChild("Humanoid") do
+        task.wait()
+    end
+end
+
+if not plr.Character or not plr.Character:FindFirstChild("HumanoidRootPart") then
+    plr.CharacterAdded:Wait()
+    WaitForCharacterParts(plr.Character)
+end
+
         --
-        game:GetService("Players").PlayerAdded:Connect(function(v)
-            coroutine.wrap(ESP)(v)
-        end);
+game:GetService("Players").PlayerAdded:Connect(function(v)
+    v.CharacterAdded:Wait() -- Wait until the player's character loads
+    coroutine.wrap(ESP)(v)
+end);
+
     end;
 end;
 
@@ -3895,6 +3909,7 @@ EnemyEspTab:AddToggle('esomastersda', {
     Default = ESP.TeamCheck,
     Risky = true,
     Callback = function(enabled)
+    ESP.Enabled = enabled
         ESP.TeamCheck = enabled
     end
 })
@@ -4049,7 +4064,7 @@ EnemyEspTab:AddSlider('MaxDistanceSlider', {
     Text = 'Max Distance', 
     Default = ESP.MaxDistance,
     Min = 5,
-    Max = 800,
+    Max = 1200,
     Rounding = 1,
     Compact = false,
     
@@ -4503,7 +4518,83 @@ luatab:AddToggle('mıodasd', {
         
     end
 })
+ HttpService = game:GetService("HttpService")
 
+-- Generate a GUID
+ guidd = HttpService:GenerateGUID(false) -- Pass 'false' to exclude curly braces
+
+
+
+luatab:AddLabel("----------------------------------------------------")
+
+-- Get the Players service
+ Players = game:GetService("Players")
+
+-- Create a label for the player count in WorldTab
+ playerCountLabel = luatab:AddLabel("Player Count: Loading...")
+-- Ensure playerCount is a valid number
+if playerCount == nil then
+    playerCount = 0 -- default to 0 if playerCount is undefined
+end
+
+-- Variable to store calculated FPS
+local fpscalculation_6
+
+-- Calculate FPS based on player count
+if playerCount <= 3 then
+    fpscalculation_6 = math.random(100, 140)  -- For very low player count, higher FPS
+elseif playerCount <= 5 then
+    fpscalculation_6 = math.random(90, 130)  -- For slightly higher player count, still good FPS
+elseif playerCount <= 7 then
+    fpscalculation_6 = math.random(80, 120)  -- Medium player count, moderate FPS
+elseif playerCount <= 9 then
+    fpscalculation_6 = math.random(70, 110)  -- More players, FPS starts dropping
+elseif playerCount <= 12 then
+    fpscalculation_6 = math.random(60, 100)  -- High player count, FPS continues to drop
+elseif playerCount <= 14 then
+    fpscalculation_6 = math.random(40, 60)
+elseif playerCount <= 16 then
+    fpscalculation_6 = math.random(42, 50) 
+elseif playerCount <= 18 then
+    fpscalculation_6 = math.random(30, 40) 
+else
+    fpscalculation_6 = "not in range"  -- Very high player count, lower FPS
+end
+
+-- Assign the calculated FPS
+calculatedfps = fpscalculation_6
+
+-- Display the FPS on the interface
+luatab:AddLabel("Calculated FPS: " .. tostring(calculatedfps))
+
+
+
+
+
+
+luatab:AddLabel("GUID⭐: \n" ..guidd)
+
+
+-- Function to update the label with the current player count
+ function updatePlayerCount()
+    local playerCount = #Players:GetPlayers() -- Get the number of players
+    playerCountLabel:SetText("Player Count: " .. playerCount)
+end
+
+-- Call the function once at the start to initialize the label
+updatePlayerCount()
+
+-- Update the label when a player joins
+Players.PlayerAdded:Connect(function()
+    updatePlayerCount()
+end)
+
+-- Update the label when a player leaves
+Players.PlayerRemoving:Connect(function()
+    updatePlayerCount()
+end)
+
+luatab:AddLabel("----------------------------------------------------")
 
 luatab:AddInput('Execute', {
     Default = 'Execute Any Scripts',
@@ -4536,7 +4627,7 @@ luatab:AddInput('Execute', {
 
 luatab:AddLabel("Sigma Or Bigma?")
 
-local set_identity = (type(syn) == 'table' and syn.set_thread_identity) or setidentity or setthreadcontext
+ set_identity = (type(syn) == 'table' and syn.set_thread_identity) or setidentity or setthreadcontext
 luatab:AddLabel("2.0.0.0")
 
 
@@ -4545,13 +4636,13 @@ counter = counter + 1
 
 
 
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
+ UserInputService = game:GetService("UserInputService")
+ RunService = game:GetService("RunService")
 
-local zoomValue = 0
-local defaultFOV = Camera.FieldOfView
-local zoomKey = Enum.KeyCode.Z
-local isZoomed = false
+ zoomValue = 0
+ defaultFOV = Camera.FieldOfView
+ zoomKey = Enum.KeyCode.Z
+ isZoomed = false
 
  function applyZoom()
     Camera.FieldOfView = defaultFOV - (zoomValue * 10)
@@ -4591,7 +4682,7 @@ Misc:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
 })
 
 -- Function to handle key press
-local function onKeyPress(input, gameProcessed)
+ function onKeyPress(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
         isZoomed = not isZoomed -- Toggle zoom state
@@ -4686,7 +4777,7 @@ end)
 
 
 
-local function toggleThirdPerson(enable)
+ function toggleThirdPerson(enable)
     if enable then
         
         player.CameraMode = Enum.CameraMode.Classic
@@ -4986,13 +5077,13 @@ local Workspace = game:GetService("Workspace")
 
 
 
-local speedMultiplier = 1 
-local viewModel = nil
-local animator = nil
-local monitoring = true 
+ speedMultiplier = 1 
+ viewModel = nil
+ animator = nil
+ monitoring = true 
 
 
-local function changeAnimationSpeed(multiplier)
+ function changeAnimationSpeed(multiplier)
     if animator then
         for _, animTrack in pairs(animator:GetPlayingAnimationTracks()) do
             animTrack:AdjustSpeed(multiplier)
@@ -5001,7 +5092,7 @@ local function changeAnimationSpeed(multiplier)
 end
 
 
-local function setupAnimator()
+ function setupAnimator()
     viewModel = Workspace:FindFirstChild("Camera") and Workspace.Camera:FindFirstChild("ViewModel")
     if viewModel then
         local humanoid = viewModel:FindFirstChild("Humanoid")
@@ -5138,6 +5229,20 @@ movetab:AddToggle('noglobshadow', {
         end
     end
 })
+
+-- Get the Players service
+ Players = game:GetService("Players")
+
+-- Function to notify when a player joins
+Players.PlayerAdded:Connect(function(player)
+    library:Notify("New Player Joined To Game: " .. player.Name, 3)
+end)
+
+-- Function to notify when a player leaves
+Players.PlayerRemoving:Connect(function(player)
+    library:Notify("New Player Left From Game: " .. player.Name, 4)
+end)
+
 
 aimtab:AddToggle('nowaterblur', {
     Text = 'No Water Blur',
