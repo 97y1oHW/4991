@@ -3291,14 +3291,14 @@ do -- Initalize
                             end
 
                             do -- Weapons
-                                Weapon.Text = "none"
+                                Weapon.Text = "error (7)"
                                 Weapon.Visible = ESP.Drawing.Weapons.Enabled
                             end                            
                         else
-                            HideESP();
+                           -- HideESP();
                         end
                     else
-                        HideESP();
+                       HideESP();
                     end
                 else
                     HideESP();
