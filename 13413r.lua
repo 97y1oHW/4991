@@ -4527,9 +4527,29 @@ luatab:AddToggle('mıodasd', {
 
 
 luatab:AddLabel("----------------------------------------------------")
-
+ destroyedf= false
 -- Get the Players service
  Players = game:GetService("Players")
+
+ if game.ReplicatedFirst.Loader then
+destroyedf = true
+game.ReplicatedFirst.Loader:Destroy()
+else
+destroyedf = false
+ end
+
+local taskd
+
+if destroyedf == true then
+
+taskd = "True"
+else
+taskd = "False"
+end
+
+
+ task.wait(0.4)
+ luatab:AddLabel("Loader Destroyed: " ..taskd)
 
 -- Create a label for the player count in WorldTab
  playerCountLabel = luatab:AddLabel("Player Count: Loading...")
@@ -7264,6 +7284,8 @@ Misc:AddToggle('makesadf', {
 })
 
 
+
+
 Misc:AddToggle('infdurability', {
     Text = 'Infinite Attachment Durability',
     Default = false,
@@ -7332,6 +7354,37 @@ end
 
     end
 })
+
+
+
+Misc:AddToggle('dsa2', {
+    Text = 'Infinite Ammo',
+    Default = false,
+    Risky = true,
+    Callback = function(enabled)
+
+-- Iterate through all objects in the game and modify attributes
+for _, object in ipairs(game:GetDescendants()) do
+    if object:GetAttribute("LoadedAmmo") and object:GetAttribute("MaxLoadedAmmo") then
+        -- Save the original values
+        local originalValues = {
+            LoadedAmmo = object:GetAttribute("LoadedAmmo"),
+            MaxLoadedAmmo = object:GetAttribute("MaxLoadedAmmo")
+        }
+        
+        -- Set new values
+        object:SetAttribute("LoadedAmmo", 145)
+        object:SetAttribute("MaxLoadedAmmo", 145)
+        
+        print("Attributes modified for", object:GetFullName())
+    end
+end
+
+
+    end
+})
+
+
 
 Misc:AddToggle('dsa1', {
     Text = 'No Gun Fire Sound and Fire',
