@@ -40,6 +40,9 @@ N::::::N        N::::::NE::::::::::::::::::::EX:::::X       X:::::XI::::::::IF::
 NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFFFFFFFFFF               YYYYYYYYYYYYY   
 ]]
 
+warn("video downloaded )5(")
+
+
 
 print(asciiart)
 
@@ -3971,6 +3974,8 @@ EnemyEspTab:AddToggle('ChamsEnabled', {
     end
 })
 
+
+
 EnemyEspTab:AddToggle('ChamsEnabled', {
     Text = 'Enable Thermal',
     Default = false,
@@ -3980,6 +3985,28 @@ EnemyEspTab:AddToggle('ChamsEnabled', {
     end
 })
 
+
+EnemyEspTab:AddDropdown('ChamsD1', {
+    Values = {'Optimized', 'Performance'},
+    Default = 2,
+    Multi = false,
+    Text = 'Esp Mode',
+    Tooltip = 'Esp Mode',
+    Callback = function(state)
+    end
+})
+
+EnemyEspTab:AddDropdown('ChamsD', {
+    Values = {'Occluded', 'AlwaysOnTop'},
+    Default = 1,
+    Multi = false,
+    Text = 'Chams Mode',
+    Tooltip = 'Chams Mode Selector',
+    Callback = function(state)
+                
+ESP.Drawing.Chams.DepthMode = State
+    end
+})
 
 EnemyEspTab:AddToggle('NamesEnabled', {
     Text = 'Enable Names',
