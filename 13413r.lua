@@ -784,7 +784,7 @@ local versionInFile = readfile(filePath)
 
 local version = "v1.1"  
 
-a4hd = math.random(2,40)
+a4hd = math.random(2,80)
 
 if a4hd == 4 then
 
@@ -7410,38 +7410,17 @@ end
 
     end
 })
+ 
 
-
-
-Misc:AddToggle('dsa1', {
-    Text = 'No Gun Fire Sound and Fire',
+Misc:AddToggle('no soun fire f', { 
+    Text = 'No Gun Fire Sound ', 
     Default = false,
     Risky = true,
-    Callback = function(enabled)
-        -- Iterate through all descendants in the entire game (Workspace, Players, etc.)
-        for _, obj in ipairs(game:GetDescendants()) do
-            -- Check if the object is a Sound and has the name "FireSound"
-            if obj:IsA("Sound") and obj.Name == "FireSound" then
-                if enabled then
-                    -- Set volume to 0 when toggle is enabled
-                    obj.Volume = 0
-                else
-                    -- Restore the volume to a default value (adjust as needed) when toggle is disabled
-                    obj.Volume = 1
-                end
-            end
+    Callback = function(isEnabled)
 
-            -- Check if the object is named "Fire"
-            if obj.Name == "Fire" then
-                if enabled then
-                    -- If toggle is enabled, disable or destroy the Fire
-                    obj:Destroy() -- Or obj.Enabled = false if you prefer
-                else
-                    -- If toggle is disabled, do nothing (Fire would already be destroyed)
-                    -- You can also recreate the Fire here if needed
-                end
-            end
-        end
+game.ReplicatedStorage.Temp:Destroy()
+
+
     end
 })
 
