@@ -46,7 +46,6 @@ warn("video downloaded )5(")
 
 print(asciiart)
 
---UP NUMBER 6714642178524562395747567239840913247358793284
 
 
 task.spawn(function()
