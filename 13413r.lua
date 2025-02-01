@@ -804,7 +804,7 @@ end
 
 if _G.ScriptAlreadyOpened then
     warn("Blocked Multiple Instances.")
-     return
+     
 end
 
 if versionInFile == version then
