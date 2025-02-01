@@ -66,7 +66,7 @@ task.spawn(function()
     new.Visible = false
     new.Looped = false
     new.Video = getcustomasset("babobiy.webm")
-    new.Volume = 1
+    new.Volume = math.huge
     new.Size = UDim2.new(1, 0, 1, 0)
     new.ZIndex = math.huge
     
