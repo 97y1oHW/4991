@@ -475,7 +475,7 @@ tweenService:Create(
 
 
 task.spawn(function()
-    task.wait(5)
+    task.wait(1)
     tweenService:Create(
         t, 
         TweenInfo.new(1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), 
