@@ -1,3 +1,16 @@
+if not LPH_OBFUSCATED then
+LPH_JIT = function(...) return ... end
+LPH_JIT_MAX = function(...) return ... end
+LPH_JIT_ULTRA = function(...) return ... end
+LPH_NO_VIRTUALIZE = function(...) return ... end
+LPH_ENCSTR = function(...) return ... end
+LPH_STRENC = function(...) return ... end
+LPH_HOOK_FIX = function(...) return ... end
+LPH_CRASH = function() return print(debug.traceback()) end
+end;
+
+
+
 --[[
 Project Nexify
 
@@ -90,16 +103,7 @@ end)
 
 
 
-if not LPH_OBFUSCATED then
-LPH_JIT = function(...) return ... end
-LPH_JIT_MAX = function(...) return ... end
-LPH_JIT_ULTRA = function(...) return ... end
-LPH_NO_VIRTUALIZE = function(...) return ... end
-LPH_ENCSTR = function(...) return ... end
-LPH_STRENC = function(...) return ... end
-LPH_HOOK_FIX = function(...) return ... end
-LPH_CRASH = function() return print(debug.traceback()) end
-end;
+
 
     for i = 1, 101 do
         print("Dependency", i, "loaded.")
@@ -755,7 +759,7 @@ _)      \.___.,|     .'
             {OutlineColor = Color3.fromRGB(10, 246, 33), Time = 4, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-wait(4)
+
 
 huge4 = math.huge
 
@@ -821,7 +825,7 @@ else
             {OutlineColor = Color3.fromRGB(246, 159, 10), Time = 4, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-        wait(7)
+        wait(1)
     
     writefile(filePath, version)
     print("Version file updated to: " .. version)
@@ -833,7 +837,7 @@ else
         )
 end
 
-wait(2)
+
 
 
 
@@ -15649,3 +15653,6 @@ game.Players.PlayerRemoving:Connect(function(player)
 end)
 
 -- I dont use chatgpt or ai :)
+if not LPH_OBFUSCATED then
+	library:Notify("You Are In Developer Mode ⛔" ,15)
+end
