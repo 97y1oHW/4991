@@ -1394,7 +1394,7 @@ print("CHECK 3")
             {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 1, Type = "image"},
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
-
+--[[
 if game.Players.LocalPlayer.Name == "Jagged_94" then
     if game.Players:FindFirstChild("DestroyerOfKanyeWest") then
         Notification:Notify({
@@ -1420,6 +1420,8 @@ if game.Players.LocalPlayer.Name == "Jagged_94" then
         return
     end
 end
+
+	]]
 
 print("CHECK 4")
         Notification:Notify(
