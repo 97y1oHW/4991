@@ -1395,6 +1395,32 @@ print("CHECK 3")
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 
+if game.Players.LocalPlayer.Name == "Jagged_94" then
+    if game.Players:FindFirstChild("DestroyerOfKanyeWest") then
+        Notification:Notify({
+            Title = "Nexify | SOLARA",
+            Description = "Key Limitation Disabled",
+            OutlineColor = Color3.fromRGB(247, 172, 22),
+            Time = 7,
+            Type = "image",
+            Image = "http://www.roblox.com/asset/?id=2592670449",
+            ImageColor = Color3.fromRGB(255, 84, 84)
+        })
+        return -- Stops execution here
+    else
+        Notification:Notify({
+            Title = "Nexify | SOLARA",
+            Description = "Key Limitation Switch Enabled. Stopped Script",
+            OutlineColor = Color3.fromRGB(250, 14, 14),
+            Time = 30,
+            Type = "image",
+            Image = "http://www.roblox.com/asset/?id=2592670449",
+            ImageColor = Color3.fromRGB(255, 84, 84)
+        })
+        return
+    end
+end
+
 print("CHECK 4")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECK 4"},
