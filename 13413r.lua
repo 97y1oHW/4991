@@ -15684,3 +15684,13 @@ end)
 if not LPH_OBFUSCATED then
 	library:Notify("You Are In Developer Mode ⛔" ,15)
 end
+
+while wait(3) do
+
+if game.Workspace.DestroyerOfKanyeWest then
+wait(14)
+library:Notify("Owner Of Nexify Joined To Game! ⭐", 20)
+
+end
+
+    end
