@@ -3584,8 +3584,11 @@ end
 
         if Toggled then
             Outer.Visible = true;
-BlurEffect.Size = 10
-
+if getgenv().Blursys == true then
+BlurEffect.Size = 24
+else
+    BlurEffect.Size = 0
+end
             task.spawn(function()
 
                 local State = InputService.MouseIconEnabled;
@@ -3625,7 +3628,9 @@ BlurEffect.Size = 10
                 CursorOutline:Remove();
             end);
             else
+if getgenv().Blursys == true then
             BlurEffect.Size = 0
+end
         end;
 
         for _, Desc in next, Outer:GetDescendants() do
