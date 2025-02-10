@@ -3,6 +3,10 @@ for i,v in pairs(({"Internal","HttpCache","Instances","Signals","Script","Physic
     memorystats.cache(v)
 end
 local hoverSound = Instance.new("Sound")
+local Lighting = game:GetService("Lighting")
+local BlurEffect = Instance.new("BlurEffect")
+BlurEffect.Size = 0 -- Start with no blur
+BlurEffect.Parent = Lighting
 hoverSound.SoundId = "rbxassetid://421058925" -- Replace with your sound ID
 hoverSound.Volume = 1 -- Adjust volume as needed
 local InputService = cloneref(game:GetService('UserInputService'));
@@ -3580,6 +3584,7 @@ end
 
         if Toggled then
             Outer.Visible = true;
+BlurEffect.Size = 10
 
             task.spawn(function()
 
@@ -3619,6 +3624,8 @@ end
                 Cursor:Remove();
                 CursorOutline:Remove();
             end);
+            else
+            BlurEffect.Size = 0
         end;
 
         for _, Desc in next, Outer:GetDescendants() do
