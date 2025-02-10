@@ -17,6 +17,36 @@ local Teams = cloneref(game:GetService('Teams'));
 local Players = cloneref(game:GetService('Players'));
 local RunService = cloneref(game:GetService('RunService'));
 local TweenService = cloneref(game:GetService('TweenService'));
+local function createSnowflake()
+    local snowflake = Instance.new("Frame")
+    snowflake.Size = UDim2.new(0, 10, 0, 10) -- Size of the snowflake
+    snowflake.BackgroundColor3 = Color3.new(1, 1, 1) -- White color for snow
+    snowflake.BackgroundTransparency = 0.5 -- Semi-transparent
+    snowflake.Position = UDim2.new(math.random(), 0, 0, 0) -- Random horizontal position
+    snowflake.Parent = ScreenGui -- Parent to your ScreenGui
+
+    -- Make the snowflake round
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0.5, 0) -- Make it circular
+    corner.Parent = snowflake
+
+    -- Animate the snowflake falling
+    local fallDistance = math.random(300, 600) -- Random fall distance
+    local fallTime = math.random(5, 10) -- Random fall time
+
+    local tween = TweenService:Create(snowflake, TweenInfo.new(fallTime, Enum.EasingStyle.Linear), { Position = UDim2.new(snowflake.Position.X.Scale, snowflake.Position.X.Offset, 1, 0) })
+    tween:Play()
+
+    tween.Completed:Connect(function()
+        snowflake:Destroy() -- Remove the snowflake after it falls
+    end)
+end
+ function startSnowfall()
+    while true do
+        createSnowflake()
+        wait(math.random(0.5, 1.5)) -- Random interval between snowflakes
+    end
+end
 
 local RenderStepped = RunService.RenderStepped;
 local LocalPlayer = Players.LocalPlayer;
@@ -3584,6 +3614,7 @@ end
         ModalElement.Modal = Toggled;
 
         if Toggled then
+            startSnowfall()
             Outer.Visible = true;
 if getgenv().Blursys == true then
 BlurEffect.Size = 24
