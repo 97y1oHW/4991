@@ -6,6 +6,7 @@ local hoverSound = Instance.new("Sound")
 local Lighting = game:GetService("Lighting")
 local BlurEffect = Instance.new("BlurEffect")
 BlurEffect.Size = 0 -- Start with no blur
+getgenv().Blursys = true
 BlurEffect.Parent = Lighting
 hoverSound.SoundId = "rbxassetid://421058925" -- Replace with your sound ID
 hoverSound.Volume = 1 -- Adjust volume as needed
