@@ -4685,6 +4685,16 @@ luatab:AddToggle('mıodasd', {
         
     end
 })
+
+luatab:AddToggle('removesd', {
+    Text = 'Blur Background',
+    Default = true,
+    Risky = false,
+    Callback = function(enabled)
+getgenv().Blursys = enabled
+    end
+})
+
  HttpService = game:GetService("HttpService")
 
 -- Generate a GUID
@@ -6652,7 +6662,7 @@ end)
 
 player3es.CameraMode = Enum.CameraMode.LockFirstPerson
 
-MenuGroup:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 22.01.2025\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\n--- Performance Metrics ---\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Solara V3\nExecution Time (Avg): <0.5ms\n--- Security Details ---\nAnticheat Bypass: Failed\nDebugging Protections: Enabled\nExploit Protections: High\nTelemetry Blocking: Active\n\n--- User Environment ---\nExecutor Version: Solara V3.12\nCustom Themes: Supported\n\n--- Additional Info ---\nSupport Contact: .crazyniga (Discord)\nLicense Type: Buyer / Standart", true)
+MenuGroup:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 10d.02.2025\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\n--- Performance Metrics ---\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Solara V3\nExecution Time (Avg): <0.5ms\n--- Security Details ---\nAnticheat Bypass: Failed\nDebugging Protections: Enabled\nExploit Protections: High\nTelemetry Blocking: Active\n\n--- User Environment ---\nExecutor Version: Solara V3.12\nCustom Themes: Supported\n\n--- Additional Info ---\nSupport Contact: .crazyniga (Discord)\nLicense Type: Buyer / Standart", true)
 
 
 
