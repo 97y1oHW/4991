@@ -2442,7 +2442,115 @@ end
 coroutine.wrap(cleanUpBoxes)()
 
 
+ Players = game:GetService("Players")
+ RunService = game:GetService("RunService")
+ UserInputService = game:GetService("UserInputService")
 
+ localPlayer = Players.LocalPlayer
+ camera = workspace.CurrentCamera
+
+ currentTarget = nil
+ initialCameraCFrame = nil
+ enabled = false
+
+ function releaseTarget()
+    if currentTarget then
+        currentTarget = nil
+        initialCameraCFrame = nil
+    end
+end
+
+ function calculateAngle(v1, v2)
+    return math.deg(math.acos(v1.Unit:Dot(v2.Unit)))
+end
+
+ function stopAnimations(character)
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+            track:Stop()
+        end
+    end
+end
+
+ function toggleundergroundresolver()
+    enabled = not enabled
+    if not enabled then
+        releaseTarget()
+    end
+end
+
+RunService.RenderStepped:Connect(function()
+    if not enabled then return end
+
+    if currentTarget and initialCameraCFrame then
+        local currentRot = (camera.CFrame - camera.CFrame.Position)
+        local initialRot = (initialCameraCFrame - initialCameraCFrame.Position)
+        if currentRot ~= initialRot then
+            releaseTarget()
+            return
+        end
+    end
+
+     localChar = localPlayer.Character
+    if not localChar then return end
+    local localRoot = localChar:FindFirstChild("HumanoidRootPart")
+    if not localRoot then return end
+
+     closest = nil
+     minAngle = math.huge
+     localPos = localRoot.Position
+     lookVector = localRoot.CFrame.LookVector
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character then
+            local char = player.Character
+            local root = char:FindFirstChild("HumanoidRootPart")
+            local humanoid = char:FindFirstChild("Humanoid")
+            
+            if root and humanoid and humanoid.Health > 0 then
+                local toPlayer = root.Position - localPos
+                local angle = calculateAngle(lookVector, toPlayer)
+                
+                if angle <= 60 then
+                    local cursorRay = camera:ScreenPointToRay(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+                    local cursorDir = cursorRay.Direction
+                    local toPlayerFromCamera = root.Position - camera.CFrame.Position
+                    local cursorAngle = calculateAngle(cursorDir, toPlayerFromCamera)
+                    
+                    if cursorAngle < minAngle then
+                        minAngle = cursorAngle
+                        closest = {
+                            player = player,
+                            root = root,
+                            humanoid = humanoid
+                        }
+                    end
+                end
+            end
+        end
+    end
+
+    if closest then
+        if currentTarget ~= closest.player then
+            releaseTarget()
+            currentTarget = closest.player
+            initialCameraCFrame = camera.CFrame
+            stopAnimations(closest.player.Character)
+        end
+
+        local offset = lookVector * 5
+        closest.root.CFrame = CFrame.new(localRoot.Position + offset, localRoot.Position)
+    else
+        releaseTarget()
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        releaseTarget()
+    end
+end)
 
 
 
@@ -8269,6 +8377,28 @@ toggleAim()
         
     end,
 })
+
+
+aimtab:AddToggle('silentAim993', {
+    Text = 'Underground Resolver',
+    Default = false,
+    Risky = true,
+    Callback = function(Value)
+
+toggleundergroundresolver()
+
+
+    end
+}):AddKeyPicker('silentAimBind994', {
+    Default = 'None',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Underground Resolver',
+    NoUI = false,
+    Callback = function(Value)
+    end,
+})
+
 --[[
 aimtab:AddToggle('silentAim994', {
     Text = 'Bot Silent Aim',
