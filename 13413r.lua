@@ -1,3 +1,4 @@
+function addaft()
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end
 LPH_JIT_MAX = function(...) return ... end
@@ -6895,8 +6896,8 @@ end
 
 
 Misc:AddSlider('timeSlider', {
-    Text = 'Set Time of Day',
-    Default = 12, 
+    Text = 'Time Changer',
+    Default = game.Lighting.ClockTime, 
     Min = 0, 
     Max = 24, 
     Rounding = 1, 
@@ -15834,3 +15835,469 @@ break
 end
 
     end
+
+end
+
+
+
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+  ---// Variables
+  Camera = game:GetService("Workspace").Camera
+  RunService = game:GetService("RunService")
+  Mouse = game:GetService("Players").LocalPlayer:GetMouse()
+  InputService = game:GetService("UserInputService")
+  TweenService = game:GetService("TweenService")
+ 
+ 
+   library = {
+    Title = 'anti.font color="rgb(645, 66, 230)">solutions</font> | <font color="rgb(245, 66, 230)">Pre-Build</font>',
+    AnimatedText = false,
+    keybind = Enum.KeyCode.End,
+    Colors = {
+        libColor = Color3.new(0.952941, 0.356863, 0.874510),
+        riskyColor = Color3.fromRGB(255, 0, 0),
+        FontColor = Color3.fromRGB(255, 255, 255),
+        MainColor = Color3.fromRGB(14, 14, 14),
+        AccentColor = Color3.new(0.952941, 0.356863, 0.874510),
+        OutlineColor = Color3.fromRGB(15, 15, 15),
+    },
+    Enabled = true,
+    colorpicking = false,
+    scrolling = true,
+    multiZindex = 200,
+    blacklisted = {
+ Enum.KeyCode.W,
+ Enum.KeyCode.A,
+ Enum.KeyCode.S,
+ Enum.KeyCode.D,
+ Enum.UserInputType.MouseMovement
+    },
+    tabbuttons = {},
+    tabs = {},
+    options = {},
+    flags = {},
+    toInvis = {},
+    Registry = {},
+    RegistryMap = {},
+    HudRegistry = {}
+ }
+  -- Menu/UI Creation
+  menu = game:GetObjects("rbxassetid://17090554797")[1] 
+  tabholder = menu.bg.bg.bg.bg.bg.bg.main.group
+  tabviewer = menu.bg.bg.bg.bg.bg.bg.tabbuttons
+ 
+     function library:Create(Class, Properties)
+ if library.Enabled == false then return end;
+ local _Instance = Class;
+ if type(Class) == 'string' then _Instance = Instance.new(Class); end;
+ for Property, Value in next, Properties do _Instance[Property] = Value; end;
+ return _Instance;
+ end;
+  local ProtectGui = protectgui or (syn and syn.protect_gui) or (function() end)
+ local ScreenGui = Instance.new('ScreenGui')
+ ProtectGui(ScreenGui)
+ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+ ScreenGui.Parent = game.CoreGui
+ ScreenGui.Name = "huh_menu"
+ menu.bg.pre.Text = ""
+ menu.bg.Position = UDim2.new(0.5,-menu.bg.Size.X.Offset/2,0.5,-menu.bg.Size.Y.Offset/2)
+
+
+  keynames = {
+    [Enum.KeyCode.LeftAlt] = 'LALT',
+    [Enum.KeyCode.RightAlt] = 'RALT',
+    [Enum.KeyCode.LeftControl] = 'LCTRL',
+    [Enum.KeyCode.RightControl] = 'RCTRL',
+    [Enum.KeyCode.LeftShift] = 'LSHIFT',
+    [Enum.KeyCode.RightShift] = 'RSHIFT',
+    [Enum.KeyCode.Underscore] = '_',
+    [Enum.KeyCode.Minus] = '-',
+    [Enum.KeyCode.Plus] = '+',
+    [Enum.KeyCode.Period] = '.',
+    [Enum.KeyCode.Slash] = '/',
+    [Enum.KeyCode.BackSlash] = '\\',
+    [Enum.KeyCode.Question] = '?',
+    [Enum.UserInputType.MouseButton1] = '[MB1]',
+    [Enum.UserInputType.MouseButton2] = '[MB2]',
+    [Enum.UserInputType.MouseButton3] = '[MB3]'
+ }
+ function library:GetTextBounds(Text, Font, Size, Resolution)
+    local Bounds = game:GetService('TextService'):GetTextSize(Text, Size, Font, Resolution or Vector2.new(1920, 1080))
+    return Bounds.X, Bounds.Y
+    end;
+     function library:AddToRegistry(Instance, Properties, IsHud)
+    local Idx = #library.Registry + 3
+    local Data = {Instance = Instance;Properties = Properties;Idx = Idx}
+    table.insert(library.Registry, Data);
+    library.RegistryMap[Instance] = Data;
+    if IsHud then table.insert(library.HudRegistry, Data) end;
+    end;
+    function library:CreateLabel(Properties, IsHud)
+ local _Instance = library:Create('TextLabel', {BackgroundTransparency = 1;Font = Enum.Font.Code;TextColor3 = library.Colors.FontColor;TextSize = 16;TextStrokeTransparency = 0});
+ library:AddToRegistry(_Instance, {TextColor3 = 'FontColor'}, IsHud);
+ return library:Create(_Instance, Properties);
+ end;
+ library.NotificationArea = library:Create('Frame', {BackgroundTransparency = 1;Position = UDim2.new(0.003, 0, 0, 40);Size = UDim2.new(0, 300, 0, 200);ZIndex = 100;Parent = ScreenGui});
+ library:Create('UIListLayout', {Padding = UDim.new(0, 4);FillDirection = Enum.FillDirection.Vertical;SortOrder = Enum.SortOrder.LayoutOrder;Parent = library.NotificationArea});
+ function library:Notify(Text, Time)
+    local XSize, YSize = library:GetTextBounds(Text, Enum.Font.Code, 14);YSize = YSize + 7
+    local NotifyOuter = library:Create('Frame', {BorderColor3 = Color3.new(189, 172, 255);Position = UDim2.new(0, 100, 0, 10);Size = UDim2.new(0, 0, 0, YSize);ClipsDescendants = true;Transparency = 0,ZIndex = 100;Parent = library.NotificationArea});
+    library:Create('UIGradient', {Color = ColorSequence.new{ColorSequenceKeypoint.new(0, library.Colors.MainColor), ColorSequenceKeypoint.new(0.1, library.Colors.MainColor), ColorSequenceKeypoint.new(0.6, library.Colors.MainColor), ColorSequenceKeypoint.new(1, library.Colors.MainColor)},Rotation = -120;Parent = NotifyOuter});
+    local NotifyInner = library:Create('Frame', {BackgroundColor3 = library.Colors.MainColor;BorderColor3 = library.Colors.OutlineColor;BorderMode = Enum.BorderMode.Inset;Size = UDim2.new(1, 0, 1, 0);ZIndex = 101;Parent = NotifyOuter});
+    local InnerFrame = library:Create('Frame', {BackgroundColor3 = Color3.new(1, 1, 1);BorderSizePixel = 0;Position = UDim2.new(0, 1, 0, 1);Size = UDim2.new(1, -2, 1, -2);ZIndex = 102;Parent = NotifyInner;});
+    local Line = library:Create('Frame', {BackgroundColor3 = library.Colors.AccentColor;BorderSizePixel = 0;Position = UDim2.new(1, 0, 0.97, 0);Size = UDim2.new(-0.999, -0.5, 0, 1.9);ZIndex = 102;Parent = NotifyInner;});
+    local LeftColor = library:Create('Frame', {BackgroundColor3 = library.Colors.AccentColor;BorderSizePixel = 0;Position = UDim2.new(0, -1, 0, 22);Size = UDim2.new(0, 2, -1.2, 0);ZIndex = 104;Parent = NotifyOuter;});
+    local Gradient = library:Create('UIGradient', {Color = ColorSequence.new({ColorSequenceKeypoint.new(0, library.Colors.MainColor),ColorSequenceKeypoint.new(1, library.Colors.MainColor)});Rotation = -90;Parent = InnerFrame});
+    library:AddToRegistry(NotifyInner, {BackgroundColor3 = 'MainColor';BorderColor3 = 'OutlineColor';}, true);
+    library:AddToRegistry(Gradient, {Color = function() return ColorSequence.new({ColorSequenceKeypoint.new(0, library.Colors.MainColor),ColorSequenceKeypoint.new(1, library.Colors.MainColor)}); end});
+    library:CreateLabel({Position = UDim2.new(0, 6, 0, 0);Size = UDim2.new(1, -4, 1, 0);Text = Text;TextXAlignment = Enum.TextXAlignment.Left;TextSize = 14;ZIndex = 103;Parent = InnerFrame});
+    pcall(NotifyOuter.TweenSize, NotifyOuter, UDim2.new(0, XSize + 8 + 4, 0, YSize), 'Out', 'Quad', 0.6, true);
+    pcall(LeftColor.TweenSize, LeftColor, UDim2.new(0, 2, 0, 0), 'Out', 'Linear', 1, true);
+    wait(0.9)
+    pcall(Line.TweenSize, Line, UDim2.new(0, 0, 0, 2), 'Out', 'Linear', Time, true);
+    task.spawn(function()
+    wait(Time or 5);
+    pcall(NotifyOuter.TweenSize, NotifyOuter, UDim2.new(0, 0, 0, YSize), 'Out', 'Quad', 0.4, true);
+    wait(0.4);
+    NotifyOuter:Destroy();
+    end);
+    end;
+
+wait(1)
+print("sent")
+
+ ScreenGui = Instance.new("ScreenGui")
+ Frame = Instance.new("Frame")
+ UICorner = Instance.new("UICorner")
+ UIGradient = Instance.new("UIGradient")
+ TextLabel = Instance.new("TextLabel")
+ UIGradient_2 = Instance.new("UIGradient")
+ TextBox = Instance.new("TextBox")
+ UICorner_2 = Instance.new("UICorner")
+ TextLabel_2 = Instance.new("TextLabel")
+ UIGradient_3 = Instance.new("UIGradient")
+ TextLabel_3 = Instance.new("TextLabel")
+ notice1 = Instance.new("TextLabel")
+ UIGradient_4 = Instance.new("UIGradient")
+ CLOSE = Instance.new("TextButton")
+ UICorner_3 = Instance.new("UICorner")
+ TextButton = Instance.new("TextButton")
+ UIGradient_5 = Instance.new("UIGradient")
+
+
+--Properties:
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.33791952, 0, 0.156467319, 60)
+Frame.Size = UDim2.new(0, 452, 0, 395)
+
+UICorner.CornerRadius = UDim.new(0.0700000003, 0)
+UICorner.Parent = Frame
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(31, 31, 31))}
+UIGradient.Rotation = 3
+UIGradient.Transparency = NumberSequence.new{NumberSequenceKeypoint.new(0.00, 0.10), NumberSequenceKeypoint.new(1.00, 0.10)}
+UIGradient.Parent = Frame
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.14380531, 0, 0.0253164563, 0)
+TextLabel.Size = UDim2.new(0, 321, 0, 58)
+TextLabel.Font = Enum.Font.Unknown
+TextLabel.Text = "Nexify Security Key"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 30.000
+TextLabel.FontFace = Font.new("rbxasset://fonts/families/Ubuntu.json", Enum.FontWeight.Light)
+
+
+UIGradient_2.Parent = TextLabel
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.BackgroundTransparency = 0.800
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0.207964599, 0, 0.425316453, 0)
+TextBox.Size = UDim2.new(0, 292, 0, 58)
+TextBox.Font = Enum.Font.SourceSansItalic
+TextBox.PlaceholderColor3 = Color3.fromRGB(255, 188, 188)
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 25.000
+
+UICorner_2.CornerRadius = UDim.new(1, 9)
+UICorner_2.Parent = TextBox
+
+TextLabel_2.Parent = Frame
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.BackgroundTransparency = 1.000
+TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_2.BorderSizePixel = 0
+TextLabel_2.Position = UDim2.new(0.407079637, 0, 0.936708868, 0)
+TextLabel_2.Size = UDim2.new(0, 111, 0, 25)
+TextLabel_2.Font = Enum.Font.Unknown
+TextLabel_2.Text = "Powered By Nexify"
+TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.TextSize = 14.000
+TextLabel_2.FontFace = Font.new("rbxasset://fonts/families/Ubuntu.json", Enum.FontWeight.Light)
+
+
+UIGradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(0.25, Color3.fromRGB(175, 255, 202)), ColorSequenceKeypoint.new(0.52, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(170, 0, 255))}
+UIGradient_3.Parent = TextLabel_2
+
+TextLabel_3.Parent = Frame
+TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_3.BackgroundTransparency = 1.000
+TextLabel_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_3.BorderSizePixel = 0
+TextLabel_3.Position = UDim2.new(0.0176991485, 0, 0.197468355, 0)
+TextLabel_3.Size = UDim2.new(0, 443, 0, 90)
+TextLabel_3.Font = Enum.Font.Unknown
+TextLabel_3.Text = "Please enter the security key that has been provided by Nexify to continue loading script"
+TextLabel_3.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_3.TextSize = 16.000
+TextLabel_3.TextWrapped = true
+TextLabel_3.FontFace = Font.new("rbxasset://fonts/families/Ubuntu.json", Enum.FontWeight.Light)
+
+notice1.Name = "notice1"
+notice1.Parent = Frame
+notice1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+notice1.BackgroundTransparency = 1.000
+notice1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+notice1.BorderSizePixel = 0
+notice1.Position = UDim2.new(0.0796460211, 0, 0.784810126, 0)
+notice1.Size = UDim2.new(0, 408, 0, 49)
+notice1.Font = Enum.Font.Unknown
+notice1.Text = "Inputting wrong key for 3 times will kick you from the game!"
+notice1.TextColor3 = Color3.fromRGB(255, 255, 255)
+notice1.TextSize = 16.000
+notice1.TextWrapped = true
+notice1.FontFace = Font.new("rbxasset://fonts/families/Ubuntu.json", Enum.FontWeight.Light)
+
+UIGradient_4.Parent = notice1
+
+CLOSE.Name = "CLOSE"
+CLOSE.Parent = Frame
+CLOSE.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+CLOSE.BackgroundTransparency = 0.700
+CLOSE.BorderColor3 = Color3.fromRGB(0, 0, 0)
+CLOSE.BorderSizePixel = 0
+CLOSE.Position = UDim2.new(0.918141603, 0, 0.0253164563, 0)
+CLOSE.Size = UDim2.new(0, 29, 0, 30)
+CLOSE.Font = Enum.Font.SourceSansBold
+CLOSE.Text = "X"
+CLOSE.TextColor3 = Color3.fromRGB(255, 0, 4)
+CLOSE.TextSize = 20.000
+
+UICorner_3.Parent = CLOSE
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 0.700
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.309734523, 0, 0.622784793, 0)
+TextButton.Size = UDim2.new(0, 200, 0, 50)
+TextButton.Font = Enum.Font.SourceSansLight
+TextButton.Text = "Confirm"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextSize = 24.000
+TextButton.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextWrapped = true
+TextButton.FontFace = Font.new("rbxasset://fonts/families/Ubuntu.json", Enum.FontWeight.Light)
+
+UIGradient_5.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(10, 157, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(84, 255, 84))}
+UIGradient_5.Parent = TextButton
+
+-- Scripts:
+
+ function ZDRDQF_fake_script() -- TextLabel.Script 
+	local script = Instance.new('Script', TextLabel)
+
+	local textlabel = script.Parent
+	local uigradient = textlabel.UIGradient
+	
+	-- Initial setup for the gradient
+	uigradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.new(0.666667, 0.666667, 1)), -- White at offset 0
+		ColorSequenceKeypoint.new(0.5, Color3.new(0.321569, 0.258824, 1)), -- Red at offset 0.5
+		ColorSequenceKeypoint.new(1, Color3.new(0.941176, 0.6, 1))  -- White at offset 1
+	})
+	
+	-- Animation loop
+	while true do
+		-- Animate from left to right (white -> red -> white)
+		for i = 0, 1, 0.01 do
+			uigradient.Offset = Vector2.new(-i, 0) -- Shift the gradient horizontally
+			task.wait(0.002) -- Control the speed of the animation
+		end
+	
+		-- Animate from right to left (white -> red -> white)
+		for i = 1, 0, -0.01 do
+			uigradient.Offset = Vector2.new(-i, 0) -- Shift the gradient horizontally
+			task.wait(0.002) -- Control the speed of the animation
+		end
+	end
+end
+coroutine.wrap(ZDRDQF_fake_script)()
+ function TAXGLX_fake_script() -- TextBox.Script 
+	local script = Instance.new('Script', TextBox)
+
+	
+	if script.Parent.Text == "Nexify_0x073915" then
+		warn("true")
+		end
+	
+end
+coroutine.wrap(TAXGLX_fake_script)()
+ function KVKHXU_fake_script() -- notice1.Script 
+	local script = Instance.new('Script', notice1)
+
+	local textlabel = script.Parent
+	local uigradient = textlabel.UIGradient
+	
+	-- Initial setup for the gradient
+	uigradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.new(1, 1, 1)), -- White at offset 0
+		ColorSequenceKeypoint.new(0.5, Color3.new(1, 0, 0)), -- Red at offset 0.5
+		ColorSequenceKeypoint.new(1, Color3.new(1, 1, 1))  -- White at offset 1
+	})
+	
+	-- Animation loop
+	while true do
+		-- Animate from left to right (white -> red -> white)
+		for i = 0, 1, 0.01 do
+			uigradient.Offset = Vector2.new(-i, 0) -- Shift the gradient horizontally
+			task.wait(0.02) -- Control the speed of the animation
+		end
+	
+		-- Animate from right to left (white -> red -> white)
+		for i = 1, 0, -0.01 do
+			uigradient.Offset = Vector2.new(-i, 0) -- Shift the gradient horizontally
+			task.wait(0.02) -- Control the speed of the animation
+		end
+	end
+end
+coroutine.wrap(KVKHXU_fake_script)()
+ function HHFVTS_fake_script() -- CLOSE.Script 
+	local script = Instance.new('Script', CLOSE)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent:Destroy()
+	end)
+	
+	if getgenv().Disableui == true then
+		
+		script.Parent.Parent:Destroy()
+	end
+end
+coroutine.wrap(HHFVTS_fake_script)()
+ function LRANNLA_fake_script() -- TextButton.Script 
+	local script = Instance.new('Script', TextButton)
+
+	local tweenService = game:GetService("TweenService")
+	local button = script.Parent
+	local inputtedbox = script.Parent.Parent.TextBox
+	
+	-- Ensure button has a UIGradient, or create one
+	local uiGradient = button:FindFirstChild("UIGradient") or Instance.new("UIGradient")
+	uiGradient.Parent = button
+	uiGradient.Rotation = 0
+	uiGradient.Offset = Vector2.new(-1, 0) -- Start off-screen
+	
+	-- Smooth green gradient colors
+	uiGradient.Color = ColorSequence.new{
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(84, 255, 84)),  -- Bright Green
+		ColorSequenceKeypoint.new(0.5, Color3.fromRGB(10, 157, 0)), -- Medium Green
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 0))   -- Bright Green (Repeats)
+	}
+	
+	-- Tween properties for size change
+	local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	local expandTween = tweenService:Create(button, tweenInfo, {Size = UDim2.new(0, 200, 0, 60)})
+	local shrinkTween = tweenService:Create(button, tweenInfo, {Size = UDim2.new(0, 200, 0, 50)})
+	
+	-- Smooth looping gradient animation (flows continuously)
+	local gradientTweenInfo = TweenInfo.new(1.5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1)
+	local gradientTween1 = tweenService:Create(uiGradient, gradientTweenInfo, {Offset = Vector2.new(1, 0)})
+	local gradientTween2 = tweenService:Create(uiGradient, gradientTweenInfo, {Offset = Vector2.new(-1, 0)})
+	
+	-- Mouse enter event (expand + start flowing animation)
+	button.MouseEnter:Connect(function()
+		expandTween:Play()
+		gradientTween1:Play()
+	
+		-- Loop between offsets to create a continuous smooth flow
+		gradientTween1.Completed:Connect(function()
+			gradientTween2:Play()
+		end)
+		gradientTween2.Completed:Connect(function()
+			gradientTween1:Play()
+		end)
+	end)
+	
+	-- Mouse leave event (shrink + reset gradient)
+	button.MouseLeave:Connect(function()
+		shrinkTween:Play()
+		gradientTween1:Cancel()
+		gradientTween2:Cancel()
+		uiGradient.Offset = Vector2.new(-1, 0) -- Reset gradient position
+	end)
+	
+	
+	button.MouseButton1Click:Connect(function()
+		if inputtedbox.Text == "Nexify_0x073915" then
+ScreenGui:Destroy()
+addaft()
+
+else
+library:Notify("Invalid Key", 15)
+ScreenGui:Destroy()
+wait(2)
+game.Players.LocalPlayer:Kick("Invalid Key \n 10")
+wait(1)
+game.Players.LocalPlayer:Kick("Invalid Key \n 9")
+wait(1)
+game.Players.LocalPlayer:Kick("Invalid Key \n 8")
+wait(1)
+game.Players.LocalPlayer:Kick("Invalid Key \n 7")
+wait(1)
+game.Players.LocalPlayer:Kick("Invalid Key \n 6")
+wait(1)
+
+game.Players.LocalPlayer:Kick("Invalid Key \n 5")
+wait(1)
+
+game.Players.LocalPlayer:Kick("Invalid Key \n 4")
+wait(1)
+
+game.Players.LocalPlayer:Kick("Invalid Key \n 3")
+wait(1)
+game.Players.LocalPlayer:Kick("Invalid Key \n 2")
+wait(1)
+game.Players.LocalPlayer:Kick("Invalid Key \n 1")
+wait(1)
+game.Players.LocalPlayer:Kick("Invalid Key \n 0")
+wait(1)
+wait(2)
+while true do end
+
+
+		end
+		
+	end)
+end
+coroutine.wrap(LRANNLA_fake_script)()
+
