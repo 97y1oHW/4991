@@ -1837,6 +1837,7 @@ do
     end;
 
     function Funcs:AddToggle(Idx, Info)
+        wait(0.1)
         assert(Info.Text, 'AddInput: Missing `Text` string.')
 
         local Toggle = {
