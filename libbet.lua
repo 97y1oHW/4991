@@ -1429,7 +1429,7 @@ do
     
 
     function Funcs:AddButton(...)
-
+wait(0.1)
         local Button = {};
         local function ProcessButtonParams(Class, Obj, ...)
             local Props = select(1, ...)
