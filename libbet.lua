@@ -2147,6 +2147,8 @@ local targetColor = Toggle.Value and Library.AccentColor or Library.MainColor
 
             Slider.Value = Num;
             Slider:Display();
+local targetSize = UDim2.new(0, math.ceil(Library:MapValue(Slider.Value, Slider.Min, Slider.Max, 0, Slider.MaxSize)), 1, 0)
+    TweenService:Create(Fill, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = targetSize }):Play()
 
             Library:SafeCallback(Slider.Callback, Slider.Value);
             Library:SafeCallback(Slider.Changed, Slider.Value);
