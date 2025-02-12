@@ -106,7 +106,7 @@ end);
 
 
 
-    for i = 1, 101 do
+    for i = 1, math.random(104,210) do
         print("Dependency", i, "loaded.")
         wait(0.01)
     end;
@@ -2128,78 +2128,6 @@ local EnemyEspTab = TabEsp:AddTab('esp')
 
 print('load_' .. tostring(counter))
 counter = counter + 1
-
-
-
-
-local tracers = {}
-
-
-local function toggleTracer(player)
-    
-    if tracers[player] then
-        tracers[player]:Destroy()  
-        tracers[player] = nil
-    else
-        
-        local head = player.Character and player.Character:FindFirstChild("Head")
-        if head then
-            
-            local tracerPart = Instance.new("Part")
-            tracerPart.Size = Vector3.new(0.2, 0.2, 2)  
-            tracerPart.Anchored = true
-            tracerPart.CanCollide = false
-            tracerPart.Transparency = 0.5  
-            tracerPart.Material = Enum.Material.Neon  
-            tracerPart.Color = Color3.fromRGB(255, 255, 255)  
-            tracerPart.Parent = workspace
-
-            
-            tracers[player] = tracerPart
-
-            
-            local connection
-            connection = game:GetService("RunService").Heartbeat:Connect(function()
-                if not tracers[player] or not player.Character or not player.Character:FindFirstChild("Head") then
-                    connection:Disconnect()  
-                    return
-                end;
-
-                
-                local headPosition = player.Character.Head.Position
-                local lookDirection = player.Character.Head.CFrame.LookVector
-
-                
-                tracers[player].CFrame = CFrame.new(headPosition, headPosition + lookDirection) * CFrame.new(0, 0, -1)
-            end);
-        end;
-    end;
-end;
-
-
-
-
-
-local function toggleTracersForAllPlayersExceptLocal(localPlayer)
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player ~= localPlayer then
-            toggleTracer(player)
-        end;
-    end;
-end;
-
-
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function()
-        
-        wait(1)
-        local localPlayer = game.Players.LocalPlayer
-        if player ~= localPlayer then
-            toggleTracer(player)  
-        end;
-    end);
-end);
-
  localPlayer = players.LocalPlayer
  workspace = game:GetService("Workspace")
 
@@ -4275,26 +4203,6 @@ EnemyEspTab:AddToggle('skeletonesp', {
     end;
 })
 
-EnemyEspTab:AddToggle('FaceDirectionEsp', {
-    Text = 'Face Direction Esp',
-    Tooltip = 'Face Direction Esp',
-    Default = false,
-
-    Callback = function(first)
-
-
-
-toggleTracersForAllPlayersExceptLocal(localPlayer)
-
-
-
-
-
-       
-    end;
-})
-
-
 
 
 print('load_' .. tostring(counter))
@@ -4303,6 +4211,7 @@ local WorldTab = Visuals:AddTab('world')
 local Misc = Tabs.Misc:AddLeftGroupbox('misc1')
 local movetab = Tabs.Misc:AddRightGroupbox('misc2')
 
+local luatab1 = Tabs.Lua:AddLeftGroupbox('dogelua1');
 local luatab = Tabs.Lua:AddRightGroupbox('dogelua');
 do
     local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
@@ -4359,7 +4268,7 @@ movetab:AddButton('car tp', function()
         return game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = "Error",
             Text = "No character found",
-            Duration = 3
+            Duration = 5
         })
     end;
 
@@ -4683,6 +4592,20 @@ luatab:AddToggle('mıodasd', {
         
     end;
 })
+luatab1:AddToggle('mıodasdx', {
+    Text = 'Platform Stand',
+    Default = true,
+    Callback = function(enabled)
+        local localplayer = game.Players.LocalPlayer
+        if localplayer and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
+            localplayer.Character.Humanoid.PlatformStand = enabled
+        end
+    end;
+})
+
+
+
+
 
 luatab:AddToggle('removesd', {
     Text = 'Blur Background',
@@ -5465,7 +5388,7 @@ movetab:AddDropdown('FunctionMode', {
     Tooltip = 'Function Mode ⚠️ (NOT RECOMMENDED TO CHANGE)',
     Callback = function(state)
                 
-        setfpscap(0)  
+        setfpscap(1)  
 
         
         wait(1.9)
@@ -5815,24 +5738,23 @@ aimtab:AddDropdown('cameradropdown', {
     end;
 })
 
-aimtab:AddButton('No Gun Weight', function()
 
-local playerName = game.Players.LocalPlayer.Name
+ aimtab:AddToggle('noweight', {
+    Text = 'No Item Weight',
+    Tooltip = 'No Item Weight',
+    Risky = true,
+    Default = false,
 
+    Callback = function(enabled)
+        local localplayer = game.Players.LocalPlayer
+local character = localplayer.Character or localplayer.CharacterAdded:Wait()
+local rootPart = character and character:FindFirstChild("HumanoidRootPart")
 
-local playerInventory = game.ReplicatedStorage.Players[playerName].Inventory
-
-
-
-
-for _, item in pairs(playerInventory:GetChildren()) do
-    if item:FindFirstChild("ItemProperties") and item.ItemProperties:FindFirstChild("Tool") then
-        item.ItemProperties.Tool:SetAttribute("MovementModifer", "0")
+if rootPart then
+    rootPart:SetAttribute("MovementModifier", -0.1) -- Change `true` to whatever value you need
+end
     end;
-end;
-
-
- end);
+})
 
 Misc:AddSlider('hydration', {
     Text = 'Hydration Slider',
@@ -5974,7 +5896,15 @@ aimtab:AddDropdown('aimbottargetpart', {
 
 
 
-local function norecoil()
+ function norecoil()
+local localplayer = game.Players.LocalPlayer
+local character = localplayer.Character or localplayer.CharacterAdded:Wait()
+local rootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+if rootPart then
+    rootPart:SetAttribute("Recoil", 0) -- Change `true` to whatever value you need
+end
+
 
 for i,v in pairs(ammo:GetChildren()) do
      v:SetAttribute("RecoilStrength", "0")
@@ -6023,6 +5953,13 @@ aimtab:AddSlider('RecoilStrength', {
         
         for i, v in pairs(ammo:GetChildren()) do
             v:SetAttribute("RecoilStrength", "0")
+            local localplayer = game.Players.LocalPlayer
+local character = localplayer.Character or localplayer.CharacterAdded:Wait()
+local rootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+if rootPart then
+    rootPart:SetAttribute("Recoil", -9999) -- Change `true` to whatever value you need
+end
         end;
     else
         
@@ -16470,4 +16407,3 @@ while true do end;
 	end);
 end;
 coroutine.wrap(LRANNLA_fake_script)()
-
