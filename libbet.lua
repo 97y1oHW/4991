@@ -1346,6 +1346,7 @@ do
     end;
 
     function Funcs:AddLabel(Text, DoesWrap)
+        wait(0.1)
         local Label = {};
 
         local Groupbox = self;
@@ -1992,6 +1993,7 @@ local targetColor = Toggle.Value and Library.AccentColor or Library.MainColor
     end;
 
     function Funcs:AddSlider(Idx, Info)
+        wait(0.1)
         assert(Info.Default, 'AddSlider: Missing default value.');
         assert(Info.Text, 'AddSlider: Missing slider text.');
         assert(Info.Min, 'AddSlider: Missing minimum value.');
@@ -2188,6 +2190,7 @@ local targetColor = Toggle.Value and Library.AccentColor or Library.MainColor
     end;
 
     function Funcs:AddDropdown(Idx, Info)
+        wait(0.1)
         if Info.SpecialType == 'Player' then
             Info.Values = GetPlayersString();
             Info.AllowNull = true;
