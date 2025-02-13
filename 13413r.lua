@@ -3953,23 +3953,34 @@ end;
 local function ToggleESP()
     isESPEnabled = not isESPEnabled
     if isESPEnabled then
+        -- Enable ESP
         for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
             if plr ~= Player then
                 DrawESP(plr)
-            end;
-        end;
+            end
+        end
     else
+        -- Disable ESP
         for _, plr in pairs(game:GetService("Players"):GetPlayers()) do
             if plr ~= Player then
-                for i, v in pairs(limbs) do
-                    if v and v.Visible then
-                        v:Remove()
-                    end;
-                end;
-            end;
-        end;
-    end;
-end;
+                -- Make sure limbs is a valid table before iterating over it
+                if typeof(limbs) == "table" then
+                    for i, v in pairs(limbs) do
+                        -- Ensure v is a valid instance and has the Visible property
+                        if typeof(v) == "Instance" and v:IsA("GuiObject") then
+                            if pcall(function() return v.Visible end) then
+                                if v.Visible then
+                                    -- Safely destroy the GUI elements
+                                    pcall(function() v:Destroy() end)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
 
 
