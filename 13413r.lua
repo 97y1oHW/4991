@@ -6505,6 +6505,25 @@ aimtab:AddToggle('Bunnyhop', {
 
 
 
+aimtab:AddToggle('Bunnyhopx', {
+    Text = 'Automatic R700 / TFZ98S',
+    Tooltip = 'Automatic r700 and tfz98s \n CANNOT BE UNTOGGLED!!',
+    Risky = true,
+    Default = false,
+
+    Callback = function(first)
+        local localplayer = game.Players.LocalPlayer
+local character = localplayer.Character or localplayer.CharacterAdded:Wait()
+local rootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+if rootPart then
+    rootPart:SetAttribute("Recoil", 0) -- Change `true` to whatever value you need
+end
+    end;
+})
+
+
+
 local function updateSoundIds()
     
     local hitMarkers = game.ReplicatedStorage:WaitForChild("SFX"):WaitForChild("Hits"):WaitForChild("HitMarkers")
