@@ -4667,7 +4667,7 @@ luatab1:AddDropdown('Memory Mode', {
     Callback = function(state)
     if state == 'RX-800' or 'RK-1200' or 'AP-100' then do
 setfpscap(1)
-wait(1)
+wait(0.1)
 setfpscap(9000000)
     end
     end
@@ -5516,7 +5516,7 @@ movetab:AddDropdown('FunctionMode', {
         setfpscap(1)  
 
         
-        wait(1.9)
+        wait(0.2)
 
         
         setfpscap(9000)  
@@ -8687,26 +8687,175 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function()
     ScreenGuiForInventory.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 end);
 
+ player = game.Players.LocalPlayer
+ screengui42f = Instance.new("ScreenGui")
+screengui42f.Parent = player.PlayerGui
 
+local frame231 = Instance.new("Frame")
+frame231.Parent = screengui42f
+frame231.Size = UDim2.new(0, 400, 0, 400)  -- Adjusted size for clarity
+frame231.Position = UDim2.new(0, 10, 0, 10)
+frame231.BackgroundTransparency = 0.4
+frame231.BorderSizePixel = 0
+frame231.Visible = false
+-- UI Gradient for the frame
+local gradientxx_upval = Instance.new("UIGradient")
+gradientxx_upval.Parent = frame231
+gradientxx_upval.Enabled = false
+gradientxx_upval.Color = ColorSequence.new(
+    Color3.fromRGB(0, 0, 0),
+    Color3.fromRGB(255, 182, 193)
+)
+
+-- UI Stroke for the frame
+local strokesdade = Instance.new("UIStroke")
+strokesdade.Parent = frame231
+strokesdade.Color = Color3.fromRGB(255, 255, 255)
+
+-- Inventory label
+local inventoryLabel = Instance.new("TextLabel")
+inventoryLabel.BackgroundTransparency = 1
+inventoryLabel.Parent = frame231
+inventoryLabel.Size = UDim2.new(1, 0, 1, 0)
+inventoryLabel.RichText = true
+inventoryLabel.Position = UDim2.new(0, 0, 0, 0)
+inventoryLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+inventoryLabel.TextSize = 12
+inventoryLabel.TextWrapped = true
+inventoryLabel.Font = Enum.Font.Code
+inventoryLabel.Text = "==INVENTORY==\nLoading..."
+
+-- Toggle for animation
+local animatexxx = false
+
+-- Function to update inventory
+local function updateInventory(targetPlayer)
+    local hotbarPath = game.ReplicatedStorage.Players[targetPlayer.Name].Inventory
+    local clothingPath = game.ReplicatedStorage.Players[targetPlayer.Name].Clothing
+    local equipmentPath = game.ReplicatedStorage.Players[targetPlayer.Name].Equipment
+
+    local hotbarItems, clothingItems, equipmentItems = {}, {}, {}
+
+    -- Get item names
+    for _, item in pairs(hotbarPath:GetChildren()) do
+        table.insert(hotbarItems, item.Name)
+    end
+    for _, item in pairs(clothingPath:GetChildren()) do
+        table.insert(clothingItems, item.Name)
+    end
+    for _, item in pairs(equipmentPath:GetChildren()) do
+        table.insert(equipmentItems, item.Name)
+    end
+
+    -- Format the inventory display text
+    local inventoryText = "==INVENTORY==\n" .. targetPlayer.Name .. "'s Inventory:\n\n"
+    inventoryText = inventoryText .. "Hotbar:\n" .. table.concat(hotbarItems, "\n") .. "\n\n"
+    inventoryText = inventoryText .. "Clothing:\n" .. table.concat(clothingItems, "\n") .. "\n\n"
+    inventoryText = inventoryText .. "Equipment:\n" .. table.concat(equipmentItems, "\n") .. "\n"
+
+    -- Update the text label
+    inventoryLabel.Text = inventoryText
+end
+
+-- Check if a player is within 160-degree FOV
+local function getPlayerAngle(targetPlayer)
+    local camera = workspace.CurrentCamera
+    local playerChar = targetPlayer.Character
+    if playerChar and playerChar:FindFirstChild("HumanoidRootPart") then
+        local playerPosition = playerChar.HumanoidRootPart.Position
+        local direction = (playerPosition - camera.CFrame.Position).unit
+        local dotProduct = camera.CFrame.LookVector:Dot(direction)
+        local angle = math.deg(math.acos(dotProduct))
+        return angle
+    end
+    return math.huge  -- Return large angle if player is invalid
+end
+
+-- Update inventory based on closest player in FOV
+game:GetService("RunService").Heartbeat:Connect(function()
+    local closestPlayer = nil
+    local smallestAngle = math.huge
+
+    -- Loop through all players
+    for _, targetPlayer in pairs(game.Players:GetPlayers()) do
+        if targetPlayer ~= player then
+            local angle = getPlayerAngle(targetPlayer)
+            if angle < smallestAngle and angle <= 80 then
+                smallestAngle = angle
+                closestPlayer = targetPlayer
+            end
+        end
+    end
+
+    -- Update inventory for the closest player in FOV
+    if closestPlayer then
+        updateInventory(closestPlayer)
+    else
+        inventoryLabel.Text = "==INVENTORY==\nNo players in view."
+    end
+end)
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    -- Ensure gradientxx_upval exists before accessing it
+    if gradientxx_upval then
+        if animatexxx then
+            -- Smoothly rotate the gradient
+            gradientxx_upval.Rotation = gradientxx_upval.Rotation + math.random(-1, 9)
+        else
+            -- Reset rotation when animation is off
+            gradientxx_upval.Rotation = 45
+        end
+    end
+end)
+
+
+-- Toggle for Inventory Viewer
 aimtab:AddToggle('Inventory Viewer', {
     Text = 'Inventory Viewer',
-    Default = true,
+    Default = false,
     Risky = true,
     Tooltip = 'Displays Inventory',
     Callback = function(first)
-        toggleGuiVisibilityForInventory()
+        frame231.Visible = first  -- Toggle frame visibility
     end;
-}):AddKeyPicker('invViewerKeyBind', {
-    Default = 'None',
-    SyncToggleState = true,
-    Mode = 'Toggle',
-    Text = 'Inventory Viewer Key Bind',
-    NoUI = false,
-    Callback = function(Value)
-    end,
 })
 
 
+
+-- Toggle for Inventory Gradient Animation
+aimtab:AddToggle('Inventory Gradient Animation', {
+    Text = 'Inventory Gradient Animation',
+    Default = false,
+    Risky = false,
+    Tooltip = 'An animation for the UI gradient',
+    Callback = function(first)
+        animatexxx = first  -- Use this to toggle the gradient animation
+    end;
+})
+
+-- Toggle for enabling/disabling the gradient animation
+aimtab:AddToggle('Inventory Gradient Toggle', {
+    Text = 'Inventory Gradient Toggle',
+    Default = false,
+    Risky = false,
+    Tooltip = 'Enables/Disables Gradient',
+    Callback = function(first)
+    
+        gradientxx_upval.Enabled = first  -- Toggle gradient animation enabled
+    end;
+})
+aimtab:AddSlider('backgrounddaqwwferg3ewrfd3ewg4rtehg34werf45werjgıvbh4rneıojfvh4rehjbf', {
+    Text = 'Inventory Viewer Background Transparency Toggle',
+    Default = 1,
+    Min = 0,
+    Max = 1,
+    Rounding = 10,
+    Compact = false,
+    Callback = function(size)
+frame231.BackgroundTransparency = size
+
+    end;
+})
 
 player = game:GetService("Players").LocalPlayer
 mouse = player:GetMouse()
