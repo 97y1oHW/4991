@@ -9334,20 +9334,40 @@ coroutine.wrap(asswhiletruedo)
 getgenv().animpos = 1.89
 getgenv().underground = -1
 
- enabled = false
- runserv = game:GetService("RunService")
- lplr = game:GetService("Players").LocalPlayer
- animation = Instance.new("Animation")
+enabled = false
+runserv = game:GetService("RunService")
+lplr = game:GetService("Players").LocalPlayer
+animation = Instance.new("Animation")
 animation.AnimationId = "http://www.roblox.com/asset/?id=10147821284"
- local danceTrack
- antiaimunlocked = false
 
+ danceTrack
+ antiaimunlocked = false
  dysenc = {}
  temp = 1
+ isRespawning = false
+
+ function onCharacterAdded(character)
+    isRespawning = false
+    if enabled then
+        enabled = false
+        library:Notify("Respawn detected, re-enable Underground if needed.", 10)
+    end
+end
+
+ function onCharacterRemoving()
+    if enabled then
+        enabled = false
+        isRespawning = true
+        library:Notify("Detected Respawning, disabled Underground until you respawn", 10)
+    end
+end
+
+lplr.CharacterAdded:Connect(onCharacterAdded)
+lplr.CharacterRemoving:Connect(onCharacterRemoving)
 
 runserv.Heartbeat:Connect(function()
     temp = temp + 1
-    if enabled and lplr.Character and lplr.Character.HumanoidRootPart then
+    if enabled and lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
         danceTrack.TimePosition = animpos
         dysenc[1] = lplr.Character.HumanoidRootPart.CFrame
         dysenc[2] = lplr.Character.HumanoidRootPart.AssemblyLinearVelocity
@@ -9362,34 +9382,38 @@ runserv.Heartbeat:Connect(function()
     end
 end)
 
+charactertab:AddToggle('Anti 2', {
+    Text = 'Underground',
+    Default = false,
+    Risky = true,
+    Callback = function(isEnabled)
+        if isRespawning then
+            library:Notify("You are respawning, enable Underground after respawn.", 5)
+            return
+        end
         
-        charactertab:AddToggle('Anti 2', {
-            Text = 'Underground',
-            Default = false,
-            Risky = true,
-            Callback = function(isEnabled)
-                enabled = isEnabled
-                if enabled then
-                    danceTrack = lplr.Character:FindFirstChildWhichIsA("Humanoid"):LoadAnimation(animation)
-                    danceTrack.Looped = false
-                    danceTrack:Play(.1, 1, 0)
-                else
-                    if danceTrack then
-                        danceTrack:Stop()
-                        danceTrack:Destroy()
-                    end
-                end
+        enabled = isEnabled
+        if enabled then
+            danceTrack = lplr.Character:FindFirstChildWhichIsA("Humanoid"):LoadAnimation(animation)
+            danceTrack.Looped = false
+            danceTrack:Play(.1, 1, 0)
+        else
+            if danceTrack then
+                danceTrack:Stop()
+                danceTrack:Destroy()
             end
-        }):AddKeyPicker('Invisible', {
-            Default = 'None',
-            SyncToggleState = true,
-            Mode = 'Toggle',
-            Text = 'Invisible',
-            NoUI = false,
-            Callback = function(Value)
-            end,
-        })
-    
+        end
+    end
+}):AddKeyPicker('Invisible', {
+    Default = 'None',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Invisible',
+    NoUI = false,
+    Callback = function(Value)
+    end,
+})
+
 
 
 
