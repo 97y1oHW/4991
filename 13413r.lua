@@ -62,7 +62,6 @@ warn("video downloaded )5(")
 print(asciiart)
 
 
-
 task.spawn(function()
     -- Check if the file exists, and download if it does not
     if not isfile("babobiy.webm") then
@@ -97,7 +96,6 @@ task.spawn(function()
         new:Destroy()
     end);
 end);
-
 
 
 
@@ -9342,24 +9340,31 @@ animation = Instance.new("Animation")
 animation.AnimationId = "http://www.roblox.com/asset/?id=10147821284"
 
 local danceTrack
- antiaimunlocked = false
- dysenc = {}
- temp = 1
- isRespawning = false
+local dysenc = {}
+local temp = 1
+local isRespawning = false
+local undergroundToggle
 
- function onCharacterAdded(character)
-    isRespawning = false
-    if enabled then
-        enabled = false
-        library:Notify("Respawn detected, re-enable Underground if needed.", 10)
-    end
+-- Check if the player is dead
+local function isPlayerDead()
+    return not lplr.Character or not lplr.Character:FindFirstChild("Humanoid") or lplr.Character.Humanoid.Health <= 0
 end
 
- function onCharacterRemoving()
+local function onCharacterAdded(character)
+    isRespawning = false
+    library:Notify("Respawn detected, re-enable Underground if needed.", 10)
+end
+
+local function onCharacterRemoving()
     if enabled then
         enabled = false
         isRespawning = true
         library:Notify("Detected Respawning, disabled Underground until you respawn", 10)
+
+        -- Disable the toggle visually & functionally
+        if undergroundToggle then
+            undergroundToggle:Set(false) -- This turns off the toggle UI
+        end
     end
 end
 
@@ -9368,6 +9373,13 @@ lplr.CharacterRemoving:Connect(onCharacterRemoving)
 
 runserv.Heartbeat:Connect(function()
     temp = temp + 1
+
+    -- Prevent Underground from working if player is dead
+    if isPlayerDead() then
+        enabled = false
+        return
+    end
+
     if enabled and lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
         danceTrack.TimePosition = animpos
         dysenc[1] = lplr.Character.HumanoidRootPart.CFrame
@@ -9383,13 +9395,14 @@ runserv.Heartbeat:Connect(function()
     end
 end)
 
-charactertab:AddToggle('Anti 2', {
+undergroundToggle = charactertab:AddToggle('Anti 2', {
     Text = 'Underground',
     Default = false,
     Risky = true,
     Callback = function(isEnabled)
-        if isRespawning then
-            library:Notify("You are respawning, enable Underground after respawn.", 5)
+        -- Prevent toggle from activating if player is dead or respawning
+        if isPlayerDead() or isRespawning then
+            library:Notify("You are dead or respawning. Underground is disabled.", 5)
             return
         end
         
@@ -9414,6 +9427,10 @@ charactertab:AddToggle('Anti 2', {
     Callback = function(Value)
     end,
 })
+
+
+
+
 
 
 
@@ -9963,6 +9980,8 @@ if game.Workspace.Unfunctionalkid then
 wait(math.random(14,20))
 library:Notify("Owner Of Nexify Joined To Game! ⭐", 20)
 break
+else
+print(0x5)
 end;
 
     end;
