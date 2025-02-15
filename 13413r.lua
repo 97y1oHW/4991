@@ -9341,7 +9341,7 @@ lplr = game:GetService("Players").LocalPlayer
 animation = Instance.new("Animation")
 animation.AnimationId = "http://www.roblox.com/asset/?id=10147821284"
 
- danceTrack
+local danceTrack
  antiaimunlocked = false
  dysenc = {}
  temp = 1
