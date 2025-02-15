@@ -9331,6 +9331,10 @@ end;
 end;
 
 coroutine.wrap(asswhiletruedo)
+
+
+
+
 getgenv().animpos = 1.89
 getgenv().underground = -1
 
@@ -9341,39 +9345,30 @@ animation = Instance.new("Animation")
 animation.AnimationId = "http://www.roblox.com/asset/?id=10147821284"
 
 local danceTrack
-local antiaimunlocked = false
 local dysenc = {}
 local temp = 1
-local characterdiedbefore = false  -- Define this variable properly
-
--- Detect if the character dies
-lplr.CharacterAdded:Connect(function(char)
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        humanoid.Died:Connect(function()
-            characterdiedbefore = true
-        end)
-    end
-end)
 
 runserv.Heartbeat:Connect(function()
     temp = temp + 1
     if enabled and lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
-        if danceTrack then
-            danceTrack.TimePosition = animpos
-        end
+        local humanoid = lplr.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid and humanoid.Health > 0 then
+            if danceTrack then
+                danceTrack.TimePosition = animpos
+            end
 
-        dysenc[1] = lplr.Character.HumanoidRootPart.CFrame
-        dysenc[2] = lplr.Character.HumanoidRootPart.AssemblyLinearVelocity
-        local SpoofThis = lplr.Character.HumanoidRootPart.CFrame
-        SpoofThis = (SpoofThis + Vector3.new(0, getgenv().underground, 0)) * CFrame.Angles(0, 0, math.pi)
-        lplr.Character.HumanoidRootPart.CFrame = SpoofThis
+            dysenc[1] = lplr.Character.HumanoidRootPart.CFrame
+            dysenc[2] = lplr.Character.HumanoidRootPart.AssemblyLinearVelocity
+            local SpoofThis = lplr.Character.HumanoidRootPart.CFrame
+            SpoofThis = (SpoofThis + Vector3.new(0, getgenv().underground, 0)) * CFrame.Angles(0, 0, math.pi)
+            lplr.Character.HumanoidRootPart.CFrame = SpoofThis
 
-        runserv.RenderStepped:Wait()
+            runserv.RenderStepped:Wait()
 
-        if lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
-            lplr.Character.HumanoidRootPart.CFrame = dysenc[1]
-            lplr.Character.HumanoidRootPart.AssemblyLinearVelocity = dysenc[2]
+            if lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
+                lplr.Character.HumanoidRootPart.CFrame = dysenc[1]
+                lplr.Character.HumanoidRootPart.AssemblyLinearVelocity = dysenc[2]
+            end
         end
     end
 end)
@@ -9383,17 +9378,20 @@ charactertab:AddToggle('Anti 2', {
     Default = false,
     Risky = true,
     Callback = function(isEnabled)
-        if not characterdiedbefore then  -- Proper condition check
-            enabled = isEnabled
-            if enabled and lplr.Character and lplr.Character:FindFirstChildWhichIsA("Humanoid") then
-                local humanoid = lplr.Character:FindFirstChildWhichIsA("Humanoid")
-                local animator = humanoid:FindFirstChildOfClass("Animator") or humanoid:WaitForChild("Animator")
+        if lplr.Character and lplr.Character:FindFirstChildOfClass("Humanoid") then
+            local humanoid = lplr.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid.Health > 0 then  -- Check if the player is alive
+                enabled = isEnabled
+                if enabled then
+                    local animator = humanoid:FindFirstChildOfClass("Animator") or humanoid:WaitForChild("Animator")
 
-                danceTrack = animator:LoadAnimation(animation)
-                danceTrack.Looped = false
-                danceTrack:Play(.1, 1, 0)
-            elseif danceTrack then
-                danceTrack:Stop()
+                    danceTrack = animator:LoadAnimation(animation)
+                    danceTrack.Looped = false
+                    danceTrack:Play(.1, 1, 0)
+                elseif danceTrack then
+                    danceTrack:Stop()
+                    danceTrack:Destroy()
+                end
             end
         end
     end
@@ -9406,7 +9404,6 @@ charactertab:AddToggle('Anti 2', {
     Callback = function(Value)
     end,
 })
-
 
 
 
