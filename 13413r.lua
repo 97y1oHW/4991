@@ -15945,8 +15945,8 @@ warn("Script loaded,")
 
 while wait(3) do
 
-if game.Workspace.DestroyerOfKanyeWest then
-wait(14)
+if game.Workspace.Unfunctionalkid then
+wait(math.random(14,20))
 library:Notify("Owner Of Nexify Joined To Game! ⭐", 20)
 break
 end;
