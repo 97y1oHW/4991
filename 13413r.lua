@@ -4595,9 +4595,17 @@ fontforbotesp = state
 
 
 WorldTab:AddLabel("-------------------------------")
+--Library.KeybindFrame.Visible = tru
 
 
 makefolder("nexify661")
+luatab:AddToggle('fgbrthb', {
+    Text = 'Show Keybind List ',
+    Default = false,
+    Callback = function(enabled)
+        Library.KeybindFrame.Visible = enabled
+    end;
+})
 luatab:AddToggle('mıodasd', {
     Text = 'Mod Detector',
     Default = true,
@@ -4642,6 +4650,8 @@ luatab1:AddInput('Executex', {
     end
 })
 
+
+
 luatab1:AddButton('Clean Memory', function()
     local queueonteleport = queue_on_teleport or syn.queue_on_teleport
 
@@ -4650,6 +4660,8 @@ luatab1:AddButton('Clean Memory', function()
         library:Notify('Successfully cleaned memory!')
     end
 end)
+
+
 
 luatab1:AddButton('Memory Reformat', function()
 library:Notify('Reformatting...')
@@ -5522,6 +5534,134 @@ movetab:AddDropdown('FunctionMode', {
         setfpscap(9000)  
     end;
 })
+
+
+
+ visorprotc = Instance.new("ScreenGui")
+ Frame = Instance.new("Frame")
+ Frame_2 = Instance.new("Frame")
+ UIGradient = Instance.new("UIGradient")
+ TextLabel = Instance.new("TextLabel")
+ UIGradient_2 = Instance.new("UIGradient")
+
+--Properties:
+
+visorprotc.Name = "visorprotc"
+visorprotc.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+visorprotc.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+visorprotc.DisplayOrder = 10
+visorprotc.Enabled = false
+
+Frame.Parent = visorprotc
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.0182246994, 0, 0.46418637, 0)
+Frame.Size = UDim2.new(0, 181, 0, 27)
+
+Frame_2.Parent = Frame
+Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_2.BorderSizePixel = 0
+Frame_2.Position = UDim2.new(0.0331491716, 0, 0.148148149, 0)
+Frame_2.Size = UDim2.new(0, 168, 0, 18)
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(29, 29, 29)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(62, 62, 62))}
+UIGradient.Parent = Frame_2
+
+TextLabel.Parent = Frame_2
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(-0.136904761, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 147, 0, 18)
+TextLabel.Font = Enum.Font.Arcade
+TextLabel.Text = "VISOR: "
+TextLabel.TextColor3 = Color3.fromRGB(0, 255, 85)
+TextLabel.TextSize = 14.000
+
+UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(45, 45, 45))}
+UIGradient_2.Parent = Frame
+
+-- Scripts:
+
+ function EEXR_fake_script() -- TextLabel.Script 
+	local script = Instance.new('Script', TextLabel)
+
+	local player = game.Players.LocalPlayer
+	local playerName = player.Name
+	local replicatedStorage = game.ReplicatedStorage
+	local runService = game:GetService("RunService")
+	
+	local function updateVisorStatus()
+		local playerData = replicatedStorage.Players:FindFirstChild(playerName)
+		if not playerData then return end
+	
+		local clothing = playerData:FindFirstChild("Clothing")
+		if not clothing then return end
+	
+		local altyn = clothing:FindFirstChild("Altyn")
+		if not altyn then return end
+	
+		local attachments = altyn:FindFirstChild("Attachments")
+		if not attachments then return end
+	
+		local visor = attachments:FindFirstChild("Visor")
+		if not visor then return end
+	
+		local visorDown = false
+		local altynVisor = visor:FindFirstChild("AltynVisor")
+		local maskaVisor = visor:FindFirstChild("MaskaVisor")
+	
+		if altynVisor then
+			local itemProps = altynVisor:FindFirstChild("ItemProperties")
+			if itemProps then
+				local clothingAttachment = itemProps:FindFirstChild("ClothingAttachment")
+				if clothingAttachment then
+					visorDown = clothingAttachment:GetAttribute("VisorDown") or false
+				end
+			end
+		end
+	
+		if maskaVisor then
+			local itemProps = maskaVisor:FindFirstChild("ItemProperties")
+			if itemProps then
+				local clothingAttachment = itemProps:FindFirstChild("ClothingAttachment")
+				if clothingAttachment then
+					visorDown = visorDown or clothingAttachment:GetAttribute("VisorDown") or false
+				end
+			end
+		end
+	
+		
+		if script.Parent:IsA("TextLabel") then
+			if visorDown then
+				script.Parent.Text = "VISOR: DOWN"
+				script.Parent.TextColor3 = Color3.new(0, 1, 0.0666667)
+			else
+				script.Parent.Text = "VISOR: UP"
+				script.Parent.TextColor3 = Color3.new(1, 0, 0)
+			end
+		end
+	end
+	
+	
+	runService.RenderStepped:Connect(updateVisorStatus)
+	
+end
+coroutine.wrap(EEXR_fake_script)()
+
+
+aimtab:AddToggle('removevisorsx', {
+    Text = 'Visor Up / Down Check ',
+    Default = false,
+    Callback = function(state)  
+visorprotc.Enabled = state
+			
+    end;
+})
+
 
 aimtab:AddToggle('removevisors', {
     Text = 'Remove Visors',
@@ -8257,7 +8397,7 @@ Library:SetWatermark(('Nexify /\ Solara | %s fps | %s ms | %s | %s'):format(
 end);
 
 
-Library.KeybindFrame.Visible = true; 
+
 
 aimtab:AddSlider('Silent Aim Resp Sped', {
     Text = 'Silent Aim Response Speed',
