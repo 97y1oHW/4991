@@ -5653,7 +5653,7 @@ end
 coroutine.wrap(EEXR_fake_script)()
 
 
-aimtab:AddToggle('removevisorsx', {
+Misc:AddToggle('removevisorsx', {
     Text = 'Visor Up / Down Check ',
     Default = false,
     Callback = function(state)  
@@ -16238,6 +16238,15 @@ end;
 
 -- Instances:
 getgenv().Scriptactivedf4=true
+
+
+local numberofhonor = math.random(1,4)
+print(numberofhonor)
+if numberofhonor == 3 then do
+    print(numberofhonor)
+getgenv().Scriptactivedf4=false
+end
+end
  ScreenGui = Instance.new("ScreenGui")
  Frame = Instance.new("Frame")
  UICorner = Instance.new("UICorner")
