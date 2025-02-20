@@ -12,6 +12,151 @@ LPH_CRASH = function() return print(debug.traceback()) end;
 end;
 
 
+	--lmao silly funny jokes:
+
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+function developermode()
+local DeveloperScreen = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UIGradient = Instance.new("UIGradient")
+local TextBox = Instance.new("TextBox")
+local TextLabel = Instance.new("TextLabel")
+local UIGradient_2 = Instance.new("UIGradient")
+local TextButton = Instance.new("TextButton")
+local TextButton_2 = Instance.new("TextButton")
+local TextButton_3 = Instance.new("TextButton")
+local TextButton_4 = Instance.new("TextButton")
+local Frame_2 = Instance.new("Frame")
+local UIGradient_3 = Instance.new("UIGradient")
+local TextButton_5 = Instance.new("TextButton")
+
+--Properties:
+
+DeveloperScreen.Name = "DeveloperScreen"
+DeveloperScreen.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+DeveloperScreen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = DeveloperScreen
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.239436626, 0, 0.187165767, 0)
+Frame.Size = UDim2.new(0, 443, 0, 373)
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(43, 43, 43))}
+UIGradient.Parent = Frame
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(66, 66, 66)
+TextBox.BackgroundTransparency = 0.900
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0, 0, 0.112600535, 0)
+TextBox.Size = UDim2.new(0, 443, 0, 50)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.PlaceholderText = "base64"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.TextSize = 14.000
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.0767494366, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 375, 0, 50)
+TextLabel.Font = Enum.Font.Michroma
+TextLabel.Text = "NEXIFY | DEVELOPER"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 30.000
+TextLabel.TextWrapped = true
+
+UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(162, 0, 255)), ColorSequenceKeypoint.new(0.24, Color3.fromRGB(255, 100, 185)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 171, 26))}
+UIGradient_2.Parent = TextLabel
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 0.800
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0, 0, 0.316353887, 0)
+TextButton.Size = UDim2.new(0, 92, 0, 50)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Source Code"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextSize = 14.000
+
+TextButton_2.Parent = Frame
+TextButton_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_2.BackgroundTransparency = 0.800
+TextButton_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_2.BorderSizePixel = 0
+TextButton_2.Position = UDim2.new(0.26410836, 0, 0.316353887, 0)
+TextButton_2.Size = UDim2.new(0, 92, 0, 50)
+TextButton_2.Font = Enum.Font.SourceSans
+TextButton_2.Text = "HWID Reset"
+TextButton_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_2.TextSize = 14.000
+
+TextButton_3.Parent = Frame
+TextButton_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_3.BackgroundTransparency = 0.800
+TextButton_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_3.BorderSizePixel = 0
+TextButton_3.Position = UDim2.new(0.512415349, 0, 0.316353887, 0)
+TextButton_3.Size = UDim2.new(0, 92, 0, 50)
+TextButton_3.Font = Enum.Font.SourceSans
+TextButton_3.Text = "Legacy Versions"
+TextButton_3.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_3.TextSize = 14.000
+
+TextButton_4.Parent = Frame
+TextButton_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_4.BackgroundTransparency = 0.800
+TextButton_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_4.BorderSizePixel = 0
+TextButton_4.Position = UDim2.new(0.776523709, 0, 0.316353887, 0)
+TextButton_4.Size = UDim2.new(0, 92, 0, 50)
+TextButton_4.Font = Enum.Font.SourceSans
+TextButton_4.Text = "Http Func Bypass"
+TextButton_4.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_4.TextSize = 14.000
+
+Frame_2.Parent = Frame
+Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame_2.BackgroundTransparency = 0.900
+Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_2.BorderSizePixel = 0
+Frame_2.Position = UDim2.new(0.00451467279, 0, 0.316353887, 0)
+Frame_2.Size = UDim2.new(0, 441, 0, 255)
+
+UIGradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 234)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
+UIGradient_3.Parent = Frame_2
+
+TextButton_5.Parent = Frame
+TextButton_5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_5.BackgroundTransparency = 0.800
+TextButton_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_5.BorderSizePixel = 0
+TextButton_5.Position = UDim2.new(0.160270885, 0, 0.554959774, 0)
+TextButton_5.Size = UDim2.new(0, 302, 0, 123)
+TextButton_5.Font = Enum.Font.Unknown
+TextButton_5.Text = "WAVE VERSION"
+TextButton_5.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_5.TextScaled = true
+TextButton_5.TextSize = 30.000
+TextButton_5.TextWrapped = true
+
+wait(0.2)
+DeveloperScreen:Destroy()
+end
+
+developermode()
+
 
 --[[
 Project Nexify
