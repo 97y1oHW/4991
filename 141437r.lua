@@ -1225,47 +1225,9 @@ end
 
 bypassedanticheat = false
 
- LocalPlayer = game.Players.LocalPlayer
- Humanoid = LocalPlayer.Character and LocalPlayer.Character:WaitForChild("Humanoid")
-
-if not Humanoid then
-    error("Humanoid not found!")
-end
-
-local Connections = {
-    { "CharacterController", Humanoid:GetPropertyChangedSignal("WalkSpeed") },
-    { "CharacterController", Humanoid:GetPropertyChangedSignal("JumpHeight") },
-    { "CharacterController", Humanoid:GetPropertyChangedSignal("HipHeight") },
-    { "CharacterController", workspace:GetPropertyChangedSignal("Gravity") },
-    { "CharacterController", Humanoid.StateChanged },
-    { "CharacterController", Humanoid.ChildAdded },
-    { "CharacterController", Humanoid.ChildRemoved },
-}
-
-for _, Array in ipairs(Connections) do
-    for _, Connection in ipairs(getconnections(Array[2])) do
-        if type(Connection.Function) == "function" then
-            local Info = debug.getinfo(Connection.Function)
-
-            if Info and string.find(Info.source or "", Array[1]) then
-            warn("internal load")
-        --print("{tostring(Connection.Function)}:", tostring(Array[2]))
-                Connection:Disable()
-                bypassedanticheat = true
-                if bypassedanticheat == true then
-warn("Bypassed Anti Cheat: true")
-else
-warn("Bypassed Anti Cheat: false")
-                end
-                
-            end
-        end
-    end
-end
-
 print("Done")
 
-Library:Notify("Activated semi anti-cheat bypasser")
+Library:Notify("Can't activate semi anti-cheat bypasser")
 
 wait(0.3)
 
@@ -3026,18 +2988,6 @@ Esptab3:AddSlider('Reloadtheresold', {
 })
 
 
-antiaimtab:AddSlider('hipheight', {
-    Text = 'Hip Height',
-    Default = 2,
-    Min = 0.2,
-    Max = 5,
-    Rounding = 1,
-    Compact = false,
-
-    Callback = function(Value)
-       game.Players.LocalPlayer.Character.Humanoid.HipHeight = Value -- Any Number
-    end
-})
 
 
 
@@ -4174,25 +4124,81 @@ player.CharacterAdded:Connect(function(newCharacter)
     initializeHumanoid(newCharacter)
 end)
 
--- Adding a slider to control the teleportation speed
-Esptab3:AddSlider('Speedlocalplayer', {
-    Text = 'Speed Hack',
-    Default = 13, -- Slider için başlangıç değeri
-    Min = 1,
-    Max = 21, 
-    Rounding = 1, 
-    Compact = false,
-}):OnChanged(function(State)
+getgenv().Fly3 = false
+getgenv().speed3 = 26
+
+
+game:GetService("RunService").RenderStepped:Connect(function(dt)
     
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+    local rootPart = game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+    rootPart.Velocity = rootPart.Velocity 
+    local travelDirection3 = Vector3.new(0, 0, 0)
 
--- Set walk speed
-humanoid.WalkSpeed = State -- Adjust this value to your desired speed
+    if getgenv().Fly3 then
+        
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.W) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, 0, 1)
+        end;
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.S) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, 0, -1)
+        end;
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.A) then
+            travelDirection3 = travelDirection3 + Vector3.new(-1, 0, 0)
+        end;
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.D) then
+            travelDirection3 = travelDirection3 + Vector3.new(1, 0, 0)
+        end;
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.Space) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, 1, 0)
+        end;
+        if game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftShift) then
+            travelDirection3 = travelDirection3 + Vector3.new(0, -1, 0)
+        end;
 
-end)
+        
+        if travelDirection3.Magnitude > 0 then
+            
+            travelDirection3 = (
+                workspace.CurrentCamera.CFrame.LookVector * travelDirection3.z +
+                workspace.CurrentCamera.CFrame.RightVector * travelDirection3.x +
+                workspace.CurrentCamera.CFrame.UpVector * travelDirection3.y
+            ).unit
 
+            
+            rootPart.Velocity = travelDirection3 * getgenv().speed3
+        end;
+    end;
+end);
+
+
+
+print("Script running...")
+
+EspTab3:AddToggle('flight3', {
+    Text = 'Flight',
+    Risky = true,
+    Default = false,
+    Callback = function(state3)
+        getgenv().Fly3 = state3
+    end;
+}):AddKeyPicker('flight_key3', {
+    Default = 'nil',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Flight',
+    NoUI = false,
+    Callback = function(value3)
+        
+    end;
+})
+
+
+    EspTab3:AddSlider('flightspeed',
+        { Text = 'flight speed', Default = 23, Min = 1, Max = 35, Rounding = 1, Compact = true }):OnChanged(function(
+        first)
+        getgenv().speed3 = first
+    end);
+        end;
 
 
 
