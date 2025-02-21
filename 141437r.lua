@@ -4193,12 +4193,17 @@ EspTab3:AddToggle('flight3', {
 })
 
 
-    EspTab3:AddSlider('flightspeed',
-        { Text = 'flight speed', Default = 23, Min = 1, Max = 35, Rounding = 1, Compact = true }):OnChanged(function(
-        first)
-        getgenv().speed3 = first
-    end);
-        end;
+Esptab3:AddSlider('flightspeed3', {
+    Text = 'Flight Speed',
+    Default = 29, -- Default to noon
+    Min = 0, -- Minimum time (midnight)
+    Max = 35, -- Maximum time (next midnight)
+    Rounding = 1, -- Round to 1 decimal place
+    Compact = false,
+}):OnChanged(function(value)
+getgenv().speed3 = value
+
+end)
 
 
 
