@@ -9620,7 +9620,6 @@ coroutine.wrap(asswhiletruedo)
 
 
 
-
 getgenv().animpos = 1.89
 getgenv().underground = -1
 
@@ -9631,12 +9630,33 @@ animation = Instance.new("Animation")
 animation.AnimationId = "http://www.roblox.com/asset/?id=10147821284"
 
 local danceTrack
-local dysenc = {}
-local temp = 1
+ dysenc = {}
+ temp = 1
+ hasDied = false -- Track if the player has died at least once
+
+-- Function to handle player death
+ function onCharacterAdded(character)
+    local humanoid = character:WaitForChild("Humanoid")
+    humanoid.Died:Connect(function()
+        hasDied = true -- Set hasDied to true when the player dies
+        enabled = false -- Disable the toggle
+        if danceTrack then
+            danceTrack:Stop()
+            danceTrack:Destroy()
+            danceTrack = nil
+        end
+    end)
+end
+
+-- Listen for character added events (e.g., respawn)
+lplr.CharacterAdded:Connect(onCharacterAdded)
+if lplr.Character then
+    onCharacterAdded(lplr.Character)
+end
 
 runserv.Heartbeat:Connect(function()
     temp = temp + 1
-    if enabled and lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") then
+    if enabled and lplr.Character and lplr.Character:FindFirstChild("HumanoidRootPart") and not hasDied then
         local humanoid = lplr.Character:FindFirstChildOfClass("Humanoid")
         if humanoid and humanoid.Health > 0 then
             if danceTrack then
@@ -9664,6 +9684,12 @@ charactertab:AddToggle('Anti 2', {
     Default = false,
     Risky = true,
     Callback = function(isEnabled)
+        if hasDied then
+            -- If the player has died, disable the toggle permanently
+            enabled = false
+            return
+        end
+
         if lplr.Character and lplr.Character:FindFirstChildOfClass("Humanoid") then
             local humanoid = lplr.Character:FindFirstChildOfClass("Humanoid")
             if humanoid.Health > 0 then  -- Check if the player is alive
@@ -9677,6 +9703,7 @@ charactertab:AddToggle('Anti 2', {
                 elseif danceTrack then
                     danceTrack:Stop()
                     danceTrack:Destroy()
+                    danceTrack = nil
                 end
             end
         end
