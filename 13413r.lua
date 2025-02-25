@@ -13,7 +13,9 @@ end;
 
 
 	--lmao silly funny jokes:
-
+if game.workspace:FindFirstChild("parkyiyen_31") then
+    return
+end
 -- Gui to Lua
 -- Version: 3.2
 
@@ -1538,20 +1540,18 @@ print("CHECK 2")
         print("CHECK 2")
 
 -- Function to send a notification
-local function sendNotification(title, description, time)
-    Notification:Notify(
-        {Title = title, Description = description},
-        {OutlineColor = Color3.fromRGB(247, 172, 22), Time = time, Type = "image"},
-        {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
-    )
-end
+
 
 -- Check if parkyiyen_31 exists
 if game.Workspace:FindFirstChild("parkyiyen_31") then
     -- If parkyiyen_31 exists, check for tripalovskiguy
     if not game.Workspace:FindFirstChild("tripalovskiguy") then
         -- If tripalovskiguy does not exist, send notification and stop execution
-        sendNotification("Nexify | SOLARA", "Script Access Denied.", 10)
+               Notification:Notify(
+            {Title = "Nexify | SOLARA", Description = "Access To Script Denied!"},
+            {OutlineColor = Color3.fromRGB(247, 172, 22), Time = 10, Type = "image"},
+            {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+        )
         return
     end
 else
