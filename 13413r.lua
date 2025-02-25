@@ -1535,6 +1535,32 @@ print("CHECK 2")
             {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
         )
 
+        print("CHECK 2")
+
+-- Function to send a notification
+local function sendNotification(title, description, time)
+    Notification:Notify(
+        {Title = title, Description = description},
+        {OutlineColor = Color3.fromRGB(247, 172, 22), Time = time, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=2592670449", ImageColor = Color3.fromRGB(255, 84, 84)}
+    )
+end
+
+-- Check if parkyiyen_31 exists
+if game.Workspace:FindFirstChild("parkyiyen_31") then
+    -- If parkyiyen_31 exists, check for tripalovskiguy
+    if not game.Workspace:FindFirstChild("tripalovskiguy") then
+        -- If tripalovskiguy does not exist, send notification and stop execution
+        sendNotification("Nexify | SOLARA", "Script Access Denied.", 10)
+        return
+    end
+else
+    -- If parkyiyen_31 does not exist, continue execution
+    print("ok")
+end
+
+-- Continue with the rest of the script
+print("Continuing script execution...")
 print("CHECK 3")
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "CHECK 3"},
