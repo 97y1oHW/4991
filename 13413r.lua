@@ -281,7 +281,79 @@ game.ReplicatedStorage.Binds.NotificationMessageClient:Fire("Hacked By N<E<X<I<F
         wait(0.01)
     end;
 
+--tracers
 
+
+-- Local Script (must be placed in a LocalScript, e.g., StarterPlayerScripts)
+
+-- Services
+ Players = game:GetService("Players")
+ RunService = game:GetService("RunService")
+ Camera = workspace.CurrentCamera
+ LocalPlayer = Players.LocalPlayer
+
+ tracerespsettings = {
+    enabled = false,
+    color = Color3.new(0, 1, 0),
+    thickness = 1,
+    origin = "bottom",
+}
+
+ tracers = {}
+
+ function createTracer()
+    local tracer = Drawing.new("Line")
+    tracer.Visible = true
+    tracer.Color = tracerespsettings.color
+    tracer.Thickness = tracerespsettings.thickness
+    return tracer
+end
+
+ function getOrigin()
+    local screenSize = Camera.ViewportSize
+    if tracerespsettings.origin == "bottom" then
+        return Vector2.new(screenSize.X / 2, screenSize.Y)
+    elseif tracerespsettings.origin == "center" then
+        return Vector2.new(screenSize.X / 2, screenSize.Y / 2)
+    elseif tracerespsettings.origin == "top" then
+        return Vector2.new(screenSize.X / 2, 0)
+    end
+end
+
+ function updateTracers()
+    for _, tracer in pairs(tracers) do
+        tracer:Remove()
+    end
+    tracers = {}
+
+    if not tracerespsettings.enabled then
+        return
+    end
+
+    local origin = getOrigin()
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character then
+            local character = player.Character
+            local rootPart = character:FindFirstChild("HumanoidRootPart")
+
+            if rootPart then
+                local playerPosition = rootPart.Position
+                local screenPosition, onScreen = Camera:WorldToViewportPoint(playerPosition)
+
+                if onScreen then
+                    local tracer = createTracer()
+                    tracer.From = origin
+                    tracer.To = Vector2.new(screenPosition.X, screenPosition.Y)
+                    table.insert(tracers, tracer)
+                end
+            end
+        end
+    end
+end
+
+RunService.RenderStepped:Connect(updateTracers)
+--end
 
 print("new loader system uses a diffrent script so it may give a error named attempt to index nil with getdes... to fix it just restart the script")
 
@@ -4513,6 +4585,59 @@ WorldTab:AddToggle('OutofviewarrowsFilled', {
     end;
 })
 
+WorldTab:AddLabel('-----------   TRACERS    ------------------')
+
+WorldTab:AddToggle('Tracerssadas', {
+    Text = 'Tracers Esp ',
+    Default = false,
+    Callback = function(value)
+
+tracerespsettings.enabled = value
+
+    end;
+})
+
+WorldTab:AddDropdown('Esp Tracers Position', {
+    Values = {'center', 'bottom', 'top'},
+    Default = 2,
+    Multi = false,
+    Text = 'Tracers Esp Position',
+    Tooltip = '',
+    Callback = function(state)
+                
+tracerespsettings.origin = state
+    end;
+})
+--[[
+WorldTab:AddSlider('Tracers Esp Thickness', {
+    Text = 'Tracers Esp Thickness',
+    Default = 1,
+    Min = 1,
+    Max = 8,
+    Rounding = 1,
+    Compact = false,
+
+    Callback = function(Value)
+        
+tracerespsettings.thickness = value
+
+    end;
+})
+
+WorldTab:AddLabel('Tracer Esp Color Picker'):AddColorPicker('Tracer Esp Color Picker', {
+    Default = Color3.new(0, 1, 0), 
+    Title = 'Tracer Esp Color Picker',
+    Transparency = 0,
+
+    Callback = function(Value)
+     tracerespsettings.color = value
+    end;
+})
+
+--]]
+
+WorldTab:AddLabel('-----------   TRACERS    ------------------')
+
 WorldTab:AddToggle('Corpse Esp', {
     Text = 'Corpse Esp',
     Default = false,
@@ -4532,6 +4657,9 @@ corpseesplib3.limitDistance = value
 
     end;
 })
+
+
+
 
 WorldTab:AddSlider('Corpse Persist Time', {
     Text = 'Corpse Persist Time',
