@@ -5878,8 +5878,6 @@ f=true;
 
 
 }
-library:Notify(math.pi+5*2-9+10-3-4+1-1+66-55+10+11+33-80,2)
-library:Notify(asad,5)
 trackPlayers()
 
 
