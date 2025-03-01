@@ -1097,7 +1097,7 @@ local Tabs = {
     Main = Window:AddTab('combat ⚔️'),
     esptabreal = Window:AddTab('Esp 👤'),
     antiaimtab = Window:AddTab('Anti-Aim 🛡️'),
-    Esptab33 = Window:AddTab('Misc 🔅'),
+    Esptab333 = Window:AddTab('Misc 🔅'),
     ['UI Settings'] = Window:AddTab('UI Settings 🎚️'),
 }
 
@@ -1106,7 +1106,7 @@ local Tabs = {
 local antiaimtab = Tabs.antiaimtab:AddLeftGroupbox('Spin')
 local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Combat')
 local Rightone = Tabs.Main:AddRightGroupbox('Combat2')
-local Esptab3 = Tabs.Esptab33:AddLeftGroupbox('Movement')
+local Esptab33 = Tabs.Esptab333:AddLeftGroupbox('Movement')
 local eaesptabactual = Tabs.esptabreal:AddLeftGroupbox('Esp')
 
 
@@ -2919,7 +2919,7 @@ local function applyZoom()
     Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
 end
 
-Esptab3:AddSlider('jump', {
+Esptab33:AddSlider('jump', {
     Text = 'Jump Slider',
     Default = 3.2,
     Min = 0,
@@ -2939,7 +2939,7 @@ Esptab3:AddSlider('jump', {
     end
 })
 
-Esptab3:AddToggle('No Fall Damage', {
+Esptab33:AddToggle('No Fall Damage', {
     Text = 'No Fall Damage',
     Default = false,
     Risky = true,
@@ -2954,7 +2954,7 @@ Esptab3:AddToggle('No Fall Damage', {
     end
 })
 
-Esptab3:AddToggle('Automatic Instant Reload', {
+Esptab33:AddToggle('Automatic Instant Reload', {
     Text = 'Automatic Instant Reload',
     Default = false,
     Risky = true,
@@ -2963,7 +2963,7 @@ Esptab3:AddToggle('Automatic Instant Reload', {
     end
 })
 
-Esptab3:AddToggle('antiaim', {
+Esptab33:AddToggle('antiaim', {
     Text = 'Tilt Manuplation',
     Risky = true,
     Default = false,
@@ -2974,7 +2974,7 @@ Esptab3:AddToggle('antiaim', {
 })
 
 
-Esptab3:AddSlider('Reloadtheresold', {
+Esptab33:AddSlider('Reloadtheresold', {
     Text = 'Automatic Reload Threshold',
     Default = 3,
     Min = 3,
@@ -3009,7 +3009,7 @@ end
 end
 
 -- Slider for zoom value
-Esptab3:AddSlider('ZoomSlider', {
+Esptab33:AddSlider('ZoomSlider', {
     Text = 'Zoom Value',
     Default = 1,
     Min = 0.1,
@@ -3022,7 +3022,7 @@ Esptab3:AddSlider('ZoomSlider', {
 })
 
 -- Key picker for zoom toggle key
-Esptab3:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
+Esptab33:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
     Default = 'Z',
     SyncToggleState = false,
     Mode = 'Toggle',
@@ -4174,7 +4174,7 @@ end);
 
 print("Script running...")
 
-EspTab3:AddToggle('flight3', {
+Esptab33:AddToggle('flight3', {
     Text = 'Flight',
     Risky = true,
     Default = false,
@@ -4193,7 +4193,7 @@ EspTab3:AddToggle('flight3', {
 })
 
 
-Esptab3:AddSlider('flightspeed3', {
+Esptab33:AddSlider('flightspeed3', {
     Text = 'Flight Speed',
     Default = 29, -- Default to noon
     Min = 0, -- Minimum time (midnight)
@@ -4230,7 +4230,7 @@ local function climbWalls()
 end
 
 -- Adding a toggle to enable/disable spider climbing
-Esptab3:AddToggle('spiderToggle', {
+Esptab33:AddToggle('spiderToggle', {
     Text = 'Spider Climb',
     Default = false,
     Callback = function(state)
@@ -4306,7 +4306,7 @@ local function changeTimeOfDay(value)
 end
 
 -- Slider to set time of day
-Esptab3:AddSlider('timeSlider', {
+Esptab33:AddSlider('timeSlider', {
     Text = 'Set Time of Day',
     Default = 12, -- Default to noon
     Min = 0, -- Minimum time (midnight)
@@ -4400,13 +4400,13 @@ Rightone:AddToggle('exitesppdlt', {
 
 
 
-Esptab3:AddButton('no fog', function()
+Esptab33:AddButton('no fog', function()
     if Lighting:FindFirstChildOfClass("Atmosphere") then
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
  end
  end)
 
-Esptab3:AddButton("remove foliage", function()
+Esptab33:AddButton("remove foliage", function()
     for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
         if v.ClassName == "MeshPart" and v:FindFirstChildOfClass("SurfaceAppearance") then
             v:Destroy()
@@ -4469,7 +4469,7 @@ end
 
 
 
-Esptab3:AddSlider('spiderSpeed', {
+Esptab33:AddSlider('spiderSpeed', {
     Text = 'Climb Speed',
     Default = 5, -- Initial default value for the slider
     Min = 1,
@@ -4498,7 +4498,7 @@ local function toggleThirdPerson(enable)
 end
 
 -- Add toggle to the UI
-Esptab3:AddToggle('Third Person', {
+Esptab33:AddToggle('Third Person', {
     Text = 'Third Person',
     Default = false,
 
@@ -4529,7 +4529,7 @@ Esptab3:AddToggle('Third Person', {
 })
 
 
-Esptab3:AddToggle('Server Info', {
+Esptab33:AddToggle('Server Info', {
     Text = 'Server Info',
     Default = true,
     Callback = function(value)
@@ -4549,7 +4549,7 @@ Esptab3:AddToggle('Server Info', {
 
 
 
-Esptab3:AddToggle('Menu Blur', {
+Esptab33:AddToggle('Menu Blur', {
     Text = 'Menu Blur',
     Default = true,
     Callback = function(value)
@@ -4611,7 +4611,7 @@ end)
 print("Script running...")
 
 -- UI flight toggle without using local variables
-Esptab3:AddToggle('flight3', {
+Esptab33:AddToggle('flight3', {
     Text = 'Flight',
     Default = false,
     Callback = function(state3)
