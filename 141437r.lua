@@ -566,7 +566,7 @@ loadmes = [[
 
                                      ============================
                                       [ Nexify Wave Loader ]
-                                      Version: v1.9
+                                      Version: OUTDATED
                                       Key: Paid
                                      ============================
 ]]
