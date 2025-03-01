@@ -2919,6 +2919,17 @@ local function applyZoom()
     Camera.FieldOfView = defaultFOV - (zoomValue * 10) -- Adjust FOV based on zoom value
 end
 
+
+
+Esptab33:AddToggle('removesd', {
+    Text = 'Blur Background',
+    Default = true,
+    Risky = false,
+    Callback = function(enabled)
+getgenv().Blursys = enabled
+    end;
+})
+
 Esptab33:AddSlider('jump', {
     Text = 'Jump Slider',
     Default = 3.2,
