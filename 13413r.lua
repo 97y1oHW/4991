@@ -1720,7 +1720,7 @@ local hwids = {
 
  versiontonechecked = 0.4
 
-if versiontonechecked == 0.256 then
+if versiontonechecked == 0.4 then
     Notification:Notify(
         {
             Title = "Nexify | SOLARA",
@@ -8508,144 +8508,145 @@ game:GetService("RunService").Stepped:Connect(function()
 end);
 
 
-
-camera = workspace.CurrentCamera
-player = game.Players.LocalPlayer
-userInputService = game:GetService("UserInputService")
-runService = game:GetService("RunService")
+local camera = workspace.CurrentCamera
+local player = game.Players.LocalPlayer
+local userInputService = game:GetService("UserInputService")
+local runService = game:GetService("RunService")
 
 local bulletSpeed = 1000
-aimEnabled = false
-botAimEnabled = false
+local aimEnabled = false
+ botAimEnabled = false
+ aiming = false -- Tracks if RMB is held
 
-targetpartsilentaim = "Head" -- Default target part
-randomTarget = false -- Flag for random targeting
+ targetpartsilentaim = "Head" -- Default target part
+ randomTarget = false -- Flag for random targeting
 
-lastAimedTime = 0
-aimUpdateInterval = 0.01
+ lastAimedTime = 0
+ aimUpdateInterval = 0.01
 
-function getRandomTargetPart()
+ function getRandomTargetPart()
     local parts = {"Head", "HumanoidRootPart"}
     return parts[math.random(#parts)]
-end;
+end
 
-function getClosestEnemyToCrosshair()
-    closestCharacter = nil
-    closestDistance = math.huge
-    crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+local function getClosestEnemyToCrosshair()
+    local closestCharacter = nil
+    local closestDistance = math.huge
+    local crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
     for _, otherPlayer in pairs(game.Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer.Character then
-            character = otherPlayer.Character
+            local character = otherPlayer.Character
             if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
                 local partToTarget = randomTarget and getRandomTargetPart() or targetpartsilentaim
-                targetPart = character:FindFirstChild(partToTarget)
+                local targetPart = character:FindFirstChild(partToTarget)
                 if targetPart then
-                    screenPoint, onScreen = camera:WorldToScreenPoint(targetPart.Position)
+                    local screenPoint, onScreen = camera:WorldToScreenPoint(targetPart.Position)
 
                     if onScreen then
-                        distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+                        local distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
                         if distanceFromCrosshair < closestDistance then
                             closestDistance = distanceFromCrosshair
                             closestCharacter = character
-                        end;
-                    end;
-                end;
-            end;
-        end;
-    end;
+                        end
+                    end
+                end
+            end
+        end
+    end
 
     return closestCharacter
-end;
+end
 
-function getClosestBotToCrosshair()
-    closestBot = nil
-    closestDistance = math.huge
-    crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+local function getClosestBotToCrosshair()
+    local closestBot = nil
+    local closestDistance = math.huge
+    local crosshairPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
 
-    for _, bot in pairs(workspace.Bots:GetChildren()) do -- Assuming bots are stored in "workspace.Bots"
+    for _, bot in pairs(workspace.Bots:GetChildren()) do
         if bot:FindFirstChild("Humanoid") and bot:FindFirstChild("HumanoidRootPart") and bot:FindFirstChild("Head") then
             local partToTarget = randomTarget and getRandomTargetPart() or targetpartsilentaim
-            targetPart = bot:FindFirstChild(partToTarget)
+            local targetPart = bot:FindFirstChild(partToTarget)
             if targetPart then
-                screenPoint, onScreen = camera:WorldToScreenPoint(targetPart.Position)
+                local screenPoint, onScreen = camera:WorldToScreenPoint(targetPart.Position)
 
                 if onScreen then
-                    distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
+                    local distanceFromCrosshair = (Vector2.new(screenPoint.X, screenPoint.Y) - crosshairPosition).Magnitude
                     if distanceFromCrosshair < closestDistance then
                         closestDistance = distanceFromCrosshair
                         closestBot = bot
-                    end;
-                end;
-            end;
-        end;
-    end;
+                    end
+                end
+            end
+        end
+    end
 
     return closestBot
-end;
+end
 
-function aimAtClosestEnemy()
-    if not aimEnabled then return end;
+local function aimAtClosestEnemy()
+    if not aimEnabled or not aiming then return end
 
-    currentTime = tick()
-    if currentTime - lastAimedTime < aimUpdateInterval then return end;
-
+    local currentTime = tick()
+    if currentTime - lastAimedTime < aimUpdateInterval then return
+    end
     lastAimedTime = currentTime
 
-    viewModel = camera:FindFirstChild("ViewModel")
-    if not viewModel then return end;
-
-    closestCharacter = getClosestEnemyToCrosshair()
-    closestBot = botAimEnabled and getClosestBotToCrosshair() or nil
+    local closestCharacter = getClosestEnemyToCrosshair()
+    local closestBot = botAimEnabled and getClosestBotToCrosshair() or nil
 
     local target = closestBot or closestCharacter
 
     if target then
-        -- Get target part (either random or chosen)
         local partToTarget = randomTarget and getRandomTargetPart() or targetpartsilentaim
         local targetPart = target:FindFirstChild(partToTarget)
 
         if targetPart then
-            gun = viewModel:FindFirstChild("AimPart")
-            arms = viewModel:FindFirstChild("Arms")
+            local aimPosition = targetPart.Position
+            local humanoidRootPart = target:FindFirstChild("HumanoidRootPart")
 
-            if gun then
-                aimPosition = targetPart.Position
-                humanoidRootPart = target:FindFirstChild("HumanoidRootPart")
+            if humanoidRootPart then
+                local velocity = humanoidRootPart.Velocity
+                local distance = (camera.CFrame.Position - targetPart.Position).Magnitude
+                local timeToImpact = distance / bulletSpeed
+                aimPosition = aimPosition + (velocity * timeToImpact) * 0.6
 
-                if humanoidRootPart then
-                    velocity = humanoidRootPart.Velocity
-                    distance = (camera.CFrame.Position - targetPart.Position).Magnitude
-                    timeToImpact = distance / bulletSpeed
-                    aimPosition = aimPosition + (velocity * timeToImpact) * 0.6
-                end;
+                -- Print the calculated predicted position
+                print("Predicted Position:", aimPosition)
 
-                rightOffset = Vector3.new(0.5, -0.3, -0.3)
-                gun.CFrame = CFrame.new(camera.CFrame.Position, aimPosition) * CFrame.new(rightOffset)
+                -- Aim at the calculated position
+                camera.CFrame = CFrame.new(camera.CFrame.Position, aimPosition)
+            end
+        end
+    end
+end
 
-                if arms then
-                    arms.CFrame = camera.CFrame * CFrame.new(0, -0.5, 0.3)
-                end;
-            end;
-        end;
-    end;
-end;
-
-
-function toggleAim()
+local function toggleAim()
     aimEnabled = not aimEnabled
-end;
+end
 
-function toggleBotAim()
+local function toggleBotAim()
     if aimEnabled then
         botAimEnabled = not botAimEnabled
     else
-        warn("please enable normal silent aim before enabling bot silent aim...")
-    end;
-end;
+        warn("Please enable normal silent aim before enabling bot silent aim...")
+    end
+end
+
+-- Detect when the right mouse button is pressed or released
+userInputService.InputBegan:Connect(function(input, gameProcessed)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 and workspace.Camera:FindFirstChild("ViewModel") then
+        aiming = true
+    end
+end)
+
+userInputService.InputEnded:Connect(function(input, gameProcessed)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        aiming = false
+    end
+end)
 
 runService.RenderStepped:Connect(aimAtClosestEnemy)
-
 
 
 aimtab:AddSlider('Silent Aim Interval', {
@@ -9297,6 +9298,19 @@ aimtab:AddToggle('trgierrbot', {
 --]]
 
 
+aimtab:AddDropdown('silentaimmoedee11', {
+    Values = { 'Method: Arm Move', 'Method: Mouse Move'},
+    Default = 2,
+    Multi = false,
+
+    Text = 'Silent aim aim Mode',
+    Tooltip = 'Selects silent aim aim mode',
+
+    Callback = function(Value)
+
+     
+    end;
+})
 
 
 aimtab:AddDropdown('Silentaimhitset2', {
@@ -16569,7 +16583,7 @@ end;
 getgenv().Scriptactivedf4=true
 
 
-local numberofhonor = math.random(1,4)
+local numberofhonor = math.random(1,9)
 print(numberofhonor)
 if numberofhonor == 3 then do
     print(numberofhonor)
