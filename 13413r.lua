@@ -1915,7 +1915,7 @@ print("If script ui not appears try spawning and waiting for 2 min")
 wait(1)
 warn("Started Check")
 print("Checking Executor......")
-wait(2)
+
 
         Notification:Notify(
             {Title = "Nexify | SOLARA", Description = "A-C"},
@@ -2282,18 +2282,18 @@ print(counter4)
 print(counter4)
 texrfj="return"
 print(texrfj)
-wait(0.9)
+
 warn("Disabled Client Anti-Cheat Bypass")
 
 
 print("esplib ok")
 print("1")
 local Library = loadstring(game:HttpGet(repo .. 'libbet.lua'))()
-print("1")
+
 local ThemeManager = loadstring(game:HttpGet(repo .. 'ThemeManager.lua'))()
-print("1")
+
 local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
-print("1")
+
 print('sucker_' .. tostring(counter))
 counter = counter + 1
 local Window = Library:CreateWindow({
