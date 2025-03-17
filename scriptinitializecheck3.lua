@@ -9,7 +9,7 @@ local player = Players.LocalPlayer
 -- Function to send a notification
 local function sendNotification(message)
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Doge Hub User Found!";
+        Title = "Nexify User Found!";
         Text = message;
         Duration = 5;
     })
@@ -80,19 +80,9 @@ end)
 if not success then
     print("Error loading external script: " .. err)
 end
-
+	Library:Notify("OPTIMIZATION LOADED")
 
 	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
+
 	Library:Notify("CHECK 1")
-	wait(0.6)
-	Library:Notify("Locked")
-	wait(1)
-	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
-	Library:Notify("Unlocked")
-	Library:Notify("CHECK 2")
-	wait(1)
-	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
-	Library:Notify("CHECK 3")
-	wait(1)
-	loadstring(game:HttpGet("https://pastebin.com/raw/bZEizLZt"))()
-	Library:Notify("Check 100%")
+	Library:Notify("Check End")
