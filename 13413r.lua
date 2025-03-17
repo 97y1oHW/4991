@@ -8884,6 +8884,26 @@ print("ignore theme settings")
 
 
 
+aimtab:AddToggle('Instant Equip', {
+    Text =    'Instant Equip',
+                                       Default = false,
+              Callback           =                                               function(isEnabled)
+
+                                                     workspace.Camera.ChildAdded:Connect(function(ch)
+     if               ch:IsA("Model")                                                                             then
+                      task.wait(0.015)
+                      for  i,v       in                     ch.Humanoid.Animator:GetPlayingAnimationTracks() do
+             if v.Animation.Name == "Equip"                             then             --v:AdjustSpeed(15)
+                                    v.TimePosition = v.Length - 0.01
+                     end
+        end
+                                          end
+                    end)
+
+    end;
+                                                                                                                                          }               )
+ 
+
 aimtab:AddToggle('silentAim994', {
     Text = 'Silent Aim',
     Default = false,
