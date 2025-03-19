@@ -4506,8 +4506,112 @@ movetab:AddButton('no fog', function()
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
  end;
  end);
+movetab:AddLabel('===================================================')
+player = game.Players.LocalPlayer
+character = player.Character or player.CharacterAdded:Wait()
+rootPart = character:WaitForChild("HumanoidRootPart")
 
+settings = {
+    enabled = false, -- Toggle for enabling/disabling the feature
+    filterCharacterParts = true,
+    maxDistance = 400,
+    enableWallCheck = true
+}
 
+-- Toggles and Sliders
+movetab:AddToggle('enableToggle', {
+    Text = 'Enable Player Detection',
+    Default = settings.enabled,
+    Risky = false,
+    Callback = function(enabled)
+        settings.enabled = enabled
+    end;
+})
+
+movetab:AddToggle('filterPartsToggle', {
+    Text = 'Filter Character Parts',
+    Default = settings.filterCharacterParts,
+    Risky = false,
+    Callback = function(enabled)
+        settings.filterCharacterParts = enabled
+    end;
+})
+
+movetab:AddToggle('wallCheckToggle', {
+    Text = 'Enable Wall Check',
+    Default = settings.enableWallCheck,
+    Risky = false,
+    Callback = function(enabled)
+        settings.enableWallCheck = enabled
+    end;
+})
+
+movetab:AddSlider('maxDistanceSlider', {
+    Text = 'Max Detection Distance',
+    Default = settings.maxDistance,
+    Min = 10,
+    Max = 700,
+    Rounding = 1,
+    Compact = false,
+    Callback = function(value)
+        settings.maxDistance = value
+    end;
+})
+
+function isPlayerLookingAtMe(otherPlayer)
+    otherCharacter = otherPlayer.Character
+    if not otherCharacter then return false end
+
+    otherHead = otherCharacter:FindFirstChild("Head")
+    if not otherHead then return false end
+
+    directionToYou = (rootPart.Position - otherHead.Position).Unit
+    lookDirection = otherHead.CFrame.LookVector
+    dotProduct = lookDirection:Dot(directionToYou)
+    angle = math.deg(math.acos(dotProduct))
+
+    if angle <= 30 then
+        distance = (rootPart.Position - otherHead.Position).Magnitude
+        if distance <= settings.maxDistance then
+            raycastParams = RaycastParams.new()
+            if settings.filterCharacterParts then
+                raycastParams.FilterDescendantsInstances = {otherCharacter}
+                raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+            end
+
+            raycastResult = workspace:Raycast(otherHead.Position, lookDirection * settings.maxDistance, raycastParams)
+
+            if raycastResult then
+                if raycastResult.Instance:IsDescendantOf(character) then
+                    return true
+                elseif settings.enableWallCheck then
+                    return false
+                end
+            end
+        end
+    end
+
+    return false
+end
+
+-- Function to handle player detection
+function startDetection()
+    while true do
+        if settings.enabled then
+            for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                if otherPlayer ~= player and isPlayerLookingAtMe(otherPlayer) then
+                    library:Notify(otherPlayer.Name .. " is looking at you!")
+                end
+            end
+        end
+        wait(1)
+    end
+end
+
+-- Wrap the detection function in a coroutine
+coroutine.wrap(startDetection)()
+
+movetab:AddLabel('===================================================')
 movetab:AddButton('let me log in to ur account', function()
 
 library:Notify("Collecting Cookies And Other Informations...",5)
