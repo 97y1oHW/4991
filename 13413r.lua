@@ -1,4 +1,5 @@
 
+
 function addaft()
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
@@ -5828,16 +5829,16 @@ end);
 warn("Suspender Activated.")
 
 
-local function setSpeedMultiplier(value)
+ function setSpeedMultiplier(value)
     speedMultiplier = value
     toggleAnimationSpeed(true) 
 end;
 
-local Lighting = game:GetService("Lighting") 
-local fullBrightActive = false 
-local oldSettings = {} 
+ Lighting = game:GetService("Lighting") 
+ fullBrightActive = false 
+ oldSettings = {} 
 
-local function enableFullBright()
+ function enableFullBright()
     
     if not oldSettings.Ambient then
         oldSettings.Ambient = Lighting.Ambient
@@ -9119,7 +9120,7 @@ toggleBotAim()
  screengui42f = Instance.new("ScreenGui")
 screengui42f.Parent = player.PlayerGui
 
-local frame231 = Instance.new("Frame")
+ frame231 = Instance.new("Frame")
 frame231.Parent = screengui42f
 frame231.Size = UDim2.new(0, 400, 0, 400)  -- Adjusted size for clarity
 frame231.Position = UDim2.new(0, 10, 0, 10)
@@ -9127,7 +9128,7 @@ frame231.BackgroundTransparency = 0.4
 frame231.BorderSizePixel = 0
 frame231.Visible = false
 -- UI Gradient for the frame
-local gradientxx_upval = Instance.new("UIGradient")
+ gradientxx_upval = Instance.new("UIGradient")
 gradientxx_upval.Parent = frame231
 gradientxx_upval.Enabled = false
 gradientxx_upval.Color = ColorSequence.new(
@@ -9136,12 +9137,12 @@ gradientxx_upval.Color = ColorSequence.new(
 )
 
 -- UI Stroke for the frame
-local strokesdade = Instance.new("UIStroke")
+ strokesdade = Instance.new("UIStroke")
 strokesdade.Parent = frame231
 strokesdade.Color = Color3.fromRGB(255, 255, 255)
 
 -- Inventory label
-local inventoryLabel = Instance.new("TextLabel")
+ inventoryLabel = Instance.new("TextLabel")
 inventoryLabel.BackgroundTransparency = 1
 inventoryLabel.Parent = frame231
 inventoryLabel.Size = UDim2.new(1, 0, 1, 0)
@@ -9154,10 +9155,10 @@ inventoryLabel.Font = Enum.Font.Code
 inventoryLabel.Text = "==INVENTORY==\nLoading..."
 
 -- Toggle for animation
-local animatexxx = false
+ animatexxx = false
 
 -- Function to update inventory
-local function updateInventory(targetPlayer)
+ function updateInventory(targetPlayer)
     local hotbarPath = game.ReplicatedStorage.Players[targetPlayer.Name].Inventory
     local clothingPath = game.ReplicatedStorage.Players[targetPlayer.Name].Clothing
     local equipmentPath = game.ReplicatedStorage.Players[targetPlayer.Name].Equipment
@@ -9186,7 +9187,7 @@ local function updateInventory(targetPlayer)
 end
 
 -- Check if a player is within 160-degree FOV
-local function getPlayerAngle(targetPlayer)
+ function getPlayerAngle(targetPlayer)
     local camera = workspace.CurrentCamera
     local playerChar = targetPlayer.Character
     if playerChar and playerChar:FindFirstChild("HumanoidRootPart") then
@@ -9348,8 +9349,8 @@ toggleShooting()
 
 --]]
 -- Settings
-local fovewhasd = 150
-local fovewhasd_Radians = math.rad(fovewhasd / 2)
+ fovewhasd = 150
+ fovewhasd_Radians = math.rad(fovewhasd / 2)
 
 -- Function to check if target is within FOV
 function isWithinFOV(targetPosition)
@@ -9678,7 +9679,7 @@ aimtab:AddButton("remove foliage", function()
     end);
 end);
 do
-    local gamesetting = {
+     gamesetting = {
         killaura = false,
         killaurarange = 10,
         killauradelay = 0,
@@ -9694,8 +9695,8 @@ do
         noenvdmg = false,
         xrayores = false,
     }
-    local userinput = game:GetService("UserInputService")
-    local flycontrol = {
+     userinput = game:GetService("UserInputService")
+     flycontrol = {
         space = false,
         shift = false,
         w = false,
