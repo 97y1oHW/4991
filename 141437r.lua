@@ -1,5 +1,4 @@
 
-return
 
 --ibet opti bimbambu
 
@@ -3002,13 +3001,13 @@ Esptab33:AddSlider('Reloadtheresold', {
 
 
 
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
+ UserInputService = game:GetService("UserInputService")
+ RunService = game:GetService("RunService")
 
-local zoomValue = 0
-local defaultFOV = Camera.FieldOfView
-local zoomKey = Enum.KeyCode.Z
-local isZoomed = false
+ zoomValue = 0
+ defaultFOV = Camera.FieldOfView
+ zoomKey = Enum.KeyCode.Z
+ isZoomed = false
 
  function applyZoom()
     Camera.FieldOfView = defaultFOV - (zoomValue * 10)
@@ -3048,7 +3047,7 @@ Esptab33:AddLabel('Zoom Bind'):AddKeyPicker('ZoomKeyPicker', {
 })
 
 -- Function to handle key press
-local function onKeyPress(input, gameProcessed)
+ function onKeyPress(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
         isZoomed = not isZoomed -- Toggle zoom state
@@ -3071,16 +3070,16 @@ UserInputService.InputBegan:Connect(onKeyPress)
 
         local player = game.Players.LocalPlayer
 -- Path to the ReplicatedStorage and Player's inventory
-local replicatedStorage = game:GetService("ReplicatedStorage")
+ replicatedStorage = game:GetService("ReplicatedStorage")
 
-local playerInventoryPath = replicatedStorage.Players:WaitForChild(player.Name, 5) -- 10 saniye bekler
+ playerInventoryPath = replicatedStorage.Players:WaitForChild(player.Name, 5) -- 10 saniye bekler
 
 -- Table to keep track of processed items
-local processedItems = {}
-local inventoryChecking = false -- Başlangıçta kontrol işlemi durdurulmuş durumda
+ processedItems = {}
+ inventoryChecking = false -- Başlangıçta kontrol işlemi durdurulmuş durumda
 
 -- Function to unlock and change fire modes for a specific weapon
-local function unlockFireModes(weapon)
+ function unlockFireModes(weapon)
     local settingsModule = weapon:FindFirstChild("SettingsModule")
     if settingsModule then
         local weaponSettings = require(settingsModule)
@@ -3097,7 +3096,7 @@ local function unlockFireModes(weapon)
 end
 
 -- Function to check the inventory and unlock fire modes for new items
-local function checkInventoryForNewItems()
+ function checkInventoryForNewItems()
     if playerInventoryPath and playerInventoryPath:FindFirstChild("Inventory") then
         local inventory = playerInventoryPath:WaitForChild("Inventory", 10)
         
@@ -5209,18 +5208,18 @@ LeftGroupBox:AddDropdown('cameradropdown', {
 
 -- Services
 -- Services
-local workspace = game:GetService("Workspace")
+ workspace = game:GetService("Workspace")
 
 
 -- ESP toggle
-local espEnabled = false
-local espObjects = {}
+ espEnabled = false
+ espObjects = {}
 
 -- Custom distance factor for game (set according to game specifics)
-local customFactor = 0.23 -- Modify this according to your game's specific scale
+ customFactor = 0.23 -- Modify this according to your game's specific scale
 
 -- Function to create a 2D box
-local function create2DBox()
+ function create2DBox()
     local box = {}
     box.topLeft = Drawing.new("Line")
     box.topRight = Drawing.new("Line")
@@ -5238,7 +5237,7 @@ local function create2DBox()
 end
 
 -- Function to update 2D box positions
-local function update2DBox(box, character)
+ function update2DBox(box, character)
     local rootPart = character:FindFirstChild("HumanoidRootPart")
     if not rootPart then return end
     
@@ -5285,14 +5284,14 @@ local function update2DBox(box, character)
 end
 
 -- Function to remove 2D box
-local function remove2DBox(box)
+ function remove2DBox(box)
     for _, line in pairs(box) do
         line:Remove()
     end
 end
 
 -- Function to create or update ESP for a player
-local function createOrUpdateESP(player)
+ function createOrUpdateESP(player)
     local character = player.Character
     if not character or not character:FindFirstChild("HumanoidRootPart") then return end
 
@@ -5382,7 +5381,7 @@ local function removeESP(player)
 end
 
 -- Function to check for nearby players every 0.1 seconds
-local function checkNearbyPlayers()
+ function checkNearbyPlayers()
     while espEnabled do
         local localCharacter = localPlayer.Character
         if localCharacter and localCharacter:FindFirstChild("HumanoidRootPart") then
@@ -5407,7 +5406,7 @@ local function checkNearbyPlayers()
 end
 
 -- Function to toggle ESP
-local function toggleESP()
+ function toggleESP()
     espEnabled = not espEnabled
     if espEnabled then
         coroutine.wrap(checkNearbyPlayers)()
@@ -5431,8 +5430,8 @@ players.PlayerAdded:Connect(function(player)
     end)
 end)
 
-local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
-local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+ NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+ Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 skidespLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/skid.lua'), true))()
 espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/esplib3.lua'), true))()
 corpseesplib3 = loadstring(game:HttpGet(('https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/corpseesplib.lua'), true))()
@@ -5638,13 +5637,13 @@ eaesptabactual:AddSlider('distancelimit', {
 eaesptabactual:AddLabel("Nexify\n#1 Project Delta Script\nLast Updated: 28.12.2024\nVersion: V2.3 (Build 2312)\nUID: Buyer\n\nLibrary Version: Linoria Modded By Nexify V1.2\nRuntime Environment: Lua VM 5.1 (Optimized)\nEncryption: AES-256 + Luraph Obfuscation\nDetection Status: Undetected\nScript Ready!\nGame ID: 7336302630\n\n--- Performance Metrics ---\nCompatibility: Direct Game\nChecksum: 6F2D3B9A1C\nBootstrapping Time: <2.55ms\nExecutor: Wave\nExecution Time (Avg): <0.5ms\n--- Security Details ---\nAnticheat Bypass: Semi Bypassed A-C\nDebugging Protections: Enabled\nExploit Protections: High\nTelemetry Blocking: Active\n\n--- User Environment ---\nExecutor Version: Wave\nCustom Themes: Supported\n\n--- Additional Info ---\nSupport Contact: .crazyniga (Discord)\nLicense Type: Buyer / Standart", true)
 
 
-local character = player.Character or player.CharacterAdded:Wait()
+ character = player.Character or player.CharacterAdded:Wait()
 
-local antiAimActive = false -- Toggle durumu
-local spinspeed = 0.1 -- Varsayılan döngü süresi
+ antiAimActive = false -- Toggle durumu
+ spinspeed = 0.1 -- Varsayılan döngü süresi
 
 -- Anti Aim Fonksiyonu
-local function AntiAim()
+ function AntiAim()
     while true do
         wait(spinspeed) -- Döngü için bekleme süresi 
         if antiAimActive and character and character:FindFirstChild("HumanoidRootPart") then
@@ -5655,7 +5654,7 @@ local function AntiAim()
 end
 
 -- Toggle Fonksiyonu
-local function ToggleAntiAim()
+ function ToggleAntiAim()
     antiAimActive = not antiAimActive
     if antiAimActive then
         print("Anti Aim Aktif")
@@ -5704,7 +5703,7 @@ antiaimtab:AddLabel('Fastest One Is 0.01', true)
 
 
 -- Function to check and display weapon names
-local function checkAndDisplayWeaponNames()
+ function checkAndDisplayWeaponNames()
     local rangedWeapons = replicatedStorage:FindFirstChild("RangedWeapons")
     if not rangedWeapons then return end
 
@@ -5796,11 +5795,11 @@ LeftGroupBox:AddToggle('debugPrint', {
 Library:SetWatermarkVisibility(true)
 
 -- Example of dynamically-updating watermark with common traits (fps and ping)
-local FrameTimer = tick()
-local FrameCounter = 0;
-local FPS = 60;
+ FrameTimer = tick()
+ FrameCounter = 0;
+ FPS = 60;
 
-local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+ WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
     FrameCounter += 1;
 
     if (tick() - FrameTimer) >= 1 then
@@ -5829,7 +5828,7 @@ Library:OnUnload(function()
 end)
 
 -- UI Settings
-local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
+ MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 
 -- I set NoUI so it does not show up in the keybinds menu
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
