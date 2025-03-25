@@ -4507,6 +4507,18 @@ movetab:AddButton('no fog', function()
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
  end;
  end);
+
+movetab:AddButton('Revive Boss', function()
+local boss = workspace.Boss
+        boss:SetAttribute("Hidden", false)
+        for _,v in boss:GetDescendants() do
+            if v:IsA("BasePart") and v:GetAttribute("OriginalTransparency") then
+                v.Transparency = v:GetAttribute("OriginalTransparency")
+            end
+        end
+	
+ end);
+
 movetab:AddLabel('===================================================')
 player = game.Players.LocalPlayer
 character = player.Character or player.CharacterAdded:Wait()
