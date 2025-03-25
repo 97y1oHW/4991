@@ -4416,6 +4416,17 @@ Esptab33:AddButton('no fog', function()
  end
  end)
 
+Esptab33:AddButton('Revive Boss', function()
+local boss = workspace.Boss
+        boss:SetAttribute("Hidden", false)
+        for _,v in boss:GetDescendants() do
+            if v:IsA("BasePart") and v:GetAttribute("OriginalTransparency") then
+                v.Transparency = v:GetAttribute("OriginalTransparency")
+            end
+        end
+	
+ end);
+
 Esptab33:AddButton("remove foliage", function()
     for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
         if v.ClassName == "MeshPart" and v:FindFirstChildOfClass("SurfaceAppearance") then
