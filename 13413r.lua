@@ -5102,6 +5102,29 @@ setfpscap(9000000)
     end
     end;
 })
+		
+		math.randomseed(os.time())
+
+ function generateSerialID(length)
+    local chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    local serial = ''
+    for i = 1, length do
+        local randIndex = math.random(2, #chars)
+        serial = serial .. chars:sub(randIndex, randIndex)
+    end
+    return serial
+end
+
+ function generateUniqueSerialID()
+    local timestamp = os.time()
+    local randomPart = generateSerialID(12)
+    return string.format('%X-%s', timestamp, randomPart)
+end
+
+
+
+
+luatab:AddLabel('SERIAL ID: ' ..generateUniqueSerialID)
 
 luatab1:AddDropdown(' not type', {
     Values = {'Advancaded', 'Linoria', 'Legacy'},
