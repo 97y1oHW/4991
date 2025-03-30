@@ -9083,25 +9083,58 @@ toggleAim()
     end,
 })
 
+-- Initial keybind setup
+-- Initial keybind setup
+local Keybind = Enum.KeyCode.X
 
+Players = game:GetService("Players")
+Workspace = game:GetService("Workspace")
+UserInputService = game:GetService("UserInputService")
+Player = Players.LocalPlayer
+
+Velocity = 2500
+Delay = 0.05
+Offset = 20
+Resolving = false
+
+-- A function to handle the key press
+local function onKeyPress(Input, Processed)
+    if not Processed and not Resolving then
+        -- Check if the pressed key matches the current keybind
+        if Input.KeyCode == Keybind then
+            Resolving = true
+            if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+                local Character = Player.Character
+                local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+                local Cached = HumanoidRootPart.CFrame
+
+                HumanoidRootPart.Velocity = Vector3.new(0, -Velocity, 0)
+                wait(Delay)
+                HumanoidRootPart.Anchored = true
+                HumanoidRootPart.CFrame = Cached + Vector3.new(0, -Offset, 0)
+                wait(Delay * 10)
+                HumanoidRootPart.Anchored = false
+            end
+            Resolving = false
+        end
+    end
+end
+
+-- Attach the InputBegan listener initially
+UserInputService.InputBegan:Connect(onKeyPress)
+
+-- When the keybind is changed, update the keybind variable
 aimtab:AddToggle('silentAim993', {
     Text = 'Underground Resolver',
     Default = false,
     Risky = true,
     Callback = function(Value)
---toggleundergroundresolver()
-
-library:Notify("Disabled")
+        -- Placeholder for callback (if needed)
     end;
-}):AddKeyPicker('silentAimBind994', {
-    Default = 'None',
-    SyncToggleState = true,
-    Mode = 'Toggle',
-    Text = 'Underground Resolver',
-    NoUI = false,
-    Callback = function(Value)
-    end,
 })
+
+aimtab:AddLabel('Underground Resolver Keybind: "X" ')
+
 
 --[[
 aimtab:AddToggle('silentAim994', {
