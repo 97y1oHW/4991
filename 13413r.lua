@@ -5124,7 +5124,8 @@ end
 
 
 
-luatab:AddLabel('SERIAL ID: ' ..generateUniqueSerialID)
+luatab:AddLabel('SERIAL ID: ' .. generateUniqueSerialID())  -- Add parentheses to call the function
+
 
 luatab1:AddDropdown(' not type', {
     Values = {'Advancaded', 'Linoria', 'Legacy'},
@@ -10440,10 +10441,10 @@ end)
 
 
 -- Toggle for enabling/disabling underground desync
-charactertab:AddToggle('underground', {
-    Text = 'Desync',
+charactertab:AddToggle('undergroundxxxx', {
+    Text = 'Position Spoofer',
     Default = false,
-    Tooltip = '/  desync',
+    Tooltip = '/  desync \\ -- ',
     Callback = function(isEnabled)
         toggleDesync(isEnabled)  -- Enable/disable desync
         desyncPos = isEnabled  -- Enable/disable position offset (underground)
@@ -10452,7 +10453,7 @@ charactertab:AddToggle('underground', {
 
 -- Slider for controlling the underground Y position offset
 charactertab:AddSlider('underyoffset', {
-    Text = 'Underground Y Offset',
+    Text = 'Position Spoofer Y Offset',
     Default = 0,  -- Default value to move underground
     Min = -2,     -- Minimum value (you can go deeper)
     Max = 4,       -- Maximum value (shallow underground)
