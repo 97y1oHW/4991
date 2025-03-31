@@ -17263,6 +17263,8 @@ UIGradient_5.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fr
 UIGradient_5.Parent = TextButton
 
 -- Scripts:
+ScreenGui:Destroy()
+addaft()
 
  function ZDRDQF_fake_script() -- TextLabel.Script 
 	local script = Instance.new('Script', TextLabel)
