@@ -210,9 +210,9 @@ warn("video downloaded )5(")
 print(asciiart)
 
 
-
-local selectedfile = math.random(1,3)
-if selectedfile == 1 then
+--[[
+local selectedfile = math.random(1,2)
+if selectedfile ==  1 then
 task.spawn(function()
     -- Check if the file exists, and download if it does not
     if not isfile("lockedin.webm") then
@@ -284,7 +284,42 @@ task.spawn(function()
     end);
 end);
 end
+]]
 
+task.spawn(function()
+    -- Check if the file exists, and download if it does not
+    if not isfile("lockedin.webm") then
+        local fileContent = game:HttpGet("https://www.dropbox.com/scl/fi/n1v2guahh3alz361rsvx2/LOCKED-IN-ALIEN-MEME-_TIKTOK-MEME_.webm?rlkey=emmwnqvqnmq8svpuqvzdcq4hf&st=7xsnu0ir&dl=1")
+        writefile("lockedin.webm", fileContent)
+    end;
+
+    -- Check if getcustomasset exists
+    if not getcustomasset then return end;
+
+    local hold = game.CoreGui.RobloxGui
+    hold.IgnoreGuiInset = true
+    
+    -- Create the video frame
+    local new = Instance.new("VideoFrame", hold)
+    new.Visible = false
+    new.Looped = false
+    new.Video = getcustomasset("lockedin.webm")
+    new.Volume = math.huge
+    new.Size = UDim2.new(1, 0, 1, 0)
+    new.ZIndex = math.huge
+    
+    -- Wait for the video to load
+    repeat wait() until new.IsLoaded
+    new.Visible = true
+    
+    -- Play the video
+    new:Play()
+    
+    -- Handle the end; of the video
+    new.Ended:Connect(function()
+        new:Destroy()
+    end);
+end);
 
 
 
@@ -16988,9 +17023,9 @@ wait(1) do
         library:Notify("Connection Failed 🔴",10)
         wait(0.1)
         do
-            library:Notify("Destryoing Gui After This Message",5)
+            library:Notify("Destryoing Gui After This Message",2)
             end;
-	wait(5)
+	wait(2)
 ScreenGui:Destroy()
         
 	end;
