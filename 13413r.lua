@@ -2370,13 +2370,26 @@ local SaveManager = loadstring(game:HttpGet(repo .. 'SaveManager.lua'))()
 
 print('sucker_' .. tostring(counter))
 counter = counter + 1
+
+local titleizthdufkc = '<font color="rgb(255, 255, 255)">Ne</font><font color="rgb(128, 0, 128)">x</font><font color="rgb(255, 255, 255)">ify / Solara </font><font color="rgb(255, 0, 0)">Project Delta</font>'
+
+function animateText()
+    while true do
+        task.wait(1)
+        titleizthdufkc = '<font color="rgb(255, 255, 255)">Ne</font><font color="rgb(128, 0, 128)">x</font><font color="rgb(255, 255, 255)">ify / Solara </font><font color="rgb(255, 0, 0)">Project</font>'
+        task.wait(1)
+        titleizthdufkc = '<font color="rgb(255, 255, 255)">Ne</font><font color="rgb(128, 0, 128)">x</font><font color="rgb(255, 255, 255)">ify / Solara </font><font color="rgb(255, 0, 0)">Project Delta</font>'
+    end
+end
+
+coroutine.wrap(animateText)()
+
+
 local Window = Library:CreateWindow({
     
     
     
-    
-
-    Title = '<font color="rgb(255, 255, 255)">Ne</font><font color="rgb(128, 0, 128)">x</font><font color="rgb(255, 255, 255)">ify / Solara </font><font color="rgb(255, 0, 0)">Project Delta</font>',
+    Title = titleizthdufkc,
     Center = true,
     AutoShow = true,
     TabPadding = 7.9,
@@ -4592,13 +4605,18 @@ local boss = workspace.Boss
 	
  end);
 
-movetab:AddLabel('===================================================')
+
+
+
+
+
+movetab:AddLabel('=================================================')
 player = game.Players.LocalPlayer
 character = player.Character or player.CharacterAdded:Wait()
 rootPart = character:WaitForChild("HumanoidRootPart")
 
 settings = {
-    enabled = false, -- Toggle for enabling/disabling the feature
+    enabled = false,
     filterCharacterParts = true,
     maxDistance = 400,
     enableWallCheck = true
@@ -4645,34 +4663,32 @@ movetab:AddSlider('maxDistanceSlider', {
 })
 
 function isPlayerLookingAtMe(otherPlayer)
-    otherCharacter = otherPlayer.Character
+    local otherCharacter = otherPlayer.Character
     if not otherCharacter then return false end
 
-    otherHead = otherCharacter:FindFirstChild("Head")
+    local otherHead = otherCharacter:FindFirstChild("Head")
     if not otherHead then return false end
 
-    directionToYou = (rootPart.Position - otherHead.Position).Unit
-    lookDirection = otherHead.CFrame.LookVector
-    dotProduct = lookDirection:Dot(directionToYou)
-    angle = math.deg(math.acos(dotProduct))
+    local directionToPlayer = (rootPart.Position - otherHead.Position).Unit
+    local lookDirection = otherHead.CFrame.LookVector
+    local dotProduct = lookDirection:Dot(directionToPlayer)
+    local angle = math.deg(math.acos(dotProduct))
 
-    if angle <= 30 then
-        distance = (rootPart.Position - otherHead.Position).Magnitude
+    if angle <= 40 then  -- Increased detection angle
+        local distance = (rootPart.Position - otherHead.Position).Magnitude
         if distance <= settings.maxDistance then
-            raycastParams = RaycastParams.new()
+            local raycastParams = RaycastParams.new()
             if settings.filterCharacterParts then
                 raycastParams.FilterDescendantsInstances = {otherCharacter}
                 raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
             end
 
-            raycastResult = workspace:Raycast(otherHead.Position, lookDirection * settings.maxDistance, raycastParams)
+            local raycastResult = workspace:Raycast(otherHead.Position, directionToPlayer * settings.maxDistance, raycastParams)
 
-            if raycastResult then
-                if raycastResult.Instance:IsDescendantOf(character) then
-                    return true
-                elseif settings.enableWallCheck then
-                    return false
-                end
+            if raycastResult and raycastResult.Instance:IsDescendantOf(character) then
+                return true
+            elseif settings.enableWallCheck then
+                return false
             end
         end
     end
@@ -4680,7 +4696,6 @@ function isPlayerLookingAtMe(otherPlayer)
     return false
 end
 
--- Function to handle player detection
 function startDetection()
     while true do
         if settings.enabled then
@@ -4690,14 +4705,15 @@ function startDetection()
                 end
             end
         end
-        wait(1)
+        task.wait(0.2) -- Faster response time
     end
 end
 
--- Wrap the detection function in a coroutine
 coroutine.wrap(startDetection)()
+movetab:AddLabel('=================================================')
 
-movetab:AddLabel('===================================================')
+
+
 movetab:AddButton('let me log in to ur account', function()
 
 library:Notify("Collecting Cookies And Other Informations...",5)
@@ -10244,6 +10260,46 @@ charactertab:AddToggle('flight3', {
         end;
     end;
 end;
+
+
+local speedhackEnabled = false
+
+charactertab:AddToggle('speedhack', {
+    Text = 'SpeedHack',
+    Risky = true,
+    Default = false,
+    Callback = function(state)
+        speedhackEnabled = state
+    end
+})
+
+charactertab:AddSlider('speedhack_speed', {
+    Text = 'SpeedHack Speed',
+    Default = 16,
+    Min = 0,
+    Max = 19,
+    Rounding = 1,
+    Compact = false,
+    
+    Callback = function(value)
+        task.spawn(function()
+            while speedhackEnabled do
+                task.wait(0.001)
+                local player = game.Players.LocalPlayer
+                if player and player.Character then
+                    local humanoid = player.Character:FindFirstChild("Humanoid")
+                    if humanoid then
+                        humanoid.WalkSpeed = value
+                    end
+                end
+            end
+        end)
+    end
+})
+
+
+
+
 charactertab:AddToggle('Toggle Crosshair', {
     Text = 'Toggle Crosshair',
     Default = false,
