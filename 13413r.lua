@@ -1,4 +1,4 @@
-
+error("Argument #1 Missing To: Garland99Level.")
 
 function addaft()
 if not LPH_OBFUSCATED then
