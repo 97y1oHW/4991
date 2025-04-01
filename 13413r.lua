@@ -4595,13 +4595,36 @@ movetab:AddButton('no fog', function()
  end);
 
 movetab:AddButton('Revive Boss', function()
-local boss = workspace.Boss
-        boss:SetAttribute("Hidden", false)
-        for _,v in boss:GetDescendants() do
-            if v:IsA("BasePart") and v:GetAttribute("OriginalTransparency") then
-                v.Transparency = v:GetAttribute("OriginalTransparency")
-            end
-        end
+
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local ReplicatedPlayer = ReplicatedStorage.Players:FindFirstChild(Players.LocalPlayer.Name)
+
+if ReplicatedPlayer then
+    local Boss = ReplicatedPlayer.Status.Journey.Quests:FindFirstChild("BossFirst")
+
+    if not Boss then
+        local NewBoss = Instance.new("Folder")
+        NewBoss.Parent = ReplicatedPlayer.Status.Journey
+        NewBoss.Name = "BossFirst"
+        NewBoss:SetAttribute("State", "Complete")
+
+        local NewFetch1 = NewBoss:Clone()
+        NewFetch1.Name = "Fetch1"
+        NewFetch1.Parent = NewBoss
+        NewFetch1:SetAttribute("State", nil)
+        NewFetch1:SetAttribute("Carrying", false)
+        NewFetch1:SetAttribute("Complete", false)
+        NewFetch1:SetAttribute("Survive", true)
+        NewFetch1:SetAttribute("Type", "Fetch")
+
+        NewBoss.Parent = ReplicatedPlayer.Status.Journey.Quests
+    else
+        Boss:SetAttribute("State", "Complete")
+    end
+end
 	
  end);
 
@@ -8887,11 +8910,15 @@ wait(0.6)
 Library:SetWatermarkVisibility(true)
 library:Notify("Failed To Bypass Client Anti-Cheat",4)
 
- FrameTimer = tick()
- FrameCounter = 0;
- FPS = 60;
+FrameTimer = tick()
+FrameCounter = 0;
+FPS = 60;
 
- WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
+ Players = game:GetService("Players")
+ LocalPlayer = Players.LocalPlayer
+local PlaceId = game.PlaceId
+
+WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
     FrameCounter += 1;
 
     if (tick() - FrameTimer) >= 1 then
@@ -8900,12 +8927,15 @@ library:Notify("Failed To Bypass Client Anti-Cheat",4)
         FrameCounter = 0;
     end;
 
-Library:SetWatermark(('Nexify /\ Solara | %s fps | %s ms | %s | %s'):format(
-    math.floor(FPS),
-    math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
-    os.date("%H:%M:%S"),   
-    os.date("%Y-%m-%d")   
-));
+    Library:SetWatermark(('Nexify /\ Solara | %s fps | %s ms | %s | %s | %s | ID: %s | Place ID: %s'):format(
+        math.floor(FPS),
+        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
+        os.date("%H:%M:%S"),   
+        os.date("%Y-%m-%d"),  
+        LocalPlayer.Name,
+        LocalPlayer.UserId,
+        PlaceId
+    ));
 end);
 
 
