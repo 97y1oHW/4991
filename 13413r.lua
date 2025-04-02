@@ -316,7 +316,7 @@ task.spawn(function()
     new:Play()
     
     -- Handle the end; of the video
-    wait(8)
+    wait(10)
         new:Destroy()
 end);
 
