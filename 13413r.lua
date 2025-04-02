@@ -205,6 +205,21 @@ NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFF
 
 warn("video downloaded )5(")
 
+ serverStatus = game:GetService("ReplicatedStorage"):FindFirstChild("ServerStatus")
+
+if serverStatus then
+     currentVersion = serverStatus:GetAttribute("Version")
+    
+    if currentVersion then
+        local newVersion = tostring(currentVersion) .. "  ✅INJECTED NEXIFY"
+        serverStatus:SetAttribute("Version", newVersion)
+        print("Updated Version Attribute: " .. newVersion)
+    else
+        warn("ServerStatus does not have a Version attribute.")
+    end
+else
+    warn("ServerStatus not found in ReplicatedStorage.")
+end
 
 
 print(asciiart)
