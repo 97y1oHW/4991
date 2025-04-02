@@ -1,7 +1,6 @@
 game.Players.LocalPlayer:Kick("TAMPERING DETECTED")
 wait(1.3)
 while true do end
-
 function addaft()
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
@@ -4587,6 +4586,144 @@ movetab:AddButton('Saved Moderators', function()
 
     library:Notify("Current Moderators: \n" .. moderatorsList)
 end);
+
+ PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+ function createModDetectorGUI(enabled)
+    -- Check if the UI exists and remove it if it's disabled
+    local modDetector = PlayerGui:FindFirstChild("moddetector")
+    
+    if enabled then
+        if modDetector then
+            return -- If the GUI already exists, do nothing
+        end
+
+        -- GUI Setup
+        local ScreenGui = Instance.new("ScreenGui")
+        ScreenGui.Name = "moddetector"
+        ScreenGui.Parent = PlayerGui
+        ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+        local Frame = Instance.new("Frame")
+        Frame.Parent = ScreenGui
+        Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Frame.Position = UDim2.new(0.005, 0, 0.276, 0)
+        Frame.Size = UDim2.new(0, 256, 0, 302)
+
+        local UIGradient = Instance.new("UIGradient")
+        UIGradient.Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), 
+            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(31, 31, 31))
+        }
+        UIGradient.Parent = Frame
+
+        local UICorner = Instance.new("UICorner")
+        UICorner.Parent = Frame
+
+        local TitleLabel = Instance.new("TextLabel")
+        TitleLabel.Parent = Frame
+        TitleLabel.BackgroundTransparency = 1
+        TitleLabel.Position = UDim2.new(0.131, 0, 0, 0)
+        TitleLabel.Size = UDim2.new(0, 200, 0, 50)
+        TitleLabel.Font = Enum.Font.RobotoMono
+        TitleLabel.Text = "INGAME STAFFS"
+        TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TitleLabel.TextSize = 14
+
+        local PlayerLabels = {}
+        for i = 1, 3 do
+            local PlayerLabel = Instance.new("TextLabel")
+            PlayerLabel.Name = "Player" .. i
+            PlayerLabel.Parent = Frame
+            PlayerLabel.BackgroundTransparency = 1
+            PlayerLabel.Position = UDim2.new(-0.153, 0, 0.12 * i, 0)
+            PlayerLabel.Size = UDim2.new(0, 200, 0, 50)
+            PlayerLabel.Font = Enum.Font.RobotoMono
+            PlayerLabel.Text = ""
+            PlayerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            PlayerLabel.TextSize = 14
+            PlayerLabels[i] = PlayerLabel
+        end
+
+        local function checkTransparency()
+            while true do
+                local detectedPlayers = {}
+
+                for _, player in pairs(Players:GetPlayers()) do
+                    if player.Character then
+                        local head = player.Character:FindFirstChild("Head")
+                        if head and head:IsA("BasePart") and head.Transparency > 0.5 then
+                            table.insert(detectedPlayers, player.Name)
+                        end
+                    end
+                end
+
+                for i, label in ipairs(PlayerLabels) do
+                    if detectedPlayers[i] then
+                        label.Text = detectedPlayers[i] .. " ( ! )"
+                    else
+                        label.Text = ""
+                    end
+                end
+                wait(1)
+                for i, label in ipairs(PlayerLabels) do
+                    if detectedPlayers[i] then
+                        label.Text = detectedPlayers[i] .. " (  )"
+                    end
+                end
+                wait(1)
+            end
+        end
+        task.spawn(checkTransparency)
+
+        -- Script for making the GUI draggable
+        local function makeDraggable(frame)
+            local UIS = game:GetService("UserInputService")
+            local dragging, dragStart, startPos
+
+            frame.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    dragging = true
+                    dragStart = input.Position
+                    startPos = frame.Position
+                end
+            end)
+
+            frame.InputChanged:Connect(function(input)
+                if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+                    local delta = input.Position - dragStart
+                    frame.Position = UDim2.new(
+                        startPos.X.Scale, startPos.X.Offset + delta.X,
+                        startPos.Y.Scale, startPos.Y.Offset + delta.Y
+                    )
+                end
+            end)
+
+            frame.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    dragging = false
+                end
+            end)
+        end
+
+        makeDraggable(Frame)
+    else
+        -- If disabled, remove the UI if it exists
+        if modDetector then
+            modDetector:Destroy()
+        end
+    end
+end
+
+movetab:AddToggle('Moderator Detector UI', {
+    Text = 'Moderator Detector UI',
+    Default = false,
+    Risky = false,
+    Callback = function(enabled)
+        createModDetectorGUI(enabled)
+    end;
+})
+
 
 
 movetab:AddButton('no fog', function()
