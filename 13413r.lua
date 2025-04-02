@@ -1,6 +1,4 @@
-game.Players.LocalPlayer:Kick()
-wait(1.3)
-while true do end
+
 function addaft()
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
@@ -15,9 +13,7 @@ end;
 
 
 	--lmao silly funny jokes:
-if game.workspace:FindFirstChild("parkyiyen_31") then
-    return
-end
+
 -- Gui to Lua
 -- Version: 3.2
 
@@ -5014,22 +5010,152 @@ WorldTab:AddLabel('Tracer Esp Color Picker'):AddColorPicker('Tracer Esp Color Pi
 
 WorldTab:AddLabel('-----------   TRACERS    ------------------')
 
+
+
+Settingsofhiglight = {
+    HighlightColor = Color3.fromRGB(255, 165, 0),
+    HighlightTransparency = 0.5,
+    enabledCorpseHighlight = false,
+    enableDebug = false,
+    requiredHumanoid = true,
+    enabledHighlightToggle = false -- New toggle to enable/disable highlighting
+}
+
+function AddHighlight(model)
+    -- Check if highlight is globally enabled
+    if not Settingsofhiglight.enabledHighlightToggle then
+        if Settingsofhiglight.enableDebug then
+            print("Highlighting is disabled, skipping model: " .. model.Name)
+        end
+        return
+    end
+    
+    if Settingsofhiglight.enableDebug then
+        print("Checking model: " .. model.Name)
+    end
+    
+    if model:FindFirstChild("Highlight") then
+        if Settingsofhiglight.enableDebug then
+            print("Highlight already exists for model: " .. model.Name)
+        end
+        return
+    end
+
+    humanoid = model:FindFirstChildOfClass("Humanoid")
+    if not humanoid then
+        if Settingsofhiglight.enableDebug then
+            print("No humanoid found in model: " .. model.Name)
+        end
+        return
+    end
+
+    if not model.PrimaryPart then
+        if Settingsofhiglight.enableDebug then
+            print("No PrimaryPart found in model: " .. model.Name)
+        end
+        model.PrimaryPart = model:FindFirstChild("Head") or model:FindFirstChild("Torso")
+        if not model.PrimaryPart then
+            if Settingsofhiglight.enableDebug then
+                print("Couldn't find a valid PrimaryPart for model: " .. model.Name)
+            end
+            return
+        end
+    end
+
+    if Settingsofhiglight.enabledCorpseHighlight then
+        if Settingsofhiglight.enableDebug then
+            print("Adding Highlight to model: " .. model.Name)
+        end
+
+        highlight = Instance.new("Highlight")
+        highlight.Name = "CORPSEEESSSP"
+        highlight.Adornee = model
+        highlight.Parent = model
+        highlight.FillColor = Settingsofhiglight.HighlightColor
+        highlight.FillTransparency = Settingsofhiglight.HighlightTransparency
+        highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+        highlight.OutlineTransparency = 0.8
+    end
+end
+
+function SearchDroppedItems()
+    droppedItems = game.Workspace:WaitForChild("DroppedItems")
+
+    if Settingsofhiglight.enableDebug then
+        print("Searching for models in DroppedItems...")
+    end
+
+    for _, item in ipairs(droppedItems:GetChildren()) do
+        if Settingsofhiglight.enableDebug then
+            print("Checking item: " .. item.Name)
+        end
+        
+        if item:IsA("Model") then
+            if Settingsofhiglight.enableDebug then
+                print("Item is a model: " .. item.Name)
+            end
+
+            humanoid = item:FindFirstChildOfClass("Humanoid")
+            hasHumanoid = humanoid ~= nil
+            
+            if Settingsofhiglight.requiredHumanoid then
+                if hasHumanoid then
+                    AddHighlight(item)
+                else
+                    if Settingsofhiglight.enableDebug then
+                        print("Model " .. item.Name .. " has no humanoid, skipping.")
+                    end
+                end
+            else
+                if not hasHumanoid then
+                    AddHighlight(item)
+                else
+                    if Settingsofhiglight.enableDebug then
+                        print("Model " .. item.Name .. " has a humanoid, skipping.")
+                    end
+                end
+            end
+        else
+            if Settingsofhiglight.enableDebug then
+                print("Item is not a model: " .. item.Name)
+            end
+        end
+    end
+end
+function mainnnn()
+while true do
+    if game and game.Workspace and game.Workspace:FindFirstChild("DroppedItems") then
+        if Settingsofhiglight.enableDebug then
+            print("DroppedItems folder found. Searching...")
+        end
+        SearchDroppedItems()
+    else
+        if Settingsofhiglight.enableDebug then
+            print("DroppedItems folder not found or Workspace not loaded properly.")
+        end
+    end
+    wait(2)
+end
+end
+
+task.spawn(mainnnn)
+
 WorldTab:AddToggle('Corpse Esp', {
     Text = 'Corpse Esp',
     Default = false,
     Callback = function(value)
 
-corpseesplib3.enabled = value
-
+Settingsofhiglight.enabledHighlightToggle = value
+Settingsofhiglight.enabledCorpseHighlight = value
     end;
 })
 
-WorldTab:AddToggle('Limit Distance', {
-    Text = 'Limit Distance Toggle',
-    Default = true,
+WorldTab:AddToggle('aaadasdsad', {
+    Text = 'Corpse ESP Debug',
+    Default = false,
     Callback = function(value)
 
-corpseesplib3.limitDistance = value
+Settingsofhiglight.enableDebug = value
 
     end;
 })
@@ -5037,49 +5163,28 @@ corpseesplib3.limitDistance = value
 
 
 
-WorldTab:AddSlider('Corpse Persist Time', {
-    Text = 'Corpse Persist Time',
-    Default = 600,
-    Min = 100,
-    Max = 1000,
+
+
+
+
+
+
+
+WorldTab:AddSlider('Higlight Transparencyofesp', {
+    Text = 'Corpse ESP Highlight Transparency',
+    Default = Settingsofhiglight.HighlightTransparency,
+    Min = 0,
+    Max = 1,
     Rounding = 1,
     Compact = false,
 
     Callback = function(Value)
         
-corpseesplib3.corpsePersistTime = Value
-
-    end;
-})	
-
-WorldTab:AddSlider('Max Distance', {
-    Text = 'Max Distance',
-    Default = 500,
-    Min = 100,
-    Max = 790,
-    Rounding = 1,
-    Compact = false,
-
-    Callback = function(Value)
-        
-corpseesplib3.maxDistance = Value
+Settingsofhiglight.HighlightTransparency = Value
 
     end;
 })
-WorldTab:AddSlider('Font Size', {
-    Text = 'Font Size',
-    Default = 13,
-    Min = 5,
-    Max = 30,
-    Rounding = 1,
-    Compact = false,
 
-    Callback = function(Value)
-        
-corpseesplib3.textSize = Value
-
-    end;
-})
 
 WorldTab:AddSlider('Update Interval qfaf', {
     Text = 'Update Interval Corpse Esp',
@@ -5091,54 +5196,27 @@ WorldTab:AddSlider('Update Interval qfaf', {
 
     Callback = function(Value)
         
-corpseesplib3.updateInterval = Value
+
 
     end;
 })
 
 
-WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
-    Default = Color3.new(1, 0, 0), 
-    Title = 'Corpse Color',
+WorldTab:AddLabel('Corpse ESP Color'):AddColorPicker('Corpse ESP Color', {
+    Default = Settingsofhiglight.HighlightColor, 
+    Title = 'Corpse ESP Color',
     Transparency = 0,
 
     Callback = function(Value)
-        corpseesplib3.corpseColor = Value
-    end;
-})
-
-WorldTab:AddLabel('Distance Color'):AddColorPicker('Distance Color', {
-    Default = Color3.new(1, 1, 1), 
-    Title = 'Distance Color',
-    Transparency = 0,
-
-    Callback = function(Value)
-        corpseesplib3.distanceColor = Value
-    end;
-})
-
-WorldTab:AddLabel('Corpse Color'):AddColorPicker('Corpse Color', {
-    Default = Color3.new(1, 0, 0), 
-    Title = 'Corpse Color',
-    Transparency = 0,
-
-    Callback = function(Value)
-        corpseesplib3.corpseColor = Value
+     Settingsofhiglight.HighlightColor = Value
     end;
 })
 
 
 
 
-WorldTab:AddLabel('Bracket Color'):AddColorPicker('Bracket Color', {
-    Default = Color3.new(1, 0, 0), 
-    Title = 'Bracket Color',
-    Transparency = 0,
 
-    Callback = function(Value)
-        corpseesplib3.bracketColor = Value
-    end;
-})
+
 
 
 WorldTab:AddLabel("-------------------------------")
