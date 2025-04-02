@@ -1,6 +1,4 @@
-game.Players.LocalPlayer:Kick("TAMPERING DETECTED")
-wait(1.3)
-while true do end
+
 function addaft()
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
