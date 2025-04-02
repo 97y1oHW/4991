@@ -1,4 +1,4 @@
-
+return
 function addaft()
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
