@@ -2771,16 +2771,10 @@ local InnerFrame = Library:Create('Frame', {
     Parent = WatermarkInner;
 });
 
-local RotatingGradient = Library:Create('UIGradient', {
-    Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)), -- Red
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 0)), -- Green
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255)) -- Blue
-    });
-    Rotation = 0;
-    Parent = InnerFrame;
-});
 
+-- Animation for rotating gradient
+local rotationSpeed = 60 -- degrees per second
+local lastTime = tick()
     
     local Gradient = Library:Create('UIGradient', {
         Color = ColorSequence.new({
@@ -2790,26 +2784,17 @@ local RotatingGradient = Library:Create('UIGradient', {
         Rotation = -90;
         Parent = InnerFrame;
     });
-local rotationSpeed = 60 -- degrees per second
-local lastTime = tick()
-
-    Library:GiveSignal(RunService.Heartbeat:Connect(function()
-    local currentTime = tick()
-    local deltaTime = currentTime - lastTime
-    lastTime = currentTime
     
-    -- Update gradient rotation
-    RotatingGradient.Rotation = (RotatingGradient.Rotation + (rotationSpeed * deltaTime)) % 360
-    
-    -- Optional: Change colors over time for more dynamic effect
-    local hue = (tick() * 0.1) % 1
-    RotatingGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromHSV(hue, 0.8, 1)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromHSV((hue + 0.3) % 1, 0.8, 1)),
-        ColorSequenceKeypoint.new(1, Color3.fromHSV((hue + 0.6) % 1, 0.8, 1))
-    })
-end))
-
+local OuterGradient = Library:Create('UIGradient', {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)), -- Red
+        ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)), -- Green
+        ColorSequenceKeypoint.new(0.66, Color3.fromRGB(0, 0, 255)), -- Blue
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0)) -- Back to red
+    });
+    Rotation = 0;
+    Parent = WatermarkOuter;
+});
     
     Library:AddToRegistry(Gradient, {
         Color = function()
@@ -2819,6 +2804,56 @@ end))
             });
         end
     });
+
+local WatermarkLabel = Library:CreateLabel({
+    Position = UDim2.new(0, 5, 0, 0);
+    Size = UDim2.new(1, -4, 1, 0);
+    TextSize = 14;
+    TextXAlignment = Enum.TextXAlignment.Left;
+    ZIndex = 203;
+    Parent = InnerFrame;
+});
+
+    Library:GiveSignal(RunService.Heartbeat:Connect(function()
+    local currentTime = tick()
+    local deltaTime = currentTime - lastTime
+    lastTime = currentTime
+    
+    -- Update gradient rotation
+    OuterGradient.Rotation = (OuterGradient.Rotation + (rotationSpeed * deltaTime)) % 360
+    
+    -- Optional: Change colors over time for more dynamic effect
+    local hue = (tick() * 0.1) % 1
+    OuterGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromHSV(hue, 0.8, 1)),
+        ColorSequenceKeypoint.new(0.33, Color3.fromHSV((hue + 0.33) % 1, 0.8, 1)),
+        ColorSequenceKeypoint.new(0.66, Color3.fromHSV((hue + 0.66) % 1, 0.8, 1)),
+        ColorSequenceKeypoint.new(1, Color3.fromHSV(hue, 0.8, 1))
+    })
+end))
+
+-- Keep the inner frame as is (unchanged)
+local WatermarkInner = Library:Create('Frame', {
+    BackgroundColor3 = Library.MainColor;
+    BorderColor3 = Library.AccentColor;
+    BorderMode = Enum.BorderMode.Inset;
+    Size = UDim2.new(1, 0, 1, 0);
+    ZIndex = 201;
+    Parent = WatermarkOuter;
+});
+
+Library:AddToRegistry(WatermarkInner, {
+    BorderColor3 = 'AccentColor';
+});
+
+local InnerFrame = Library:Create('Frame', {
+    BackgroundColor3 = Color3.new(1, 1, 1);
+    BorderSizePixel = 0;
+    Position = UDim2.new(0, 1, 0, 1);
+    Size = UDim2.new(1, -2, 1, -2);
+    ZIndex = 202;
+    Parent = WatermarkInner;
+});
 
 local WatermarkLabel = Library:CreateLabel({
     Position = UDim2.new(0, 5, 0, 0);
