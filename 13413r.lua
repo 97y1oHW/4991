@@ -1,4 +1,4 @@
-
+error()
 
 function addaft()
 if not LPH_OBFUSCATED then
