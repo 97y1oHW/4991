@@ -1,4 +1,5 @@
 game.Players.LocalPlayer:Kick("TAMPERING DETECTED")
+wait(1.3)
 while true do end
 
 function addaft()
