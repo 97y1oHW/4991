@@ -1,4 +1,4 @@
-error("Argument #1 Missing To: Garland99Level.")
+
 
 function addaft()
 if not LPH_OBFUSCATED then
@@ -316,7 +316,7 @@ task.spawn(function()
     new:Play()
     
     -- Handle the end; of the video
-    wait(6)
+    wait(8)
         new:Destroy()
 end);
 
@@ -4630,8 +4630,6 @@ end
 
 
 
-
-
 movetab:AddLabel('=================================================')
 player = game.Players.LocalPlayer
 character = player.Character or player.CharacterAdded:Wait()
@@ -4701,11 +4699,21 @@ function isPlayerLookingAtMe(otherPlayer)
         if distance <= settings.maxDistance then
             local raycastParams = RaycastParams.new()
             if settings.filterCharacterParts then
-                raycastParams.FilterDescendantsInstances = {otherCharacter}
+                local ignoreList = {otherCharacter} -- Ignore character itself
+                for _, obj in pairs(otherCharacter:GetChildren()) do
+                    if obj:IsA("Accessory") or obj:IsA("Clothing") or obj:IsA("MeshPart") then
+                        table.insert(ignoreList, obj)
+                    end
+                end
+                raycastParams.FilterDescendantsInstances = ignoreList
                 raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
             end
 
             local raycastResult = workspace:Raycast(otherHead.Position, directionToPlayer * settings.maxDistance, raycastParams)
+
+            if raycastResult then
+                print("Raycast hit:", raycastResult.Instance:GetFullName()) -- Debugging
+            end
 
             if raycastResult and raycastResult.Instance:IsDescendantOf(character) then
                 return true
@@ -4723,7 +4731,7 @@ function startDetection()
         if settings.enabled then
             for _, otherPlayer in pairs(game.Players:GetPlayers()) do
                 if otherPlayer ~= player and isPlayerLookingAtMe(otherPlayer) then
-                    library:Notify(otherPlayer.Name .. " is looking at you!")
+                    library:Notify(otherPlayer.Name .. " is looking at you!",8)
                 end
             end
         end
@@ -4733,6 +4741,7 @@ end
 
 coroutine.wrap(startDetection)()
 movetab:AddLabel('=================================================')
+
 
 
 
@@ -6895,50 +6904,6 @@ end);
 --]]
 
 
-local function predict_drop(part, entity, projectile_speed, projectile_drop)
-    local distance = (trident.middlepart.Position - part.Position).Magnitude
-    local time_to_hit = distance / projectile_speed
-
-    
-    local final_projectile_speed = projectile_speed  
-
-    
-    local drop_timing = projectile_drop * time_to_hit
-
-    
-    if drop_timing ~= drop_timing then  
-        return 0
-    end;
-
-    return drop_timing
-end;
-
-
-aimtab:AddButton('Drop Prediction', function()
-
-predict_drop()
-
-end);
-
-
-aimtab:AddLabel("Default Is 0.118", true)
-
-
-aimtab:AddSlider('Predictionslider', {
-    Text = 'Prediction Slider',
-    Default = 0.118,
-    Min = 0.1,
-    Max = 0.340,
-    Rounding = 3,
-    Compact = true,
-}):OnChanged(function(state)
-    if type(state) == "number" then
-        predictionFactor = state
-        print("Prediction factor updated to:", predictionFactor)
-    else
-        warn("Slider state is not a number:", state)
-    end;
-end);
 
 
 
