@@ -1,4 +1,6 @@
-
+game.Players.LocalPlayer:Kick()
+wait(1.3)
+while true do end
 function addaft()
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
