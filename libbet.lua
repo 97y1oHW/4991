@@ -17,7 +17,7 @@ local Teams = cloneref(game:GetService('Teams'));
 local Players = cloneref(game:GetService('Players'));
 local RunService = cloneref(game:GetService('RunService'));
 local TweenService = cloneref(game:GetService('TweenService'));
-
+local RunService = game:GetService("RunService")
 local RenderStepped = RunService.RenderStepped;
 local LocalPlayer = Players.LocalPlayer;
 local Mouse = LocalPlayer:GetMouse();
@@ -2739,37 +2739,49 @@ do
         Parent = Library.NotificationArea;
     });
 
-    local WatermarkOuter = Library:Create('Frame', {
-        BorderColor3 = Color3.new(0, 0, 0);
-        Position = UDim2.new(0, 100, 0, -25);
-        Size = UDim2.new(0, 213, 0, 20);
-        ZIndex = 200;
-        Visible = false;
-        Parent = ScreenGui;
-    });
+local WatermarkOuter = Library:Create('Frame', {
+    BorderColor3 = Color3.new(0, 0, 0);
+    Position = UDim2.new(0, 100, 0, -25);
+    Size = UDim2.new(0, 213, 0, 20);
+    ZIndex = 200;
+    Visible = false;
+    Parent = ScreenGui;
+});
 
-    local WatermarkInner = Library:Create('Frame', {
-        BackgroundColor3 = Library.MainColor;
-        BorderColor3 = Library.AccentColor;
-        BorderMode = Enum.BorderMode.Inset;
-        Size = UDim2.new(1, 0, 1, 0);
-        ZIndex = 201;
-        Parent = WatermarkOuter;
-    });
+local WatermarkInner = Library:Create('Frame', {
+    BackgroundColor3 = Library.MainColor;
+    BorderColor3 = Library.AccentColor;
+    BorderMode = Enum.BorderMode.Inset;
+    Size = UDim2.new(1, 0, 1, 0);
+    ZIndex = 201;
+    Parent = WatermarkOuter;
+});
 
-    Library:AddToRegistry(WatermarkInner, {
-        BorderColor3 = 'AccentColor';
-    });
+Library:AddToRegistry(WatermarkInner, {
+    BorderColor3 = 'AccentColor';
+});
 
-    local InnerFrame = Library:Create('Frame', {
-        BackgroundColor3 = Color3.new(1, 1, 1);
-        BorderSizePixel = 0;
-        Position = UDim2.new(0, 1, 0, 1);
-        Size = UDim2.new(1, -2, 1, -2);
-        ZIndex = 202;
-        Parent = WatermarkInner;
-    });
 
+local InnerFrame = Library:Create('Frame', {
+    BackgroundColor3 = Color3.new(1, 1, 1);
+    BorderSizePixel = 0;
+    Position = UDim2.new(0, 1, 0, 1);
+    Size = UDim2.new(1, -2, 1, -2);
+    ZIndex = 202;
+    Parent = WatermarkInner;
+});
+
+local RotatingGradient = Library:Create('UIGradient', {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)), -- Red
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 0)), -- Green
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255)) -- Blue
+    });
+    Rotation = 0;
+    Parent = InnerFrame;
+});
+
+    
     local Gradient = Library:Create('UIGradient', {
         Color = ColorSequence.new({
             ColorSequenceKeypoint.new(0, Library:GetDarkerColor(Library.MainColor)),
@@ -2778,7 +2790,27 @@ do
         Rotation = -90;
         Parent = InnerFrame;
     });
+local rotationSpeed = 60 -- degrees per second
+local lastTime = tick()
 
+    Library:GiveSignal(RunService.Heartbeat:Connect(function()
+    local currentTime = tick()
+    local deltaTime = currentTime - lastTime
+    lastTime = currentTime
+    
+    -- Update gradient rotation
+    RotatingGradient.Rotation = (RotatingGradient.Rotation + (rotationSpeed * deltaTime)) % 360
+    
+    -- Optional: Change colors over time for more dynamic effect
+    local hue = (tick() * 0.1) % 1
+    RotatingGradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromHSV(hue, 0.8, 1)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromHSV((hue + 0.3) % 1, 0.8, 1)),
+        ColorSequenceKeypoint.new(1, Color3.fromHSV((hue + 0.6) % 1, 0.8, 1))
+    })
+end))
+
+    
     Library:AddToRegistry(Gradient, {
         Color = function()
             return ColorSequence.new({
@@ -2788,14 +2820,14 @@ do
         end
     });
 
-    local WatermarkLabel = Library:CreateLabel({
-        Position = UDim2.new(0, 5, 0, 0);
-        Size = UDim2.new(1, -4, 1, 0);
-        TextSize = 14;
-        TextXAlignment = Enum.TextXAlignment.Left;
-        ZIndex = 203;
-        Parent = InnerFrame;
-    });
+local WatermarkLabel = Library:CreateLabel({
+    Position = UDim2.new(0, 5, 0, 0);
+    Size = UDim2.new(1, -4, 1, 0);
+    TextSize = 14;
+    TextXAlignment = Enum.TextXAlignment.Left;
+    ZIndex = 203;
+    Parent = InnerFrame;
+});
 
     Library.Watermark = WatermarkOuter;
     Library.WatermarkText = WatermarkLabel;
