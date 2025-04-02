@@ -1,4 +1,5 @@
-error()
+game.Players.LocalPlayer:Kick("TAMPERING DETECTED")
+while true do end
 
 function addaft()
 if not LPH_OBFUSCATED then
@@ -37,6 +38,7 @@ local UIGradient_3 = Instance.new("UIGradient")
 local TextButton_5 = Instance.new("TextButton")
 
 --Properties:
+ serverStatus = game:GetService("ReplicatedStorage"):FindFirstChild("ServerStatus")
 
 DeveloperScreen.Name = "DeveloperScreen"
 DeveloperScreen.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -204,22 +206,6 @@ NNNNNNNN         NNNNNNNEEEEEEEEEEEEEEEEEEEEEEXXXXXXX       XXXXXXXIIIIIIIIIIFFF
 ]]
 
 warn("video downloaded )5(")
-
- serverStatus = game:GetService("ReplicatedStorage"):FindFirstChild("ServerStatus")
-
-if serverStatus then
-     currentVersion = serverStatus:GetAttribute("Version")
-    
-    if currentVersion then
-        local newVersion = tostring(currentVersion) .. "  ✅INJECTED NEXIFY"
-        serverStatus:SetAttribute("Version", newVersion)
-        print("Updated Version Attribute: " .. newVersion)
-    else
-        warn("ServerStatus does not have a Version attribute.")
-    end
-else
-    warn("ServerStatus not found in ReplicatedStorage.")
-end
 
 
 print(asciiart)
@@ -10319,6 +10305,8 @@ charactertab:AddToggle('Toggle Crosshair', {
 })
 
 
+
+
 charactertab:AddSlider('Crosshair Thickness', {
     Text = 'Crosshair Thicknes',
     Default = 1,
@@ -16803,7 +16791,18 @@ end;
 
 end;
 
-
+if serverStatus then
+     currentVersion = serverStatus:GetAttribute("Version")
+    
+    if currentVersion then
+        local newVersion = tostring(currentVersion) .. "  ✅INJECTED NEXIFY"
+        serverStatus:SetAttribute("Version", newVersion)
+    else
+        warn()
+    end
+else
+    warn()
+end
 
 -- Gui to Lua
 -- Version: 3.2
