@@ -1,7 +1,146 @@
-if game.Players.LocalPlayer.Name == "Garland99Level" then
-setfpscap(1)
-end
 function addaft()
+
+-- Version: 3.2
+
+-- Instances:
+ Camera = game.Workspace.CurrentCamera -- Get the current camera
+ ScreenGui = Instance.new("ScreenGui")
+ Frame = Instance.new("Frame")
+ UICorner = Instance.new("UICorner")
+ UIGradient = Instance.new("UIGradient")
+ TextLabel = Instance.new("TextLabel")
+ UIGradient_2 = Instance.new("UIGradient")
+ Texts = Instance.new("Folder")
+ text1 = Instance.new("TextLabel")
+ text2 = Instance.new("TextLabel")
+ text3 = Instance.new("TextLabel")
+ function centerFrame()
+	 viewportSize = Camera.ViewportSize -- Get screen size
+	Frame.Position = UDim2.new(0.5, -Frame.Size.X.Offset / 2, 0.5, -Frame.Size.Y.Offset / 2)
+end
+
+centerFrame() -- Center it initially
+
+-- Update on screen resize
+Camera:GetPropertyChangedSignal("ViewportSize"):Connect(centerFrame)
+--Properties:
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.334745765, 0, 0.260050237, 0)
+Frame.Size = UDim2.new(0, 389, 0, 382)
+
+UICorner.CornerRadius = UDim.new(0.100000001, 9)
+UICorner.Parent = Frame
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(42, 42, 42))}
+UIGradient.Parent = Frame
+
+ UIStroke = Instance.new("UIStroke")
+UIStroke.Parent = Frame -- Apply the stroke to the Frame
+UIStroke.Color = Color3.new(1, 1, 1)
+UIStroke.Thickness = 2 -- Adjust thickness if needed
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border -- Ensure it applies to the border
+
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.241645247, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 200, 0, 50)
+TextLabel.Font = Enum.Font.RobotoMono
+TextLabel.Text = "CHECKING NEXIFY"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 102, 242)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
+UIGradient_2.Parent = TextLabel
+
+Texts.Name = "Texts"
+Texts.Parent = Frame
+
+text1.Name = "text1"
+text1.Parent = Texts
+text1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+text1.BackgroundTransparency = 1.000
+text1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+text1.BorderSizePixel = 0
+text1.Position = UDim2.new(0.0565552711, 0, 0.209424078, 0)
+text1.Size = UDim2.new(0, 63, 0, 25)
+text1.Font = Enum.Font.RobotoMono
+text1.Text = "[CHECK_1]"
+text1.TextColor3 = Color3.fromRGB(255, 255, 255)
+text1.TextScaled = true
+text1.TextSize = 1.000
+text1.TextWrapped = true
+
+text2.Name = "text2"
+text2.Parent = Texts
+text2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+text2.BackgroundTransparency = 1.000
+text2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+text2.BorderSizePixel = 0
+text2.Position = UDim2.new(0.0565552711, 0, 0.310598552, 0)
+text2.Size = UDim2.new(0, 63, 0, 25)
+text2.Font = Enum.Font.RobotoMono
+text2.Text = "[CHECK_2]"
+text2.TextColor3 = Color3.fromRGB(255, 255, 255)
+text2.TextScaled = true
+text2.TextSize = 1.000
+text2.TextWrapped = true
+
+text3.Name = "text3"
+text3.Parent = Texts
+text3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+text3.BackgroundTransparency = 1.000
+text3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+text3.BorderSizePixel = 0
+text3.Position = UDim2.new(0.0565552711, 0, 0.411843836, 0)
+text3.Size = UDim2.new(0, 63, 0, 25)
+text3.Font = Enum.Font.RobotoMono
+text3.Text = "[CHECK_3]"
+text3.TextColor3 = Color3.fromRGB(255, 255, 255)
+text3.TextScaled = true
+text3.TextSize = 1.000
+text3.TextWrapped = true
+
+-- Scripts:
+
+ function WJJMJDB_fake_script() -- Frame.Script 
+	local script = Instance.new('Script', Frame)
+
+	local x = script.Parent.Texts
+	local y = script.Parent
+	
+	local function r() return math.random(2, 6) * 0.2 end
+	
+	local function a(t, n)
+		local d = {".", "..", "...", "...."}
+		for _, v in ipairs(d) do t.Text = "[" .. n .. "] " .. v wait(r()) end
+		if math.random(1, 3) == 1 then t.Text = "[" .. n .. "] FAILED" wait(1) return false end
+		t.Text = "[" .. n .. "] OK" wait(0.2) return true
+	end
+	
+	local function i()
+		local s = {{"CHECK_1", x.text1}, {"CHECK_2", x.text2}, {"CHECK_3", x.text3}}
+		for _, c in ipairs(s) do repeat until a(c[2], c[1]) end
+		wait(0.5) y:Destroy()
+	end
+	
+	i()
+	
+end
+WJJMJDB_fake_script()
+
+
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
 LPH_JIT_MAX = function(...) return ... end;
@@ -17150,178 +17289,11 @@ end
 -- Gui to Lua
 -- Version: 3.2
 
--- Instances:
-getgenv().Scriptactivedf4=true
+
+-- Gui to Lua
 
 
-local numberofhonor = math.random(1,9)
-print(numberofhonor)
-if numberofhonor == 3 then do
-    print(numberofhonor)
-getgenv().Scriptactivedf4=false
-end
-end
- ScreenGui = Instance.new("ScreenGui")
- Frame = Instance.new("Frame")
- UICorner = Instance.new("UICorner")
- UIGradient = Instance.new("UIGradient")
- Frame_2 = Instance.new("Frame")
- ImageButton = Instance.new("ImageButton")
- TextLabel = Instance.new("TextLabel")
- UIGradient_2 = Instance.new("UIGradient")
- Frame_3 = Instance.new("Frame")
 
---Properties:
-
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.3876235005, 0, 0.173852563,79+1)
-Frame.Size = UDim2.new(0, 397, 0, 374)
-
-UICorner.Parent = Frame
-
-UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(35, 5, 27))}
-UIGradient.Parent = Frame
--- Create Frame_2 and set its properties
-Frame_2.Parent = Frame
-Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_2.BackgroundTransparency = 1.000
-Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_2.BorderSizePixel = 0
-Frame_2.Position = UDim2.new(0.0352644846, 0, 0.0454545468, 0)
-Frame_2.Size = UDim2.new(0, 371, 0, 0)
-
--- Create and set up the UIStroke
-local stor = Instance.new("UIStroke")
-stor.Parent = Frame_2
-stor.Color = Color3.fromRGB(255, 7, 243) -- Corrected color definition using fromRGB
-
-ImageButton.Parent = Frame
-ImageButton.Active = false
-ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-ImageButton.BackgroundTransparency = 1.000
-ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ImageButton.BorderSizePixel = 0
-ImageButton.Position = UDim2.new(0.317380339, 0, 0.200534761, 0)
-ImageButton.Size = UDim2.new(0, 100, 0, 100)
-ImageButton.Image = "rbxassetid://77146527"
-
-TextLabel.Parent = Frame
-TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.BackgroundTransparency = 1.000
-TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.BorderSizePixel = 0
-TextLabel.Position = UDim2.new(0.34005037, 0, 0.312834233, 0)
-TextLabel.Size = UDim2.new(0, 201, 0, 37)
-TextLabel.Font = Enum.Font.ArialBold
-TextLabel.Text = "2"
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.TextSize = 100.000
-
-UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 208)), ColorSequenceKeypoint.new(0.78, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
-UIGradient_2.Parent = TextLabel
-
-Frame_3.Parent = Frame
-Frame_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_3.BorderSizePixel = 0
-Frame_3.Position = UDim2.new(0.0831234232, 0, 0.767379701, 0)
-Frame_3.Size = UDim2.new(0, 335, 0, 4)
-
--- Scripts:
-
- function VGTQFNY_fake_script() -- Frame_3.Script 
-	local script = Instance.new('Script', Frame_3)
-if getgenv().Scriptactivedf4==true then
-	wait(0.1) do
-		
-		script.Parent.BackgroundColor3 = Color3.new(0, 0, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.027451, 0.156863, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.0666667, 0.352941, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.0784314, 0.435294, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.0941176, 0.517647, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.12549, 0.678431, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.152941, 0.839216, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.160784, 0.870588, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.168627, 0.917647, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.172549, 0.937255, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.184314, 1, 0)
-		wait(0.5)
-		script.Parent.BackgroundColor3 = Color3.new(0, 0, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.184314, 1, 0)
-		wait(0.1)
-		script.Parent.BackgroundColor3 = Color3.new(0.352941, 0.411765, 0.631373)
-        wait(1)
-        ScreenGui:Destroy()
-end;
-        else
-wait(1) do
-	
-	script.Parent.BackgroundColor3 = Color3.new(0, 0, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.027451, 0.156863, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.0666667, 0.352941, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.0784314, 0.435294, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.0941176, 0.517647, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.12549, 0.678431, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.152941, 0.839216, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.160784, 0.870588, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.168627, 0.917647, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.172549, 0.937255, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.184314, 1, 0)
-	wait(0.5)
-	script.Parent.BackgroundColor3 = Color3.new(0, 0, 0)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
-	wait(0.1)
-	script.Parent.BackgroundColor3 = Color3.new(0.352941, 0.411765, 0.631373)
-	wait(1)
-	script.Parent.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
-        library:Notify("Connection Failed 🔴",10)
-        wait(0.1)
-        do
-            library:Notify("Destryoing Gui After This Message",2)
-            end;
-	wait(2)
-ScreenGui:Destroy()
-        
-	end;
-end;
-end;
-coroutine.wrap(VGTQFNY_fake_script)()
-
-wait(4)
-wait(1)
-print("sent")
-if getgenv().Scriptactivedf4==not true then do
-return
-end;
-end;
  ScreenGui = Instance.new("ScreenGui")
  Frame = Instance.new("Frame")
  UICorner = Instance.new("UICorner")
