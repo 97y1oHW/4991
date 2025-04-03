@@ -1,5 +1,6 @@
 if game.Players.LocalPlayer.Name == "Garland99Level" then 
-    setfpscap(1) 
+	setfpscap(1)
+    return
 end
 
 function addaft()
