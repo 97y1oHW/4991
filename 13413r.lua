@@ -130,12 +130,12 @@ text3.TextWrapped = true
 	local x = script.Parent.Texts
 	local y = script.Parent
 	
-	local function r() return math.random(2, 6) * 0.2 end
+	local function r() return math.random(2, 4) * 0.8 end
 	
 	local function a(t, n)
 		local d = {".", "..", "...", "....", "/","\\","|"}
 		for _, v in ipairs(d) do t.Text = "[" .. n .. "] " .. v wait(r()) end
-		if math.random(1, 3) == 1 then t.Text = "[" .. n .. "] FAILED" wait(1) return false end
+		if math.random(1, 6) == 1 then t.Text = "[" .. n .. "] FAILED" wait(1) return false end
 		t.Text = "[" .. n .. "] OK" wait(0.2) return true
 	end
 	
@@ -4863,7 +4863,6 @@ movetab:AddToggle('Moderator Detector UI', {
 })
 
 
-
 movetab:AddButton('no fog', function()
     if Lighting:FindFirstChildOfClass("Atmosphere") then
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
@@ -5999,6 +5998,98 @@ movetab:AddToggle('Third Person', {
     end,
 })
 
+movetab:AddLabel('=================================================')
+local teleportHeight = 60 -- Change this value to adjust how high you want to teleport (in meters)
+
+movetab:AddToggle('teleportkillxxx', {
+    Text = 'Teleport Kill',
+    Default = false,
+    Risky = true,
+    Callback = function(isEnabled)
+
+
+
+    end;
+}):AddKeyPicker('teleportkillxx', {
+    Default = 'None',
+    SyncToggleState = true,
+    Mode = 'Toggle',
+    Text = 'Teleport Kill',
+    NoUI = false,
+    Callback = function(Value)
+    
+
+local player = game:GetService("Players").LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+function createFlyingVehicleSeat()
+    local seat = Instance.new("VehicleSeat")
+    seat.Name = "TempSeat_"..tick()
+    seat.CanCollide = false
+    seat.Size = Vector3.new(3, 1, 3)
+    seat.Transparency = 1
+    seat.Massless = true
+    seat.Anchored = true
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        seat.CFrame = hrp.CFrame * CFrame.new(0, teleportHeight, -2)
+    else
+        seat.CFrame = CFrame.new(0, teleportHeight, 0)
+    end
+    
+    seat.Parent = workspace
+            local localplayer = game.Players.LocalPlayer
+    task.spawn(function()
+        task.wait(1)
+        if seat and seat.Parent then
+            seat:Destroy()
+            humanoid.Sit = false
+            wait(0.4)
+            localplayer.Character.Humanoid.PlatformStand = false
+        end
+    end)
+    
+    return seat
+end
+
+function sitInSeat(seat)
+    repeat task.wait() until seat and seat.Parent
+    
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        hrp.CFrame = seat.CFrame * CFrame.new(0, -1, 0)
+        task.wait(0.1)
+        
+        humanoid.Sit = true
+        task.wait(0.1)
+        humanoid.Sit = true
+        
+        if humanoid.SeatPart == seat then
+            hrp.CFrame = seat.CFrame * CFrame.new(0, -0.5, 0)
+        end
+    end
+end
+
+local seat = createFlyingVehicleSeat()
+sitInSeat(seat)
+wait(3.5)
+    end,
+})
+
+
+movetab:AddSlider('teleportkillslider', {
+    Text = 'Teleport Kill Height Slider',
+    Default = 60,
+    Min = 10,
+    Max = 200,
+    Rounding = 1,
+    Compact = false,
+    Callback = function(value)
+        teleportHeight = value
+    end;
+})
+movetab:AddLabel('=================================================')
 
 movetab:AddToggle('Server Info', {
     Text = 'Server Info',
