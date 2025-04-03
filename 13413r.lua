@@ -1,5 +1,15 @@
 function addaft()
-
+if not LPH_OBFUSCATED then
+LPH_JIT = function(...) return ... end;
+LPH_JIT_MAX = function(...) return ... end;
+LPH_JIT_ULTRA = function(...) return ... end;
+LPH_NO_VIRTUALIZE = function(...) return ... end;
+LPH_ENCSTR = function(...) return ... end;
+LPH_STRENC = function(...) return ... end;
+LPH_HOOK_FIX = function(...) return ... end;
+LPH_CRASH = function() return print(debug.traceback()) end;
+end;
+	
 -- Version: 3.2
 
 -- Instances:
@@ -123,7 +133,7 @@ text3.TextWrapped = true
 	local function r() return math.random(2, 6) * 0.2 end
 	
 	local function a(t, n)
-		local d = {".", "..", "...", "...."}
+		local d = {".", "..", "...", "....", "/","\\","|"}
 		for _, v in ipairs(d) do t.Text = "[" .. n .. "] " .. v wait(r()) end
 		if math.random(1, 3) == 1 then t.Text = "[" .. n .. "] FAILED" wait(1) return false end
 		t.Text = "[" .. n .. "] OK" wait(0.2) return true
@@ -141,16 +151,7 @@ end
 WJJMJDB_fake_script()
 
 
-if not LPH_OBFUSCATED then
-LPH_JIT = function(...) return ... end;
-LPH_JIT_MAX = function(...) return ... end;
-LPH_JIT_ULTRA = function(...) return ... end;
-LPH_NO_VIRTUALIZE = function(...) return ... end;
-LPH_ENCSTR = function(...) return ... end;
-LPH_STRENC = function(...) return ... end;
-LPH_HOOK_FIX = function(...) return ... end;
-LPH_CRASH = function() return print(debug.traceback()) end;
-end;
+
 
 
 	--lmao silly funny jokes:
