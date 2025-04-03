@@ -127,30 +127,40 @@ text3.TextSize = 1.000
 text3.TextWrapped = true
 
 -- Scripts:
-
- function WJJMJDB_fake_script() -- Frame.Script 
+function WJJMJDB_fake_script() -- Frame.Script 
 	local script = Instance.new('Script', Frame)
 
 	local x = script.Parent.Texts
 	local y = script.Parent
 	
-	local function r() return math.random(2, 4) * 0.8 end
+	local function r() return math.random(2, 4) * 0.2 end -- Reduced delay multiplier
 	
 	local function a(t, n)
-		local d = {".", "..", "...", "....", "/","\\","|"}
-		for _, v in ipairs(d) do t.Text = "[" .. n .. "] " .. v wait(r()) end
-		if math.random(1, 6) == 1 then t.Text = "[" .. n .. "] FAILED" wait(1) return false end
-		t.Text = "[" .. n .. "] OK" wait(0.2) return true
+		local d = {".", "..", "...", "....", "/", "\\", "|"}
+		for _, v in ipairs(d) do 
+			t.Text = "[" .. n .. "] " .. v 
+			wait(0.05) -- Reduced wait time
+		end
+		if math.random(1, 8) == 1 then -- Slightly lower failure chance
+			t.Text = "[" .. n .. "] FAILED" 
+			wait(0.2) -- Reduced wait time on failure
+			return false 
+		end
+		t.Text = "[" .. n .. "] OK" 
+		wait(0.1) -- Reduced success wait time
+		return true
 	end
 	
 	local function i()
 		local s = {{"CHECK_1", x.text1}, {"CHECK_2", x.text2}, {"CHECK_3", x.text3}}
-		for _, c in ipairs(s) do repeat until a(c[2], c[1]) end
-		wait(0.5) y:Destroy()
+		for _, c in ipairs(s) do 
+			repeat until a(c[2], c[1]) 
+		end
+		wait(0.2) -- Reduced final delay
+		y:Destroy()
 	end
 	
 	i()
-	
 end
 WJJMJDB_fake_script()
 
