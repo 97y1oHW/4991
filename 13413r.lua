@@ -6047,6 +6047,8 @@ function createFlyingVehicleSeat()
             humanoid.Sit = false
             wait(0.4)
             localplayer.Character.Humanoid.PlatformStand = false
+            task.wait(1)
+            localplayer.Character.Humanoid.PlatformStand = false
         end
     end)
     
