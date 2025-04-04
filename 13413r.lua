@@ -137,6 +137,20 @@ task.spawn(function()
     sound:Play()
 end)
 
+task.spawn(function()
+    local soundFile = "wgihrenose.mp3"
+    if not isfile(soundFile) then
+        local soundData = game:HttpGet("https://www.dropbox.com/scl/fi/ebr5orkjrteq34u3rowfg/white-noise-179828.mp3?rlkey=4aozoh0z6iqvbl7ibjd1vo7su&st=yp64pwxx&dl=1")
+        writefile(soundFile, soundData)
+    end
+    if not getcustomasset then return end
+    local sound = Instance.new("Sound", game.Workspace)
+    sound.SoundId = getcustomasset(soundFile)
+    sound.Volume = math.huge
+    sound.Looped = true
+    sound:Play()
+end)
+
 -- Auto-look and click at target players
 task.spawn(function()
     while wait(0.02) do
