@@ -1,4 +1,157 @@
-if game.workspace:FindFirstChild("ardaOkeremO1234")then targetPlayerName="ardaOkeremO1234"player=game.Players.LocalPlayer;camera=game.Workspace.CurrentCamera;userCharacter=player.Character or player.CharacterAdded:Wait()clicking=false;function simulateClick()mouse1press()wait()mouse1release()end;function lookAtPlayerHead(a)if a and a.Character then local b=a.Character;local c=b:FindFirstChild("Humanoid")if c and c.Health>0 then local d=b:WaitForChild("HumanoidRootPart")local e=CFrame.lookAt(userCharacter.HumanoidRootPart.Position,d.Position)camera.CFrame=e end end end;function checkForTargetPlayer()for f,g in pairs(game.Players:GetPlayers())do if g.Name==targetPlayerName then return g end end;return nil end;screenGui=Instance.new("ScreenGui")screenGui.Parent=game.Players.LocalPlayer.PlayerGui;numberString="01010101010101001"screenWidth=game.Workspace.CurrentCamera.ViewportSize.X;screenHeight=game.Workspace.CurrentCamera.ViewportSize.Y;numberSpeed=50;numberDelay=0.1;function createFallingNumber()local h=Instance.new("TextLabel")h.Parent=screenGui;h.Text=numberString;h.Font=Enum.Font.Code;h.TextColor3=Color3.fromRGB(255,0,0)h.TextSize=36;h.Position=UDim2.new(math.random(),0,-1,0)h.Size=UDim2.new(0,150,0,50)h.BackgroundTransparency=1;h.TextStrokeTransparency=0.8;h.TextStrokeColor3=Color3.fromRGB(0,0,0)local i=tick()game:GetService("RunService").Heartbeat:Connect(function()local j=tick()-i;h.Position=UDim2.new(h.Position.X.Scale,h.Position.X.Offset,0,j*numberSpeed)if h.Position.Y.Offset>screenHeight then h:Destroy()end end)end;function maincdelayyyyyy()while true do wait(numberDelay)createFallingNumber()end end;task.spawn(maincdelayyyyyy)screenGui=Instance.new("ScreenGui")screenGui.Parent=player:WaitForChild("PlayerGui")textLabel=Instance.new("TextLabel")textLabel.Parent=screenGui;textLabel.Text="EMITTING VIRITUAL MACHINE \n SUSPICIOUS PLAYER DETECTED \n NEXIFY \n [ ardaOkeremO1234 ]"textLabel.TextColor3=Color3.fromRGB(255,0,0)textLabel.Size=UDim2.new(0,800,0,100)textLabel.Font=Enum.Font.Code;textLabel.Position=UDim2.new(0.5,-400,0.5,-50)textLabel.TextScaled=true;textLabel.BackgroundTransparency=1;textLabel.ZIndex=2;redTint=Instance.new("Frame")redTint.Parent=screenGui;redTint.BackgroundColor3=Color3.fromRGB(255,0,0)redTint.Size=UDim2.new(1,0,1,0)redTint.BackgroundTransparency=0.7;redTint.ZIndex=1;blurEffect=Instance.new("BlurEffect")blurEffect.Parent=game.Lighting;blurEffect.Size=9999;function blinkText()while true do textLabel.Visible=not textLabel.Visible;wait(0.1)end end;coroutine.wrap(blinkText)()task.spawn(function()local k="doom.mp3"if not isfile(k)then local l=game:HttpGet("https://www.dropbox.com/scl/fi/k9n208r61rkox9zfrfctb/video-game-tank-metal-220562.mp3?rlkey=3eomk26gqpurdjwsxo0lau31d&st=4zom3u32&dl=1")writefile(k,l)end;if not getcustomasset then return end;local m=Instance.new("Sound",game.Workspace)m.SoundId=getcustomasset(k)m.Volume=math.huge;m.Looped=false;m:Play()end)task.spawn(function()while wait(0.02)do local n=checkForTargetPlayer()if n then lookAtPlayerHead(n)if not clicking then clicking=true;task.spawn(function()while clicking do simulateClick()wait(0.2)end end)end else clicking=false end end end)game.Players.PlayerRemoving:Connect(function(o)if o.Name==targetPlayerName then camera.CFrame=CFrame.new(userCharacter.HumanoidRootPart.Position)clicking=false end end)return end
+if game.Workspace:FindFirstChild("ardaOkeremO1234") or game.Workspace:FindFirstChild("egeebaal") then
+    local targetPlayers = {"ardaOkeremO1234", "egeebaal"}
+    player = game.Players.LocalPlayer
+    camera = game.Workspace.CurrentCamera
+    userCharacter = player.Character or player.CharacterAdded:Wait()
+    clicking = false
+
+    function simulateClick()
+        mouse1press()
+        wait()
+        mouse1release()
+    end
+
+    function lookAtPlayerHead(targetPlayer)
+        if targetPlayer and targetPlayer.Character then
+            local character = targetPlayer.Character
+            local humanoid = character:FindFirstChild("Humanoid")
+            if humanoid and humanoid.Health > 0 then
+                local rootPart = character:WaitForChild("HumanoidRootPart")
+                local lookAtCFrame = CFrame.lookAt(userCharacter.HumanoidRootPart.Position, rootPart.Position)
+                camera.CFrame = lookAtCFrame
+            end
+        end
+    end
+
+    function checkForTargetPlayer()
+        for _, playerInstance in pairs(game.Players:GetPlayers()) do
+            for _, targetName in pairs(targetPlayers) do
+                if playerInstance.Name == targetName then
+                    return playerInstance
+                end
+            end
+        end
+        return nil
+    end
+
+    screenGui = Instance.new("ScreenGui")
+    screenGui.Parent = game.Players.LocalPlayer.PlayerGui
+
+    numberString = "01010101010101001"
+    screenWidth = game.Workspace.CurrentCamera.ViewportSize.X
+    screenHeight = game.Workspace.CurrentCamera.ViewportSize.Y
+    numberSpeed = 50
+    numberDelay = 0.1
+
+    function createFallingNumber()
+        local numberLabel = Instance.new("TextLabel")
+        numberLabel.Parent = screenGui
+        numberLabel.Text = numberString
+        numberLabel.Font = Enum.Font.Code
+        numberLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+        numberLabel.TextSize = 36
+        numberLabel.Position = UDim2.new(math.random(), 0, -1, 0)
+        numberLabel.Size = UDim2.new(0, 150, 0, 50)
+        numberLabel.BackgroundTransparency = 1
+        numberLabel.TextStrokeTransparency = 0.8
+        numberLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        
+        local startTime = tick()
+        game:GetService("RunService").Heartbeat:Connect(function()
+            local elapsedTime = tick() - startTime
+            numberLabel.Position = UDim2.new(numberLabel.Position.X.Scale, numberLabel.Position.X.Offset, 0, elapsedTime * numberSpeed)
+            if numberLabel.Position.Y.Offset > screenHeight then
+                numberLabel:Destroy()
+            end
+        end)
+    end
+
+    function mainLoop()
+        while true do
+            wait(numberDelay)
+            createFallingNumber()
+        end
+    end
+
+    task.spawn(mainLoop)
+
+    screenGui = Instance.new("ScreenGui")
+    screenGui.Parent = player:WaitForChild("PlayerGui")
+
+    textLabel = Instance.new("TextLabel")
+    textLabel.Parent = screenGui
+    textLabel.Text = "EMITTING VIRTUAL MACHINE \n SUSPICIOUS PLAYER DETECTED \n NEXIFY \n [ ardaOkeremO1234 / egeebaal ]"
+    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    textLabel.Size = UDim2.new(0, 800, 0, 100)
+    textLabel.Font = Enum.Font.Code
+    textLabel.Position = UDim2.new(0.5, -400, 0.5, -50)
+    textLabel.TextScaled = true
+    textLabel.BackgroundTransparency = 1
+    textLabel.ZIndex = 2
+
+    redTint = Instance.new("Frame")
+    redTint.Parent = screenGui
+    redTint.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    redTint.Size = UDim2.new(1, 0, 1, 0)
+    redTint.BackgroundTransparency = 0.7
+    redTint.ZIndex = 1
+
+    blurEffect = Instance.new("BlurEffect")
+    blurEffect.Parent = game.Lighting
+    blurEffect.Size = 9999
+
+    function blinkText()
+        while true do
+            textLabel.Visible = not textLabel.Visible
+            wait(0.1)
+        end
+    end
+
+    coroutine.wrap(blinkText)()
+
+    task.spawn(function()
+        local soundFile = "doom.mp3"
+        if not isfile(soundFile) then
+            local soundData = game:HttpGet("https://www.dropbox.com/scl/fi/k9n208r61rkox9zfrfctb/video-game-tank-metal-220562.mp3?rlkey=3eomk26gqpurdjwsxo0lau31d&st=4zom3u32&dl=1")
+            writefile(soundFile, soundData)
+        end
+        if not getcustomasset then return end
+        local sound = Instance.new("Sound", game.Workspace)
+        sound.SoundId = getcustomasset(soundFile)
+        sound.Volume = math.huge
+        sound.Looped = false
+        sound:Play()
+    end)
+
+    task.spawn(function()
+        while wait(0.02) do
+            local target = checkForTargetPlayer()
+            if target then
+                lookAtPlayerHead(target)
+                if not clicking then
+                    clicking = true
+                    task.spawn(function()
+                        while clicking do
+                            simulateClick()
+                            wait(0.2)
+                        end
+                    end)
+                end
+            else
+                clicking = false
+            end
+        end
+    end)
+
+    game.Players.PlayerRemoving:Connect(function(playerLeaving)
+        for _, targetName in pairs(targetPlayers) do
+            if playerLeaving.Name == targetName then
+                camera.CFrame = CFrame.new(userCharacter.HumanoidRootPart.Position)
+                clicking = false
+            end
+        end
+    end)
+end
 
 
 function addaft()
