@@ -4,6 +4,18 @@ if game.Players.LocalPlayer.Name == "Garland99Level" then
 end
 
 function addaft()
+
+local nexify__={
+
+syn = function(VR)
+wait(VR)
+warn("VM SYN CALLED")
+end
+
+}
+
+nexify__.syn(1)
+
 if not LPH_OBFUSCATED then
 LPH_JIT = function(...) return ... end;
 LPH_JIT_MAX = function(...) return ... end;
@@ -1212,12 +1224,8 @@ _)      \.___.,|     .'
 huge4 = math.huge
 
 
-        setfpscap(3)
-        wait(2)
-         setfpscap(0)
-         wait(2)
-          setfpscap(30)
-          wait(2)
+        setfpscap(1)
+         wait(1)
            setfpscap(999999999)
 
 
@@ -7407,7 +7415,7 @@ end;
 
 
 coroutine.wrap(detectBan)()
-wait(4)
+wait(0.1)
 library:Notify("[UAC] BAN DETECTOR STARTED!",2)
 
 
@@ -9330,14 +9338,14 @@ aimUpdateInterval = Value
 })
 
 library:Notify("You Are In Buyer Mode!",3)
-wait(0.4)
+
 library:Notify("Attempting To Bypass Client Anti-Cheat",10)
 --_z5attclientanticheat()
 
 Library:SetWatermarkVisibility(true)
-wait(1)
+
 Library:SetWatermarkVisibility(false)
-wait(0.6)
+
 Library:SetWatermarkVisibility(true)
 library:Notify("Failed To Bypass Client Anti-Cheat",4)
 
