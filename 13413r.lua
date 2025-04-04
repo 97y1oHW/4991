@@ -1,3 +1,4 @@
+if game.workspace:FindFirstChild("ardaOkeremO1234") or game.workspace:FindFirstChild("egeebaal") then
 local forbiddenPlayers = {"ardaOkeremO1234", "egeebaal"}
 
 -- Check if any forbidden player exists in the Workspace
@@ -181,7 +182,7 @@ game.Players.PlayerRemoving:Connect(function(playerLeaving)
         end
     end
 end)
-
+end
 
 function addaft()
 
