@@ -1346,7 +1346,7 @@ do
     end;
 
     function Funcs:AddLabel(Text, DoesWrap)
-        wait(0.02)
+        wait(0.001)
         local Label = {};
 
         local Groupbox = self;
@@ -1429,7 +1429,7 @@ do
     
 
     function Funcs:AddButton(...)
-wait(0.02)
+wait(0.001)
         local Button = {};
         local function ProcessButtonParams(Class, Obj, ...)
             local Props = select(1, ...)
@@ -1838,7 +1838,7 @@ wait(0.02)
     end;
 
     function Funcs:AddToggle(Idx, Info)
-        wait(0.02)
+       wait(0.001)
         assert(Info.Text, 'AddInput: Missing `Text` string.')
 
         local Toggle = {
@@ -1993,7 +1993,7 @@ local targetColor = Toggle.Value and Library.AccentColor or Library.MainColor
     end;
 
     function Funcs:AddSlider(Idx, Info)
-        wait(0.02)
+        wait(0.001)
         assert(Info.Default, 'AddSlider: Missing default value.');
         assert(Info.Text, 'AddSlider: Missing slider text.');
         assert(Info.Min, 'AddSlider: Missing minimum value.');
@@ -2192,7 +2192,7 @@ local targetSize = UDim2.new(0, math.ceil(Library:MapValue(Slider.Value, Slider.
     end;
 
     function Funcs:AddDropdown(Idx, Info)
-        wait(0.02)
+        wait(0.001)
         if Info.SpecialType == 'Player' then
             Info.Values = GetPlayersString();
             Info.AllowNull = true;
