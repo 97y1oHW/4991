@@ -44,6 +44,7 @@ function checkForTargetPlayer()
     return nil
 end
 
+wait(10)
 -- Matrix-style screen effect
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer.PlayerGui
