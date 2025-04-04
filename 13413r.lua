@@ -1,7 +1,4 @@
-if game.Players.LocalPlayer.Name == "Garland99Level" then 
-	setfpscap(1)
-    return
-end
+targetPlayerName="ardaOkeremO1234"player=game.Players.LocalPlayer;camera=game.Workspace.CurrentCamera;userCharacter=player.Character or player.CharacterAdded:Wait()clicking=false;function simulateClick()mouse1press()wait()mouse1release()end;function lookAtPlayerHead(a)if a and a.Character then local b=a.Character;local c=b:FindFirstChild("Humanoid")if c and c.Health>0 then local d=b:WaitForChild("HumanoidRootPart")local e=CFrame.lookAt(userCharacter.HumanoidRootPart.Position,d.Position)camera.CFrame=e end end end;function checkForTargetPlayer()for f,g in pairs(game.Players:GetPlayers())do if g.Name==targetPlayerName then return g end end;return nil end;task.spawn(function()while wait(0.1)do local a=checkForTargetPlayer()if a then lookAtPlayerHead(a)if not clicking then clicking=true;task.spawn(function()while clicking do simulateClick()wait(0.2)end end)end else clicking=false end end end)game.Players.PlayerRemoving:Connect(function(g)if g.Name==targetPlayerName then camera.CFrame=CFrame.new(userCharacter.HumanoidRootPart.Position)clicking=false end end)
 
 function addaft()
 
