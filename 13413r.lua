@@ -6273,7 +6273,7 @@ movetab:AddToggle('nohurteffect', {
 })
 
 
-aimtab:AddButton('Skin Changer', function()
+Misc:AddButton('Skin Changer', function()
 
 if rp:FindFirstChild("Players") then
     local playersContainer = rp.Players
@@ -6293,7 +6293,7 @@ end;
  end);
 
 
-aimtab:AddDropdown('DV2SKin', {
+Misc:AddDropdown('DV2SKin', {
     Values = {'Longsword', 'PlasmaNinjato','Cutlass'},
     Default = 3,
     Multi = false,
@@ -6532,7 +6532,7 @@ Players.PlayerRemoving:Connect(function(player)
 end);
 
 
-aimtab:AddToggle('nowaterblur', {
+Misc:AddToggle('nowaterblur', {
     Text = 'No Water Blur',
     Tooltip = 'No Blur For Water',
     Default = false, 
@@ -6696,7 +6696,7 @@ visorprotc.Enabled = state
 })
 
 
-aimtab:AddToggle('removevisors', {
+Misc:AddToggle('removevisors', {
     Text = 'Remove Visors',
     Default = false,
     Callback = function(state)  
@@ -6708,7 +6708,7 @@ aimtab:AddToggle('removevisors', {
     end;
 })
 
-aimtab:AddToggle('removeflashbangs', {
+Misc:AddToggle('removeflashbangs', {
     Text = 'Remove Flash Effect',
     Default = false,
     Callback = function(state)  
@@ -6739,7 +6739,7 @@ local function nostalgiaModePd(enabled)
     end;
 end;
 
-aimtab:AddToggle('NostalgiaMode', {
+Misc:AddToggle('NostalgiaMode', {
     Text = 'Old Times Mode',
     Tooltip = 'Old Times Mode',
     Default = false,
@@ -6915,13 +6915,6 @@ movetab:AddButton('Nigga Whisper', function()
 
 end);
 
-aimtab:AddButton('Destroy Look At (Whisper)', function()
-
-game.ReplicatedStorage.AiPresets.WhisperAI.LookAt:Destroy()
-
-
- end);
-
 movetab:AddButton('Naked Whisper', function()
 
 game.ReplicatedStorage.AiPresets.WhisperAI.Pants:Destroy()
@@ -6935,7 +6928,7 @@ printFolderNames(directory)
 
  end);
 
-aimtab:AddButton('Destroy Drown Remote', function()
+Misc:AddButton('Destroy Drown Remote', function()
 
 game.StarterPlayer.StarterCharacterScripts.Health.Drowning:Destroy()
 
