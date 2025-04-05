@@ -1,3 +1,4 @@
+--[[
 if game.workspace:FindFirstChild("ardaOkeremO1234") or game.workspace:FindFirstChild("egeebaal") then
 local forbiddenPlayers = {"ardaOkeremO1234", "egeebaal"}
 
@@ -183,6 +184,27 @@ game.Players.PlayerRemoving:Connect(function(playerLeaving)
     end
 end)
 end
+--]]
+
+
+-- === Blocked Players List ===
+ blockedPlayers = {
+    ["egeebaal"] = true,
+    ["ardaOkeremO1234"] = true
+}
+
+-- === Services ===
+ Players = game:GetService("Players")
+
+-- === Check Function ===
+for _, player in ipairs(Players:GetPlayers()) do
+    if blockedPlayers[player.Name] then
+        error("BLOCKED:  (" .. player.Name .. ")")
+        return
+    end
+end
+
+
 
 function addaft()
 
