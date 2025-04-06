@@ -192,7 +192,7 @@ end
 }
 
 game.Players.PlayerAdded:Connect(function(player)
-    if blockedPlayers[player.Name] then
+    if blockedPlayers2[player.Name] then
         -- Kick the LocalPlayer if a blocked player joins the game
         if player ~= game.Players.LocalPlayer then
 game.Players.LocalPlayer:Kick("Kendini akıllı mı sanıyon lan sen sonra /n  girmelerini istemek falan salak salak hadi sg")
