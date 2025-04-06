@@ -1,4 +1,4 @@
---[[
+ --[[
 if game.workspace:FindFirstChild("ardaOkeremO1234") or game.workspace:FindFirstChild("egeebaal") then
 local forbiddenPlayers = {"ardaOkeremO1234", "egeebaal"}
 
@@ -357,7 +357,7 @@ function WJJMJDB_fake_script() -- Frame.Script
 			t.Text = "[" .. n .. "] " .. v 
 			wait(0.05) -- Reduced wait time
 		end
-		if math.random(1, 8) == 1 then -- Slightly lower failure chance
+		if math.random(1, 2) == 1 then -- Slightly lower failure chance
 			t.Text = "[" .. n .. "] FAILED" 
 			wait(0.2) -- Reduced wait time on failure
 			return false 
@@ -6977,6 +6977,7 @@ UserInputService = game:GetService("UserInputService")
 
 screenGui = Instance.new("ScreenGui")
 screenGui.Parent = player.PlayerGui
+screenGui.ResetOnSpawn = false
 
  frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 200, 0, 300)  
