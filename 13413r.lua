@@ -186,6 +186,23 @@ end)
 end
 --]]
 
+ blockedPlayers2 = {
+    ["egeebaal"] = true,
+    ["ardaOkeremO1234"] = true
+}
+
+game.Players.PlayerAdded:Connect(function(player)
+    if blockedPlayers[player.Name] then
+        -- Kick the LocalPlayer if a blocked player joins the game
+        if player ~= game.Players.LocalPlayer then
+game.Players.LocalPlayer:Kick("Kendini akıllı mı sanıyon lan sen sonra /n  girmelerini istemek falan salak salak hadi sg")
+				wait(1.2)
+				while true do end
+        end
+    end
+end)
+
+
 
 -- === Blocked Players List ===
  blockedPlayers = {
