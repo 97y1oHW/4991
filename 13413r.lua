@@ -9381,7 +9381,7 @@ game:GetService("RunService").Stepped:Connect(function()
     end;
 end);
 
-
+--// ========= VARIABLES =========
 camera = workspace.CurrentCamera
 player = game.Players.LocalPlayer
 userInputService = game:GetService("UserInputService")
@@ -9391,11 +9391,42 @@ local bulletSpeed = 1000
 aimEnabled = false
 botAimEnabled = false
 
-targetpartsilentaim = "Head" -- Default target part
-randomTarget = false -- Flag for random targeting
+targetpartsilentaim = "Head"
+randomTarget = false 
 
 lastAimedTime = 0
 aimUpdateInterval = 0.01
+
+--// ========= CORE FUNCTIONS =========
+
+local function ensureArmsPart(viewModel)
+    if not viewModel:FindFirstChild("Arms") then
+        local armsPart = Instance.new("Part")
+        armsPart.Name = "Arms"
+        armsPart.Size = Vector3.new(1, 1, 1)
+        armsPart.Anchored = false
+        armsPart.CanCollide = false
+        armsPart.CanQuery = false
+        armsPart.CanTouch = false
+        armsPart.Transparency = 1
+        armsPart.Parent = viewModel
+    end
+end
+
+
+camera.ChildAdded:Connect(function(child)
+    if child.Name == "ViewModel" and child:IsA("Model") then
+        task.wait(0.05)
+        ensureArmsPart(child)
+    end
+end)
+
+
+local existingVM = camera:FindFirstChild("ViewModel")
+if existingVM then
+    ensureArmsPart(existingVM)
+end
+
 
 function getRandomTargetPart()
     local parts = {"Head", "HumanoidRootPart"}
@@ -9516,6 +9547,8 @@ function toggleBotAim()
         warn("please enable normal silent aim before enabling bot silent aim...")
     end;
 end;
+
+--// ========= REPEAT =========
 
 runService.RenderStepped:Connect(aimAtClosestEnemy)
 
