@@ -185,10 +185,10 @@ game.Players.PlayerRemoving:Connect(function(playerLeaving)
 end)
 end
 --]]
-
+--[[
  blockedPlayers2 = {
-    ["egeebaal"] = true,
-    ["ardaOkeremO1234"] = true
+    ["egeebaal"] = false,
+    ["ardaOkeremO1234"] = false
 }
 
 game.Players.PlayerAdded:Connect(function(player)
@@ -221,7 +221,7 @@ for _, player in ipairs(Players:GetPlayers()) do
     end
 end
 
-
+]]
 
 function addaft()
 
