@@ -5754,6 +5754,7 @@ luatab:AddToggle('mıodasd', {
 luatab1:AddToggle('mıodasdx', {
     Text = 'Platform Stand',
     Default = false,
+    Warn = true,
     Callback = function(enabled)
         local localplayer = game.Players.LocalPlayer
         if localplayer and localplayer.Character and localplayer.Character:FindFirstChild("Humanoid") then
@@ -6399,6 +6400,7 @@ aimtab:AddLabel('NEXIFY V2 SOLARA', true)
 aimtab:AddToggle('nograss', {
     Text = 'No Grass',
     Default = false,
+    Warn = true,
     Tooltip = 'Removes Grasses',
     Callback = function(first)
         sethiddenproperty(game:GetService("Workspace").Terrain, "Decoration", not first)
@@ -6519,11 +6521,11 @@ end;
 localplayer = plrs.LocalPlayer
 
 methodsresolver = {
-    velocity = true,
-    animations = true,
-    slope = true,
-    angles = true,
-    breaker = true,
+    velocity = false,
+    animations = false,
+    slope = false,
+    angles = false,
+    breaker = false,
     position = false, --requires breaker
 }
 
@@ -7336,7 +7338,7 @@ aimtab:AddDropdown('cameradropdown', {
  aimtab:AddToggle('noweight', {
     Text = 'No Item Weight',
     Tooltip = 'No Item Weight',
-    Risky = true,
+    Warn = true,
     Default = false,
 
     Callback = function(enabled)
@@ -9069,7 +9071,7 @@ end;
 Misc:AddToggle('no soun fire f', { 
     Text = 'No Gun Fire Sound ', 
     Default = false,
-    Risky = true,
+--    Risky = true,
     Callback = function(isEnabled)
 
 game.ReplicatedStorage.Temp:Destroy()
@@ -9432,7 +9434,7 @@ charactertab:AddLabel('---------------------------------------------------------
 
 charactertab:AddToggle('disabletilt', {
     Text = 'Disable Tilt',
-    Risky = true,
+    Warn = true,
     Tooltip = 'Disable Tilt',
     Default = false,
     Callback = function(isToggled)
@@ -9936,7 +9938,7 @@ Misc:AddToggle(
     {
         Text = "Instant Respawn",
         Default = false,
-        Risky = true,
+        Warn = true,
         Callback = function(a)
             local function b()
                 local c = game.Players.LocalPlayer.Name
@@ -10034,7 +10036,7 @@ UserInputService.InputBegan:Connect(onKeyPress)
 aimtab:AddToggle('resolverrrrrrrr', {
     Text = 'Advancaded Resolver',
     Default = false,
-    Risky = true,
+    Warn = true,
     Callback = function(Value)
        settingsxxx.enabled = Value
     end;
@@ -10056,7 +10058,7 @@ aimtab:AddDropdown('DDDDD', {
 aimtab:AddToggle('silentAim993', {
     Text = 'Underground Resolver',
     Default = false,
-    Risky = true,
+    Warn = true,
     Callback = function(Value)
         -- Placeholder for callback (if needed)
     end;
