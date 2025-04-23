@@ -6515,6 +6515,100 @@ end;
 
  end);
 
+ plrs = game.Players
+localplayer = plrs.LocalPlayer
+
+methodsresolver = {
+    velocity = true,
+    animations = true,
+    slope = true,
+    angles = true,
+    breaker = true,
+    position = false, --requires breaker
+}
+
+settingsxxx = {
+    enabled = false,
+    debug = false
+}
+
+resolvecache = {}
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if not settingsxxx.enabled then return end
+
+    for _, v in pairs(plrs:GetPlayers()) do
+        if v ~= localplayer and v.Character then
+            local char = v.Character
+            local humanoid = char:FindFirstChild("Humanoid")
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+
+            if methodsresolver.angles then
+                local waist = char:FindFirstChild("UpperTorso") and char.UpperTorso:FindFirstChild("Waist")
+                if waist then waist.C0 = CFrame.new() end
+
+                local root = char:FindFirstChild("LowerTorso") and char.LowerTorso:FindFirstChild("Root")
+                if root then root.C0 = CFrame.new() end
+            end
+
+            if humanoid and methodsresolver.slope then
+                humanoid.MaxSlopeAngle = 89
+            end
+
+            if hrp and methodsresolver.velocity then
+                hrp.Velocity = Vector3.zero
+                if humanoid then humanoid.AutoRotate = true end
+            end
+
+            if hrp and humanoid and methodsresolver.breaker then
+                for _, anim in pairs(humanoid:GetPlayingAnimationTracks()) do
+                    local id = v.UserId .. "_" .. tostring(anim.Animation)
+                    if not resolvecache[id] then
+                        resolvecache[id] = {
+                            lasttime = anim.TimePosition,
+                            stuckframes = 0
+                        }
+                    else
+                        local cache = resolvecache[id]
+                        if math.abs(anim.TimePosition - cache.lasttime) < 0.001 then
+                            cache.stuckframes += 1
+                        else
+                            cache.stuckframes = 0
+                        end
+                        cache.lasttime = anim.TimePosition
+
+                        if cache.stuckframes > 10 then
+                        --    warn("[Resolver] Detected desync on", v.Name)
+                            anim:Stop()
+
+                            hrp.CFrame = CFrame.new(hrp.Position)
+                            if methodsresolver.position then
+                                hrp.CFrame = hrp.CFrame + Vector3.new(0,0.035,0)
+                            end
+                            resolvecache[id] = nil
+
+                            -- Debug Mode: Notify desync detected
+                            if settingsxxx.debug then
+                                library:Notify("Desync detected: " .. v.Name, 15)
+                            end
+                        end
+                    end
+                end
+            end
+
+            if humanoid and methodsresolver.animations then
+                for _, f in pairs(humanoid:GetPlayingAnimationTracks()) do
+                    f:Stop()
+                end
+            end
+        end
+    end
+end)
+
+
+
+
+
 
 Misc:AddDropdown('DV2SKin', {
     Values = {'Longsword', 'PlasmaNinjato','Cutlass'},
@@ -9936,6 +10030,27 @@ end
 
 -- Attach the InputBegan listener initially
 UserInputService.InputBegan:Connect(onKeyPress)
+
+aimtab:AddToggle('resolverrrrrrrr', {
+    Text = 'Advancaded Resolver',
+    Default = false,
+    Risky = true,
+    Callback = function(Value)
+       settingsxxx.enabled = Value
+    end;
+})
+
+
+aimtab:AddDropdown('DDDDD', {
+    Values = { 'velocity', 'animations', 'angles', 'slope', 'breaker'},
+    Default = 0,
+    Multi = true,
+    Text = 'Advancaded Resolver Options',
+    Tooltip = 'Recommended To Select All',
+    Callback = function(state)
+        methodsresolver = state
+    end;
+})
 
 -- When the keybind is changed, update the keybind variable
 aimtab:AddToggle('silentAim993', {
@@ -17502,7 +17617,7 @@ warn("Script loaded,")
 
 while wait(3) do
 
-if game.Workspace.Unfunctionalkid then
+if game.Workspace.Quicst8057 then
 wait(math.random(14,20))
 library:Notify("Owner Of Nexify Joined To Game! ⭐", 20)
 break
