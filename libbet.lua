@@ -45,6 +45,7 @@ local Library = {
     AccentColor = Color3.fromRGB(106,90,205);
     OutlineColor = Color3.fromRGB(50, 50, 50);
     RiskColor = Color3.fromRGB(162, 5, 5),
+    WarnColor = Color3.fromRGB(255, 183, 14),
 
     Black = Color3.new(0, 0, 0);
     Font = Enum.Font.Code; 
@@ -1848,6 +1849,7 @@ wait(0.001)
             Callback = Info.Callback or function(Value) end;
             Addons = {},
             Risky = Info.Risky,
+            Warn = Info.Warn,
         };
 
         local Groupbox = self;
@@ -1975,6 +1977,12 @@ local targetColor = Toggle.Value and Library.AccentColor or Library.MainColor
             Library:RemoveFromRegistry(ToggleLabel)
             ToggleLabel.TextColor3 = Library.RiskColor
             Library:AddToRegistry(ToggleLabel, { TextColor3 = 'RiskColor' })
+        end
+
+         if Toggle.Warn then
+            Library:RemoveFromRegistry(ToggleLabel)
+            ToggleLabel.TextColor3 = Library.WarnColor
+            Library:AddToRegistry(ToggleLabel, { TextColor3 = 'WarnColor' })
         end
 
         Toggle:Display();
