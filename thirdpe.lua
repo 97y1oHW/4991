@@ -2,7 +2,7 @@ local player = game:GetService("Players").LocalPlayer
 local userInputService = game:GetService("UserInputService");
 
 getgenv().thirdperson = true
-getgenv().thirdpersondistance = true
+getgenv().thirdpersondistance = 10
 
 local function updateCamera()
     if getgenv().thirdperson then
