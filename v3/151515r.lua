@@ -3458,9 +3458,35 @@ getgenv().thirdpersondistance = State
 
 end})
 
-MiscCharSettings:toggle({name = "Instant Respawn", def = false, callback = function(isEnabled)
+MiscCharSettings:toggle({name = "Instant Respawn", def = false, callback = function(a)
 
-
+local function b()
+                local c = game.Players.LocalPlayer.Name
+                local d = game.Workspace:FindFirstChild(c)
+                if d then
+                    local e = d:FindFirstChild("Humanoid")
+                    if e and e.Health <= 0 then
+                        if a then
+                            game.Players.LocalPlayer.PlayerGui.RespawnMenu.Enabled = false
+                            game.ReplicatedStorage.Remotes.SpawnCharacter:InvokeServer()
+                        else
+                            game.Players.LocalPlayer.PlayerGui.RespawnMenu.Enabled = true
+                        end
+                    else
+                        game.Players.LocalPlayer.PlayerGui.RespawnMenu.Enabled = false
+                        if a then
+                            game.ReplicatedStorage.Remotes.SpawnCharacter:InvokeServer()
+                        end
+                    end
+                end
+            end
+            if a then
+                RunService.Heartbeat:Connect(
+                    function()
+                        b()
+                    end
+                )
+            end
 
 end})
 
