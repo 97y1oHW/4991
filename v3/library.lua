@@ -10,6 +10,7 @@ local sliders = {}
 local dropdowns = {}
 local multiboxs = {}
 local buttonboxs = {}
+
 local textboxs = {}
 local keybinds = {}
 local colorpickers = {}
@@ -42,6 +43,7 @@ dropdowns.__index = dropdowns
 multiboxs.__index = multiboxs
 buttonboxs.__index = buttonboxs
 textboxs.__index = textboxs
+library.keybinds = {} -- Add this line
 keybinds.__index = keybinds
 colorpickers.__index = colorpickers
 configloaders.__index = configloaders
@@ -412,7 +414,7 @@ function library:new(props)
 	--
 	window.labels[#window.labels+1] = titletext
 	-- // metatable indexing + return
-	setmetatable(window, library)
+	(window, library)
 	return window
 end
 --
@@ -497,7 +499,7 @@ function library:watermark()
 	--
 	self.labels[#self.labels+1] = title
 	--
-	setmetatable(watermark,watermarks)
+	(watermark,watermarks)
 	return watermark
 end
 --
@@ -763,7 +765,7 @@ function library:loader(props)
 		["title"] = title
 	}
 	--
-	setmetatable(loader,loaders)
+	(loader,loaders)
 	return loader
 end
 --
@@ -1142,7 +1144,7 @@ function library:page(props)
 	--
 	self.labels[#self.labels+1] = label
 	-- // metatable indexing + return
-	setmetatable(page, pages)
+	(page, pages)
 	return page
 end
 --
@@ -1272,7 +1274,7 @@ function pages:section(props)
 	--
 	self.library.labels[#self.library.labels+1] = title
 	-- // metatable indexing + return
-	setmetatable(section, sections)
+	(section, sections)
 	return section
 end
 --
@@ -1422,7 +1424,7 @@ function pages:multisection(props)
 	--
 	self.library.labels[#self.library.labels+1] = title
 	-- // metatable indexing + return
-	setmetatable(multisection,multisections)
+	(multisection,multisections)
 	return multisection
 end
 --
@@ -1588,7 +1590,7 @@ function multisections:section(props)
 	--
 	self.library.labels[#self.library.labels+1] = label
 	-- // metatable indexing + return
-	setmetatable(mssection,mssections)
+	(mssection,mssections)
 	return mssection
 end
 --
@@ -1714,7 +1716,7 @@ function sections:toggle(props)
 	--
 	self.library.labels[#self.library.labels+1] = title
 	-- // metatable indexing + return
-	setmetatable(toggle, toggles)
+	(toggle, toggles)
 	return toggle
 end
 --
@@ -1829,7 +1831,7 @@ function sections:button(props)
 	--
 	self.library.labels[#self.library.labels+1] = buttonpress
 	-- // metatable indexing + return
-	setmetatable(button, buttons)
+	(button, buttons)
 	return button
 end
 --
@@ -2043,7 +2045,7 @@ function sections:slider(props)
 	self.library.labels[#self.library.labels+1] = title
 	self.library.labels[#self.library.labels+1] = value
 	-- // metatable indexing + return
-	setmetatable(slider, sliders)
+	(slider, sliders)
 	return slider
 end
 --
@@ -2392,7 +2394,7 @@ function sections:dropdown(props)
 	self.library.labels[#self.library.labels+1] = title
 	self.library.labels[#self.library.labels+1] = value
 	-- // metatable indexing + return
-	setmetatable(dropdown, dropdowns)
+	(dropdown, dropdowns)
 	return dropdown
 end
 --
@@ -2635,7 +2637,7 @@ function sections:buttonbox(props)
 	--
 	self.library.labels[#self.library.labels+1] = title
 	-- // metatable indexing + return
-	setmetatable(buttonbox, buttonboxs)
+	(buttonbox, buttonboxs)
 	return buttonbox
 end
 --
@@ -2972,7 +2974,7 @@ function sections:multibox(props)
 	self.library.labels[#self.library.labels+1] = value
 	self.library.labels[#self.library.labels+1] = title
 	-- // metatable indexing + return
-	setmetatable(multibox, multiboxs)
+	(multibox, multiboxs)
 	return multibox
 end
 --
@@ -3176,7 +3178,7 @@ function sections:textbox(props)
 	self.library.labels[#self.library.labels+1] = title
 	self.library.labels[#self.library.labels+1] = tbox
 	-- // metatable indexing + return
-	setmetatable(textbox, textboxs)
+	(textbox, textboxs)
 	return textbox
 end
 --
@@ -3193,6 +3195,7 @@ function sections:keybind(props)
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
 	local allowed = props.allowed or props.Allowed or 1
 	--
+	
 	local default = ".."
 	local typeis = nil
 	--
@@ -3330,6 +3333,7 @@ function sections:keybind(props)
 			Parent = keybindholder
 		}
 	)
+	table.insert(self.library.keybinds, keybind)
 	-- // keybind tbl
 	keybind = {
 		["library"] = self.library,
@@ -3363,46 +3367,44 @@ function sections:keybind(props)
 		outline.Size = UDim2.new(0,value.TextBounds.X+20,1,0)
 	end)
 	--
-	local function turn(typeis,current)
-		outline.Size = UDim2.new(0,value.TextBounds.X+20,1,0)
-		keybind.down = false
-		keybind.current = {typeis,utility.splitenum(current)}
-		outline.BorderColor3 = Color3.fromRGB(12, 12, 12)
-		local find = table.find(self.library.themeitems["accent"]["BorderColor3"],outline)
-		if find then
-			table.remove(self.library.themeitems["accent"]["BorderColor3"],find)
-		end
-	end
+local function turn(typeis, current)
+    outline.Size = UDim2.new(0, value.TextBounds.X + 20, 1, 0)
+    keybind.down = false
+    keybind.current = {typeis, utility.splitenum(current)}
+    outline.BorderColor3 = Color3.fromRGB(12, 12, 12)
+    local find = table.find(self.library.themeitems["accent"]["BorderColor3"], outline)
+    if find then
+        table.remove(self.library.themeitems["accent"]["BorderColor3"], find)
+    end
+    -- Removed callback(Input.KeyCode) or callback(Input)
+end
 	--
 	uis.InputBegan:Connect(function(Input)
-		if keybind.down then
-			if Input.UserInputType == Enum.UserInputType.Keyboard then
-				local capd = utility.capatalize(Input.KeyCode.Name)
-				if #capd > 1 then
-					value.Text = capd
-				else
-					value.Text = Input.KeyCode.Name
-				end
-				turn("KeyCode",Input.KeyCode)
-				callback(Input.KeyCode)
-			end
-			if allowed == 1 then
-				if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					value.Text = "MB1"
-					turn("UserInputType",Input)
-					callback(Input)
-				elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
-					value.Text = "MB2"
-					turn("UserInputType",Input)
-					callback(Input)
-				elseif Input.UserInputType == Enum.UserInputType.MouseButton3 then
-					value.Text = "MB3"
-					turn("UserInputType",Input)
-					callback(Input)
-				end
-			end
-		end
-	end)
+    if keybind.down then
+        if Input.UserInputType == Enum.UserInputType.Keyboard then
+            local capd = utility.capatalize(Input.KeyCode.Name)
+            if #capd > 1 then
+                value.Text = capd
+            else
+                value.Text = Input.KeyCode.Name
+            end
+            turn("KeyCode", Input.KeyCode)
+        end
+        if allowed == 1 then
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                value.Text = "MB1"
+                turn("UserInputType", Input)
+            elseif Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                value.Text = "MB2"
+                turn("UserInputType", Input)
+            elseif Input.UserInputType == Enum.UserInputType.MouseButton3 then
+                value.Text = "MB3"
+                turn("UserInputType", Input)
+            end
+        end
+    end
+end)
+	
 	--
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
 	--
@@ -3415,7 +3417,7 @@ function sections:keybind(props)
 	self.library.labels[#self.library.labels+1] = title
 	self.library.labels[#self.library.labels+1] = value
 	-- // metatable indexing + return
-	setmetatable(keybind, keybinds)
+	(keybind, keybinds)
 	return keybind
 end
 --
@@ -3921,7 +3923,28 @@ function sections:colorpicker(props)
 	end
 	--
 	updateboxes()
+
+	
 	--
+
+	uis.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard then
+        for _, keybind in pairs(library.keybinds) do
+            if keybind.current[1] == "KeyCode" and input.KeyCode.Name == keybind.current[2] then
+                keybind.callback()
+            end
+        end
+    elseif input.UserInputType == Enum.UserInputType.MouseButton1 or 
+           input.UserInputType == Enum.UserInputType.MouseButton2 or 
+           input.UserInputType == Enum.UserInputType.MouseButton3 then
+        for _, keybind in pairs(library.keybinds) do
+            if keybind.current[1] == "UserInputType" and input.UserInputType.Name == keybind.current[2] then
+                keybind.callback()
+            end
+        end
+    end
+end)
+	
 	local function movehue()
 		local posy = math.clamp(plr:GetMouse().Y-outline3.AbsolutePosition.Y,0,outline3.AbsoluteSize.Y)
 		local resy = (1/outline3.AbsoluteSize.Y)*posy
@@ -4103,7 +4126,7 @@ function sections:colorpicker(props)
 	self.library.labels[#self.library.labels+1] = blue[2]
 	self.library.labels[#self.library.labels+1] = cptitle
 	-- // metatable indexing + return
-	setmetatable(colorpicker, colorpickers)
+	(colorpicker, colorpickers)
 	return colorpicker
 end
 --
@@ -4661,7 +4684,7 @@ function sections:configloader(props)
 		["library"] = self.library
 	}
 	-- // metatable indexing + return
-	setmetatable(configloader, configloaders)
+	(configloader, configloaders)
 	return configloader 
 end
 return library
