@@ -908,6 +908,89 @@ SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
 
+ local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
+    if not Sky then Sky = Instance.new("Sky", Lighting) end;
+    local value = "Standard"
+    local SkyBoxes = {
+        ["Standard"] = { ["SkyboxBk"] = Sky.SkyboxBk, ["SkyboxDn"] = Sky.SkyboxDn, ["SkyboxFt"] = Sky.SkyboxFt, ["SkyboxLf"] = Sky.SkyboxLf, ["SkyboxRt"] = Sky.SkyboxRt, ["SkyboxUp"] = Sky.SkyboxUp, },
+        ["Among Us"] = { ["SkyboxBk"] = "rbxassetid://5752463190", ["SkyboxDn"] = "rbxassetid://5752463190", ["SkyboxFt"] = "rbxassetid://5752463190", ["SkyboxLf"] = "rbxassetid://5752463190", ["SkyboxRt"] = "rbxassetid://5752463190", ["SkyboxUp"] = "rbxassetid://5752463190" },
+        ["Doge"] = { ["SkyboxBk"] = "rbxassetid://159713165", ["SkyboxDn"] = "rbxassetid://159713165", ["SkyboxFt"] = "rbxassetid://5752463190", ["SkyboxLf"] = "rbxassetid://5752463190", ["SkyboxRt"] = "rbxassetid://159713165", ["SkyboxUp"] = "rbxassetid://159713165" },
+        ["Spongebob"] = { ["SkyboxBk"] = "rbxassetid://277099484", ["SkyboxDn"] = "rbxassetid://277099500", ["SkyboxFt"] = "rbxassetid://277099554", ["SkyboxLf"] = "rbxassetid://277099531", ["SkyboxRt"] = "rbxassetid://277099589", ["SkyboxUp"] = "rbxassetid://277101591" },
+        ["Deep Space"] = { ["SkyboxBk"] = "rbxassetid://159248188", ["SkyboxDn"] = "rbxassetid://159248183", ["SkyboxFt"] = "rbxassetid://159248187", ["SkyboxLf"] = "rbxassetid://159248173", ["SkyboxRt"] = "rbxassetid://159248192", ["SkyboxUp"] = "rbxassetid://159248176" },
+        ["Winter"] = { ["SkyboxBk"] = "rbxassetid://510645155", ["SkyboxDn"] = "rbxassetid://510645130", ["SkyboxFt"] = "rbxassetid://510645179", ["SkyboxLf"] = "rbxassetid://510645117", ["SkyboxRt"] = "rbxassetid://510645146", ["SkyboxUp"] = "rbxassetid://510645195" },
+        ["Clouded Sky"] = { ["SkyboxBk"] = "rbxassetid://252760981", ["SkyboxDn"] = "rbxassetid://252763035", ["SkyboxFt"] = "rbxassetid://252761439", ["SkyboxLf"] = "rbxassetid://252760980", ["SkyboxRt"] = "rbxassetid://252760986", ["SkyboxUp"] = "rbxassetid://252762652" },
+        
+    }
+
+    
+SkyBoxes = {
+    ["Standard"] = {
+        ["SkyboxBk"] = "rbxassetid://123456789", 
+        ["SkyboxDn"] = "rbxassetid://123456789",
+        ["SkyboxFt"] = "rbxassetid://123456789",
+        ["SkyboxLf"] = "rbxassetid://123456789",
+        ["SkyboxRt"] = "rbxassetid://123456789",
+        ["SkyboxUp"] = "rbxassetid://123456789"
+    },
+    ["Among Us"] = {
+        ["SkyboxBk"] = "rbxassetid://5752463190",
+        ["SkyboxDn"] = "rbxassetid://5752463190",
+        ["SkyboxFt"] = "rbxassetid://5752463190",
+        ["SkyboxLf"] = "rbxassetid://5752463190",
+        ["SkyboxRt"] = "rbxassetid://5752463190",
+        ["SkyboxUp"] = "rbxassetid://5752463190"
+    },
+    ["Doge"] = {
+        ["SkyboxBk"] = "rbxassetid://159713165",
+        ["SkyboxDn"] = "rbxassetid://159713165",
+        ["SkyboxFt"] = "rbxassetid://5752463190",
+        ["SkyboxLf"] = "rbxassetid://5752463190",
+        ["SkyboxRt"] = "rbxassetid://159713165",
+        ["SkyboxUp"] = "rbxassetid://159713165"
+    },
+    ["Spongebob"] = {
+        ["SkyboxBk"] = "rbxassetid://277099484",
+        ["SkyboxDn"] = "rbxassetid://277099500",
+        ["SkyboxFt"] = "rbxassetid://277099554",
+        ["SkyboxLf"] = "rbxassetid://277099531",
+        ["SkyboxRt"] = "rbxassetid://277099589",
+        ["SkyboxUp"] = "rbxassetid://277101591"
+    },
+["Blood"] = {
+    ["SkyboxBk"] = "rbxassetid://163288979",  
+    ["SkyboxDn"] = "rbxassetid://163288979",  
+    ["SkyboxFt"] = "rbxassetid://163288979",  
+    ["SkyboxLf"] = "rbxassetid://163288979",  
+    ["SkyboxRt"] = "rbxassetid://163288979",  
+    ["SkyboxUp"] = "rbxassetid://163288979"   
+},
+
+    ["Deep Space"] = {
+        ["SkyboxBk"] = "rbxassetid://159248188",
+        ["SkyboxDn"] = "rbxassetid://159248183",
+        ["SkyboxFt"] = "rbxassetid://159248187",
+        ["SkyboxLf"] = "rbxassetid://159248173",
+        ["SkyboxRt"] = "rbxassetid://159248192",
+        ["SkyboxUp"] = "rbxassetid://159248176"
+    },
+    ["Winter"] = {
+        ["SkyboxBk"] = "rbxassetid://510645155",
+        ["SkyboxDn"] = "rbxassetid://510645130",
+        ["SkyboxFt"] = "rbxassetid://510645179",
+        ["SkyboxLf"] = "rbxassetid://510645117",
+        ["SkyboxRt"] = "rbxassetid://510645146",
+        ["SkyboxUp"] = "rbxassetid://510645195"
+    },
+    ["Clouded Sky"] = {
+        ["SkyboxBk"] = "rbxassetid://252760981",
+        ["SkyboxDn"] = "rbxassetid://252763035",
+        ["SkyboxFt"] = "rbxassetid://252761439",
+        ["SkyboxLf"] = "rbxassetid://252760980",
+        ["SkyboxRt"] = "rbxassetid://252760986",
+        ["SkyboxUp"] = "rbxassetid://252762652"
+    },
+}
+
  PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
  function createModDetectorGUI(enabled)
@@ -3308,6 +3391,26 @@ end})
 
 MiscMoveSettings:keybind({name = "CFrame Keybind", def = Enum.KeyCode.V, callback = function(Key)
  PuppySettings.Misc.CFrameSpeed.Keybind = Key
+end})
+
+MiscMoveSettings:dropdown({name = "Sky Box Changer", def = "Standart", max = 7, options = {"Standard", "Blood", "Among Us", "Doge", "Spongebob", "Deep Space", "Winter", "Clouded Sky"},  callback = function(part)
+    local sky = game.Lighting:FindFirstChildOfClass("Sky")
+        
+        
+        if not sky then
+            sky = Instance.new("Sky")
+            sky.Parent = game.Lighting
+        end;
+
+        
+        local selectedBox = SkyBoxes[selectedSkybox]
+        if selectedBox then
+            for key, assetId in pairs(selectedBox) do
+                sky[key] = assetId 
+            end;
+        else
+            warn("Selected skybox is not available!")
+        end;
 end})
 
 local speedconfig = {
