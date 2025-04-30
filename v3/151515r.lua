@@ -3451,6 +3451,13 @@ MiscCharSettings:toggle({name = "Third Person", def = false, callback = function
         end;
 end})
 
+
+MiscCharSettings:slider({name = "Third Person Distance", def = 10, max = 100, min = 1, rounding = true, callback = function(State)
+
+getgenv().thirdpersondistance = State
+
+end})
+
 MiscCharSettings:toggle({name = "Instant Respawn", def = false, callback = function(isEnabled)
 
 
