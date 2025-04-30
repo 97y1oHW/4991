@@ -1,4 +1,7 @@
 -- // variables
+
+local mouseLockEnabled = false
+local mouseLockConnection = nil
 local library = {}
 local pages = {}
 local sections = {}
@@ -103,6 +106,34 @@ end
 --
 utility.zigzag = function(X)
 	return math.acos(math.cos(X*math.pi))/math.pi
+end
+
+-- Add this function to your utility section
+utility.lockMouse = function(state)
+    if state then
+        -- Lock mouse
+        if not mouseLockEnabled then
+            mouseLockEnabled = true
+            if mouseLockConnection then
+                mouseLockConnection:Disconnect()
+            end
+            mouseLockConnection = game:GetService("RunService").RenderStepped:Connect(function()
+                if mouseLockEnabled then
+                    game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.LockCenter
+                end
+            end)
+        end
+    else
+        -- Unlock mouse
+        if mouseLockEnabled then
+            mouseLockEnabled = false
+            if mouseLockConnection then
+                mouseLockConnection:Disconnect()
+                mouseLockConnection = nil
+            end
+            game:GetService("UserInputService").MouseBehavior = Enum.MouseBehavior.Default
+        end
+    end
 end
 --
 utility.capatalize = function(s)
@@ -389,7 +420,10 @@ function library:new(props)
 						--
 						if window.x == false and window.y == false then
 							screen.Enabled = false
+								utility.lockMouse(true) -- Unlock mouse when UI is shown
 						else
+								utility.lockMouse(true) -- Unlock mouse when UI is shown
+								
 							ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.In), {Position = UDim2.new(xx,xxx,yy,yyy)}):Play()
 						end
 						wait(0.5)
@@ -399,8 +433,10 @@ function library:new(props)
 						toggled = not toggled
 						if window.x == false and window.y == false then
 							screen.Enabled = true
+								utility.lockMouse(false) -- Unlock mouse when UI is shown
 						else
-							ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.Out), {Position = saved}):Play()
+							utility.lockMouse(false) -- Unlock mouse when UI is shown
+								ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.Out), {Position = saved}):Play()
 						end
 						wait(0.5)
 						cooldown = false
