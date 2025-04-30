@@ -776,6 +776,72 @@ function watermarks:toggle(bool)
 	--
 	watermark.outline.Visible = bool
 end
+
+function library:graphcheck()
+	local graphFrame = Instance.new("Frame")
+	graphFrame.Size = UDim2.new(0, 200, 0, 100)
+	graphFrame.Position = UDim2.new(0, 10, 0, 10)
+	graphFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	graphFrame.BorderColor3 = Color3.fromRGB(12, 12, 12)
+	graphFrame.Parent = self.screen
+	graphFrame.ZIndex = 9990
+
+	local fpsLine = Instance.new("Frame", graphFrame)
+	fpsLine.BackgroundColor3 = Color3.fromRGB(225, 58, 81)
+	fpsLine.BorderSizePixel = 0
+	fpsLine.Size = UDim2.new(0, 1, 1, 0)
+	fpsLine.Position = UDim2.new(1, -1, 0, 0)
+	fpsLine.AnchorPoint = Vector2.new(1, 0)
+
+	local pingLine = fpsLine:Clone()
+	pingLine.BackgroundColor3 = Color3.fromRGB(58, 181, 225)
+	pingLine.Parent = graphFrame
+
+	local fpsData = {}
+	local pingData = {}
+
+	local function push(t, v)
+		table.insert(t, v)
+		if #t > 200 then
+			table.remove(t, 1)
+		end
+	end
+
+	local function updateGraph()
+		local fps = math.floor(1 / rs.RenderStepped:Wait())
+		local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue()
+
+		push(fpsData, fps)
+		push(pingData, ping)
+
+		local w = graphFrame.AbsoluteSize.X
+		graphFrame:ClearAllChildren()
+
+		for i = 1, #fpsData do
+			local fBar = Instance.new("Frame")
+			fBar.Size = UDim2.new(0, 1, 0, math.clamp(fpsData[i] * 2, 1, 100))
+			fBar.Position = UDim2.new(0, i, 1, -fBar.Size.Y.Offset)
+			fBar.BackgroundColor3 = Color3.fromRGB(225, 58, 81)
+			fBar.BorderSizePixel = 0
+			fBar.ZIndex = 9991
+			fBar.Parent = graphFrame
+
+			local pBar = fBar:Clone()
+			pBar.Size = UDim2.new(0, 1, 0, math.clamp(pingData[i] * 0.4, 1, 100))
+			pBar.Position = UDim2.new(0, i, 1, -pBar.Size.Y.Offset)
+			pBar.BackgroundColor3 = Color3.fromRGB(58, 181, 225)
+			pBar.Parent = graphFrame
+		end
+	end
+
+	task.spawn(function()
+		while true do
+			updateGraph()
+			task.wait(0.2)
+		end
+	end)
+end
+
 --
 function library:saveconfig()
 	local cfg = {}
