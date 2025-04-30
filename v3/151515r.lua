@@ -893,7 +893,7 @@ local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", 
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
 local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
 local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 100})
-local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 210})
+local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 250})
 local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 100})
 local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 145})
 local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
@@ -903,7 +903,7 @@ local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 150})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 200})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
@@ -1238,7 +1238,59 @@ GunMods:toggle({name = "Rapid Fire", def = false, callback = function(state)
             setFireRateForAllItems(originalFireRate)  -- Reset to original fire rate
             print("Rapid Fire disabled.")
         end
-end})
+end
+})
+
+GunMods:toggle({
+    name = "No Sway",
+    def = false,
+    callback = function(state)
+        local plr = game:GetService("Players").LocalPlayer
+        local rs = game:GetService("ReplicatedStorage")
+        local inv = rs.Players:FindFirstChild(plr.Name).Inventory
+
+        for _, item in pairs(inv:GetChildren()) do
+            local settingsModule = item:FindFirstChild("SettingsModule")
+            if settingsModule and settingsModule:IsA("ModuleScript") then
+                local settings = require(settingsModule)
+                if state == true then
+                    settings.swayMult = 0
+                    settings.IdleSwayModifier = 0
+                    settings.WalkSwayModifier = 0
+                    settings.SprintSwayModifier = 0
+                else
+                    settings.swayMult = 1
+                    settings.IdleSwayModifier = 8
+                    settings.WalkSwayModifier = 5
+                    settings.SprintSwayModifier = 1
+                end
+            end
+        end
+    end
+})
+
+
+GunMods:toggle({
+    name = "No Gun Collision",
+    def = false,
+    callback = function(state)
+        local plr = game:GetService("Players").LocalPlayer
+        local rs = game:GetService("ReplicatedStorage")
+        local inv = rs.Players:FindFirstChild(plr.Name).Inventory
+
+        for _, item in pairs(inv:GetChildren()) do
+            local settingsModule = item:FindFirstChild("SettingsModule")
+            if settingsModule and settingsModule:IsA("ModuleScript") then
+                local settings = require(settingsModule)
+                if state == true then
+                    settings.ItemLength = 0
+                else
+                    settings.ItemLength = 3.1
+                end
+            end
+        end
+    end
+})
 
 
         GunMods:toggle({name = "Instant Aim", def = false, callback = function(Value)
@@ -2249,6 +2301,65 @@ end})
 
 -- Trigger Bot Section -- 
 local TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 90})
+local Offsettabb = AimingTab:section({name = "Gun Offset", side = "left",size = 120})
+ local plr = game:GetService("Players").LocalPlayer
+local rs = game:GetService("ReplicatedStorage")
+local inv = rs.Players:FindFirstChild(plr.Name).Inventory
+
+local xaaa, yaaa, zaaa = 0, 0, 0
+local originalOffsets = {}
+
+-- ilk değerleri saklıyoz, ki slider değişince oradan başlayalım
+for _, item in pairs(inv:GetChildren()) do
+	local settingsModule = item:FindFirstChild("SettingsModule")
+	if settingsModule and settingsModule:IsA("ModuleScript") then
+		local settings = require(settingsModule)
+		if settings.weaponOffSet and typeof(settings.weaponOffSet) == "CFrame" then
+			originalOffsets[item.Name] = settings.weaponOffSet
+		end
+	end
+end
+
+local function applyOffset()
+	for _, item in pairs(inv:GetChildren()) do
+		local settingsModule = item:FindFirstChild("SettingsModule")
+		if settingsModule and settingsModule:IsA("ModuleScript") then
+			local settings = require(settingsModule)
+			local baseOffset = originalOffsets[item.Name]
+			if baseOffset and typeof(baseOffset) == "CFrame" then
+				settings.weaponOffSet = baseOffset + Vector3.new(xaaa, yaaa, zaaa)
+			end
+		end
+	end
+end
+
+-- slider'lar
+Offsettabb:slider({
+	name = "X", def = 0, max = 10, min = 0, rounding = true,
+	callback = function(val)
+		xaaa = val
+		applyOffset()
+	end
+})
+
+Offsettabb:slider({
+	name = "Y", def = 0, max = 10, min = 0, rounding = true,
+	callback = function(val)
+		yaaa = val
+		applyOffset()
+	end
+})
+
+Offsettabb:slider({
+	name = "Z", def = 0, max = 10, min = 0, rounding = true,
+	callback = function(val)
+		zaaa = val
+		applyOffset()
+	end
+})
+
+
+
 local BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 40})
 
 
