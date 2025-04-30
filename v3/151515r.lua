@@ -894,7 +894,7 @@ local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "righ
 local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
 local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 100})
 local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 210})
-local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 60})
+local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 100})
 local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 145})
 local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
@@ -903,7 +903,7 @@ local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 135})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 150})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
