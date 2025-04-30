@@ -2,185 +2,9 @@ if getgenv().nexifye == true then return end
 getgenv().nexifye = true
 getgenv().SilentKeyy = 'q'
 getgenv().PredictionAmmount = 0.137
+loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/v3/loadingbar.lua"))()
 wait(3)
-local TweenService = game:GetService("TweenService")
-local CoreGuiService = game:GetService("CoreGui") -- Added missing service
 
-local TweenTable = {
-    Default = TweenInfo.new(0.17, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 0, false, 0) -- Simplified Default tween
-}
-
-local CreateTween = function(name, speed, style, direction, loop, reverse, delay)
-    speed = speed or 0.17
-    style = style or Enum.EasingStyle.Sine
-    direction = direction or Enum.EasingDirection.InOut
-    loop = loop or 0
-    reverse = reverse or false
-    delay = delay or 0
-
-    TweenTable[name] = TweenInfo.new(speed, style, direction, loop, reverse, delay)
-end
-
-
-local introduction = Instance.new("ScreenGui")
-local edge = Instance.new("Frame")
-local edgeCorner = Instance.new("UICorner")
-local background = Instance.new("Frame")
-local backgroundGradient = Instance.new("UIGradient")
-local backgroundCorner = Instance.new("UICorner")
-local barFolder = Instance.new("Folder")
-local bar = Instance.new("Frame")
-local barCorner = Instance.new("UICorner")
-local barLayout = Instance.new("UIListLayout")
-local xsxLogo = Instance.new("ImageLabel")  -- This is the logo we're changing
-local xsx = Instance.new("TextLabel")
-local text = Instance.new("TextLabel")
-local pageLayout = Instance.new("UIListLayout")
-local n3TextLabel = Instance.new("TextLabel")  -- TextLabel for N3
-
-introduction.Name = "introduction"
-introduction.Parent = CoreGuiService
-introduction.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-edge.Name = "edge"
-edge.Parent = introduction
-edge.AnchorPoint = Vector2.new(0.5, 0.5)
-edge.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-edge.BackgroundTransparency = 1
-edge.Position = UDim2.new(0.511773348, 0, 0.5, 0)
-edge.Size = UDim2.new(0, 300, 0, 308)
-
-edgeCorner.CornerRadius = UDim.new(0, 2)
-edgeCorner.Name = "edgeCorner"
-edgeCorner.Parent = edge
-
-background.Name = "background"
-background.Parent = edge
-background.AnchorPoint = Vector2.new(0.5, 0.5)
-background.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-background.BackgroundTransparency = 1
-background.ClipsDescendants = true
-background.Position = UDim2.new(0.5, 0, 0.5, 0)
-background.Size = UDim2.new(0, 298, 0, 306)
-
-backgroundGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(34, 34, 34)), ColorSequenceKeypoint.new(1, Color3.fromRGB(28, 28, 28))}
-backgroundGradient.Rotation = 90
-backgroundGradient.Name = "backgroundGradient"
-backgroundGradient.Parent = background
-
-backgroundCorner.CornerRadius = UDim.new(0, 2)
-backgroundCorner.Name = "backgroundCorner"
-backgroundCorner.Parent = background
-
-barFolder.Name = "barFolder"
-barFolder.Parent = background
-
-bar.Name = "bar"
-bar.Parent = barFolder
-bar.BackgroundColor3 = Color3.fromRGB(159, 115, 255)
-bar.BackgroundTransparency = 0.200
-bar.Size = UDim2.new(0, 0, 0, 1)
-
-barCorner.CornerRadius = UDim.new(0, 2)
-barCorner.Name = "barCorner"
-barCorner.Parent = bar
-
-barLayout.Name = "barLayout"
-barLayout.Parent = barFolder
-barLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-barLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-xsxLogo.Name = "xsxLogo"
-xsxLogo.Parent = background
-xsxLogo.AnchorPoint = Vector2.new(0.5, 0.5)
-xsxLogo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-xsxLogo.BackgroundTransparency = 1
-xsxLogo.Position = UDim2.new(0.5, 0, 0.5, 0)
-xsxLogo.Size = UDim2.new(0, 448, 0, 150)
-xsxLogo.Visible = true
-xsxLogo.ImageColor3 = Color3.fromRGB(159, 115, 255)
-xsxLogo.ImageTransparency = 1
-
-xsx.Name = "xsx"
-xsx.Parent = background
-xsx.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-xsx.BackgroundTransparency = 1
-xsx.Size = UDim2.new(0, 80, 0, 21)
-xsx.Font = Enum.Font.Code
-xsx.Text = "powered by nexify"
-xsx.TextColor3 = Color3.fromRGB(124, 124, 124)
-xsx.TextSize = 10
-xsx.TextTransparency = 1
-
-text.Name = "text"
-text.Parent = background
-text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-text.BackgroundTransparency = 1
-text.Position = UDim2.new(0.912751675, 0, 0, 0)
-text.Size = UDim2.new(0, 26, 0, 21)
-text.Font = Enum.Font.Code
-text.Text = "PD"
-text.TextColor3 = Color3.fromRGB(124, 124, 124)
-text.TextSize = 10
-text.TextTransparency = 1
-text.RichText = true
-
-n3TextLabel.Name = "n3TextLabel"
-n3TextLabel.Parent = background
-n3TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-n3TextLabel.BackgroundTransparency = 1
-n3TextLabel.Position = UDim2.new(0.16, 8, 0.4, -8)
-n3TextLabel.Size = UDim2.new(0, 200, 0, 100)  -- Increase the size of the label
-n3TextLabel.Font = Enum.Font.Code
-n3TextLabel.Text = "<b><font size=\"60\">N</font><font color=\"rgb(159, 115, 255)\"><font size=\"60\">3</font></font></b>"  -- Make 3 purple
-n3TextLabel.TextColor3 = Color3.fromRGB(124, 124, 124)
-n3TextLabel.TextSize = 60
-n3TextLabel.TextTransparency = 1
-n3TextLabel.TextScaled = true
-n3TextLabel.RichText = true  -- Enable RichText to style "3" with purple color
-
-pageLayout.Name = "pageLayout"
-pageLayout.Parent = introduction
-pageLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
-pageLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-
-CreateTween("xsxRotation", 0)
-
-local MinusAmount = -16
-coroutine.wrap(function()
-    while true do -- Changed to infinite loop
-        MinusAmount = MinusAmount + 0.4
-        TweenService:Create(xsxLogo, TweenTable["xsxRotation"], {Rotation = xsxLogo.Rotation - MinusAmount}):Play()
-        wait() -- Moved wait inside loop
-    end
-end)()
-
-TweenService:Create(edge, TweenTable["xsxRotation"], {BackgroundTransparency = 0}):Play()
-TweenService:Create(background, TweenTable["xsxRotation"], {BackgroundTransparency = 0}):Play()
-wait(0.2)
-TweenService:Create(bar, TweenTable["xsxRotation"], {Size = UDim2.new(0, 298, 0, 1)}):Play()
-wait(0.2)
-TweenService:Create(xsx, TweenTable["xsxRotation"], {TextTransparency = 0}):Play()
-TweenService:Create(text, TweenTable["xsxRotation"], {TextTransparency = 0}):Play()
-TweenService:Create(n3TextLabel, TweenTable["xsxRotation"], {TextTransparency = 0}):Play()  -- Make the N3 label visible
-wait(0.3)
-TweenService:Create(xsxLogo, TweenTable["xsxRotation"], {ImageTransparency = 0}):Play()
-wait(2)
-TweenService:Create(xsxLogo, TweenTable["xsxRotation"], {ImageTransparency = 1}):Play()
-wait(0.2)
-TweenService:Create(n3TextLabel, TweenTable["xsxRotation"], {TextTransparency = 1}):Play()  -- Hide N3 label
-wait(0.1)
-TweenService:Create(text, TweenTable["xsxRotation"], {TextTransparency = 1}):Play()
-wait(0.1)
-TweenService:Create(xsx, TweenTable["xsxRotation"], {TextTransparency = 1}):Play()
-wait(0.1)
-TweenService:Create(bar, TweenTable["xsxRotation"], {Size = UDim2.new(0, 0, 0, 1)}):Play()
-wait(0.1)
-TweenService:Create(background, TweenTable["xsxRotation"], {BackgroundTransparency = 1}):Play()
-TweenService:Create(edge, TweenTable["xsxRotation"], {BackgroundTransparency = 1}):Play()
-wait(0.2)
-introduction:Destroy()
 
 
 --// Main Libarys \\--
@@ -200,36 +24,25 @@ local GetService = setmetatable({}, {
         return game:GetService(key)
     end
 })
-local function anticheatbypass()
-    print("Bypass initiated")
-    Notify({
-        Title = "[ NEXIFY ]",
-        Description = "Anti-Cheat Bypassed Successfully",
-        Duration = 3,
-    })
-
-    local originalMethod
-    local function complexHandler(self, ...)
-        local arguments = {...}
-        local method = getnamecallmethod()
-
-        if method == "FireServer" and (
-            self == game.ReplicatedStorage.Remotes:FindFirstChild("UAC") or
-            self == game.ReplicatedStorage.Remotes:FindFirstChild("ЕrrorLog") or
-            self == game.ReplicatedStorage.Remotes:FindFirstChild(string.char(69,114,114,114,111,114,76,111,103))
-        ) then
-            if not checkcaller() then
-                return nil
-            end
-            return nil
-        end
-        return originalMethod(self, ...)
+function anticheatbypass()
+print("Anti cheat bypassed")
+                                                Notify({
+                    Title = "[ NEXIFY ]",
+                    Description = "Bypassed Anti Cheat",
+                    Duration = 3,
+                })
+local old
+game:GetService("RunService"):Connected(function()
+old = hookmetamethod(game, "__namecall", function(self, ...)
+    local args = {...}
+    if getnamecallmethod() == "FireServer" and self == game.ReplicatedStorage.Remotes.UAC then
+        warn("Blocked Anti Cheat \n call", unpack(args))
+        return
     end
+    return old(self, ...)
+end)
+end)
 
-    local mt = getrawmetatable(game)
-    setreadonly(mt, false)
-    originalMethod = mt.__namecall
-    mt.__namecall = newcclosure(complexHandler)
 end
 
 task.spawn(anticheatbypass)
@@ -830,33 +643,32 @@ config = {
     snapline_color = Color3.fromRGB(255, 255, 255), 
     fovRadius = 150, 
 }
-
 function findTargetWithinFovCircle()
     local mousePos = Vector2.new(Mouse.X, Mouse.Y)
     local closestTarget = nil
     local shortestDistance = config.fovRadius
 
-    
     for _, targetPlayer in pairs(Players:GetPlayers()) do
         if targetPlayer ~= Players.LocalPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
             local head = targetPlayer.Character.Head
-            local screenPos, onScreen = game.workspace.Camera:WorldToScreenPoint(head.Position)
+            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(head.Position)
 
             if onScreen then
                 local screenPoint = Vector2.new(screenPos.X, screenPos.Y)
                 local distance = (screenPoint - mousePos).Magnitude
 
-                
                 if distance < shortestDistance then
                     shortestDistance = distance
                     closestTarget = targetPlayer.Character
-                end;
-            end;
-        end;
-    end;
+                end
+            end
+        end
+    end
 
     return closestTarget
-end;
+end
+
+
  GuiService = game:GetService("GuiService")
 
 local inset = game:service("GuiService"):GetGuiInset()
@@ -986,8 +798,8 @@ local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",s
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
 local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 90})
 local WaterTab = AimingTab:section({name = "Water", side = "right",size = 60})
-local AAMainSection = RageTab:section({name = "Main", side = "left", size = 210})
-local AASettings = RageTab:section({name = "Settings", side = "right", size = 210})
+local AAMainSection = RageTab:section({name = "Main", side = "left", size = 250})
+local AASettings = RageTab:section({name = "Settings", side = "right", size = 220})
 local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", size = 200})
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
 local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
@@ -1871,8 +1683,6 @@ end})
 
 BobbingSection:toggle({name = "No Bob", def = false, callback = function(Boolean)
 
-
-
 -- Safe No Bob Script for Project Delta
 
 -- Services
@@ -1880,36 +1690,6 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
-
--- Cache original functions
-local originalSpringUpdate
-local originalCameraUpdate
-
--- Hook the spring update function
-local function hookSpringUpdate()
-    for _, v in next, getgc(true) do
-        if type(v) == "table" and rawget(v, "update") then
-            originalSpringUpdate = v.update
-            v.update = function(...)
-                return Vector3.zero
-            end
-            break
-        end
-    end
-end
-
--- Hook the camera update function
-local function hookCameraUpdate()
-    for _, v in next, getgc(true) do
-        if type(v) == "table" and rawget(v, "update") then
-            originalCameraUpdate = v.update
-            v.update = function(...)
-                return Vector3.zero
-            end
-            break
-        end
-    end
-end
 
 -- Main function to apply hooks
 local function applyNoBob()
@@ -1921,36 +1701,46 @@ local function applyNoBob()
             local spring = originalCreate(...)
             if spring and spring.update then
                 spring.update = function(...)
-                    return Vector3.zero
+                    return Vector3.new(0, 0, 0)
                 end
             end
             return spring
         end
     end
-    
-    -- Hook direct bobbing functions
-    hookSpringUpdate()
-    hookCameraUpdate()
+
+    -- Hook garbage collected spring updates (only works in exploit)
+    if getgc then
+        for _, v in next, getgc(true) do
+            if type(v) == "table" and rawget(v, "update") then
+                v.update = function(...)
+                    return Vector3.new(0, 0, 0)
+                end
+            end
+        end
+    end
 end
 
 -- Apply the No Bob modification
 task.spawn(function()
     applyNoBob()
-    
+
     -- Notification
-    for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
-        if v.Function then
-            v.Function("NO BOB ENABLED", 3, 1)
+    if getconnections then
+        for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
+            if v.Function then
+                v.Function("NO BOB ENABLED", 3, 1)
+            end
         end
     end
 end)
 
--- Cleanup on script termination
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
-    applyNoBob() -- Reapply when character respawns
+-- Reapply when character respawns
+LocalPlayer.CharacterAdded:Connect(function()
+    applyNoBob()
 end)
 
 end})
+
 
 TriggerbotSection:slider({name = "Delay (Ammount)", def = 0, max = 60, min = 0, rounding = true, callback = function(Value)
  PuppySettings.TriggerBot.DelayAmount = Value
@@ -2303,6 +2093,16 @@ AAMainSection:toggle({name = "Underground", def = false, callback = function(val
                 replicatedStorage.Remotes.UpdateTilt:FireServer(false and 0/0 or 0)
             end
         end)
+
+end})
+
+AAMainSection:toggle({name = "Remove Fall Damage", def = false, callback = function(value)
+
+if value == true then
+game.workspace.Gravity = math.huge
+else
+game.workspace.Gravity = 90
+end
 
 end})
 
@@ -3088,10 +2888,10 @@ game:GetService("RunService").RenderStepped:Connect(function(dt)
     end;
 end);
 
-MiscMoveSettings:toggle({name = "Fly", def = false, callback = function(Boolean)
+MiscMoveSettings:toggle({name = "Fly", def = false, callback = function(state3)
 getgenv().Fly3 = state3
 end})
-MiscMoveSettings:slider({name = "Fly Speed", def = 30, max = 35, min = -35, rounding = true, callback = function(Value)
+MiscMoveSettings:slider({name = "Fly Speed", def = 30, max = 35, min = -35, rounding = true, callback = function(first)
    getgenv().speed3 = first
 end})
 
