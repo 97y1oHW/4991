@@ -1126,6 +1126,25 @@ local function setFireRateForAllItems(rate)
     end
 end
 
+GunMods:toggle({name = "Instant Equip", def = false, callback = function(isEnabled)
+
+			        workspace.Camera.ChildAdded:Connect(function(child)
+            if child:IsA("Model") then
+                task.wait(0.015)
+                local animator = child:FindFirstChildOfClass("Humanoid") and child.Humanoid:FindFirstChild("Animator")
+                if animator then
+                    for _, anim in ipairs(animator:GetPlayingAnimationTracks()) do
+                        if anim.Animation.Name == "Equip" then
+                            anim.TimePosition = anim.Length - 0.01
+                        end
+                    end
+                end
+            end
+        end)
+end})
+
+
+
 GunMods:toggle({name = "Rapid Fire", def = false, callback = function(state)
      if state then
             -- Enable rapid fire
