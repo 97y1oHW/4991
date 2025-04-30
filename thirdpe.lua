@@ -2,11 +2,12 @@ local player = game:GetService("Players").LocalPlayer
 local userInputService = game:GetService("UserInputService");
 
 getgenv().thirdperson = true
+getgenv().thirdpersondistance = true
 
 local function updateCamera()
     if getgenv().thirdperson then
         userInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
-        player.CameraMaxZoomDistance = 10
+        player.CameraMaxZoomDistance = getgenv().thirdpersondistance
         player.CameraMinZoomDistance = 10
         player.CameraMode = Enum.CameraMode.Classic
         --
