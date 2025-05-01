@@ -2166,65 +2166,94 @@ TriggerbotSection:toggle({name = "Trigger Bot", def = false, callback = function
  PuppySettings.TriggerBot.Enabled = Boolean
 end})
 
-BobbingSection:toggle({name = "No Bob", def = false, callback = function(Boolean)
+local BobEnabled = false
+local applied = false
+local originalUpdates = {}
 
--- Safe No Bob Script for Project Delta
+BobbingSection:toggle({
+    name = "No Bob",
+    def = false,
+    callback = function(state)
+        BobEnabled = state
 
--- Services
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
 
--- Main function to apply hooks
-local function applyNoBob()
-    -- Hook spring-based bobbing
-    local springModule = require(game:GetService("ReplicatedStorage").Modules.SpringV2)
-    if springModule then
-        local originalCreate = springModule.create
-        springModule.create = function(...)
-            local spring = originalCreate(...)
-            if spring and spring.update then
-                spring.update = function(...)
-                    return Vector3.new(0, 0, 0)
+        -- No Bob uygulayıcı
+        local function applyNoBob()
+            if applied then return end
+            applied = true
+
+            -- SpringV2 hook
+            local success, springModule = pcall(function()
+                return require(game:GetService("ReplicatedStorage").Modules.SpringV2)
+            end)
+
+            if success and springModule and springModule.create then
+                local originalCreate = springModule.create
+                springModule.create = function(...)
+
+                    local spring = originalCreate(...)
+
+                    if spring and spring.update then
+                        local originalUpdate = spring.update
+                        originalUpdates[spring] = originalUpdate
+
+                        spring.update = function(...)
+                            if not BobEnabled then
+                                -- Bob kapalı ise eski fonksiyonu geri çağır
+                                originalUpdates[spring](...)
+                            end
+                            local result = originalUpdate(...)
+                            if typeof(result) == "Vector3" and math.abs(result.Y) < 0.2 then
+                                return Vector3.zero
+                            end
+                            return result
+                        end
+                    end
+                    return spring
                 end
             end
-            return spring
-        end
-    end
 
-    -- Hook garbage collected spring updates (only works in exploit)
-    if getgc then
-        for _, v in next, getgc(true) do
-            if type(v) == "table" and rawget(v, "update") then
-                v.update = function(...)
-                    return Vector3.new(0, 0, 0)
+            -- getgc hook
+            if getgc then
+                for _, v in next, getgc(true) do
+                    if type(v) == "table" and rawget(v, "update") and typeof(v.update) == "function" then
+                        local original = v.update
+                        originalUpdates[v] = original
+
+                        v.update = function(...)
+                            if not BobEnabled then
+                                -- Bob kapalı ise eski fonksiyonu geri çağır
+                                return original(...)
+                            end
+                            local result = original(...)
+                            if typeof(result) == "Vector3" and math.abs(result.Y) < 0.2 then
+                                return Vector3.zero
+                            end
+                            return result
+                        end
+                    end
+                end
+            end
+        end
+
+        applyNoBob()
+
+        Players.LocalPlayer.CharacterAdded:Connect(function()
+            applyNoBob()
+        end)
+
+        -- Bildirim
+        if getconnections then
+            for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
+                if v.Function then
+                    --v.Function(BobEnabled and "NO BOB AÇILDI" or "NO BOB KAPANDI", 3, 1)
                 end
             end
         end
     end
-end
-
--- Apply the No Bob modification
-task.spawn(function()
-    applyNoBob()
-
-    -- Notification
-    if getconnections then
-        for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
-            if v.Function then
-                v.Function("NO BOB ENABLED", 3, 1)
-            end
-        end
-    end
-end)
-
--- Reapply when character respawns
-LocalPlayer.CharacterAdded:Connect(function()
-    applyNoBob()
-end)
-
-end})
+})
 
 
 TriggerbotSection:slider({name = "Delay (Ammount)", def = 0, max = 60, min = 0, rounding = true, callback = function(Value)
@@ -2649,17 +2678,30 @@ Envioromental:colorpicker({name = "Grass Color Picker", cpname = "", def = origi
         sethiddenproperty(terrain, "Decoration", true) 
 end})
 
-Envioromental:colorpicker({name = "Bullet Color Picker", cpname = "", def = Color3.new(144, 175, 127), callback = function(color)
-local function changeAllProjectileColors(selectedColor)
-for _, instance in ipairs(game:GetDescendants()) do
-if instance:GetAttribute("ProjectileColor") then
-instance:SetAttribute("ProjectileColor", selectedColor)
-end;
-end;
-end;
-changeAllProjectileColors(Value)
-print("All 'ProjectileColor' attributes updated to:", Value)
-end})
+Envioromental:colorpicker({
+    name = "Bullet Color Picker",
+    cpname = "",
+    def = Color3.new(144, 175, 127),
+    callback = function(color)
+        local function changeAllProjectileColorsGradually(selectedColor)
+            local delayPerChange = 0.04 -- saniye, istersen 0.005 yap ama abartma
+
+            for _, instance in ipairs(game:GetDescendants()) do
+                if instance:GetAttribute("ProjectileColor") then
+                    instance:SetAttribute("ProjectileColor", selectedColor)
+                    task.wait(delayPerChange) -- keko sistemi kasmıyo artık
+                end
+            end
+
+            print("Changing Ammo Color: ", selectedColor, " E84F1")
+        end
+
+        task.spawn(function()
+            changeAllProjectileColorsGradually(color)
+        end)
+    end
+})
+
 
 
 
@@ -3464,7 +3506,7 @@ MiscNorSettings:toggle({name = "Remove Clouds", def = false, callback = function
         terrain = game:GetService("Workspace").Terrain
 
         
-        if isEnabled then
+        if isEnabled and terrain and terrain.Clouds then
             terrain.Clouds.Density = 0
         else
             
