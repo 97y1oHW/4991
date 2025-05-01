@@ -88,12 +88,12 @@ end
 RunService:BindToRenderStep("UpdateList", 0, Update)
 
 local TitleSettings = {
-    Font = Enum.Font.GothamSemibold,
+    Font = Enum.Font.Arcade,
     Size = 14,
 }
 
 local DescriptionSettings = {
-    Font = Enum.Font.Gotham,
+    Font = Enum.Font.Code,
     Size = 14,
 }
 
