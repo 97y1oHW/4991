@@ -1137,7 +1137,23 @@ end})
             end
         end
 end})
+GunMods:toggle({name = "Instant Equip", def = false, callback = function(Value)
 
+ workspace.Camera.ChildAdded:Connect(function(child)
+            if child:IsA("Model") then
+                task.wait(0.015)
+                local animator = child:FindFirstChild("Humanoid") and child.Humanoid:FindFirstChild("Animator")
+                if animator then
+                    for _, anim in ipairs(animator:GetPlayingAnimationTracks()) do
+                        if anim.Animation and anim.Animation.Name == "Equip" then
+                            anim.TimePosition = anim.Length - 0.01
+                        end
+                    end
+                end
+            end
+        end)
+end
+})
         GunMods:toggle({name = "Instant Reload", def = false, callback = function(Value)
 
 
