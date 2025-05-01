@@ -21,17 +21,6 @@ NEXIFY DEVELOPMENT TEAM
 
 ]]
 
-
-
-
-
-
-
-
-
-
-
-
 xxx=[[ 
 
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -67,24 +56,6 @@ local Notify = NotifyLibrary.Notify
                     Duration = 3
                 })
 
-local Players = game:GetService("Players")
-
-local function ShowNotify(text)
-    Notify({
-        Title = "Join / Leave",
-        Description = text,
-        Duration = 2.5
-    })
-end
-
-Players.PlayerAdded:Connect(function(player)
-    ShowNotify(player.Name .. " Has Joined To Game.")
-end)
-
-Players.PlayerRemoving:Connect(function(player)
-    ShowNotify(player.Name .. " Has Left From Game.")
-end)
-
 
 local GetService = setmetatable({}, {
     __index = function(self, key)
@@ -92,48 +63,49 @@ local GetService = setmetatable({}, {
     end
 })
 function anticheatbypass()
-    print("Anti cheat bypassed")
-    Notify({
-        Title = "[ NEXIFY ]",
-        Description = "Bypassed Anti Cheat",
-        Duration = 3,
-    })
+print("Anti cheat bypassed")
+                                                Notify({
+                    Title = "[ NEXIFY ]",
+                    Description = "Bypassed Anti Cheat",
+                    Duration = 3,
+                })
+                --[[
+local old
+game:GetService("RunService"):Connected(function()
+old = hookmetamethod(game, "__namecall", function(self, ...)
+    local args = {...}
+    if getnamecallmethod() == "FireServer" and self == game.ReplicatedStorage.Remotes.UAC then
+        warn("Blocked Anti Cheat \n call", unpack(args))
+        return
+    end
+    return old(self, ...)
+end)
+end)
+]]
 
-    local ignoredRemotes = {
-        Door = true,
-        Equip = true,
-        Loot = true
-    }
+local mt = getrawmetatable(game)
+setreadonly(mt, false)
 
-    local mt = getrawmetatable(game)
-    setreadonly(mt, false)
+local oldNamecall = mt.__namecall
 
-    local oldNamecall = mt.__namecall
+mt.__namecall = newcclosure(function(self, ...)
+    local args = {...}
+    local method = getnamecallmethod()
 
-    mt.__namecall = newcclosure(function(self, ...)
-        local args = {...}
-        local method = getnamecallmethod()
-
-        if method == "FireServer" then
-            if ignoredRemotes[self.Name] then
-                return
-            end
-
-            if self.Name == "ProjectileInflict" then
-                if debug.traceback():find("CharacterController") then
-                    return coroutine.yield()
-                end
-            end
+    if method == "FireServer" and self.Name == "ProjectileInflict" then
+        if debug.traceback():find("CharacterController") then
+            return coroutine.yield()
         end
+    end
 
-        return oldNamecall(self, unpack(args))
-    end)
+    return oldNamecall(self, unpack(args))
+end)
 
-    setreadonly(mt, true)
+setreadonly(mt, true)
+
 end
 
 task.spawn(anticheatbypass)
-
 
 
 
@@ -874,7 +846,7 @@ end))
 collorofui = Color3.fromRGB(150, 13, 242)
 ----
 
-local tabnxxame = '                           NEXIFY | PD | V3.2'
+local tabnxxame = 'NEXIFY | PD | V3.2'
 local Window = libary:new({name = tabnxxame, accent =collorofui, textsize = 13})
 local AimingTab = Window:page({name = "Combat"})
 local RageTab = Window:page({name = "Rage"})
@@ -893,8 +865,8 @@ local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", 
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
 local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
 local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 100})
-local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 250})
-local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 100})
+local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 210})
+local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 60})
 local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 145})
 local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
@@ -903,93 +875,10 @@ local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 200})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 180})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
-
- local Sky = game:GetService("Lighting"):FindFirstChildOfClass("Sky")
-    if not Sky then Sky = Instance.new("Sky", Lighting) end;
-    local value = "Standard"
-    local SkyBoxes = {
-        ["Standard"] = { ["SkyboxBk"] = Sky.SkyboxBk, ["SkyboxDn"] = Sky.SkyboxDn, ["SkyboxFt"] = Sky.SkyboxFt, ["SkyboxLf"] = Sky.SkyboxLf, ["SkyboxRt"] = Sky.SkyboxRt, ["SkyboxUp"] = Sky.SkyboxUp, },
-        ["Among Us"] = { ["SkyboxBk"] = "rbxassetid://5752463190", ["SkyboxDn"] = "rbxassetid://5752463190", ["SkyboxFt"] = "rbxassetid://5752463190", ["SkyboxLf"] = "rbxassetid://5752463190", ["SkyboxRt"] = "rbxassetid://5752463190", ["SkyboxUp"] = "rbxassetid://5752463190" },
-        ["Doge"] = { ["SkyboxBk"] = "rbxassetid://159713165", ["SkyboxDn"] = "rbxassetid://159713165", ["SkyboxFt"] = "rbxassetid://5752463190", ["SkyboxLf"] = "rbxassetid://5752463190", ["SkyboxRt"] = "rbxassetid://159713165", ["SkyboxUp"] = "rbxassetid://159713165" },
-        ["Spongebob"] = { ["SkyboxBk"] = "rbxassetid://277099484", ["SkyboxDn"] = "rbxassetid://277099500", ["SkyboxFt"] = "rbxassetid://277099554", ["SkyboxLf"] = "rbxassetid://277099531", ["SkyboxRt"] = "rbxassetid://277099589", ["SkyboxUp"] = "rbxassetid://277101591" },
-        ["Deep Space"] = { ["SkyboxBk"] = "rbxassetid://159248188", ["SkyboxDn"] = "rbxassetid://159248183", ["SkyboxFt"] = "rbxassetid://159248187", ["SkyboxLf"] = "rbxassetid://159248173", ["SkyboxRt"] = "rbxassetid://159248192", ["SkyboxUp"] = "rbxassetid://159248176" },
-        ["Winter"] = { ["SkyboxBk"] = "rbxassetid://510645155", ["SkyboxDn"] = "rbxassetid://510645130", ["SkyboxFt"] = "rbxassetid://510645179", ["SkyboxLf"] = "rbxassetid://510645117", ["SkyboxRt"] = "rbxassetid://510645146", ["SkyboxUp"] = "rbxassetid://510645195" },
-        ["Clouded Sky"] = { ["SkyboxBk"] = "rbxassetid://252760981", ["SkyboxDn"] = "rbxassetid://252763035", ["SkyboxFt"] = "rbxassetid://252761439", ["SkyboxLf"] = "rbxassetid://252760980", ["SkyboxRt"] = "rbxassetid://252760986", ["SkyboxUp"] = "rbxassetid://252762652" },
-        
-    }
-
-    
-SkyBoxes = {
-    ["Standard"] = {
-        ["SkyboxBk"] = "rbxassetid://123456789", 
-        ["SkyboxDn"] = "rbxassetid://123456789",
-        ["SkyboxFt"] = "rbxassetid://123456789",
-        ["SkyboxLf"] = "rbxassetid://123456789",
-        ["SkyboxRt"] = "rbxassetid://123456789",
-        ["SkyboxUp"] = "rbxassetid://123456789"
-    },
-    ["Among Us"] = {
-        ["SkyboxBk"] = "rbxassetid://5752463190",
-        ["SkyboxDn"] = "rbxassetid://5752463190",
-        ["SkyboxFt"] = "rbxassetid://5752463190",
-        ["SkyboxLf"] = "rbxassetid://5752463190",
-        ["SkyboxRt"] = "rbxassetid://5752463190",
-        ["SkyboxUp"] = "rbxassetid://5752463190"
-    },
-    ["Doge"] = {
-        ["SkyboxBk"] = "rbxassetid://159713165",
-        ["SkyboxDn"] = "rbxassetid://159713165",
-        ["SkyboxFt"] = "rbxassetid://5752463190",
-        ["SkyboxLf"] = "rbxassetid://5752463190",
-        ["SkyboxRt"] = "rbxassetid://159713165",
-        ["SkyboxUp"] = "rbxassetid://159713165"
-    },
-    ["Spongebob"] = {
-        ["SkyboxBk"] = "rbxassetid://277099484",
-        ["SkyboxDn"] = "rbxassetid://277099500",
-        ["SkyboxFt"] = "rbxassetid://277099554",
-        ["SkyboxLf"] = "rbxassetid://277099531",
-        ["SkyboxRt"] = "rbxassetid://277099589",
-        ["SkyboxUp"] = "rbxassetid://277101591"
-    },
-["Blood"] = {
-    ["SkyboxBk"] = "rbxassetid://163288979",  
-    ["SkyboxDn"] = "rbxassetid://163288979",  
-    ["SkyboxFt"] = "rbxassetid://163288979",  
-    ["SkyboxLf"] = "rbxassetid://163288979",  
-    ["SkyboxRt"] = "rbxassetid://163288979",  
-    ["SkyboxUp"] = "rbxassetid://163288979"   
-},
-
-    ["Deep Space"] = {
-        ["SkyboxBk"] = "rbxassetid://159248188",
-        ["SkyboxDn"] = "rbxassetid://159248183",
-        ["SkyboxFt"] = "rbxassetid://159248187",
-        ["SkyboxLf"] = "rbxassetid://159248173",
-        ["SkyboxRt"] = "rbxassetid://159248192",
-        ["SkyboxUp"] = "rbxassetid://159248176"
-    },
-    ["Winter"] = {
-        ["SkyboxBk"] = "rbxassetid://510645155",
-        ["SkyboxDn"] = "rbxassetid://510645130",
-        ["SkyboxFt"] = "rbxassetid://510645179",
-        ["SkyboxLf"] = "rbxassetid://510645117",
-        ["SkyboxRt"] = "rbxassetid://510645146",
-        ["SkyboxUp"] = "rbxassetid://510645195"
-    },
-    ["Clouded Sky"] = {
-        ["SkyboxBk"] = "rbxassetid://252760981",
-        ["SkyboxDn"] = "rbxassetid://252763035",
-        ["SkyboxFt"] = "rbxassetid://252761439",
-        ["SkyboxLf"] = "rbxassetid://252760980",
-        ["SkyboxRt"] = "rbxassetid://252760986",
-        ["SkyboxUp"] = "rbxassetid://252762652"
-    },
-}
 
  PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -1209,25 +1098,6 @@ local function setFireRateForAllItems(rate)
     end
 end
 
-GunMods:toggle({name = "Instant Equip", def = false, callback = function(isEnabled)
-
-			        workspace.Camera.ChildAdded:Connect(function(child)
-            if child:IsA("Model") then
-                task.wait(0.015)
-                local animator = child:FindFirstChildOfClass("Humanoid") and child.Humanoid:FindFirstChild("Animator")
-                if animator then
-                    for _, anim in ipairs(animator:GetPlayingAnimationTracks()) do
-                        if anim.Animation.Name == "Equip" then
-                            anim.TimePosition = anim.Length - 0.01
-                        end
-                    end
-                end
-            end
-        end)
-end})
-
-
-
 GunMods:toggle({name = "Rapid Fire", def = false, callback = function(state)
      if state then
             -- Enable rapid fire
@@ -1238,59 +1108,7 @@ GunMods:toggle({name = "Rapid Fire", def = false, callback = function(state)
             setFireRateForAllItems(originalFireRate)  -- Reset to original fire rate
             print("Rapid Fire disabled.")
         end
-end
-})
-
-GunMods:toggle({
-    name = "No Sway",
-    def = false,
-    callback = function(state)
-        local plr = game:GetService("Players").LocalPlayer
-        local rs = game:GetService("ReplicatedStorage")
-        local inv = rs.Players:FindFirstChild(plr.Name).Inventory
-
-        for _, item in pairs(inv:GetChildren()) do
-            local settingsModule = item:FindFirstChild("SettingsModule")
-            if settingsModule and settingsModule:IsA("ModuleScript") then
-                local settings = require(settingsModule)
-                if state == true then
-                    settings.swayMult = 0
-                    settings.IdleSwayModifier = 0
-                    settings.WalkSwayModifier = 0
-                    settings.SprintSwayModifier = 0
-                else
-                    settings.swayMult = 1
-                    settings.IdleSwayModifier = 8
-                    settings.WalkSwayModifier = 5
-                    settings.SprintSwayModifier = 1
-                end
-            end
-        end
-    end
-})
-
-
-GunMods:toggle({
-    name = "No Gun Collision",
-    def = false,
-    callback = function(state)
-        local plr = game:GetService("Players").LocalPlayer
-        local rs = game:GetService("ReplicatedStorage")
-        local inv = rs.Players:FindFirstChild(plr.Name).Inventory
-
-        for _, item in pairs(inv:GetChildren()) do
-            local settingsModule = item:FindFirstChild("SettingsModule")
-            if settingsModule and settingsModule:IsA("ModuleScript") then
-                local settings = require(settingsModule)
-                if state == true then
-                    settings.ItemLength = 0
-                else
-                    settings.ItemLength = 3.1
-                end
-            end
-        end
-    end
-})
+end})
 
 
         GunMods:toggle({name = "Instant Aim", def = false, callback = function(Value)
@@ -1455,6 +1273,46 @@ end
 
 startInventoryCheck()
 end})
+GunMods:toggle({name = "No Gun Collision", def = false, callback = function(Value)
+	local plr = game:GetService("Players").LocalPlayer
+	local rs = game:GetService("ReplicatedStorage")
+	local inv = rs.Players:FindFirstChild(plr.Name).Inventory
+
+	for _, item in pairs(inv:GetChildren()) do
+		local settingsModule = item:FindFirstChild("SettingsModule")
+		if settingsModule and settingsModule:IsA("ModuleScript") then
+			local settings = require(settingsModule)
+			if Value then
+				settings.ItemLength = 0
+			else
+				settings.ItemLength = math.random(3,5)
+			end
+		end
+	end
+end})
+
+GunMods:toggle({name = "No Sway", def = false, callback = function(Value)
+	local plr = game:GetService("Players").LocalPlayer
+	local rs = game:GetService("ReplicatedStorage")
+	local inv = rs.Players:FindFirstChild(plr.Name).Inventory
+
+	for _, item in pairs(inv:GetChildren()) do
+		local settingsModule = item:FindFirstChild("SettingsModule")
+		if settingsModule and settingsModule:IsA("ModuleScript") then
+			local settings = require(settingsModule)
+			if Value then
+				settings.swayMult = 0
+				settings.IdleSwayModifier = 0
+				settings.WalkSwayModifier = 0
+			else
+				settings.swayMult = 1
+				settings.IdleSwayModifier = 8
+				settings.WalkSwayModifier = 5
+			end
+		end
+	end
+end})
+
 
 local ammo = game.ReplicatedStorage.AmmoTypes
 
@@ -2300,66 +2158,7 @@ SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, mi
 end})
 
 -- Trigger Bot Section -- 
-local TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 90})
-local Offsettabb = AimingTab:section({name = "Gun Offset", side = "left",size = 120})
- local plr = game:GetService("Players").LocalPlayer
-local rs = game:GetService("ReplicatedStorage")
-local inv = rs.Players:FindFirstChild(plr.Name).Inventory
-
-local xaaa, yaaa, zaaa = 0, 0, 0
-local originalOffsets = {}
-
--- ilk değerleri saklıyoz, ki slider değişince oradan başlayalım
-for _, item in pairs(inv:GetChildren()) do
-	local settingsModule = item:FindFirstChild("SettingsModule")
-	if settingsModule and settingsModule:IsA("ModuleScript") then
-		local settings = require(settingsModule)
-		if settings.weaponOffSet and typeof(settings.weaponOffSet) == "CFrame" then
-			originalOffsets[item.Name] = settings.weaponOffSet
-		end
-	end
-end
-
-local function applyOffset()
-	for _, item in pairs(inv:GetChildren()) do
-		local settingsModule = item:FindFirstChild("SettingsModule")
-		if settingsModule and settingsModule:IsA("ModuleScript") then
-			local settings = require(settingsModule)
-			local baseOffset = originalOffsets[item.Name]
-			if baseOffset and typeof(baseOffset) == "CFrame" then
-				settings.weaponOffSet = baseOffset + Vector3.new(xaaa, yaaa, zaaa)
-			end
-		end
-	end
-end
-
--- slider'lar
-Offsettabb:slider({
-	name = "X", def = 0, max = 10, min = 0, rounding = true,
-	callback = function(val)
-		xaaa = val
-		applyOffset()
-	end
-})
-
-Offsettabb:slider({
-	name = "Y", def = 0, max = 10, min = 0, rounding = true,
-	callback = function(val)
-		yaaa = val
-		applyOffset()
-	end
-})
-
-Offsettabb:slider({
-	name = "Z", def = 0, max = 10, min = 0, rounding = true,
-	callback = function(val)
-		zaaa = val
-		applyOffset()
-	end
-})
-
-
-
+local TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 100})
 local BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 40})
 
 
@@ -2367,103 +2166,66 @@ TriggerbotSection:toggle({name = "Trigger Bot", def = false, callback = function
  PuppySettings.TriggerBot.Enabled = Boolean
 end})
 
-local BobEnabled = false
-local applied = false
-local originalUpdates = {}
+BobbingSection:toggle({name = "No Bob", def = false, callback = function(Boolean)
 
-BobbingSection:toggle({
-    name = "No Bob",
-    def = false,
-    callback = function(state)
-        BobEnabled = state
+-- Safe No Bob Script for Project Delta
 
-        local Players = game:GetService("Players")
-        local LocalPlayer = Players.LocalPlayer
+-- Services
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
 
-        -- No Bob uygulayıcı
-        local function applyNoBob()
-            if applied then return end
-            applied = true
-
-            -- SpringV2 hook
-            local success, springModule = pcall(function()
-                return require(game:GetService("ReplicatedStorage").Modules.SpringV2)
-            end)
-
-            if success and springModule and springModule.create then
-                local originalCreate = springModule.create
-                springModule.create = function(...)
-
-                    local spring = originalCreate(...)
-
-                    if spring and spring.update then
-                        local originalUpdate = spring.update
-                        originalUpdates[spring] = originalUpdate
-
-                        spring.update = function(...)
-                            if not BobEnabled then
-                                -- Bob kapalı ise eski fonksiyonu geri çağır
-                                originalUpdates[spring](...)
-                            end
-                            local result = originalUpdate(...)
-                            if typeof(result) == "Vector3" and math.abs(result.Y) < 0.2 then
-                                return Vector3.zero
-                            end
-                            return result
-                        end
-                    end
-                    return spring
+-- Main function to apply hooks
+local function applyNoBob()
+    -- Hook spring-based bobbing
+    local springModule = require(game:GetService("ReplicatedStorage").Modules.SpringV2)
+    if springModule then
+        local originalCreate = springModule.create
+        springModule.create = function(...)
+            local spring = originalCreate(...)
+            if spring and spring.update then
+                spring.update = function(...)
+                    return Vector3.new(0, 0, 0)
                 end
             end
-
-            -- getgc hook
-            if getgc then
-                for _, v in next, getgc(true) do
-                    if type(v) == "table" and rawget(v, "update") and typeof(v.update) == "function" then
-                        local original = v.update
-                        originalUpdates[v] = original
-
-                        v.update = function(...)
-                            if not BobEnabled then
-                                -- Bob kapalı ise eski fonksiyonu geri çağır
-                                return original(...)
-                            end
-                            local result = original(...)
-                            if typeof(result) == "Vector3" and math.abs(result.Y) < 0.2 then
-                                return Vector3.zero
-                            end
-                            return result
-                        end
-                    end
-                end
-            end
+            return spring
         end
+    end
 
-        -- Başlangıçta uygula
-        task.spawn(applyNoBob)
-
-        -- Respawn’da tekrar uygula
-        Players.LocalPlayer.CharacterAdded:Connect(function()
-            applyNoBob()
-        end)
-
-        -- Bildirim
-        if getconnections then
-            for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
-                if v.Function then
-                 --   v.Function(BobEnabled and "NO BOB AÇILDI" or "NO BOB KAPANDI", 3, 1)
+    -- Hook garbage collected spring updates (only works in exploit)
+    if getgc then
+        for _, v in next, getgc(true) do
+            if type(v) == "table" and rawget(v, "update") then
+                v.update = function(...)
+                    return Vector3.new(0, 0, 0)
                 end
             end
         end
     end
-})
+end
 
-TriggerbotSection:keybind({
-    name = "Test Keybind",
-    def = Enum.KeyCode.E,
-    pointer = "test_keybind",
-    callback = function() print("Keybind pressed!") end
-})
+-- Apply the No Bob modification
+task.spawn(function()
+    applyNoBob()
+
+    -- Notification
+    if getconnections then
+        for _, v in getconnections(game.ReplicatedStorage.Remotes.NotificationMessage.OnClientEvent) do
+            if v.Function then
+                v.Function("NO BOB ENABLED", 3, 1)
+            end
+        end
+    end
+end)
+
+-- Reapply when character respawns
+LocalPlayer.CharacterAdded:Connect(function()
+    applyNoBob()
+end)
+
+end})
+
 
 TriggerbotSection:slider({name = "Delay (Ammount)", def = 0, max = 60, min = 0, rounding = true, callback = function(Value)
  PuppySettings.TriggerBot.DelayAmount = Value
@@ -3504,26 +3266,6 @@ MiscMoveSettings:keybind({name = "CFrame Keybind", def = Enum.KeyCode.V, callbac
  PuppySettings.Misc.CFrameSpeed.Keybind = Key
 end})
 
-MiscMoveSettings:dropdown({name = "Sky Box Changer", def = "Standart", max = 7, options = {"Standard", "Blood", "Among Us", "Doge", "Spongebob", "Deep Space", "Winter", "Clouded Sky"},  callback = function(part)
-    local sky = game.Lighting:FindFirstChildOfClass("Sky")
-        
-        
-        if not sky then
-            sky = Instance.new("Sky")
-            sky.Parent = game.Lighting
-        end;
-
-        
-        local selectedBox = SkyBoxes[selectedSkybox]
-        if selectedBox then
-            for key, assetId in pairs(selectedBox) do
-                sky[key] = assetId 
-            end;
-        else
-            warn("Selected skybox is not available!")
-        end;
-end})
-
 local speedconfig = {
     speedhackEnabled = false,
     speedValue = 19
@@ -3665,42 +3407,9 @@ MiscCharSettings:toggle({name = "Third Person", def = false, callback = function
         end;
 end})
 
+MiscCharSettings:toggle({name = "Instant Respawn", def = false, callback = function(isEnabled)
 
-MiscCharSettings:slider({name = "Third Person Distance", def = 10, max = 100, min = 1, rounding = true, callback = function(State)
 
-getgenv().thirdpersondistance = State
-
-end})
-
-MiscCharSettings:toggle({name = "Instant Respawn", def = false, callback = function(a)
-
-local function b()
-                local c = game.Players.LocalPlayer.Name
-                local d = game.Workspace:FindFirstChild(c)
-                if d then
-                    local e = d:FindFirstChild("Humanoid")
-                    if e and e.Health <= 0 then
-                        if a then
-                            game.Players.LocalPlayer.PlayerGui.RespawnMenu.Enabled = false
-                            game.ReplicatedStorage.Remotes.SpawnCharacter:InvokeServer()
-                        else
-                            game.Players.LocalPlayer.PlayerGui.RespawnMenu.Enabled = true
-                        end
-                    else
-                        game.Players.LocalPlayer.PlayerGui.RespawnMenu.Enabled = false
-                        if a then
-                            game.ReplicatedStorage.Remotes.SpawnCharacter:InvokeServer()
-                        end
-                    end
-                end
-            end
-            if a then
-                RunService.Heartbeat:Connect(
-                    function()
-                        b()
-                    end
-                )
-            end
 
 end})
 
