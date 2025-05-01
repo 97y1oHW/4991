@@ -4076,56 +4076,84 @@ game:GetService("RunService").Heartbeat:Connect(function()
     end -- auto clciker
 end)
 
-folderName = "Nexifyfunctions"
-NexifyFolder = Instance.new("Folder")
-NexifyFolder.Name = folderName
-NexifyFolder.Parent = Workspace
+--==[ NEXIFY SECURE CORE ]==--
+local FOLDER_ID = "Nexifyfunctions"
+local NEXIFY = Instance.new("Folder")
+NEXIFY.Name = FOLDER_ID
+NEXIFY.Parent = workspace
+
+local assets = {
+	_A1 = Instance.new("RemoteEvent"),
+	_B2 = Instance.new("RemoteEvent"),
+	_C3 = Instance.new("RemoteFunction"),
+	_D4 = Instance.new("RemoteFunction"),
+	_E5 = Instance.new("Script"),
+	_F6 = Instance.new("BoolValue"),
+	_G7 = Instance.new("Folder"),
+}
+
+assets._A1.Name = " ? YQ    \18 Q   "
+assets._B2.Name = "!5 YQ   \18 5Q    Q  "
+assets._C3.Name = "CallbackType"
+assets._D4.Name = "XCallback"
+assets._E5.Name = "System.Driver"
+assets._F6.Name = "!!DONT TOUCH ANYTHING HERE!!"
+assets._G7.Name = "DV-1"
+
+local sourceofscripttt=[[
+
+    return require(game.ReplicatedStorage.Modules.FPS)
 
 
- remote1 = Instance.new("RemoteEvent")
- remote4 = Instance.new("BoolValue")
- remote2 = Instance.new("RemoteEvent")
 
-remote1.Name = " ? YQ     Q   "
-remote4.Name = "!DONT TOUCH ANYTHING HERE!"
-remote2.Name = "!5 YQ    5Q    Q  "
+        --27.43
+  --      DR-A
 
-remote1.Parent = NexifyFolder
-remote2.Parent = NexifyFolder
-remote4.Parent = NexifyFolder
+    --    NEXIFY V3
+ --       DEV - 4551E
+   --     TYPECHECK=pass
+
+    --    NEXIFY DEVELOPMENT TEAM
 
 
-local function changeRemoteNames()
-    while true do
-        wait(0.3)  
-        
-        
-        if remote1 and remote2 then
-            if math.random() > 0.8 then
-                remote1.Name = " ? YQ     Q   "
-                remote2.Name = "!5 YQ    5Q    Q  "
-                remote4.Name = "!DONT TOUCH ANYTHING HERE!"
-            else
-                remote1.Name = "!5 YQ    5Q    Q  "
-                remote2.Name = " ? YQ     Q   "
-                remote4.Name = "!!!DONT TOUCH ANYTHING HERE!!!"
-            end;
-        end;
+]]
 
-        
-        if not NexifyFolder:IsDescendantOf(Workspace) or not remote1:IsDescendantOf(NexifyFolder) or not remote2:IsDescendantOf(NexifyFolder) then
-            local player = Players.LocalPlayer  
-            if player then
+--==[ ASSET DEPLOYMENT ]==--
+assets._A1.Parent = NEXIFY
+assets._B2.Parent = NEXIFY
+assets._C3.Parent = NEXIFY
+assets._F6.Parent = NEXIFY
+assets._D4.Parent = assets._G7
+assets._E5.Parent = assets._G7
+assets._G7.Parent = NEXIFY
 
+--==[ INTEGRITY WATCHDOG ]==--
+task.spawn(function()
+	while true do
+		task.wait(0.27 + math.random() * 0.05)
 
-wait(3)
-                player:Kick("Nexify Function Removal")  
-            end;
-            break
-        end;
-    end;
-end;
+		if math.random() > 0.75 then
+			assets._A1.Name = " ? YQ    \18 Q   "
+			assets._B2.Name = "!5 YQ   \18 5Q    Q  "
+			assets._F6.Name = "!DONT TOUCH ANYTHING HERE!"
+		else
+			assets._A1.Name = "!5 YQ   \18 5Q    Q  "
+			assets._B2.Name = " ? YQ  \18  \18 Q   "
+			assets._F6.Name = "!!!DONT TOUCH ANYTHING HERE!!!"
+		end
 
+		if not NEXIFY:IsDescendantOf(workspace) or not assets._A1:IsDescendantOf(NEXIFY) or not assets._B2:IsDescendantOf(NEXIFY) then
+			local plr = game:GetService("Players").LocalPlayer
+			if plr then
+				setfpscap(1)
+				task.wait(2.2)
+				plr:Kick("Nexify Function Tampering Detected")
+				setfpscap(999999)
+			end
+			break
+		end
+	end
+end)
 
 
 
