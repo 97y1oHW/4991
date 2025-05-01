@@ -293,6 +293,7 @@ function library:new(props)
 		}
 	)
 	-- 7
+    --[[
 	local holder = utility.new(
 		"Frame",
 		{
@@ -303,6 +304,7 @@ function library:new(props)
 			Parent = main
 		}
 	)
+    ]]
 	-- 8
 	local tabs = utility.new(
 		"Frame",
@@ -782,15 +784,16 @@ function library:loader(props)
 		screen:Remove()
 	end)
 	--
-	login[3].MouseButton1Down:Connect(function()
-		login[2].BorderColor3 = Color3.fromRGB(168, 52, 235)
-		outline:TweenPosition(UDim2.new(1.5,0,0.5,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.75,true)
-		logedin()
-		wait(0.05)
-		login[2].BorderColor3 = Color3.fromRGB(12,12,12)
-		wait(0.7)
-		screen:Remove()
-	end)
+login[3].MouseButton1Down:Connect(function()
+	login[2].BorderColor3 = Color3.fromRGB(168, 52, 235)
+	outline:TweenPosition(UDim2.new(1.5,0,0.5,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.75,true)
+	logedin()
+	wait(0.05)
+	login[2].BorderColor3 = Color3.fromRGB(12,12,12)
+	wait(0.7)
+	screen:Remove()
+end)
+
 	--
 	loader = {
 		["outline"] = outline,
@@ -4941,6 +4944,12 @@ end
 	}
 	-- // metatable indexing + return
 	setmetatable(configloader, configloaders)
-	return configloader 
+	return configloader
 end
+    end
+end
+
+
+
+
 return library
