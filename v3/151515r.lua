@@ -2636,9 +2636,17 @@ Envioromental:colorpicker({name = "Ambient Color Picker", cpname = "", def = gam
     game.Lighting.Ambient = color
 end})
 
-Envioromental:colorpicker({name = "Grass Color Picker", cpname = "", def = originalGrassColor, callback = function(color)
-    local grassColor = Value
-    terrain:SetMaterialColor(Enum.Material.Grass, grassColor)
+terrain = game:GetService("Workspace").Terrain
+originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
+
+Envioromental:colorpicker({name = "Grass Color Picker", cpname = "", def = originalGrassColor, callback = function(Value)
+        local grassColor = Value
+
+        
+        terrain:SetMaterialColor(Enum.Material.Grass, grassColor)
+
+        
+        sethiddenproperty(terrain, "Decoration", true) 
 end})
 
 Envioromental:colorpicker({name = "Bullet Color Picker", cpname = "", def = Color3.new(144, 175, 127), callback = function(color)
