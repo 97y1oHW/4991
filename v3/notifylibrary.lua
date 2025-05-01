@@ -1,3 +1,5 @@
+-- Terminal-style Notification UI with Typewriter Effect
+
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local TextService = game:GetService("TextService")
@@ -43,8 +45,8 @@ end
 local Padding = 10
 local DescriptionPadding = 10
 local InstructionObjects = {}
-local TweenTime = 1.5  -- Bu kısımdan "daha yavaş, daha sağlam" terminal havası katıyoruz
-local TweenStyle = Enum.EasingStyle.Elastic  -- *Sıkı* bir görünüm için Elastic
+local TweenTime = 1.5
+local TweenStyle = Enum.EasingStyle.Elastic
 local TweenDirection = Enum.EasingDirection.Out
 
 local LastTick = tick()
@@ -66,8 +68,8 @@ local function Update()
     local PreviousObjects = {}
     for CurObj, Object in next, InstructionObjects do
         local Label, Delta, Done = Object[1], Object[2], Object[3]
-        if (not Done) then
-            if (Delta < TweenTime) then
+        if not Done then
+            if Delta < TweenTime then
                 Object[2] = math.clamp(Delta + DeltaTime, 0, 1)
                 Delta = Object[2]
             else
@@ -119,39 +121,27 @@ local function DescriptionLabel(Text)
     return Label(Text, DescriptionSettings.Font, DescriptionSettings.Size)
 end
 
-local PropertyTweenOut = {
-    Text = "TextTransparency",
-    Fram = "BackgroundTransparency",
-    Imag = "ImageTransparency"
-}
-
 local function FadeProperty(Object)
-    local Prop = PropertyTweenOut[string.sub(Object.ClassName, 1, 4)]
+    local Prop = {
+        Text = "TextTransparency",
+        Fram = "BackgroundTransparency",
+        Imag = "ImageTransparency"
+    }[string.sub(Object.ClassName, 1, 4)]
     TweenService:Create(Object, TweenInfo.new(0.25, TweenStyle, TweenDirection), {
         [Prop] = 1,
     }):Play()
 end
 
-local function SearchTableFor(Table, For)
-    for _, v in next, Table do
-        if (v == For) then
-            return true
-        end
-    end
-    return false
-end
-
 local function FindIndexByDependency(Table, Dependency)
     for Index, Object in next, Table do
-        if (typeof(Object) == "table") then
-            local Found = SearchTableFor(Object, Dependency)
-            if (Found) then
-                return Index
+        if typeof(Object) == "table" then
+            for _, v in next, Object do
+                if v == Dependency then
+                    return Index
+                end
             end
-        else
-            if (Object == Dependency) then
-                return Index
-            end
+        elseif Object == Dependency then
+            return Index
         end
     end
 end
@@ -164,25 +154,34 @@ local function ResetObjects()
 end
 
 local function FadeOutAfter(Object, Seconds)
-    wait(Seconds)
+    task.wait(Seconds)
     FadeProperty(Object)
     for _, SubObj in next, Object:GetDescendants() do
         FadeProperty(SubObj)
     end
-    wait(0.25)
+    task.wait(0.25)
     table.remove(InstructionObjects, FindIndexByDependency(InstructionObjects, Object))
     ResetObjects()
 end
 
+local function TypeText(Label, FullText, Delay)
+    local i = 1
+    Label.Text = ""
+    while i <= #FullText do
+        Label.Text = string.sub(FullText, 1, i)
+        i += 1
+        task.wait(Delay or 0.02)
+    end
+end
+
 return {
     Notify = function(Properties)
-        local Properties = typeof(Properties) == "table" and Properties or {}
         local Title = Properties.Title
         local Description = Properties.Description
         local Duration = Properties.Duration or 5
-        if (Title) or (Description) then -- Check that user has provided title and/or description
+        if Title or Description then
             local Y = Title and 26 or 0
-            if (Description) then
+            if Description then
                 local TextSize = TextService:GetTextSize(Description, DescriptionSettings.Size, DescriptionSettings.Font, Vector2.new(0, 0))
                 for i = 1, math.ceil(TextSize.X / MaxWidth) do
                     Y += TextSize.Y
@@ -192,20 +191,29 @@ return {
             local NewLabel = Round2px()
             NewLabel.Size = UDim2.new(1, 0, 0, Y)
             NewLabel.Position = UDim2.new(-1, 20, 0, CalculateBounds(CachedObjects).Y + (Padding * #CachedObjects))
-            if (Title) then
-                local NewTitle = TitleLabel(Title)
+
+            if Title then
+                local NewTitle = TitleLabel("")
                 NewTitle.Size = UDim2.new(1, -10, 0, 26)
                 NewTitle.Position = UDim2.fromOffset(10, 0)
                 NewTitle.Parent = NewLabel
+                coroutine.wrap(function()
+                    TypeText(NewTitle, Title)
+                end)()
             end
-            if (Description) then
-                local NewDescription = DescriptionLabel(Description)
+
+            if Description then
+                local NewDescription = DescriptionLabel("")
                 NewDescription.TextWrapped = true
                 NewDescription.Size = UDim2.fromScale(1, 1) + UDim2.fromOffset(-DescriptionPadding, Title and -26 or 0)
                 NewDescription.Position = UDim2.fromOffset(10, Title and 26 or 0)
                 NewDescription.TextYAlignment = Enum.TextYAlignment[Title and "Top" or "Center"]
                 NewDescription.Parent = NewLabel
+                coroutine.wrap(function()
+                    TypeText(NewDescription, Description)
+                end)()
             end
+
             Shadow2px().Parent = NewLabel
             NewLabel.Parent = Container
             table.insert(InstructionObjects, {NewLabel, 0, false})
