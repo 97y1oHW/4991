@@ -62,7 +62,7 @@ background.Size = UDim2.new(0, 298, 0, 306)
 
 backgroundGradient.Color = ColorSequence.new{
 	ColorSequenceKeypoint.new(0, Color3.fromRGB(34, 34, 34)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(28, 28, 28))
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(52, 42, 53))
 }
 backgroundGradient.Rotation = 90
 backgroundGradient.Name = "backgroundGradient"
@@ -172,9 +172,9 @@ local function addTerminalLine(textContent)
 	TweenService:Create(newText, TweenTable["xsxRotation"], {TextTransparency = 0}):Play()
 
 	coroutine.wrap(function()
-		wait(2.13) -- erken sil baba
+		wait(1.73) -- erken sil baba
 		TweenService:Create(newText, TweenTable["xsxRotation"], {TextTransparency = 1}):Play()
-		wait(3)
+		wait(5)
 		newText:Destroy()
 	end)()
 end
@@ -182,6 +182,7 @@ end
 local terminalLines = {
 	"     [N] > INITIALIZING LIBRARY...",
 	"[N] > CATCHING IMAGES...",
+    "  [N] > READING CONFIG FILES",
 	"   [N] > LOADING UI MODULES...",
 	"[N] > BOOTING N3........"
 }
