@@ -1,5 +1,5 @@
 -- // variables
-local version = "0.25"
+local version = "0.26 B-X"
 warn("LIB VERSION: "  ..version)
 local mouseLockEnabled = false
 local mouseLockConnection = nil
@@ -890,7 +890,6 @@ end
 --
 function library:saveconfig()
     local cfg = {}
-    --
     -- Debug: Print the pointers table to inspect its contents
     print("Debug: self.pointers = ", hs:JSONEncode(self.pointers))
     --
