@@ -1,5 +1,5 @@
 -- // variables
-local version = "0.29 BX ALPHA"
+local version = "0.27 BX ALPHA"
 warn("LIB VERSION: "  ..version)
 local mouseLockEnabled = false
 local mouseLockConnection = nil
@@ -114,34 +114,6 @@ utility.tweenTransparency = function(object, duration, transparency)
     end
 end
 
-utility.tweenIn = function(object, duration)
-    duration = duration or 0.5
-    object.Visible = true
-    object.BackgroundTransparency = 1
-    object.ImageTransparency = 1
-    object.TextTransparency = 1
-    
-    -- Tween the main frame
-    ts:Create(object, TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        BackgroundTransparency = 0
-    }):Play()
-    
-    -- Tween all descendants
-    for _, child in pairs(object:GetDescendants()) do
-        if child:IsA("GuiObject") then
-            child.BackgroundTransparency = 1
-            child.ImageTransparency = 1
-            child.TextTransparency = 1
-            
-            ts:Create(child, TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                BackgroundTransparency = child:GetAttribute("OriginalBackgroundTransparency") or 0,
-                ImageTransparency = child:GetAttribute("OriginalImageTransparency") or 0,
-                TextTransparency = child:GetAttribute("OriginalTextTransparency") or 0
-            }):Play()
-        end
-    end
-end
-
 --
 utility.getFullPath = function(folder)
     -- Ensure folder path ends with a separator and is valid
@@ -229,14 +201,10 @@ function library:new(props)
 			DisplayOrder = 9999,
 			ResetOnSpawn = false,
 			ZIndexBehavior = "Global",
-			Parent = cre,
-			Enabled = false -- Start disabled
+			Parent = cre
 		}
 	)
 	--
-
-
-	
         if (check_exploit == "Synapse" and syn.request) then
 	syn.protect_gui(screen)
         end
@@ -438,42 +406,6 @@ function library:new(props)
 			}
 		}
 	}
-
--- Store original transparency values for all elements
-    local function storeOriginalTransparency(obj)
-        if obj:IsA("GuiObject") then
-            obj:SetAttribute("OriginalBackgroundTransparency", obj.BackgroundTransparency)
-            obj:SetAttribute("OriginalImageTransparency", obj.ImageTransparency or 0)
-            obj:SetAttribute("OriginalTextTransparency", obj.TextTransparency or 0)
-        end
-        
-        for _, child in pairs(obj:GetChildren()) do
-            storeOriginalTransparency(child)
-        end
-    end
-    
-    -- Create all your UI elements as before...
-    
-    -- After creating all elements, store their original transparency
-    storeOriginalTransparency(outline)
-    
-    -- Set initial transparency
-    outline.BackgroundTransparency = 1
-    for _, child in pairs(outline:GetDescendants()) do
-        if child:IsA("GuiObject") then
-            child.BackgroundTransparency = 1
-            if child:IsA("TextLabel") or child:IsA("TextBox") then
-                child.TextTransparency = 1
-            elseif child:IsA("ImageLabel") or child:IsA("ImageButton") then
-                child.ImageTransparency = 1
-            end
-        end
-    end
-    
-    -- Enable the screen and play the tween animation
-    screen.Enabled = true
-    utility.tweenIn(outline, 0.7)
-	
 	--
 	table.insert(window.themeitems["accent"]["BackgroundColor3"],outline)
 	--
@@ -481,63 +413,61 @@ function library:new(props)
 	local cooldown = false
 	local saved = UDim2.new(0,0,0,0)
 	--
-	 uis.InputBegan:Connect(function(Input)
-        if Input.UserInputType == Enum.UserInputType.Keyboard then
-            if Input.KeyCode == window.key then
-                if cooldown == false then
-                    if toggled then
-                        cooldown = true
-                        toggled = not toggled
-                        saved = outline.Position
-                        local xx,yy = 0,0
-                        local xxx,yyy = 0,0
-                        --
-                        if (outline.AbsolutePosition.X+(outline.AbsoluteSize.X/2)) < (cam.ViewportSize.X/2) then
-                            xx = -3
-                        else
-                            xx = 3
-                        end
-                        --
-                        if window.y then
-                            if (outline.AbsolutePosition.Y+(outline.AbsoluteSize.Y/2)) < (cam.ViewportSize.Y/2) then
-                                yy = -3
-                            else
-                                yy = 3
-                            end
-                        else
-                            yy = saved.Y.Scale
-                            yyy = saved.Y.Offset
-                        end
-                        --
-                        if window.x == false and window.y == false then
-                            utility.tweenTransparency(outline, 0.3, 1)
-                            wait(0.3)
-                            screen.Enabled = false
-                            utility.lockMouse(true)
-                        else
-                            utility.lockMouse(true)
-                            ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.In), {Position = UDim2.new(xx,xxx,yy,yyy)}):Play()
-                        end
-                        wait(0.5)
-                        cooldown = false
-                    else
-                        cooldown = true
-                        toggled = not toggled
-                        if window.x == false and window.y == false then
-                            screen.Enabled = true
-                            utility.tweenTransparency(outline, 0.3, 0)
-                            utility.lockMouse(false)
-                        else
-                            utility.lockMouse(false)
-                            ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.Out), {Position = saved}):Play()
-                        end
-                        wait(0.5)
-                        cooldown = false
-                    end
-                end
-            end
-        end
-    end)
+	uis.InputBegan:Connect(function(Input)
+		if Input.UserInputType == Enum.UserInputType.Keyboard then
+			if Input.KeyCode == window.key then
+				if cooldown == false then
+					if toggled then
+						cooldown = true
+						toggled = not toggled
+						saved = outline.Position
+						local xx,yy = 0,0
+						local xxx,yyy = 0,0
+						--
+						if (outline.AbsolutePosition.X+(outline.AbsoluteSize.X/2)) < (cam.ViewportSize.X/2) then
+							xx = -3
+						else
+							xx = 3
+						end
+						--
+						if window.y then
+							if (outline.AbsolutePosition.Y+(outline.AbsoluteSize.Y/2)) < (cam.ViewportSize.Y/2) then
+								yy = -3
+							else
+								yy = 3
+							end
+						else
+							yy = saved.Y.Scale
+							yyy = saved.Y.Offset
+						end
+						--
+						if window.x == false and window.y == false then
+							screen.Enabled = false
+								utility.lockMouse(true) -- Unlock mouse when UI is shown
+						else
+								utility.lockMouse(true) -- Unlock mouse when UI is shown
+								
+							ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.In), {Position = UDim2.new(xx,xxx,yy,yyy)}):Play()
+						end
+						wait(0.5)
+						cooldown = false
+					else
+						cooldown = true
+						toggled = not toggled
+						if window.x == false and window.y == false then
+							screen.Enabled = true
+								utility.lockMouse(false) -- Unlock mouse when UI is shown
+						else
+							utility.lockMouse(false) -- Unlock mouse when UI is shown
+								ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.Out), {Position = saved}):Play()
+						end
+						wait(0.5)
+						cooldown = false
+					end
+				end
+			end
+		end
+	end)
 	--
 	window.labels[#window.labels+1] = titletext
 	-- // metatable indexing + return
