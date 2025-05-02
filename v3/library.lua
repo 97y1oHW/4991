@@ -890,9 +890,7 @@ end
 --
 function library:saveconfig()
     local cfg = {}
-    -- Debug: Print the pointers table to inspect its contents
     print("Debug: self.pointers = ", hs:JSONEncode(self.pointers))
-    --
     for i, v in pairs(self.pointers) do
         cfg[i] = {}
         print("Debug: Processing pointer ", i, " with value ", hs:JSONEncode(v))
@@ -913,7 +911,6 @@ function library:saveconfig()
             end
         end
     end
-    --
     local json_data = hs:JSONEncode(cfg)
     if json_data == "{}" or json_data == "[]" then
         warn("No configuration data to save: cfg table is empty")
