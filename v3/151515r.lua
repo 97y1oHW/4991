@@ -2711,7 +2711,6 @@ VisualMainSection:toggle({name = "ESP Masterswitch", def = false, callback = fun
     ESP.TeamCheck = enabled
 end})
 
-VisualMainSection:esppreview({name = "ESP Preview", color = Color3.fromRGB(255, 0, 0)})
 
 VisualMainSection:toggle({name = "Fade Out On Distance", def = false, callback = function(enabled)
  ESP.FadeOut.OnDistance = enabled
