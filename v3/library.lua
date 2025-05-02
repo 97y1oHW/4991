@@ -100,6 +100,14 @@ utility.dragify = function(ins,touse)
 	end)
 end
 --
+utility.getFullPath = function(folder)
+    -- Ensure folder path ends with a separator and is valid
+    if folder:sub(-1) ~= "/" and folder:sub(-1) ~= "\\" then
+        folder = folder .. "/"
+    end
+    return folder
+end
+
 utility.round = function(n,d)
 	return tonumber(string.format("%."..(d or 0).."f",n))
 end
@@ -880,23 +888,27 @@ end
 
 --
 function library:saveconfig()
-	local cfg = {}
-	--
-	for i,v in pairs(self.pointers) do
-		cfg[i] = {}
-		for c,d in pairs(v) do
-			cfg[i][c] = {}
-			for x,z in pairs(d) do
-				if typeof(z.current) == "Color3" then
-					cfg[i][c][x] = {z.current.R,z.current.G,z.current.B}
-				else
-					cfg[i][c][x] = z.current
-				end
-			end
-		end
-	end
-	--
-	return hs:JSONEncode(cfg)
+    local cfg = {}
+    --
+    for i, v in pairs(self.pointers) do
+        cfg[i] = {}
+        for c, d in pairs(v) do
+            cfg[i][c] = {}
+            for x, z in pairs(d) do
+                if typeof(z.current) == "Color3" then
+                    cfg[i][c][x] = {z.current.R, z.current.G, z.current.B}
+                else
+                    cfg[i][c][x] = z.current
+                end
+            end
+        end
+    end
+    --
+    local json_data = hs:JSONEncode(cfg)
+    if json_data == "{}" then
+        warn("No configuration data to save: pointers table is empty")
+    end
+    return json_data
 end
 --
 function library:loadconfig(cfg)
@@ -4213,521 +4225,553 @@ function colorpickers:set(color)
 end
 --
 function sections:configloader(props)
-	-- // properties
-	local folder = props.folder or props.Folder
-	-- // variables
-	local configloader = {}
-	-- // main
-	local clholder = utility.new(
-		"Frame",
-		{
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,0,222),
-			Parent = self.content
-		}
-	)
-	--
-	local outline = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,0,1,0),
-			Parent = clholder
-		}
-	)
-	--
-	local outline2 = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-			BorderColor3 = Color3.fromRGB(56, 56, 56),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,0,1,0),
-			Parent = outline
-		}
-	)
-	--
-	local title = utility.new(
-		"TextLabel",
-		{
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,0,15),
-			Position = UDim2.new(0,0,0,3),
-			Font = self.library.font,
-			Text = "configs",
-			TextColor3 = Color3.fromRGB(255,255,255),
-			TextSize = self.library.textsize,
-			TextStrokeTransparency = 0,
-			TextXAlignment = "Center",
-			Parent = outline
-		}
-	)
-	--
-	self.library.labels[#self.library.labels+1] = title
-	--
-	local color = utility.new(
-		"Frame",
-		{
-			AnchorPoint = Vector2.new(0.5,0),
-			BackgroundColor3 = self.library.theme.accent,
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,-6,0,1),
-			Position = UDim2.new(0.5,0,0,19),
-			Parent = outline
-		}
-	)
-	--
-	table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color)
-	--
-	local buttonsholder = utility.new(
-		"Frame",
-		{
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			Size = UDim2.new(1,0,0,64),
-			Position = UDim2.new(0,0,0,150),
-			Parent = outline
-		}
-	)
-	--
-	local configsholder = utility.new(
-		"Frame",
-		{
-			AnchorPoint = Vector2.new(0.5,0),
-			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,-10,0,120),
-			Position = UDim2.new(0.5,0,0,25),
-			Parent = outline
-		}
-	)
-	--
-	local outline3 = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-			BorderColor3 = Color3.fromRGB(56, 56, 56),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,0,1,0),
-			Position = UDim2.new(0,0,0,0),
-			Parent = configsholder
-		}
-	)
-	--
-	local outline4 = utility.new(
-		"ScrollingFrame",
-		{
-			BackgroundColor3 = Color3.fromRGB(56, 56, 56),
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			Size = UDim2.new(1,0,1,0),
-			Position = UDim2.new(0,0,0,0),
-			ClipsDescendants = true,
-			AutomaticCanvasSize = "Y",
-			CanvasSize = UDim2.new(0,0,0,0),
-			ScrollBarImageTransparency = 0.25,
-			ScrollBarImageColor3 = Color3.fromRGB(0,0,0),
-			ScrollBarThickness = 5,
-			VerticalScrollBarInset = "ScrollBar",
-			VerticalScrollBarPosition = "Right",
-			Parent = outline3
-		}
-	)
-	--
-	utility.new(
-		"UIListLayout",
-		{
-			FillDirection = "Vertical",
-			Padding = UDim.new(0,0),
-			Parent = outline4
-		}
-	)
-	--
-	local createdbuttons = {}
-	local selected
-	--
-	local makebutton = function(name,toggled)
-		local createdbutton = utility.new(
-			"TextButton",
-			{
-				AnchorPoint = Vector2.new(0,0),
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1,0,0,18),
-				Position = UDim2.new(0,0,0,0),
-				Text = "",
-				Parent = outline4
-			}
-		)
-		--
-		local grey = utility.new(
-			"Frame",
-			{
-				AnchorPoint = Vector2.new(0.5,0),
-				BackgroundColor3 = Color3.fromRGB(125, 125, 125),
-				BackgroundTransparency = 0.9,
-				BorderSizePixel = 0,
-				Size = UDim2.new(1,-4,1,0),
-				Position = UDim2.new(0.5,0,0,0),
-				Visible = false,
-				Parent = createdbutton
-			}
-		)
-		--
-		local createdtitle = utility.new(
-			"TextLabel",
-			{
-				AnchorPoint = Vector2.new(0.5,0),
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1,-10,1,0),
-				Position = UDim2.new(0.5,0,0,0),
-				Font = self.library.font,	
-				Text = name,
-				TextColor3 = Color3.fromRGB(255,255,255),
-				TextSize = self.library.textsize,
-				TextStrokeTransparency = 0,
-				TextXAlignment = "Left",
-				Parent = createdbutton
-			}
-		)
-		--
-		self.library.labels[#self.library.labels+1] = createdtitle
-		--
-		local createdb = {
-			["button"] = createdbutton,
-			["grey"] = grey,
-			["title"] = createdtitle,
-			["name"] = name
-		}
-		--
-		table.insert(createdbuttons,createdb)
-		--
-		if toggled then
-			createdb.grey.Visible = true
-			createdb.title.TextColor3 = self.library.theme.accent
-			table.insert(self.library.themeitems["accent"]["TextColor3"],createdb.title)
-			selected = createdb
-		end
-		--
-		createdbutton.MouseButton1Down:Connect(function()
-			for i,v in pairs(createdbuttons) do
-				if v ~= createdb then
-					v.grey.Visible = false
-					v.title.TextColor3 = Color3.fromRGB(255,255,255)
-					local find = table.find(self.library.themeitems["accent"]["TextColor3"],v.title)
-					if find then
-						table.remove(self.library.themeitems["accent"]["TextColor3"],find)
-					end
-				end
-			end
-			--
-			createdb.grey.Visible = true
-			createdb.title.TextColor3 = self.library.theme.accent
-			table.insert(self.library.themeitems["accent"]["TextColor3"],createdb.title)
-			selected = createdb
-		end)
-	end
-	--
-	local newbutton = function(parent,name)
-		local button_holder = utility.new(
-			"Frame",
-			{
-				BackgroundTransparency = 1,
-				BorderSizePixel = 0,
-				ZIndex = 5,
-				Parent = parent
-			}
-		)
-		--
-		local button_outline = utility.new(
-			"Frame",
-			{
-				BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-				BorderColor3 = Color3.fromRGB(12, 12, 12),
-				BorderMode = "Inset",
-				BorderSizePixel = 1,
-				Position = UDim2.new(0,0,0,0),
-				Size = UDim2.new(1,0,1,0),
-				ZIndex = 5,
-				Parent = button_holder
-			}
-		)
-		--
-		local button_outline2 = utility.new(
-			"Frame",
-			{
-				BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-				BorderColor3 = Color3.fromRGB(56, 56, 56),
-				BorderMode = "Inset",
-				BorderSizePixel = 1,
-				Position = UDim2.new(0,0,0,0),
-				Size = UDim2.new(1,0,1,0),
-				ZIndex = 5,
-				Parent = button_outline
-			}
-		)
-		--
-		local button_color = utility.new(
-			"Frame",
-			{
-				AnchorPoint = Vector2.new(0,0),
-				BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-				BorderSizePixel = 0,
-				Size = UDim2.new(1,0,0,0),
-				Position = UDim2.new(0,0,0,0),
-				ZIndex = 5,
-				Parent = button_outline2
-			}
-		)
-		--
-		utility.new(
-			"UIGradient",
-			{
-				Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
-				Rotation = 90,
-				Parent = button_color
-			}
-		)
-		--
-		local button_button = utility.new(
-			"TextButton",
-			{
-				AnchorPoint = Vector2.new(0,0),
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1,0,1,0),
-				Position = UDim2.new(0,0,0,0),
-				Text = name,
-				TextColor3 = Color3.fromRGB(255,255,255),
-				TextSize = self.library.textsize,
-				TextStrokeTransparency = 0,
-				Font = self.library.font,
-				ZIndex = 5,
-				Parent = button_holder
-			}
-		)
-		--
-		self.library.labels[#self.library.labels+1] = button_button
-		--
-		return {button_holder,button_outline,button_button}
-	end
-	--
-	local function textbox(parent)
-		local textbox_holder = utility.new(
-			"Frame",
-			{
-				BackgroundTransparency = 1,
-				BorderSizePixel = 0,
-				ZIndex = 5,
-				Parent = parent
-			}
-		)
-		--
-		local outline5 = utility.new(
-			"Frame",
-			{
-				BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-				BorderColor3 = Color3.fromRGB(12, 12, 12),
-				BorderMode = "Inset",
-				BorderSizePixel = 1,
-				Position = UDim2.new(0,0,0,0),
-				Size = UDim2.new(1,0,1,0),
-				ZIndex = 5,
-				Parent = textbox_holder
-			}
-		)
-		--
-		local outline6 = utility.new(
-			"Frame",
-			{
-				BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-				BorderColor3 = Color3.fromRGB(56, 56, 56),
-				BorderMode = "Inset",
-				BorderSizePixel = 1,
-				Position = UDim2.new(0,0,0,0),
-				Size = UDim2.new(1,0,1,0),
-				ZIndex = 5,
-				Parent = outline5
-			}
-		)
-		--
-		local color2 = utility.new(
-			"Frame",
-			{
-				AnchorPoint = Vector2.new(0,0),
-				BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-				BorderSizePixel = 0,
-				Size = UDim2.new(1,0,0,0),
-				Position = UDim2.new(0,0,0,0),
-				ZIndex = 5,
-				Parent = outline6
-			}
-		)
-		--
-		utility.new(
-			"UIGradient",
-			{
-				Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
-				Rotation = 90,
-				Parent = color2
-			}
-		)
-		--
-		local tbox = utility.new(
-			"TextBox",
-			{
-				AnchorPoint = Vector2.new(0.5,0),
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1,0,1,0),
-				Position = UDim2.new(0.5,0,0,0),
-				PlaceholderColor3 = Color3.fromRGB(178, 178, 178),
-				PlaceholderText = "",
-				Text = "",
-				TextColor3 = Color3.fromRGB(255,255,255),
-				TextSize = self.library.textsize,
-				TextStrokeTransparency = 0,
-				Font = self.library.font,
-				ZIndex = 5,
-				Parent = textbox_holder
-			}
-		)
-		--
-		local tbox_button = utility.new(
-			"TextButton",
-			{
-				AnchorPoint = Vector2.new(0,0),
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1,0,1,0),
-				Position = UDim2.new(0,0,0,0),
-				Text = "",
-				TextColor3 = Color3.fromRGB(255,255,255),
-				TextSize = self.library.textsize,
-				TextStrokeTransparency = 0,
-				Font = self.library.font,
-				ZIndex = 5,
-				Parent = textbox_holder
-			}
-		)
-		--
-		tbox_button.MouseButton1Down:Connect(function()
-			tbox:CaptureFocus()
-		end)
-		--
-		return {textbox_holder,tbox,outline5}
-	end
-	--
-	local refresh = function()
-		for i,v in pairs(createdbuttons) do
-			v.button:Remove()
-			v.grey:Remove()
-			v.title:Remove()
-		end
-		createdbuttons = {}
-		for i,v in pairs(listfiles(folder)) do
-			if v:sub(-4) == ".cfg" then
-				if i == 1 then 
-					makebutton(v:sub(#tostring(folder)+2, -5),true)
-				else
-					makebutton(v:sub(#tostring(folder)+2, -5),false)
-				end
-			end
-		end
-	end
-	--
-	refresh()
-	--
-	local name = textbox(buttonsholder)
-	local load = newbutton(buttonsholder,"Load")
-	local delete = newbutton(buttonsholder,"Delete")
-	local save = newbutton(buttonsholder,"Save")
-	local create = newbutton(buttonsholder,"Create")
-	--
-	name[1].Size = UDim2.new(1,-10,0,20)
-	load[1].Size = UDim2.new(0.5,-6,0,20)
-	delete[1].Size = UDim2.new(0.5,-6,0,20)
-	save[1].Size = UDim2.new(0.5,-6,0,20)
-	create[1].Size = UDim2.new(0.5,-6,0,20)
-	--
-	name[1].Position = UDim2.new(0.5,0,0,0)
-	name[1].AnchorPoint = Vector2.new(0.5,0)
-	--
-	load[1].Position = UDim2.new(0,5,0,22)
-	load[1].AnchorPoint = Vector2.new(0,0)
-	--
-	delete[1].Position = UDim2.new(1,-5,0,22)
-	delete[1].AnchorPoint = Vector2.new(1,0)
-	--
-	save[1].Position = UDim2.new(0,5,0,44)
-	save[1].AnchorPoint = Vector2.new(0,0)
-	--
-	create[1].Position = UDim2.new(1,-5,0,44)
-	create[1].AnchorPoint = Vector2.new(1,0)
-	--
-	name[2].PlaceholderText = "Name"
-	--
-	local currentname = nil
-	--
-	name[2].Focused:Connect(function()
-		name[3].BorderColor3 = self.library.theme.accent
-	end)
-	--
-	name[2].FocusLost:Connect(function()
-		local saved = name[2].Text
-		if #saved >= 3 and #saved <= 15 then
-			currentname = saved
-		else
-			name[2].Text = ""
-			currentname = nil
-		end
-		name[3].BorderColor3 = Color3.fromRGB(12,12,12)
-	end)
-	--
-	load[3].MouseButton1Down:Connect(function()
-		self.library:loadconfig(folder..selected.name..".cfg")
-		load[2].BorderColor3 = self.library.theme.accent
-		wait(0.05)
-		load[2].BorderColor3 = Color3.fromRGB(12,12,12)
-	end)
-	--
-	delete[3].MouseButton1Down:Connect(function()
-		delfile(folder..selected.name..".cfg")
-		delete[2].BorderColor3 = self.library.theme.accent
-		wait(0.05)
-		delete[2].BorderColor3 = Color3.fromRGB(12,12,12)
-		wait()
-		refresh()
-	end)
-	--
-	save[3].MouseButton1Down:Connect(function()
-		writefile(folder..selected.name..".cfg", self.library:saveconfig())
-		save[2].BorderColor3 = self.library.theme.accent
-		wait(0.05)
-		save[2].BorderColor3 = Color3.fromRGB(12,12,12)
-		wait()
-		refresh()
-	end)
-	--
-	create[3].MouseButton1Down:Connect(function()
-		writefile(folder..currentname..".cfg", self.library:saveconfig())
-		create[2].BorderColor3 = self.library.theme.accent
-		wait(0.05)
-		create[2].BorderColor3 = Color3.fromRGB(12,12,12)
-		wait()
-		refresh()
-	end)
-	-- // button tbl
-	configloader = {
-		["library"] = self.library
-	}
-	-- // metatable indexing + return
-	setmetatable(configloader, configloaders)
-	return configloader 
+    -- // properties
+    local folder = props.folder or props.Folder or "nexifyv3" -- Default to nexifyv3 if not provided
+    -- // variables
+    local configloader = {}
+    -- // main
+    local clholder = utility.new(
+        "Frame",
+        {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 222),
+            Parent = self.content
+        }
+    )
+    --
+    local outline = utility.new(
+        "Frame",
+        {
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, 0, 1, 0),
+            Parent = clholder
+        }
+    )
+    --
+    local outline2 = utility.new(
+        "Frame",
+        {
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(56, 56, 56),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, 0, 1, 0),
+            Parent = outline
+        }
+    )
+    --
+    local title = utility.new(
+        "TextLabel",
+        {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 15),
+            Position = UDim2.new(0, 0, 0, 3),
+            Font = self.library.font,
+            Text = "configs",
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            TextSize = self.library.textsize,
+            TextStrokeTransparency = 0,
+            TextXAlignment = "Center",
+            Parent = outline
+        }
+    )
+    --
+    self.library.labels[#self.library.labels + 1] = title
+    --
+    local color = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(0.5, 0),
+            BackgroundColor3 = self.library.theme.accent,
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, -6, 0, 1),
+            Position = UDim2.new(0.5, 0, 0, 19),
+            Parent = outline
+        }
+    )
+    --
+    table.insert(self.library.themeitems["accent"]["BackgroundColor3"], color)
+    --
+    local buttonsholder = utility.new(
+        "Frame",
+        {
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            Size = UDim2.new(1, 0, 0, 64),
+            Position = UDim2.new(0, 0, 0, 150),
+            Parent = outline
+        }
+    )
+    --
+    local configsholder = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(0.5, 0),
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, -10, 0, 120),
+            Position = UDim2.new(0.5, 0, 0, 25),
+            Parent = outline
+        }
+    )
+    --
+    local outline3 = utility.new(
+        "Frame",
+        {
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(56, 56, 56),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, 0, 1, 0),
+            Position = UDim2.new(0, 0, 0, 0),
+            Parent = configsholder
+        }
+    )
+    --
+    local outline4 = utility.new(
+        "ScrollingFrame",
+        {
+            BackgroundColor3 = Color3.fromRGB(56, 56, 56),
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            Size = UDim2.new(1, 0, 1, 0),
+            Position = UDim2.new(0, 0, 0, 0),
+            ClipsDescendants = true,
+            AutomaticCanvasSize = "Y",
+            CanvasSize = UDim2.new(0, 0, 0, 0),
+            ScrollBarImageTransparency = 0.25,
+            ScrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
+            ScrollBarThickness = 5,
+            VerticalScrollBarInset = "ScrollBar",
+            VerticalScrollBarPosition = "Right",
+            Parent = outline3
+        }
+    )
+    --
+    utility.new(
+        "UIListLayout",
+        {
+            FillDirection = "Vertical",
+            Padding = UDim.new(0, 0),
+            Parent = outline4
+        }
+    )
+    --
+    local createdbuttons = {}
+    local selected
+    --
+    local makebutton = function(name, toggled)
+        local createdbutton = utility.new(
+            "TextButton",
+            {
+                AnchorPoint = Vector2.new(0, 0),
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 18),
+                Position = UDim2.new(0, 0, 0, 0),
+                Text = "",
+                Parent = outline4
+            }
+        )
+        --
+        local grey = utility.new(
+            "Frame",
+            {
+                AnchorPoint = Vector2.new(0.5, 0),
+                BackgroundColor3 = Color3.fromRGB(125, 125, 125),
+                BackgroundTransparency = 0.9,
+                BorderSizePixel = 0,
+                Size = UDim2.new(1, -4, 1, 0),
+                Position = UDim2.new(0.5, 0, 0, 0),
+                Visible = false,
+                Parent = createdbutton
+            }
+        )
+        --
+        local createdtitle = utility.new(
+            "TextLabel",
+            {
+                AnchorPoint = Vector2.new(0.5, 0),
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, -10, 1, 0),
+                Position = UDim2.new(0.5, 0, 0, 0),
+                Font = self.library.font,
+                Text = name,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextSize = self.library.textsize,
+                TextStrokeTransparency = 0,
+                TextXAlignment = "Left",
+                Parent = createdbutton
+            }
+        )
+        --
+        self.library.labels[#self.library.labels + 1] = createdtitle
+        --
+        local createdb = {
+            ["button"] = createdbutton,
+            ["grey"] = grey,
+            ["title"] = createdtitle,
+            ["name"] = name
+        }
+        --
+        table.insert(createdbuttons, createdb)
+        --
+        if toggled then
+            createdb.grey.Visible = true
+            createdb.title.TextColor3 = self.library.theme.accent
+            table.insert(self.library.themeitems["accent"]["TextColor3"], createdb.title)
+            selected = createdb
+        end
+        --
+        createdbutton.MouseButton1Down:Connect(function()
+            for i, v in pairs(createdbuttons) do
+                if v ~= createdb then
+                    v.grey.Visible = false
+                    v.title.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    local find = table.find(self.library.themeitems["accent"]["TextColor3"], v.title)
+                    if find then
+                        table.remove(self.library.themeitems["accent"]["TextColor3"], find)
+                    end
+                end
+            end
+            --
+            createdb.grey.Visible = true
+            createdb.title.TextColor3 = self.library.theme.accent
+            table.insert(self.library.themeitems["accent"]["TextColor3"], createdb.title)
+            selected = createdb
+        end)
+    end
+    --
+    local newbutton = function(parent, name)
+        local button_holder = utility.new(
+            "Frame",
+            {
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                ZIndex = 5,
+                Parent = parent
+            }
+        )
+        --
+        local button_outline = utility.new(
+            "Frame",
+            {
+                BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+                BorderColor3 = Color3.fromRGB(12, 12, 12),
+                BorderMode = "Inset",
+                BorderSizePixel = 1,
+                Position = UDim2.new(0, 0, 0, 0),
+                Size = UDim2.new(1, 0, 1, 0),
+                ZIndex = 5,
+                Parent = button_holder
+            }
+        )
+        --
+        local button_outline2 = utility.new(
+            "Frame",
+            {
+                BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+                BorderColor3 = Color3.fromRGB(56, 56, 56),
+                BorderMode = "Inset",
+                BorderSizePixel = 1,
+                Position = UDim2.new(0, 0, 0, 0),
+                Size = UDim2.new(1, 0, 1, 0),
+                ZIndex = 5,
+                Parent = button_outline
+            }
+        )
+        --
+        local button_color = utility.new(
+            "Frame",
+            {
+                AnchorPoint = Vector2.new(0, 0),
+                BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+                BorderSizePixel = 0,
+                Size = UDim2.new(1, 0, 0, 0),
+                Position = UDim2.new(0, 0, 0, 0),
+                ZIndex = 5,
+                Parent = button_outline2
+            }
+        )
+        --
+        utility.new(
+            "UIGradient",
+            {
+                Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
+                Rotation = 90,
+                Parent = button_color
+            }
+        )
+        --
+        local button_button = utility.new(
+            "TextButton",
+            {
+                AnchorPoint = Vector2.new(0, 0),
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 1, 0),
+                Position = UDim2.new(0, 0, 0, 0),
+                Text = name,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextSize = self.library.textsize,
+                TextStrokeTransparency = 0,
+                Font = self.library.font,
+                ZIndex = 5,
+                Parent = button_holder
+            }
+        )
+        --
+        self.library.labels[#self.library.labels + 1] = button_button
+        --
+        return {button_holder, button_outline, button_button}
+    end
+    --
+    local function textbox(parent)
+        local textbox_holder = utility.new(
+            "Frame",
+            {
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                ZIndex = 5,
+                Parent = parent
+            }
+        )
+        --
+        local outline5 = utility.new(
+            "Frame",
+            {
+                BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+                BorderColor3 = Color3.fromRGB(12, 12, 12),
+                BorderMode = "Inset",
+                BorderSizePixel = 1,
+                Position = UDim2.new(0, 0, 0, 0),
+                Size = UDim2.new(1, 0, 1, 0),
+                ZIndex = 5,
+                Parent = textbox_holder
+            }
+        )
+        --
+        local outline6 = utility.new(
+            "Frame",
+            {
+                BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+                BorderColor3 = Color3.fromRGB(56, 56, 56),
+                BorderMode = "Inset",
+                BorderSizePixel = 1,
+                Position = UDim2.new(0, 0, 0, 0),
+                Size = UDim2.new(1, 0, 1, 0),
+                ZIndex = 5,
+                Parent = outline5
+            }
+        )
+        --
+        local color2 = utility.new(
+            "Frame",
+            {
+                AnchorPoint = Vector2.new(0, 0),
+                BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+                BorderSizePixel = 0,
+                Size = UDim2.new(1, 0, 0, 0),
+                Position = UDim2.new(0, 0, 0, 0),
+                ZIndex = 5,
+                Parent = outline6
+            }
+        )
+        --
+        utility.new(
+            "UIGradient",
+            {
+                Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
+                Rotation = 90,
+                Parent = color2
+            }
+        )
+        --
+        local tbox = utility.new(
+            "TextBox",
+            {
+                AnchorPoint = Vector2.new(0.5, 0),
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 1, 0),
+                Position = UDim2.new(0.5, 0, 0, 0),
+                PlaceholderColor3 = Color3.fromRGB(178, 178, 178),
+                PlaceholderText = "",
+                Text = "",
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextSize = self.library.textsize,
+                TextStrokeTransparency = 0,
+                Font = self.library.font,
+                ZIndex = 5,
+                Parent = textbox_holder
+            }
+        )
+        --
+        local tbox_button = utility.new(
+            "TextButton",
+            {
+                AnchorPoint = Vector2.new(0, 0),
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 1, 0),
+                Position = UDim2.new(0, 0, 0, 0),
+                Text = "",
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextSize = self.library.textsize,
+                TextStrokeTransparency = 0,
+                Font = self.library.font,
+                ZIndex = 5,
+                Parent = textbox_holder
+            }
+        )
+        --
+        tbox_button.MouseButton1Down:Connect(function()
+            tbox:CaptureFocus()
+        end)
+        --
+        return {textbox_holder, tbox, outline5}
+    end
+    --
+    local function refresh()
+        for i, v in pairs(createdbuttons) do
+            v.button:Remove()
+            v.grey:Remove()
+            v.title:Remove()
+        end
+        createdbuttons = {}
+        -- Ensure folder exists
+        if not isfolder(folder) then
+            makefolder(folder)
+        end
+        local files = listfiles(folder)
+        for i, v in pairs(files) do
+            if v:sub(-4) == ".cfg" then
+                local cfgname = v:sub(#tostring(folder) + 2, -5)
+                if i == 1 then
+                    makebutton(cfgname, true)
+                else
+                    makebutton(cfgname, false)
+                end
+            end
+        end
+    end
+    --
+    refresh()
+    --
+    local name = textbox(buttonsholder)
+    local load = newbutton(buttonsholder, "Load")
+    local delete = newbutton(buttonsholder, "Delete")
+    local save = newbutton(buttonsholder, "Save")
+    local create = newbutton(buttonsholder, "Create")
+    --
+    name[1].Size = UDim2.new(1, -10, 0, 20)
+    load[1].Size = UDim2.new(0.5, -6, 0, 20)
+    delete[1].Size = UDim2.new(0.5, -6, 0, 20)
+    save[1].Size = UDim2.new(0.5, -6, 0, 20)
+    create[1].Size = UDim2.new(0.5, -6, 0, 20)
+    --
+    name[1].Position = UDim2.new(0.5, 0, 0, 0)
+    name[1].AnchorPoint = Vector2.new(0.5, 0)
+    --
+    load[1].Position = UDim2.new(0, 5, 0, 22)
+    load[1].AnchorPoint = Vector2.new(0, 0)
+    --
+    delete[1].Position = UDim2.new(1, -5, 0, 22)
+    delete[1].AnchorPoint = Vector2.new(1, 0)
+    --
+    save[1].Position = UDim2.new(0, 5, 0, 44)
+    save[1].AnchorPoint = Vector2.new(0, 0)
+    --
+    create[1].Position = UDim2.new(1, -5, 0, 44)
+    create[1].AnchorPoint = Vector2.new(1, 0)
+    --
+    name[2].PlaceholderText = "Name"
+    --
+    local currentname = nil
+    --
+    name[2].Focused:Connect(function()
+        name[3].BorderColor3 = self.library.theme.accent
+    end)
+    --
+    name[2].FocusLost:Connect(function()
+        local saved = name[2].Text
+        if #saved >= 3 and #saved <= 15 then
+            currentname = saved
+        else
+            name[2].Text = ""
+            currentname = nil
+        end
+        name[3].BorderColor3 = Color3.fromRGB(12, 12, 12)
+    end)
+    --
+    load[3].MouseButton1Down:Connect(function()
+        if selected then
+            local filepath = folder .. "/" .. selected.name .. ".cfg"
+            if isfile(filepath) then
+                self.library:loadconfig(filepath)
+                load[2].BorderColor3 = self.library.theme.accent
+                wait(0.05)
+                load[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+            end
+        end
+    end)
+    --
+    delete[3].MouseButton1Down:Connect(function()
+        if selected then
+            local filepath = folder .. "/" .. selected.name .. ".cfg"
+            if isfile(filepath) then
+                delfile(filepath)
+                delete[2].BorderColor3 = self.library.theme.accent
+                wait(0.05)
+                delete[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                wait()
+                refresh()
+            end
+        end
+    end)
+    --
+    save[3].MouseButton1Down:Connect(function()
+        if selected then
+            local filepath = folder .. "/" .. selected.name .. ".cfg"
+            local config_data = self.library:saveconfig()
+            if config_data and config_data ~= "{}" then
+                writefile(filepath, config_data)
+                save[2].BorderColor3 = self.library.theme.accent
+                wait(0.05)
+                save[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                wait()
+                refresh()
+            else
+                warn("Failed to save config: No configuration data available")
+            end
+        end
+    end)
+    --
+    create[3].MouseButton1Down:Connect(function()
+        if currentname then
+            local filepath = folder .. "/" .. currentname .. ".cfg"
+            local config_data = self.library:saveconfig()
+            if config_data and config_data ~= "{}" then
+                writefile(filepath, config_data)
+                create[2].BorderColor3 = self.library.theme.accent
+                wait(0.05)
+                create[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                wait()
+                refresh()
+            else
+                warn("Failed to create config: No configuration data available")
+            end
+        end
+    end)
+    -- // button tbl
+    configloader = {
+        ["library"] = self.library
+    }
+    -- // metatable indexing + return
+    setmetatable(configloader, configloaders)
+    return configloader
 end
 return library
