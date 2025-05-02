@@ -1,10 +1,11 @@
 -- // variables
-local version = "0.26 B-X"
+local version = "0.27 B-X"
 warn("LIB VERSION: "  ..version)
 local mouseLockEnabled = false
 local mouseLockConnection = nil
 local library = {}
 local pages = {}
+local esppreviews = {}
 local sections = {}
 local multisections = {}
 local mssections = {}
@@ -36,6 +37,7 @@ local cam = ws.CurrentCamera
 -- // indexes
 library.__index = library
 pages.__index = pages
+esppreviews.__index = esppreviews
 sections.__index = sections
 multisections.__index = multisections
 mssections.__index = mssections
@@ -100,6 +102,18 @@ utility.dragify = function(ins,touse)
 		end
 	end)
 end
+
+utility.tweenTransparency = function(object, duration, transparency)
+    duration = duration or 0.5
+    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    game:GetService("TweenService"):Create(object, tweenInfo, {BackgroundTransparency = transparency, ImageTransparency = transparency, TextTransparency = transparency}):Play()
+    for _, child in pairs(object:GetDescendants()) do
+        if child:IsA("GuiObject") then
+            game:GetService("TweenService"):Create(child, tweenInfo, {BackgroundTransparency = transparency, ImageTransparency = transparency, TextTransparency = transparency}):Play()
+        end
+    end
+end
+
 --
 utility.getFullPath = function(folder)
     -- Ensure folder path ends with a separator and is valid
@@ -1174,6 +1188,7 @@ end
 	table.insert(self.pages,page)
 	--
 	button.MouseButton1Down:Connect(function()
+			
 		if page.open == false then
 			for i,v in pairs(self.pages) do
 				if v ~= page then
@@ -1194,6 +1209,16 @@ end
 			page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 			page.line.Size = UDim2.new(1,0,0,3)
 			page.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+
+				for _, esppreview in pairs(self.esppreviews or {}) do
+    utility.tweenTransparency(esppreview.previewholder, 0.5, 1)
+    esppreview.previewholder.Visible = false
+end
+if page.esppreview then
+    utility.tweenTransparency(page.esppreview.previewholder, 0.5, 0)
+    page.esppreview.previewholder.Visible = true
+end
+
 		end
 	end)
 	--
@@ -2180,6 +2205,125 @@ function library:closewindows(ignore)
 		end
 	end
 end
+
+function sections:esppreview(props)
+    -- // properties
+    local name = props.name or props.Name or "ESP Preview"
+    local esp_color = props.color or props.Color or Color3.fromRGB(225, 58, 81)
+    -- // variables
+    local esppreview = {}
+    -- // main
+    local previewholder = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(0, 0.5),
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(0, 200, 0, 300),
+            Position = UDim2.new(1, 10, 0.5, 0),
+            ZIndex = 10000,
+            Visible = false,
+            Parent = self.library.screen
+        }
+    )
+    --
+    local outline = utility.new(
+        "Frame",
+        {
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(56, 56, 56),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, 0, 1, 0),
+            Parent = previewholder
+        }
+    )
+    --
+    local title = utility.new(
+        "TextLabel",
+        {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, -10, 0, 20),
+            Position = UDim2.new(0, 5, 0, 0),
+            Font = self.library.font,
+            Text = name,
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            TextSize = self.library.textsize,
+            TextStrokeTransparency = 0,
+            TextXAlignment = "Left",
+            ZIndex = 10001,
+            Parent = outline
+        }
+    )
+    --
+    local viewport = utility.new(
+        "ViewportFrame",
+        {
+            AnchorPoint = Vector2.new(0.5, 1),
+            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+            BorderColor3 = Color3.fromRGB(56, 56, 56),
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, -10, 1, -30),
+            Position = UDim2.new(0.5, 0, 1, -5),
+            ZIndex = 10002,
+            Ambient = Color3.fromRGB(255, 255, 255),
+            LightColor = Color3.fromRGB(255, 255, 255),
+            LightDirection = Vector3.new(-1, -1, -1),
+            Parent = outline
+        }
+    )
+    --
+    -- Create dummy model
+    local dummy = Instance.new("Model")
+    local humanoid = Instance.new("Humanoid")
+    local rootPart = Instance.new("Part")
+    rootPart.Size = Vector3.new(2, 4, 1)
+    rootPart.Position = Vector3.new(0, 2, 0)
+    rootPart.Anchored = true
+    rootPart.CanCollide = false
+    rootPart.Parent = dummy
+    humanoid.Parent = dummy
+    dummy.PrimaryPart = rootPart
+    dummy.Parent = viewport
+    --
+    -- Add ESP highlight
+    local highlight = Instance.new("Highlight")
+    highlight.FillColor = esp_color
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+    highlight.FillTransparency = 0.3
+    highlight.OutlineTransparency = 0
+    highlight.Adornee = dummy
+    highlight.Parent = dummy
+    --
+    -- Setup camera
+    local camera = Instance.new("Camera")
+    camera.CFrame = CFrame.new(Vector3.new(5, 2, 5), rootPart.Position)
+    viewport.CurrentCamera = camera
+    --
+    -- Store in library
+    self.library.esppreviews = self.library.esppreviews or {}
+    table.insert(self.library.esppreviews, esppreview)
+    --
+    -- Store in page
+    self.page.esppreview = esppreview
+    --
+    -- esppreview tbl
+    esppreview = {
+        ["library"] = self.library,
+        ["previewholder"] = previewholder,
+        ["viewport"] = viewport,
+        ["dummy"] = dummy,
+        ["highlight"] = highlight
+    }
+    --
+    self.library.labels[#self.library.labels + 1] = title
+    -- // metatable indexing + return
+    setmetatable(esppreview, esppreviews)
+    return esppreview
+end
+
 --
 function sections:dropdown(props)
     -- // properties
