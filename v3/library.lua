@@ -1785,7 +1785,7 @@ function sections:button(props)
 		"Frame",
 		{
 			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,0,20),
+			Size = UDim2.new(1,0,0,15),
 			Parent = self.content
 		}
 	)
@@ -1824,7 +1824,7 @@ function sections:button(props)
 		}
 	)
 	--
-	local gradient = utility.new(
+	utility.new(
 		"UIGradient",
 		{
 			Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
@@ -1833,7 +1833,7 @@ function sections:button(props)
 		}
 	)
 	--
-	local buttonpress = utility.new(
+	local buttonb = utility.new(
 		"TextButton",
 		{
 			AnchorPoint = Vector2.new(0,0),
@@ -1849,23 +1849,29 @@ function sections:button(props)
 		}
 	)
 	--
-	buttonpress.MouseButton1Down:Connect(function()
-		callback()
-		outline.BorderColor3 = self.library.theme.accent
-		table.insert(self.library.themeitems["accent"]["BorderColor3"],outline)
-		wait(0.05)
-		outline.BorderColor3 = Color3.fromRGB(12, 12, 12)
-		local find = table.find(self.library.themeitems["accent"]["BorderColor3"],outline)
-		if find then
-			table.remove(self.library.themeitems["accent"]["BorderColor3"],find)
-		end
-	end)
 	-- // button tbl
 	button = {
-		["library"] = self.library
+		["library"] = self.library,
+		["outline"] = outline,
+		["callback"] = callback
 	}
 	--
-	self.library.labels[#self.library.labels+1] = buttonpress
+	buttonb.MouseButton1Down:Connect(function()
+		utility.tweenColor(outline, "BorderColor3", self.library.theme.accent, 0.15)
+		callback()
+		wait(0.05)
+		utility.tweenColor(outline, "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
+	end)
+	--
+	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
+	--
+	if pointer then
+		if self.pointers then
+			self.pointers[tostring(pointer)] = button
+		end
+	end
+	--
+	self.library.labels[#self.library.labels+1] = buttonb
 	-- // metatable indexing + return
 	setmetatable(button, buttons)
 	return button
@@ -3535,6 +3541,7 @@ function keybinds:set(key)
 	end
 end
 --
+-- Replace the existing sections:colorpicker function with this:
 function sections:colorpicker(props)
 	-- // properties
 	local name = props.name or props.Name or "new colorpicker"
@@ -3982,13 +3989,13 @@ function sections:colorpicker(props)
 	updateboxes()
 	--
 	local function movehue()
-		local posy = math.clamp(plr:GetMouse().Y-outline3.AbsolutePosition.Y,0,outline3.AbsoluteSize.Y)
+		local posy Limestone = math.clamp(plr:GetMouse().Y-outline3.AbsolutePosition.Y,0,outline3.AbsoluteSize.Y)
 		local resy = (1/outline3.AbsoluteSize.Y)*posy
-		outline3.BackgroundColor3 = Color3.fromHSV(resy,1,1)
-		huecursor_inline.BackgroundColor3 = Color3.fromHSV(resy,1,1)
+		utility.tweenColor(outline3, "BackgroundColor3", Color3.fromHSV(resy,1,1), 0.15)
+		utility.tweenColor(huecursor_inline, "BackgroundColor3", Color3.fromHSV(resy,1,1), 0.15)
 		colorpicker.hsv[1] = resy
 		colorpicker.current = Color3.fromHSV(colorpicker.hsv[1],colorpicker.hsv[2],colorpicker.hsv[3])
-		cpcolor.BackgroundColor3 = colorpicker.current
+		utility.tweenColor(cpcolor, "BackgroundColor3", colorpicker.current, 0.15)
 		updateboxes()
 		colorpicker.callback(colorpicker.current)
 		huecursor:TweenPosition(UDim2.new(0.5,0,resy,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.15,true)
@@ -4000,7 +4007,7 @@ function sections:colorpicker(props)
 		colorpicker.hsv[2] = resx
 		colorpicker.hsv[3] = 1-resy
 		colorpicker.current = Color3.fromHSV(colorpicker.hsv[1],colorpicker.hsv[2],colorpicker.hsv[3])
-		cpcolor.BackgroundColor3 = colorpicker.current
+		utility.tweenColor(cpcolor, "BackgroundColor3", colorpicker.current, 0.15)
 		updateboxes()
 		colorpicker.callback(colorpicker.current)
 		cpcursor:TweenPosition(UDim2.new(resx,0,resy,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.15,true)
@@ -4008,7 +4015,15 @@ function sections:colorpicker(props)
 	--
 	button.MouseButton1Down:Connect(function()
 		self.library:closewindows(colorpicker)
-		cpholder.Visible = not colorpicker.open
+		if not colorpicker.open then
+			cpholder.Visible = true
+			cpholder.Size = UDim2.new(1,0,0,0)
+			ts:Create(cpholder, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(1,0,0,230)}):Play()
+		else
+			ts:Create(cpholder, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(1,0,0,0)}):Play()
+			wait(0.3)
+			cpholder.Visible = false
+		end
 		colorpicker.open = not colorpicker.open
 	end)
 	--
@@ -4032,7 +4047,7 @@ function sections:colorpicker(props)
 	end)
 	--
 	uis.InputEnded:Connect(function(Input)
-		if Input.UserInputType.Name == 'MouseButton1'  then
+		if Input.UserInputType.Name == 'MouseButton1' then
 			if colorpicker.cp then
 				colorpicker.cp = false
 			end
@@ -4043,7 +4058,7 @@ function sections:colorpicker(props)
 	end)
 	--
 	red[2].Focused:Connect(function()
-		red[3].BorderColor3 = self.library.theme.accent
+		utility.tweenColor(red[3], "BorderColor3", self.library.theme.accent, 0.15)
 	end)
 	--
 	red[2].FocusLost:Connect(function()
@@ -4057,18 +4072,18 @@ function sections:colorpicker(props)
 					red[2].PlaceholderText = "R: "..tostring(saved)
 				end
 				colorpicker:set(Color3.fromRGB(tonumber(saved),colorpicker.current.G*255,colorpicker.current.B*255))
-				red[3].BorderColor3 = Color3.fromRGB(12,12,12)
+				utility.tweenColor(red[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 			else
-				red[3].BorderColor3 = Color3.fromRGB(12,12,12)
+				utility.tweenColor(red[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 			end
 		else
 			red[2].Text = ""
-			red[3].BorderColor3 = Color3.fromRGB(12,12,12)
+			utility.tweenColor(red[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 		end
 	end)
 	--
 	green[2].Focused:Connect(function()
-		green[3].BorderColor3 = self.library.theme.accent
+		utility.tweenColor(green[3], "BorderColor3", self.library.theme.accent, 0.15)
 	end)
 	--
 	green[2].FocusLost:Connect(function()
@@ -4082,18 +4097,18 @@ function sections:colorpicker(props)
 					green[2].PlaceholderText = "G: "..tostring(saved)
 				end
 				colorpicker:set(Color3.fromRGB(colorpicker.current.R*255,tonumber(saved),colorpicker.current.B*255))
-				green[3].BorderColor3 = Color3.fromRGB(12,12,12)
+				utility.tweenColor(green[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 			else
-				green[3].BorderColor3 = Color3.fromRGB(12,12,12)
+				utility.tweenColor(green[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 			end
 		else
 			green[2].Text = ""
-			green[3].BorderColor3 = Color3.fromRGB(12,12,12)
+			utility.tweenColor(green[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 		end
 	end)
 	--
 	blue[2].Focused:Connect(function()
-		blue[3].BorderColor3 = self.library.theme.accent
+		utility.tweenColor(blue[3], "BorderColor3", self.library.theme.accent, 0.15)
 	end)
 	--
 	blue[2].FocusLost:Connect(function()
@@ -4107,18 +4122,18 @@ function sections:colorpicker(props)
 					blue[2].PlaceholderText = "B: "..tostring(saved)
 				end
 				colorpicker:set(Color3.fromRGB(colorpicker.current.R*255,colorpicker.current.G*255,tonumber(saved)))
-				blue[3].BorderColor3 = Color3.fromRGB(12,12,12)
+				utility.tweenColor(blue[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 			else
-				blue[3].BorderColor3 = Color3.fromRGB(12,12,12)
+				utility.tweenColor(blue[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 			end
 		else
 			blue[2].Text = ""
-			blue[3].BorderColor3 = Color3.fromRGB(12,12,12)
+			utility.tweenColor(blue[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 		end
 	end)
 	--
 	hex[2].Focused:Connect(function()
-		hex[3].BorderColor3 = self.library.theme.accent
+		utility.tweenColor(hex[3], "BorderColor3", self.library.theme.accent, 0.15)
 	end)
 	--
 	hex[2].FocusLost:Connect(function()
@@ -4132,18 +4147,18 @@ function sections:colorpicker(props)
 				if hexcolor then
 					colorpicker:set(hexcolor)
 					hex[2].Text = ""
-					hex[3].BorderColor3 = Color3.fromRGB(12,12,12)
+					utility.tweenColor(hex[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 				else
 					hex[2].Text = ""
-					hex[3].BorderColor3 = Color3.fromRGB(12,12,12)
+					utility.tweenColor(hex[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 				end
 			else
 				hex[2].Text = ""
-				hex[3].BorderColor3 = Color3.fromRGB(12,12,12)
+				utility.tweenColor(hex[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 			end
 		else
 			hex[2].Text = ""
-			hex[3].BorderColor3 = Color3.fromRGB(12,12,12)
+			utility.tweenColor(hex[3], "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 		end
 	end)
 	--
