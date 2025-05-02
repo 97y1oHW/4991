@@ -1,5 +1,5 @@
 -- // variables
-local version = "0.27 B-X"
+local version = "0.27 BX ALPHA"
 warn("LIB VERSION: "  ..version)
 local mouseLockEnabled = false
 local mouseLockConnection = nil
