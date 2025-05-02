@@ -1057,9 +1057,73 @@ uiSettings2:toggle({name = "Watermark", pointer = "watermarktext", def = false, 
     screenGuiwatermark.Enabled = Value
 end})
 
-uiSettings2:dropdown({name = "Executor Name Manuplator", def = "", max = 7, options = {"Swift","Solara","Wave","Synapse","Celery","Xeno","Argon","NX","AWP","Velocity"}, callback = function(executor)
+uiSettings2:dropdown({name = "Executor Name Manuplator", def = "", max = 7, options = {"Swift","Solara","Wave","Synapse","Celery","Xeno","Argon","NX","AWP","Velocity","Delta","Krnl","JJSploit","Sentinel","Nezur",""}, callback = function(executor)
 print('Current Executor: ' ..identifyexecutor())
+local execeutornametomanup = executor
     getgenv().identifyexecutor = function(...) return executor end
+    
+
+pcall(
+    function()
+        getgenv().identifyexecutor = function()
+            return execeutornametomanup
+        end
+    end
+)
+pcall(
+    function()
+        identifyexecutor = function()
+            return execeutornametomanup
+        end
+    end
+)
+pcall(
+    function()
+        if identifyexecutor and hookfunction then
+            hookfunction(
+                identifyexecutor,
+                function()
+                    return execeutornametomanup
+                end
+            )
+        end
+    end
+)
+pcall(
+    function()
+        for _, f in pairs(getgc(true)) do
+            if typeof(f) == "function" and islclosure(f) then
+                local i = debug.getinfo(f)
+                if i.name == "identifyexecutor" then
+                    hookfunction(
+                        f,
+                        function()
+                            return execeutornametomanup
+                        end
+                    )
+                end
+            end
+        end
+    end
+)
+pcall(
+    function()
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local o = mt.__index
+        mt.__index = function(t, k)
+            if k == "IdentifyExecutor" then
+                return function()
+                    return execeutornametomanup
+                end
+            end
+            return o(t, k)
+        end
+    end
+)
+
+
+
     print('Manuplated Executor: ' ..identifyexecutor())
 end})
 
@@ -2647,6 +2711,8 @@ VisualMainSection:toggle({name = "ESP Masterswitch", def = false, callback = fun
     ESP.TeamCheck = enabled
 end})
 
+VisualMainSection:esppreview({name = "ESP Preview", color = Color3.fromRGB(255, 0, 0)})
+
 VisualMainSection:toggle({name = "Fade Out On Distance", def = false, callback = function(enabled)
  ESP.FadeOut.OnDistance = enabled
 end})
@@ -2658,6 +2724,8 @@ end})
 VisualMainSection:toggle({name = "Chams", def = false, callback = function(enabled)
 ESP.Drawing.Chams.Enabled = enabled
 end})
+
+
 
 VisualMainSection:toggle({name = "Pulsing Chams", def = false, callback = function(enabled)
 ESP.Drawing.Chams.Thermal = enabled
