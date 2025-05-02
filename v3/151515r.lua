@@ -875,7 +875,7 @@ local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 180})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 200})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
@@ -1053,8 +1053,14 @@ for i = 0, labelCountX - 1 do
 end
 
 
-uiSettings2:toggle({name = "Watermark", def = false, callback = function(Value)
+uiSettings2:toggle({name = "Watermark", pointer = "watermarktext", def = false, callback = function(Value)
     screenGuiwatermark.Enabled = Value
+end})
+
+uiSettings2:dropdown({name = "Executor Name Manuplator", def = "", max = 7, options = {"Swift","Solara","Wave","Synapse","Celery","Xeno","Argon","NX","AWP","Velocity"}, callback = function(executor)
+print('Current Executor: ' ..identifyexecutor())
+    getgenv().identifyexecutor = function(...) return executor end
+    print('Manuplated Executor: ' ..identifyexecutor())
 end})
 
 SAimSection:dropdown({name = "Silent Aim Part", def = "Head", max = 3, options = {"Head","UpperTorso","HumanoidRootPart"}, callback = function(part)
@@ -1098,7 +1104,7 @@ local function setFireRateForAllItems(rate)
     end
 end
 
-GunMods:toggle({name = "Rapid Fire", def = false, callback = function(state)
+GunMods:toggle({name = "Rapid Fire", def = false , pointer = "rapidfire", callback = function(state)
      if state then
             -- Enable rapid fire
             setFireRateForAllItems(newFireRate)  -- Set to desired rapid fire rate
@@ -1111,7 +1117,7 @@ GunMods:toggle({name = "Rapid Fire", def = false, callback = function(state)
 end})
 
 
-        GunMods:toggle({name = "Instant Aim", def = false, callback = function(Value)
+        GunMods:toggle({name = "Instant Aim", def = false, pointer = "instaaim", callback = function(Value)
             -- Iterate through each weapon in the local player's inventory
         local inventory = game.ReplicatedStorage.Players[localplayernameee].Inventory:GetChildren()
         
@@ -1397,7 +1403,7 @@ SAimSection:slider({name = "FOV Thickness Size", def = 2, max = 3, min = 1, roun
 end})
 
 
-SAimSection:colorpicker({name = "FOV Color", cpname = "", def = Color3.new(0.603921, 0.011764, 1), callback = function(color)
+SAimSection:colorpicker({name = "FOV Color", cpname = "", def = Color3.new(255, 255, 255), callback = function(color)
     FOVConfig.Color = color
 end})
 
@@ -1591,7 +1597,8 @@ AimbotFOVSection:toggle({name = "Snapline Enabled", def = false, callback = func
 end})
 
 AimbotFOVSection:colorpicker({name = "Snapline Color", cpname = "", def = Color3.new(255, 255, 255), callback = function(color)
-    Snapline.Color = Value
+   
+   config.snapline_color = color
 end})
 
 
@@ -2470,70 +2477,68 @@ AASettings:keybind({name = "Auto Peak Keybind", def = Enum.KeyCode.N, callback =
 end})
 local teleportHeight = 60 -- Change this value to adjust how high you want to teleport (in meters)
 
+AASettings:keybind({name = "Teleport Kill Keybind", def = Enum.KeyCode.X, callback = function(Key)
+    print("Key pressed: " .. Key.Name)  -- Keybind tetiklendi mi kontrol et
 
+    local player = game:GetService("Players").LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
 
-AASettings:keybind({name = "Teleport Kill Keybind", def = Enum.KeyCode.X, callback = function(Value)
-
-
-
- local player = game:GetService("Players").LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-function createFlyingVehicleSeat()
-    local seat = Instance.new("VehicleSeat")
-    seat.Name = "TempSeat_"..tick()
-    seat.CanCollide = false
-    seat.Size = Vector3.new(3, 1, 3)
-    seat.Transparency = 1
-    seat.Massless = true
-    seat.Anchored = true
-    local hrp = character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        seat.CFrame = hrp.CFrame * CFrame.new(0, teleportHeight, -2)
-    else
-        seat.CFrame = CFrame.new(0, teleportHeight, 0)
-    end
-    
-    seat.Parent = workspace
-            local localplayer = game.Players.LocalPlayer
-    task.spawn(function()
-        task.wait(1)
-        if seat and seat.Parent then
-            seat:Destroy()
-            humanoid.Sit = false
-            wait(0.4)
-            localplayer.Character.Humanoid.PlatformStand = false
+    function createFlyingVehicleSeat()
+        local seat = Instance.new("VehicleSeat")
+        seat.Name = "TempSeat_"..tick()
+        seat.CanCollide = false
+        seat.Size = Vector3.new(3, 1, 3)
+        seat.Transparency = 1
+        seat.Massless = true
+        seat.Anchored = true
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            seat.CFrame = hrp.CFrame * CFrame.new(0, teleportHeight, -2)
+        else
+            seat.CFrame = CFrame.new(0, teleportHeight, 0)
+        end
+        
+        seat.Parent = workspace
+        local localplayer = game.Players.LocalPlayer
+        task.spawn(function()
             task.wait(1)
-            localplayer.Character.Humanoid.PlatformStand = false
-        end
-    end)
-    
-    return seat
-end
+            if seat and seat.Parent then
+                seat:Destroy()
+                humanoid.Sit = false
+                wait(0.4)
+                localplayer.Character.Humanoid.PlatformStand = false
+                task.wait(1)
+                localplayer.Character.Humanoid.PlatformStand = false
+            end
+        end)
+        
+        return seat
+    end
 
-function sitInSeat(seat)
-    repeat task.wait() until seat and seat.Parent
-    
-    local hrp = character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        hrp.CFrame = seat.CFrame * CFrame.new(0, -1, 0)
-        task.wait(0.1)
+    function sitInSeat(seat)
+        repeat task.wait() until seat and seat.Parent
         
-        humanoid.Sit = true
-        task.wait(0.1)
-        humanoid.Sit = true
-        
-        if humanoid.SeatPart == seat then
-            hrp.CFrame = seat.CFrame * CFrame.new(0, -0.5, 0)
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            hrp.CFrame = seat.CFrame * CFrame.new(0, -1, 0)
+            task.wait(0.1)
+            
+            humanoid.Sit = true
+            task.wait(0.1)
+            humanoid.Sit = true
+            
+            if humanoid.SeatPart == seat then
+                hrp.CFrame = seat.CFrame * CFrame.new(0, -0.5, 0)
+            end
         end
     end
-end
 
-local seat = createFlyingVehicleSeat()
-sitInSeat(seat)
-wait(3.5)
+    local seat = createFlyingVehicleSeat()
+    sitInSeat(seat)
+    wait(3.5)
 end})
+
 
 AASettings:toggle({name = "Underground Resolver", def = false, callback = function(Boolean)
     settingsxxx.enabled = Boolean
@@ -2673,7 +2678,7 @@ terrain = game:GetService("Workspace").Terrain
 originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
 
 
-SAimSection:dropdown({name = "Silent Aim Part", def = "Head", max = 3, options = {"Head","UpperTorso","HumanoidRootPart"}, callback = function(part)
+SAimSection:dropdown({name = "Silent Aim Part", def = "Head", max = 2, options = {"Head","UpperTorso","HumanoidRootPart"}, callback = function(part)
     silent_aim.part = part
 end})
 
@@ -3087,43 +3092,58 @@ end;
 
 
 
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+local Camera = game.Workspace.CurrentCamera
 
+local zoomKey = Enum.KeyCode.Z
+local isZoomedIn = false
+local normalFOV = Camera.FieldOfView
+local zoomedFOV = 10
+local zoomTweenSpeed = 1.2
 
- UserInputService = game:GetService("UserInputService")
- RunService = game:GetService("RunService")
+local zoomTweenInfo = TweenInfo.new(zoomTweenSpeed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
- zoomValue = 0
- defaultFOV = Camera.FieldOfView
- zoomKey = Enum.KeyCode.Z
- isZoomed = false
+local function createZoomTween(fov)
+    return TweenService:Create(Camera, zoomTweenInfo, {FieldOfView = fov})
+end
 
- function applyZoom()
-    Camera.FieldOfView = defaultFOV - (zoomValue * 10)
-end;
-
--- Function to reset FOV
- function resetZoom()
-    Camera.FieldOfView = defaultFOV
-end;
-
+UIS.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
+        local targetFOV = isZoomedIn and normalFOV or zoomedFOV
+        createZoomTween(targetFOV):Play()
+        isZoomedIn = not isZoomedIn
+    end
+end)
 
 MiscCamSettings:slider({
     name = "Zoom Slider",
-    def = 8.1,
-    min = 0.1,
-    max = 9,
+    def = 10,
+    min = 1,
+    max = 50,
     rounding = true,
     callback = function(val)
-        zoomValue = val
+        zoomedFOV = val
+        if isZoomedIn then
+            createZoomTween(zoomedFOV):Play()
+        end
     end
 })
-MiscCamSettings:keybind({name = "Zoom Keybind", def = Enum.KeyCode.Z, callback = function(Key)
-       print('[cb] Keybind clicked!', value)
+
+MiscCamSettings:keybind({
+    name = "Zoom Keybind",
+    def = Enum.KeyCode.Z,
+    callback = function(Key)
+        zoomKey = Key
+        print('[cb] Keybind clicked!', Key)
     end,
     ChangedCallback = function(newKey)
         zoomKey = newKey
         print('[cb] Keybind changed!', newKey)
-end})
+    end
+})
+
 
 local HitmarkerSounds = {
     ["TF2"]       = "rbxassetid://8255306220",
@@ -3183,28 +3203,6 @@ if rootPart then
     rootPart:SetAttribute("MovementModifier", -0.1) -- Change `true` to whatever value you need
 end
 end})
-
--- Function to handle key press
- function onKeyPress(input, gameProcessed)
-    if gameProcessed then return end;
-    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == zoomKey then
-        isZoomed = not isZoomed -- Toggle zoom state
-        if not isZoomed then
-            resetZoom() -- Reset zoom if untoggled
-        end;
-    end;
-end;
-
--- Continuously apply zoom while toggled
-RunService.RenderStepped:Connect(function()
-    if isZoomed then
-        applyZoom()
-    end;
-end);
-
--- Connect input events
-UserInputService.InputBegan:Connect(onKeyPress)
-
 
 
 
