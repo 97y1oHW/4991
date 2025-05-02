@@ -846,7 +846,7 @@ end))
 collorofui = Color3.fromRGB(150, 13, 242)
 ----
 
-local tabnxxame = 'NEXIFY | PD | V3.2'
+local tabnxxame = 'NEXIFY | PD | V3.2 | ' ..identifyexecutor()
 local Window = libary:new({name = tabnxxame, accent =collorofui, textsize = 13})
 local AimingTab = Window:page({name = "Combat"})
 local RageTab = Window:page({name = "Rage"})
@@ -4247,7 +4247,7 @@ end)
                 })
 
                 task.wait(3)
-                coroutine.wrap(changeRemoteNames)()
+       --         coroutine.wrap(changeRemoteNames)
                                 Notify({
                     Title = "[ NEXIFY FUNCTIONS ]",
                     Description = "Created Nexify Functions In Workspace. \n Do Not Attempt To Remove Them!",
@@ -4257,24 +4257,65 @@ end)
                  statusFolder = game.ReplicatedStorage:WaitForChild("ServerStatus")
 local versionAttr = statusFolder:GetAttribute("Version")
 
+function createfakesys()
+local folderName = "nexifyv3"
+if not isfolder(folderName) then
+    makefolder(folderName)
+end
+local filePath = folderName .. "/nexify.cfg"
+local textss = [[
+nexify.sys
 
+[INFO]
+Version=3.2.1
+Author=Unkown
+Date=2025-05-02
+
+[CONFIG]
+EnableDebug=true
+MaxConnections=100
+
+[KEYS]
+EncryptionKey=4e7f4f3c9b2d1f034c6f5b087a7f1d8c
+
+[LOG]
+LastAction=Executed on 2025-05-02
+Status=Active
+]]
+writefile(filePath, textss)
+end
 
 if versionAttr then
 	statusFolder:SetAttribute("Version", versionAttr .. " | Injected Nexify ✅")
 else
 	statusFolder:SetAttribute("Version", "Injected Nexify ✅")
 end
-local wm = Window:watermark()
+--[[
 wm:update({"Nexify V3.2 | "..identifyexecutor().." | Advancaded Version"})
 wm:updateside("topright")
 wm:toggle(true)
 wait(1)
+]]
                                 Notify({
                     Title = "[ NEXIFY ]",
                     Description = "Injected Nexify",
                     Duration = math.random(10,15)
                 })
+                createfakesys()
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
+wait(1)
+                                Notify({
+                    Title = "[ NEXIFY ]",
+                    Description = "Attempt To Start Watermark Core",
+                    Duration = math.random(1)
+                })
 
 
-                
+                                            Notify({
+                    Title = "[ NEXIFY ]",
+                    Description = identifyexecutor(),
+                    Duration = math.random(2)
+                })
+
+
+        
