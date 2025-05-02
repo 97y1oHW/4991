@@ -1,5 +1,6 @@
 -- // variables
-
+local version = "0.25"
+warn("LIB VERSION: "  ..version)
 local mouseLockEnabled = false
 local mouseLockConnection = nil
 local library = {}
