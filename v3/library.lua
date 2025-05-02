@@ -890,23 +890,35 @@ end
 function library:saveconfig()
     local cfg = {}
     --
+    -- Debug: Print the pointers table to inspect its contents
+    print("Debug: self.pointers = ", hs:JSONEncode(self.pointers))
+    --
     for i, v in pairs(self.pointers) do
         cfg[i] = {}
+        print("Debug: Processing pointer ", i, " with value ", hs:JSONEncode(v))
         for c, d in pairs(v) do
             cfg[i][c] = {}
+            print("Debug: Processing sub-pointer ", c, " with value ", hs:JSONEncode(d))
             for x, z in pairs(d) do
-                if typeof(z.current) == "Color3" then
-                    cfg[i][c][x] = {z.current.R, z.current.G, z.current.B}
+                if z.current ~= nil then
+                    if typeof(z.current) == "Color3" then
+                        cfg[i][c][x] = {z.current.R, z.current.G, z.current.B}
+                    else
+                        cfg[i][c][x] = z.current
+                    end
+                    print("Debug: Saved ", x, " with value ", cfg[i][c][x])
                 else
-                    cfg[i][c][x] = z.current
+                    warn("Debug: Skipping ", x, " because z.current is nil")
                 end
             end
         end
     end
     --
     local json_data = hs:JSONEncode(cfg)
-    if json_data == "{}" then
-        warn("No configuration data to save: pointers table is empty")
+    if json_data == "{}" or json_data == "[]" then
+        warn("No configuration data to save: cfg table is empty")
+    else
+        print("Debug: Config data to save: ", json_data)
     end
     return json_data
 end
