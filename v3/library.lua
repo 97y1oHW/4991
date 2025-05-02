@@ -475,167 +475,178 @@ function library:new(props)
 	return window
 end
 --
+local RunService = game:GetService("RunService")
+
 function library:watermark()
-    local watermark = {}
-    --
-    local outline = utility.new(
-        "Frame",
-        {
-            AnchorPoint = Vector2.new(1,0),
-            BackgroundColor3 = self.theme.accent,
-            BorderColor3 = Color3.fromRGB(12, 12, 12),
-            BorderSizePixel = 1,
-            Size = UDim2.new(0,300,0,26),
-            Position = UDim2.new(1,-10,0,10),
-            ZIndex = 9900,
-            Visible = false,
-            Parent = self.screen
-        }
-    )
-    -- Gradient Animasyonu
-    local gradient = utility.new(
-        "UIGradient",
-        {
-            Rotation = 45,
-            Color = ColorSequence.new(
-                Color3.fromRGB(0, 255, 255), 
-                Color3.fromRGB(255, 0, 255), 
-                Color3.fromRGB(0, 0, 255)
-            ),
-            Parent = outline
-        }
-    )
-
-    -- Stroke Animasyonu
-    local strokeAnim = utility.new(
-        "UIStroke",
-        {
-            Color = Color3.fromRGB(255, 255, 255),
-            Transparency = 0,
-            Thickness = 2,
-            ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-            Parent = outline
-        }
-    )
-
-    -- Pulse animasyonu (stroke için)
-    local tweenService = game:GetService("TweenService")
-    local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
-    local tweenGoal = {Thickness = 4}
-    local pulseTween = tweenService:Create(strokeAnim, tweenInfo, tweenGoal)
-    pulseTween:Play()
-
-    --
-    table.insert(self.themeitems["accent"]["BackgroundColor3"], outline)
-    --
-    local outline2 = utility.new(
-        "Frame",
-        {
-            AnchorPoint = Vector2.new(0.5,0.5),
-            BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-            BorderColor3 = Color3.fromRGB(12, 12, 12),
-            BorderSizePixel = 1,
-            Size = UDim2.new(1,-4,1,-4),
-            Position = UDim2.new(0.5,0,0.5,0),
-            ZIndex = 9901,
-            Parent = outline
-        }
-    )
-    --
-    local indent = utility.new(
-        "Frame",
-        {
-            AnchorPoint = Vector2.new(0.5,0.5),
-            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
-            BorderColor3 = Color3.fromRGB(56, 56, 56),
-            BorderSizePixel = 1,
-            Size = UDim2.new(1,0,1,0),
-            Position = UDim2.new(0.5,0,0.5,0),
-            ZIndex = 9902,
-            Parent = outline2
-        }
-    )
-    --
-    local title = utility.new(
-        "TextLabel",
-        {
-            AnchorPoint = Vector2.new(0.5,0),
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1,-10,1,0),
-            Position = UDim2.new(0.5,0,0,0),
-            Font = Enum.Font.SourceSansBold, -- Retro font style, terminal vibes
-            Text = "",
-            TextColor3 = Color3.fromRGB(255,255,255),
-            TextXAlignment = "Left",
-            TextSize = self.textsize,
-            TextStrokeTransparency = 0.5, -- Text stroke for that crispy look
-            ZIndex = 9903,
-            Parent = indent
-        }
-    )
-    --
-    local con
-    con = title:GetPropertyChangedSignal("TextBounds"):Connect(function()
-        outline.Size = UDim2.new(0,title.TextBounds.X+20,0,26)
-    end)
-    --
-    watermark = {
-        ["outline"] = outline,
-        ["outline2"] = outline2,
-        ["indent"] = indent,
-        ["title"] = title,
-        ["connection"] = con
-    }
-    --
-    self.labels[#self.labels+1] = title
-    --
-    setmetatable(watermark, watermarks)
-    return watermark
+	local watermark = {}
+	
+	-- Creating main frame with gradient
+	local outline = utility.new(
+		"Frame",
+		{
+			AnchorPoint = Vector2.new(1,0),
+			BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+			BorderSizePixel = 0,
+			Size = UDim2.new(0,300,0,26),
+			Position = UDim2.new(1,-10,0,10),
+			ZIndex = 9900,
+			Visible = false,
+			Parent = self.screen
+		}
+	)
+	
+	-- Adding gradient
+	local gradient = utility.new(
+		"UIGradient",
+		{
+			Color = ColorSequence.new({
+				ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 40)),
+				ColorSequenceKeypoint.new(1, Color3.fromRGB(60, 60, 60))
+			}),
+			Rotation = 45,
+			Parent = outline
+		}
+	)
+	
+	-- Inner frame for terminal effect
+	local outline2 = utility.new(
+		"Frame",
+		{
+			AnchorPoint = Vector2.new(0.5,0.5),
+			BackgroundColor3 = Color3.fromRGB(10, 10, 10),
+			BorderColor3 = Color3.fromRGB(0, 255, 128),
+			BorderSizePixel = 1,
+			Size = UDim2.new(1,-4,1,-4),
+			Position = UDim2.new(0.5,0,0.5,0),
+			ZIndex = 9901,
+			Parent = outline
+		}
+	)
+	
+	-- Scanline effect
+	local scanline = utility.new(
+		"Frame",
+		{
+			BackgroundColor3 = Color3.fromRGB(0, 255, 128),
+			BackgroundTransparency = 0.95,
+			Size = UDim2.new(1,0,0,1),
+			Position = UDim2.new(0,0,0,0),
+			ZIndex = 9902,
+			Parent = outline2
+		}
+	)
+	
+	-- Terminal text
+	local title = utility.new(
+		"TextLabel",
+		{
+			AnchorPoint = Vector2.new(0.5,0),
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1,-10,1,0),
+			Position = UDim2.new(0.5,0,0,0),
+			Font = Enum.Font.Code,
+			Text = "",
+			TextColor3 = Color3.fromRGB(0, 255, 128),
+			TextXAlignment = "Left",
+			TextSize = self.textsize,
+			TextStrokeTransparency = 0.8,
+			ZIndex = 9903,
+			Parent = outline2
+		}
+	)
+	
+	-- Blinking cursor
+	local cursor = utility.new(
+		"Frame",
+		{
+			BackgroundColor3 = Color3.fromRGB(0, 255, 128),
+			Size = UDim2.new(0,2,0,14),
+			Position = UDim2.new(0,0,0.5,-7),
+			ZIndex = 9904,
+			Parent = title
+		}
+	)
+	
+	-- Gradient animation
+	local t = 0
+	local connection = RunService.RenderStepped:Connect(function(dt)
+		t = t + dt
+		gradient.Offset = Vector2.new(math.sin(t * 0.5) * 0.5, 0)
+		
+		-- Pulse effect for border
+		local pulse = (math.sin(t * 2) + 1) / 2
+		outline2.BorderColor3 = Color3.fromRGB(0, 128 + 127 * pulse, 128)
+		
+		-- Cursor blink
+		cursor.Visible = math.floor(t * 2) % 2 == 0
+		
+		-- Scanline movement
+		scanline.Position = UDim2.new(0, 0, math.sin(t * 0.3) * 0.5 + 0.5, 0)
+	end)
+	
+	-- Size adjustment
+	local textConnection
+	textConnection = title:GetPropertyChangedSignal("TextBounds"):Connect(function()
+		outline.Size = UDim2.new(0, title.TextBounds.X + 30, 0, 26)
+		cursor.Position = UDim2.new(0, title.TextBounds.X + 5, 0.5, -7)
+	end)
+	
+	watermark = {
+		["outline"] = outline,
+		["outline2"] = outline2,
+		["gradient"] = gradient,
+		["scanline"] = scanline,
+		["title"] = title,
+		["cursor"] = cursor,
+		["connection"] = connection,
+		["textConnection"] = textConnection
+	}
+	
+	self.labels[#self.labels+1] = title
+	setmetatable(watermark, watermarks)
+	return watermark
 end
 
 function watermarks:update(content)
-    local content = content or {}
-    local watermark = self
-    --
-    local text = ""
-    --
-    for i,v in pairs(content) do
-        text = text..i..": "..v.."  "
-    end
-    --
-    text = text:sub(0, -3)
-    --
-    watermark.title.Text = text
+	local content = content or {}
+	local watermark = self
+	
+	local text = "> "
+	for i,v in pairs(content) do
+		text = text..i..": "..v.."  "
+	end
+	text = text:sub(0, -3)
+	
+	watermark.title.Text = text
 end
 
 function watermarks:updateside(side)
-    side = utility.removespaces(tostring(side):lower())
-    --
-    local sides = {
-        topright = {
-            AnchorPoint = Vector2.new(1,0),
-            Position = UDim2.new(1,-10,0,10)
-        },
-        topleft = {
-            AnchorPoint = Vector2.new(0,0),
-            Position = UDim2.new(0,10,0,10)
-        },
-        bottomright = {
-            AnchorPoint = Vector2.new(1,1),
-            Position = UDim2.new(1,-10,1,-10)
-        },
-        bottomleft = {
-            AnchorPoint = Vector2.new(0,1),
-            Position = UDim2.new(0,10,1,-10)
-        }
-    }
-    --
-    if sides[side] then
-        self.outline.AnchorPoint = sides[side].AnchorPoint
-        self.outline.Position = sides[side].Position
-    end
+	side = utility.removespaces(tostring(side):lower())
+	
+	local sides = {
+		topright = {
+			AnchorPoint = Vector2.new(1,0),
+			Position = UDim2.new(1,-10,0,10)
+		},
+		topleft = {
+			AnchorPoint = Vector2.new(0,0),
+			Position = UDim2.new(0,10,0,10)
+		},
+		bottomright = {
+			AnchorPoint = Vector2.new(1,1),
+			Position = UDim2.new(1,-10,1,-10)
+		},
+		bottomleft = {
+			AnchorPoint = Vector2.new(0,1),
+			Position = UDim2.new(0,10,1,-10)
+		}
+	}
+	
+	if sides[side] then
+		self.outline.AnchorPoint = sides[side].AnchorPoint
+		self.outline.Position = sides[side].Position
+	end
 end
-
 --
 function library:loader(props)
 	local name = props.name or props.Name or props.LoaderName or props.Loadername or props.loaderName or props.loadername or "Loader"
