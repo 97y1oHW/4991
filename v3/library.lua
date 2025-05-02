@@ -476,132 +476,166 @@ function library:new(props)
 end
 --
 function library:watermark()
-	local watermark = {}
-	--
-	local outline = utility.new(
-		"Frame",
-		{
-			AnchorPoint = Vector2.new(1,0),
-			BackgroundColor3 = self.theme.accent,
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderSizePixel = 1,
-			Size = UDim2.new(0,300,0,26),
-			Position = UDim2.new(1,-10,0,10),
-			ZIndex = 9900,
-			Visible = false,
-			Parent = self.screen
-		}
-	)
-	--
-	table.insert(self.themeitems["accent"]["BackgroundColor3"],outline)
-	--
-	local outline2 = utility.new(
-		"Frame",
-		{
-			AnchorPoint = Vector2.new(0.5,0.5),
-			BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,-4,1,-4),
-			Position = UDim2.new(0.5,0,0.5,0),
-			ZIndex = 9901,
-			Parent = outline
-		}
-	)
-	--
-	local indent = utility.new(
-		"Frame",
-		{
-			AnchorPoint = Vector2.new(0.5,0.5),
-			BackgroundColor3 = Color3.fromRGB(20, 20, 20),
-			BorderColor3 = Color3.fromRGB(56, 56, 56),
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,0,1,0),
-			Position = UDim2.new(0.5,0,0.5,0),
-			ZIndex = 9902,
-			Parent = outline2
-		}
-	)
-	--
-	local title = utility.new(
-		"TextLabel",
-		{
-			AnchorPoint = Vector2.new(0.5,0),
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,-10,1,0),
-			Position = UDim2.new(0.5,0,0,0),
-			Font = self.font,
-			Text = "",
-			TextColor3 = Color3.fromRGB(255,255,255),
-			TextXAlignment = "Left",
-			TextSize = self.textsize,
-			TextStrokeTransparency = 0,
-			ZIndex = 9903,
-			Parent = indent
-		}
-	)
-	--
-	local con
-	con = title:GetPropertyChangedSignal("TextBounds"):Connect(function()
-		outline.Size = UDim2.new(0,title.TextBounds.X+20,0,26)
-	end)
-	--
-	watermark = {
-		["outline"] = outline,
-		["outline2"] = outline2,
-		["indent"] = indent,
-		["title"] = title,
-		["connection"] = con
-	}
-	--
-	self.labels[#self.labels+1] = title
-	--
-	setmetatable(watermark,watermarks)
-	return watermark
+    local watermark = {}
+    --
+    local outline = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(1,0),
+            BackgroundColor3 = self.theme.accent,
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderSizePixel = 1,
+            Size = UDim2.new(0,300,0,26),
+            Position = UDim2.new(1,-10,0,10),
+            ZIndex = 9900,
+            Visible = false,
+            Parent = self.screen
+        }
+    )
+    -- Gradient Animasyonu
+    local gradient = utility.new(
+        "UIGradient",
+        {
+            Rotation = 45,
+            Color = ColorSequence.new(
+                Color3.fromRGB(0, 255, 255), 
+                Color3.fromRGB(255, 0, 255), 
+                Color3.fromRGB(0, 0, 255)
+            ),
+            Parent = outline
+        }
+    )
+
+    -- Stroke Animasyonu
+    local strokeAnim = utility.new(
+        "UIStroke",
+        {
+            Color = Color3.fromRGB(255, 255, 255),
+            Transparency = 0,
+            Thickness = 2,
+            ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+            Parent = outline
+        }
+    )
+
+    -- Pulse animasyonu (stroke için)
+    local tweenService = game:GetService("TweenService")
+    local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+    local tweenGoal = {Thickness = 4}
+    local pulseTween = tweenService:Create(strokeAnim, tweenInfo, tweenGoal)
+    pulseTween:Play()
+
+    --
+    table.insert(self.themeitems["accent"]["BackgroundColor3"], outline)
+    --
+    local outline2 = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(0.5,0.5),
+            BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderSizePixel = 1,
+            Size = UDim2.new(1,-4,1,-4),
+            Position = UDim2.new(0.5,0,0.5,0),
+            ZIndex = 9901,
+            Parent = outline
+        }
+    )
+    --
+    local indent = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(0.5,0.5),
+            BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+            BorderColor3 = Color3.fromRGB(56, 56, 56),
+            BorderSizePixel = 1,
+            Size = UDim2.new(1,0,1,0),
+            Position = UDim2.new(0.5,0,0.5,0),
+            ZIndex = 9902,
+            Parent = outline2
+        }
+    )
+    --
+    local title = utility.new(
+        "TextLabel",
+        {
+            AnchorPoint = Vector2.new(0.5,0),
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1,-10,1,0),
+            Position = UDim2.new(0.5,0,0,0),
+            Font = Enum.Font.SourceSansBold, -- Retro font style, terminal vibes
+            Text = "",
+            TextColor3 = Color3.fromRGB(255,255,255),
+            TextXAlignment = "Left",
+            TextSize = self.textsize,
+            TextStrokeTransparency = 0.5, -- Text stroke for that crispy look
+            ZIndex = 9903,
+            Parent = indent
+        }
+    )
+    --
+    local con
+    con = title:GetPropertyChangedSignal("TextBounds"):Connect(function()
+        outline.Size = UDim2.new(0,title.TextBounds.X+20,0,26)
+    end)
+    --
+    watermark = {
+        ["outline"] = outline,
+        ["outline2"] = outline2,
+        ["indent"] = indent,
+        ["title"] = title,
+        ["connection"] = con
+    }
+    --
+    self.labels[#self.labels+1] = title
+    --
+    setmetatable(watermark, watermarks)
+    return watermark
 end
---
+
 function watermarks:update(content)
-	local content = content or {}
-	local watermark = self
-	--
-	local text = ""
-	--
-	for i,v in pairs(content) do
-		text = text..i..": "..v.."  "
-	end
-	--
-	text = text:sub(0, -3)
-	--
-	watermark.title.Text = text
+    local content = content or {}
+    local watermark = self
+    --
+    local text = ""
+    --
+    for i,v in pairs(content) do
+        text = text..i..": "..v.."  "
+    end
+    --
+    text = text:sub(0, -3)
+    --
+    watermark.title.Text = text
 end
---
+
 function watermarks:updateside(side)
-	side = utility.removespaces(tostring(side):lower())
-	--
-	local sides = {
-		topright = {
-			AnchorPoint = Vector2.new(1,0),
-			Position = UDim2.new(1,-10,0,10)
-		},
-		topleft = {
-			AnchorPoint = Vector2.new(0,0),
-			Position = UDim2.new(0,10,0,10)
-		},
-		bottomright = {
-			AnchorPoint = Vector2.new(1,1),
-			Position = UDim2.new(1,-10,1,-10)
-		},
-		bottomleft = {
-			AnchorPoint = Vector2.new(0,1),
-			Position = UDim2.new(0,10,1,-10)
-		}
-	}
-	--
-	if sides[side] then
-		self.outline.AnchorPoint = sides[side].AnchorPoint
-		self.outline.Position = sides[side].Position
-	end
+    side = utility.removespaces(tostring(side):lower())
+    --
+    local sides = {
+        topright = {
+            AnchorPoint = Vector2.new(1,0),
+            Position = UDim2.new(1,-10,0,10)
+        },
+        topleft = {
+            AnchorPoint = Vector2.new(0,0),
+            Position = UDim2.new(0,10,0,10)
+        },
+        bottomright = {
+            AnchorPoint = Vector2.new(1,1),
+            Position = UDim2.new(1,-10,1,-10)
+        },
+        bottomleft = {
+            AnchorPoint = Vector2.new(0,1),
+            Position = UDim2.new(0,10,1,-10)
+        }
+    }
+    --
+    if sides[side] then
+        self.outline.AnchorPoint = sides[side].AnchorPoint
+        self.outline.Position = sides[side].Position
+    end
 end
+
 --
 function library:loader(props)
 	local name = props.name or props.Name or props.LoaderName or props.Loadername or props.loaderName or props.loadername or "Loader"
