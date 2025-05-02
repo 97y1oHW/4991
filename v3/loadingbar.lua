@@ -180,11 +180,11 @@ local function addTerminalLine(textContent)
 end
 
 local terminalLines = {
-	"     [N] > INITIALIZING LIBRARY...",
-	"[N] > CATCHING IMAGES...",
-    "  [N] > READING CONFIG FILES",
-	"   [N] > LOADING UI MODULES...",
-	"[N] > BOOTING N3........"
+	"     [ N ] > INITIALIZING LIBRARY.....",
+	"[ N ] > CATCHING IMAGES.....",
+    "  [ N ] > READING CONFIG FILES..",
+	"   [ N ] > LOADING UI MODULES.....",
+	"[ N ] > BOOTING N3.........."
 }
 
 coroutine.wrap(function()
@@ -213,7 +213,7 @@ TweenService:Create(text, TweenTable["xsxRotation"], {TextTransparency = 0}):Pla
 TweenService:Create(n3TextLabel, TweenTable["xsxRotation"], {TextTransparency = 0}):Play()
 wait(0.3)
 TweenService:Create(xsxLogo, TweenTable["xsxRotation"], {ImageTransparency = 0}):Play()
-wait(2)
+wait(math.random(1,6))
 TweenService:Create(xsxLogo, TweenTable["xsxRotation"], {ImageTransparency = 1}):Play()
 wait(0.2)
 TweenService:Create(n3TextLabel, TweenTable["xsxRotation"], {TextTransparency = 1}):Play()
