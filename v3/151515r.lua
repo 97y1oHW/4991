@@ -1,3 +1,4 @@
+
 --[[
 
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -17,10 +18,13 @@ NEXIFY V3.2
 
 ADVANCADED VERSION TS:::
 
-
+IN NEXIFY, WE TRUST
 
 NEXIFY DEVELOPMENT TEAM
-
+:::
+S TI
+:::
+TIER S
 ]]
 
 xxx=[[ 
@@ -47,6 +51,18 @@ Notification.new("message", "Message Heading", "Message body message.") -- Args(
 
 print(xxx)
 
+function fixhealth()
+	for _, player in pairs(game.Players:GetPlayers()) do
+		if player.Character and player.Character:FindFirstChild("Humanoid") then
+			local hum = player.Character.Humanoid
+			if hum.Health < 0 then
+				hum.Health = 0
+			end
+		end
+	end
+end
+
+task.spawn(fixhealth)
 
 
 
@@ -71,140 +87,6 @@ Notification.new("warning", "Warning Heading", "Warning body message.") -- Args(
 Notification.new("message", "Message Heading", "Message body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
 ]]
 
-Notification.new("info", "Executor Memory Check", "Performing A Executor Check...",true,3)
-
-function checker()
-
-print("=============================================================")
-
-local function safeCheck(name, func)
-	local success, result = pcall(function()
-		return typeof(func) == "function" and func or nil
-	end)
-	local status = (success and result) and "🟢" or "🔴"
-	print(name .. ": " .. status)
-	return status == "🟢"
-end
-
--- Advanced Roblox Executor Functions
--- A comprehensive list of functions for Roblox scripting and executor environments
-local checkList = {
-    -- Core Lua and Environment Manipulation
-    getgc = getgc, -- Retrieves the Lua garbage collector table
-    hookmetamethod = hookmetamethod, -- Hooks a metamethod for an object
-    hookfunction = hookfunction, -- Replaces a function with a custom implementation
-    setrawmetatable = setrawmetatable, -- Sets a raw metatable without invoking __metatable
-    setmetatable = setmetatable, -- Sets a metatable for a table
-    getmetatable = getmetatable, -- Retrieves the metatable of a table or userdata
-    setfenv = setfenv, -- Sets the function environment
-    getfenv = getfenv, -- Gets the function environment
-    loadstring = loadstring, -- Compiles and executes a string as Lua code
-    load = load, -- Loads a chunk of Lua code
-    pcall = pcall, -- Calls a function in protected mode to catch errors
-    xpcall = xpcall, -- Calls a function with an error handler
-    getupvalue = getupvalue, -- Retrieves an upvalue from a function
-    setupvalue = setupvalue, -- Sets an upvalue for a function
-    getregistry = getregistry, -- Accesses the Lua registry
-
-    -- Debugging and Inspection
-    debug = debug.getconstant or debug.getconstants or debug.getinfo or debug.getlocal or debug.getmetatable or debug.getupvalue or debug.setconstant or debug.setconstants or debug.setlocal or debug.setmetatable or debug.setupvalue or debug.traceback,
-
-    getinfo = debug.getinfo, -- Retrieves information about a function
-    traceback = debug.traceback, -- Returns a stack traceback
-    rawequal = rawequal, -- Compares two values without invoking __eq
-    rawget = rawget, -- Retrieves a table value without invoking __index
-    rawset = rawset, -- Sets a table value without invoking __newindex
-    issecure = issecure, -- Checks if a function is running in a secure context
-    setreadonly = setreadonly, -- Sets a table as read-only or writable
-
-    -- Roblox-Specific Utilities
-    getconnections = getconnections, -- Retrieves signal connections for an event
-    firesignal = firesignal, -- Manually triggers a Roblox signal
-    setsimulationradius = setsimulationradius, -- Sets the simulation radius for physics
-    getinstances = getinstances, -- Retrieves all instances in the game
-    getnilinstances = getnilinstances, -- Retrieves instances parented to nil
-    getplayers = getplayers, -- Retrieves all players in the game
-    getplayer = getplayer, -- Retrieves a specific player by name or ID
-    getasset = getasset, -- Loads an asset by its ID
-
-    -- File and Clipboard Operations
-    setclipboard = setclipboard, -- Sets the system clipboard content
-    getclipboard = getclipboard, -- Retrieves the system clipboard content
-    isfile = isfile, -- Checks if a file exists
-    readfile = readfile, -- Reads content from a file
-    writefile = writefile, -- Writes content to a file
-    appendfile = appendfile, -- Appends content to a file
-    isfolder = isfolder, -- Checks if a folder exists
-    makefolder = makefolder, -- Creates a new folder
-    delfolder = delfolder, -- Deletes a folder
-    delfile = delfile, -- Deletes a file
-
-    -- GUI and Instance Manipulation
-    make_gui_visible = function(gui) -- Makes a GUI element visible
-        gui.Visible = true
-    end,
-    make_gui_invisible = function(gui) -- Hides a GUI element
-        gui.Visible = false
-    end,
-    create = create, -- Creates a new instance (e.g., GUI or part)
-    clone = clone, -- Clones an instance
-    newproxy = newproxy, -- Creates a new proxy object
-
-    -- Anti-Cheat and Security
-    secure_hook = function(func) -- Creates a secure hook for a function
-        return hookfunction(func, function(...)
-            -- Add security checks or logging here
-            return func(...)
-        end)
-    end,
-    bypass_anticheat = function() -- Placeholder for anti-cheat bypass logic
-        -- Implement custom anti-cheat bypass (e.g., spoofing detections)
-        warn("Anti-cheat bypass not fully implemented")
-    end,
-
-    -- Advanced Utilities
-    getcallingscript = getcallingscript, -- Retrieves the script that called the current function
-    getthreadidentity = getthreadidentity, -- Gets the identity level of the current thread
-    setthreadidentity = setthreadidentity, -- Sets the identity level of the current thread
-    crypt = crypt.base64.decode or  crypt.base64.encode or crypt.decrypt, -- Encrypts or decrypts data (if supported by executor)
-    httpget = httpget, -- Performs an HTTP GET request
-    httppost = httppost, -- Performs an HTTP POST request
-    getobjects = getobjects, -- Loads objects from Roblox assets
-    syn_io_read = syn_io_read, -- Synapse-specific file reading (if supported)
-    syn_io_write = syn_io_write, -- Synapse-specific file writing (if supported)
-    newcclosure = newclosure,
-    getrawmetatable = getrawmetatable, -- Retrieves raw metatable without restrictions
-}
-
-local total = 0
-local passed = 0
-
-for name, func in pairs(checkList) do
-	total += 1
-	if safeCheck(name, func) then
-		passed += 1
-	end
-end
-
-local rate = math.floor((passed / total) * 100)
-print("\nExecutor Check Result: " .. rate .. "% passed ✅")
-
-if rate == 100 then
-	print("Status: Passed")
-    Notification.new("Success", "Pass", "Executor meets the standart for Nexify V3",true,5)
-    wait(3)
-elseif rate >= 50 then
-Notification.new("warning","Failed", "Does not meet the standarts for Nexify v3",true,5)
-	return print("Status: Partially Functional ⚠️ \n Script will not run")
-else
-Notification.new("error","Failed", "Check Failed",true,3)
-	return print("Executor Is Very Bad")
-end
-
-end
-
-checker()
-
 local Notify = NotifyLibrary.Notify
 --// Service Handler \\--
 Notification.new("info", "Loading", "Loading Nexify V3 For: " ..identifyexecutor(),true,5)
@@ -212,7 +94,7 @@ Notification.new("info", "Loading", "Loading Nexify V3 For: " ..identifyexecutor
  plr = game:GetService("Players").LocalPlayer
 
 if not plr.Character or not plr.Character:FindFirstChild("HumanoidRootPart") then
-Notification.new("warning", "Waiting For You To Spawn...",true,3)
+Notification.new("warning", "Waiting", "Waiting For You To Spawn...",true,5)
                 
     plr.CharacterAdded:Wait()
 end
@@ -708,21 +590,21 @@ Notification.new("Info", "ESP LIBRARY", "Loaded Esp Library.",true,5)
 
 
 --// Services \\--
-local RunService = GetService.RunService
-local Players = GetService.Players
-local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
-local CurrentCamera = workspace.CurrentCamera
-local UserInputService = GetService.UserInputService
-local Unpack = table.unpack
-local GuiInset = GetService.GuiService:GetGuiInset()
-local Insert = table.insert
-local Network = GetService.NetworkClient
-local StarterGui = GetService.StarterGui
-local tweenService = GetService.TweenService
-local ReplicatedStorage = GetService.ReplicatedStorage
-local http = GetService.HttpService
-local lighting = GetService.Lighting
+ RunService = GetService.RunService
+ Players = GetService.Players
+ LocalPlayer = Players.LocalPlayer
+ Mouse = LocalPlayer:GetMouse()
+ CurrentCamera = workspace.CurrentCamera
+ UserInputService = GetService.UserInputService
+ Unpack = table.unpack
+ GuiInset = GetService.GuiService:GetGuiInset()
+ Insert = table.insert
+ Network = GetService.NetworkClient
+ StarterGui = GetService.StarterGui
+ tweenService = GetService.TweenService
+ ReplicatedStorage = GetService.ReplicatedStorage
+ http = GetService.HttpService
+ lighting = GetService.Lighting
 makefolder("nexifyv3")
 
 --// Start \\--
@@ -1009,7 +891,7 @@ local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size =
 local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",size = 215})
 local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
-local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 90})
+local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 120})
 local WaterTab = AimingTab:section({name = "Water", side = "right",size = 60})
 local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200})
 local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
@@ -1026,7 +908,8 @@ local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", si
 local Brightt = MiscTab:section({name = "Bright",side = "left", size = 70})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
 local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right", size = 88})
-local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size = 150})
+local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size = 120})
+local KnifeModss = RageTab:section({name = "Knife Mods", side = "right",size = 200})
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local GameLogsTab = MiscTab:section({name = "Game Logs",side = "right", size = 80})
@@ -1783,10 +1666,7 @@ fovsettingsss:slider({name = "FOV Thickness", def = 1, max = 3, min = 1, roundin
     stroke.Thickness = val
 end})
 
-fovsettingsss:colorpicker({name = "FOV Color", def = Color3.new(1, 1, 1), callback = function(col)
-    FOVConfig.Color = col
-    stroke.Color = col
-end})
+
 
 fovsettingsss:toggle({name = "Internal FOV", def = false, callback = function(bool)
     FOVConfig.InternalFOV = bool
@@ -2188,7 +2068,130 @@ end})
 SilentAimSettings:toggle({name = "Gradiant Animation", def = false, callback = function(Boolean)
     animatexxx = Boolean  -- Use this to toggle the gradient animation
 end})
+
+
+
+
+local stabSettings = {
+    ultraHit = false,
+    angrySwing = false,
+    tiltMode = false,
+    tiltValue = 1.0,
+    ghostTilt = false,
+    stabTarget = nil,
+    stabPart = "Head",
+}
+
+KnifeModss:toggle({
+    name = "Ultra Hit", 
+    def = false, 
+    pointer = "ultrahit", 
+    callback = function(state)
+        stabSettings.ultraHit = state
+    end
+})
+
+KnifeModss:toggle({
+    name = "Angry Swing", 
+    def = false, 
+    pointer = "angryswing", 
+    callback = function(state)
+        stabSettings.angrySwing = state
+    end
+})
+
+KnifeModss:toggle({
+    name = "Tilt Mode", 
+    def = false, 
+    pointer = "tiltmodex", 
+    callback = function(state)
+        stabSettings.tiltMode = state
+    end
+})
+
+KnifeModss:toggle({
+    name = "Ghost Tilt", 
+    def = false, 
+    pointer = "ghosttilt", 
+    callback = function(state)
+        stabSettings.ghostTilt = state
+    end
+})
+
+-- Hook 1: Power Swing için
+local mt1 = getrawmetatable(game)
+local originalSwing = mt1.__namecall
+setreadonly(mt1, false)
+mt1.__namecall = newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+    if method == "FireServer" and self.Name == "MeleeInflict" then
+        if stabSettings.angrySwing then
+            args[3] = "PowerAttack"
+        end
+        return originalSwing(self, table.unpack(args))
+    end
+    return originalSwing(self, ...)
+end)
+setreadonly(mt1, true)
+
+-- Hook 2: AutoHit Raycast spoof
+local fakeRay
+fakeRay = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+
+    if not stabSettings.ultraHit then return fakeRay(self, ...) end
+
+    if method == "Raycast" and stabSettings.stabTarget and debug.getinfo(5, "f").short_src == "ReplicatedStorage.Modules.FPS.Melee" then
+        local tgtPart = stabSettings.stabTarget
+        local tgtChar = tgtPart.Parent
+        local realHitbox = tgtChar:FindFirstChild(stabSettings.stabPart)
+        if not realHitbox then return fakeRay(self, ...) end
+        if (realHitbox.Position - game.Players.LocalPlayer.Character.Head.Position).Magnitude > 11 then return fakeRay(self, ...) end
+
+        return {
+            Instance = realHitbox,
+            Position = realHitbox.Position,
+            Normal = Vector3.new(1, 0, 0),
+            Material = realHitbox.Material,
+            Distance = (realHitbox.Position - game.Players.LocalPlayer.Character.Head.Position).Magnitude
+        }
+    end
+
+    return fakeRay(self, ...)
+end)
+
+-- Hook 3: Tilt changer
+local mt2 = getrawmetatable(game)
+local oldTilt = mt2.__namecall
+setreadonly(mt2, false)
+mt2.__namecall = newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+    if method == "FireServer" and self.Name == "UpdateTilt" then
+        if stabSettings.tiltMode then
+            args[1] = stabSettings.tiltValue
+            return oldTilt(self, table.unpack(args))
+        elseif stabSettings.ghostTilt then
+            args[1] = 0.75
+            return oldTilt(self, table.unpack(args))
+        end
+    end
+    return oldTilt(self, ...)
+end)
+setreadonly(mt2, true)
+
+
+
+
 local allvars = {}
+
+
+
+
+
+
 
 -- Vars
 allvars.desyncbool = false
@@ -2224,7 +2227,7 @@ DesyncTab:toggle({
         desyncvis.Size = Vector3.new(4, 5, 1)
         desyncvis.Color = Color3.fromRGB(255, 255, 255)
         desyncvis.Material = Enum.Material.Neon
-        desyncvis.Transparency = 0.7
+        desyncvis.Transparency = 1
         desyncvis.TopSurface = Enum.SurfaceType.Smooth 
 
         while allvars.desyncbool do
@@ -2463,7 +2466,7 @@ Frame_2.Parent = PlayerInfo
 Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame_2.BorderSizePixel = 0
-Frame_2.Position = UDim2.new(0.0284629986, 0, 0.459558815, 0)
+Frame_2.Position = UDim2.new(0.0189753324, 0, 0.449532062, 0)
 Frame_2.Size = UDim2.new(0, 278, 0, 122)
 local Frame2 = Instance.new("UIStroke")
 Frame2.Parent = Frame_2
@@ -2476,7 +2479,7 @@ Frame_3.Parent = PlayerInfo
 Frame_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Frame_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame_3.BorderSizePixel = 0
-Frame_3.Position = UDim2.new(0.0367647037, 0, 0.471256673, 0)
+Frame_3.Position = UDim2.new(0.0189753324, 0, 0.449532062, 0)
 Frame_3.Size = UDim2.new(0, 263, 0, 108)
 local Frame3 = Instance.new("UIStroke")
 Frame3.Parent = Frame_3
@@ -2803,9 +2806,85 @@ SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, mi
 end})
 
 -- Trigger Bot Section -- 
-local TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 100})
-local BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 40})
-local TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 140})
+ TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 80})
+ DoubleJump = AimingTab:section({name = "Double Jump", side = "left",size = 75})
+ BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 70})
+ TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 140})
+
+
+
+
+ Players = game:GetService("Players")
+ UserInputService = game:GetService("UserInputService")
+ player = Players.LocalPlayer
+ playerSettings = {
+	enableDoubleJump = false,
+	jumpHeight = 0.4 -- sliderdan gelen çarpan
+}
+
+-- bu ayarlar dışarıdan kontrol ediliyor:
+-- playerSettings.enableDoubleJump = true/false
+-- playerSettings.jumpHeight = 1.2 falan
+
+ function setupDoubleJump()
+	local char = player.Character or player.CharacterAdded:Wait()
+	local humanoid = char:WaitForChild("Humanoid")
+	local root = char:WaitForChild("HumanoidRootPart")
+
+	local jumping = false
+	local canDoubleJump = false
+	local doubleJumped = false
+
+	humanoid.StateChanged:Connect(function(_, newState)
+		if newState == Enum.HumanoidStateType.Freefall then
+			jumping = true
+		elseif newState == Enum.HumanoidStateType.Landed then
+			jumping = false
+			doubleJumped = false
+		end
+	end)
+
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if gameProcessed then return end
+		if input.KeyCode == Enum.KeyCode.Space then
+			if not jumping then
+				canDoubleJump = true
+			elseif canDoubleJump and not doubleJumped and playerSettings.enableDoubleJump then
+				doubleJumped = true
+				canDoubleJump = false
+				local power = 50 * playerSettings.jumpHeight
+				root.Velocity = Vector3.new(root.Velocity.X, power, root.Velocity.Z)
+			end
+		end
+	end)
+end
+
+player.CharacterAdded:Connect(setupDoubleJump)
+if player.Character then
+	setupDoubleJump()
+end
+
+DoubleJump:toggle({
+	name = "Double Jump",
+	def = false,
+	pointer = "superjump",
+	callback = function(state)
+		playerSettings.enableDoubleJump = state
+	end
+})
+
+DoubleJump:slider({
+	name = "Double Jump Height",
+	def = 0.4,
+	max = 0.4,
+	min = 0,
+	roundingvalue = 0.1,
+	callback = function(Value)
+		playerSettings.jumpHeight = Value
+	end
+})
+
+
 
 
 
@@ -3030,6 +3109,28 @@ BobbingSection:toggle({
     end
 })
 
+ RunService = game:GetService("RunService")
+local loop
+
+BobbingSection:toggle({
+    name = "No Camera Bob",
+    def = false,
+    callback = function(state)
+        local localplayername = game.Players.LocalPlayer.Name
+        local sprintAttr = game.ReplicatedStorage.Players[localplayername].Status.GameplayVariables.Sprinting
+
+        if state then
+            loop = RunService.RenderStepped:Connect(function()
+                sprintAttr:SetAttribute("Value", false)
+            end)
+        else
+            if loop then loop:Disconnect() end
+            sprintAttr:SetAttribute("Value", true)
+        end
+    end
+})
+
+
 
 TriggerbotSection:slider({name = "Delay (Ammount)", def = 0, max = 60, min = 0, rounding = true, callback = function(Value)
  PuppySettings.TriggerBot.DelayAmount = Value
@@ -3223,10 +3324,10 @@ AASettings:keybind({name = "Legit AA Keybind", def = Enum.KeyCode.Z, callback = 
  PuppySettings.AntiAim.LegitAAKey = Key
 end})
 
-local Players = game:GetService("Players")
+ Players = game:GetService("Players")
 
-local JoinLogEnabled = false
-local LeaveLogEnabled = false
+ JoinLogEnabled = false
+ LeaveLogEnabled = false
 
 GameLogsTab:toggle({
 	name = "Player Joined Log",
@@ -3244,24 +3345,15 @@ GameLogsTab:toggle({
 	end
 })
 
-local waittimeforlogs = 3
-
-GameLogsTab:slider({name = "Log Timeout Time", def = 2, max = 5, min = 1, rounding = true, callback = function(State)
-
-
-waittimeforlogs = State
-
-end})
-
 Players.PlayerAdded:Connect(function(player)
 	if JoinLogEnabled then
-		Notification.new("info", "Player Has Joined The Game: ", player.Name .. "",true,waittimeforlogs)
+		Notification.new("info", "Player Has Joined The Game: ", player.Name .. "",true,2)
 	end
 end)
 
 Players.PlayerRemoving:Connect(function(player)
 	if LeaveLogEnabled then
-		Notification.new("info", "Player Has Left: ", player.Name .. "",true,waittimeforlogs)
+		Notification.new("info", "Player Has Left: ", player.Name .. "",true,2)
 	end
 end)
 
@@ -3269,7 +3361,7 @@ end)
 AASettings:keybind({name = "Auto Peak Keybind", def = Enum.KeyCode.N, callback = function(Key)
  PuppySettings.AutoPeak.APKey = Key
 end})
-local teleportHeight = 60 -- Change this value to adjust how high you want to teleport (in meters)
+ teleportHeight = 60 -- Change this value to adjust how high you want to teleport (in meters)
 
 AASettings:keybind({name = "Teleport Kill Keybind", def = Enum.KeyCode.X, callback = function(Key)
     print("Key pressed: " .. Key.Name)  -- Keybind tetiklendi mi kontrol et
@@ -3439,6 +3531,27 @@ AAMainSection:toggle({name = "Underground", def = false, callback = function(val
     end)
 end})
 
+AASettings:keybind({name = "Underground Keybind", def = nil, callback = function(value)
+     pcall(function()
+        if enabled == false then
+            enabled = true
+            -- Save camera height before going underground
+            savedCameraHeight = camera.CFrame.Y
+            danceTrack = lplr.Character:FindFirstChildWhichIsA("Humanoid"):LoadAnimation(animation)
+            danceTrack.Looped = false
+            danceTrack:Play(.1, 1, 0)
+            replicatedStorage.Remotes.UpdateTilt:FireServer(0/0 or 0)
+        elseif enabled then
+            enabled = false
+            -- Clear saved camera height when exiting underground
+            savedCameraHeight = nil
+            danceTrack:Stop()
+            danceTrack:Destroy()
+            replicatedStorage.Remotes.UpdateTilt:FireServer(false and 0/0 or 0)
+        end
+    end)
+end})
+
 --[[
 
 AAMainSection:toggle({name = "Protect Y Offset For Underground", def = true, callback = function(value)
@@ -3493,14 +3606,45 @@ VisualMainSection:toggle({name = "Distance ESP", def = false, callback = functio
 ESP.Drawing.Distances.Enabled = enabled
 end})
 terrain = game:GetService("Workspace").Terrain
-originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
 
 
-Envioromental:colorpicker({name = "Ambient Color Picker", cpname = "", def = game.Lighting.Ambient, callback = function(color)
-    game.Lighting.Ambient = color
-end})
+Envioromental:colorpicker({
+    name = "Ground Color Picker",
+    cpname = "",
+    def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Ground),
+    callback = function(Value)
+        local newColor = Value
+        local matName = Enum.Material.Grass  -- Grass
+        game.Workspace.Terrain:SetMaterialColor(matName, newColor)
+    end
+})
 
-terrain = game:GetService("Workspace").Terrain
+Envioromental:colorpicker({
+    name = "Rock Color Picker",
+    cpname = "",
+    def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Rock),
+    callback = function(Value)
+        local newColor = Value
+        local matName = Enum.Material.Rock  -- Rock
+        game.Workspace.Terrain:SetMaterialColor(matName, newColor)
+    end
+})
+
+Envioromental:colorpicker({
+    name = "Sand Color Picker",
+    cpname = "",
+    def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Sand),
+    callback = function(Value)
+        local newColor = Value
+        local matName = Enum.Material.Sand  -- Sand
+        game.Workspace.Terrain:SetMaterialColor(matName, newColor)
+    end
+})
+
+
+
+
+
 originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
 
 Envioromental:colorpicker({name = "Grass Color Picker", cpname = "", def = originalGrassColor, callback = function(Value)
@@ -3673,7 +3817,7 @@ local Settingsofhiglight = {
     enabledHighlightToggle = false
 }
 
--- MODELİN GERÇEKTEN "CESET" OLDUĞUNU ANLAMAK İÇİN
+
 local function IsValidCorpse(model)
     return model:IsA("Model")
         and model:FindFirstChildOfClass("Humanoid")
@@ -4335,7 +4479,7 @@ MiscCharSettings:toggle({name = "Instant Respawn", def = false, callback = funct
 
 end})
 
-
+--[[
 MiscNorSettings:toggle({name = "AutoClicker", def = false, callback = function(Boolean)
  PuppySettings.AutoClicker.Enabled = Boolean 
 end})
@@ -4343,26 +4487,46 @@ end})
 
 
 
+
 MiscNorSettings:keybind({name = "AutoClicker Keybind", def = Enum.KeyCode.B, callback = function(Key)
  PuppySettings.AutoClicker.Keybind = Key
 end})
+]]
 
 MiscNorSettings:toggle({name = "No Grass", def = false, callback = function(first)
  sethiddenproperty(game:GetService("Workspace").Terrain, "Decoration", not first)
 end})
 
-MiscNorSettings:toggle({name = "Remove Trees", def = false, callback = function(first)
-for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
-        if v.ClassName == "MeshPart" and v:FindFirstChildOfClass("SurfaceAppearance") then
-            v:Destroy()
-        end;
-    end;
-    workspace.SpawnerZones.DescendantAdded:Connect(function(inst)
-        if inst.ClassName == "MeshPart" and inst:FindFirstChildOfClass("SurfaceAppearance") then
-            inst:Destroy()
-        end;
-    end);
-end})
+MiscNorSettings:toggle({
+	name = "Remove Trees",
+	def = false,
+	callback = function(state)
+		for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
+			if v:IsA("MeshPart") and v:FindFirstChildOfClass("SurfaceAppearance") then
+				if state then
+					v.Transparency = 1
+					v.CanCollide = false
+				else
+					v.Transparency = 0
+					v.CanCollide = true
+				end
+			end
+		end
+
+		if state and not _G.TreeRemoverConnection then
+			_G.TreeRemoverConnection = workspace.SpawnerZones.DescendantAdded:Connect(function(inst)
+				if inst:IsA("MeshPart") and inst:FindFirstChildOfClass("SurfaceAppearance") then
+					inst.Transparency = 1
+					inst.CanCollide = false
+				end
+			end)
+		elseif not state and _G.TreeRemoverConnection then
+			_G.TreeRemoverConnection:Disconnect()
+			_G.TreeRemoverConnection = nil
+		end
+	end
+})
+
 
 
 MiscNorSettings:button({name = "No Fog", callback = function()
@@ -4401,7 +4565,7 @@ if not game.Players.LocalPlayer.Character then
     end;
 
     if not closestCar then
-        return Notification.new("error", "ERROR", " No Cars Nearby.",true,2)
+        return Notification.new("error", "ERROR", " No Cars Nearby.",true,5)
     end;
 
     -- Attempt to teleport the character to the car
@@ -4424,19 +4588,24 @@ if not game.Players.LocalPlayer.Character then
 
 end})
 
-MiscNorSettings:toggle({name = "Remove Clouds", def = false, callback = function(isEnabled)
+MiscNorSettings:toggle({
+    name = "Remove Clouds",
+    def = false,
+    callback = function(isEnabled)
+        local terrain = game:GetService("Workspace").Terrain
 
-        terrain = game:GetService("Workspace").Terrain
-
-        
-        if isEnabled and terrain and terrain.Clouds then
-            terrain.Clouds.Density = 0
+        if terrain and terrain.Clouds then
+            if isEnabled then
+                terrain.Clouds.Density = 0
+            else
+                terrain.Clouds.Density = 1
+            end
         else
-            
-            terrain.Clouds.Density = 1
-        end;
+            print("Error: No Clouds found!")
+        end
+    end
+})
 
-end})
 
 AimingTab:openpage()
 
@@ -4449,9 +4618,9 @@ getgenv().ThirdPerson = true
 getgenv().FirstPerson = true
 getgenv().PredictionVelocity = 11
 
-local Players, Uis, RService, SGui = game:GetService"Players", game:GetService"UserInputService", game:GetService"RunService", game:GetService"StarterGui";
-local Client, Mouse, Camera, CF, RNew, Vec3, Vec2 = Players.LocalPlayer, Players.LocalPlayer:GetMouse(), workspace.CurrentCamera, CFrame.new, Ray.new, Vector3.new, Vector2.new;
-local MousePressed, CanNotify = false, false;
+ Players, Uis, RService, SGui = game:GetService"Players", game:GetService"UserInputService", game:GetService"RunService", game:GetService"StarterGui";
+ Client, Mouse, Camera, CF, RNew, Vec3, Vec2 = Players.LocalPlayer, Players.LocalPlayer:GetMouse(), workspace.CurrentCamera, CFrame.new, Ray.new, Vector3.new, Vector2.new;
+ MousePressed, CanNotify = false, false;
 local AimlockTarget;
 local OldPre;
 
@@ -4572,9 +4741,8 @@ end)
 
 
 
-uiSettings1:toggle({name = "Performance Saver", def = true, callback = function(Boolean)
-  
-end})
+uiSettings1:toggle({name = "Performance Saver", def = true, callback = function(Boolean) end})
+uiSettings1:toggle({name = "Experiemental Features", def = true, callback = function(Boolean) end})
 
 uiSettings1:colorpicker({name = "Accent Color", cpname = "", def = Color3.RGB, callback = function(color)
     collorofui = color
@@ -4803,8 +4971,8 @@ end
 
 local Plr
 local Pos
-local enabled = false
-local placemarker = Instance.new("Part", game.Workspace)
+ enabled = false
+ placemarker = Instance.new("Part", game.Workspace)
 
 function makemarker(Parent, Adornee, Color, Size, Size2)
     local e = Instance.new("BillboardGui", Parent)
@@ -5079,6 +5247,32 @@ task.spawn(function()
 end)
 
 
+ mt = getrawmetatable(game)
+ oldIndex = mt.__newindex
+setreadonly(mt, false)
+mt.__newindex = newcclosure(function(self, index, value)
+    if tostring(self) == "Humanoid" and index == "CameraOffset" then
+        local offset = Vector3.zero
+
+        if allvars.desyncbool then
+            if allvars.desyncPos then
+                offset += Vector3.new(-allvars.desynXp, -allvars.desynYp, -allvars.desynZp)
+            end
+            if allvars.desyncOr then
+
+            end
+        end
+
+        if allvars.camthirdp then
+            offset += Vector3.new(allvars.camthirdpX, allvars.camthirdpY, allvars.camthirdpZ)
+        end
+
+        return oldIndex(self, index, offset)
+    end
+    return oldIndex(self, index, value)
+end)
+setreadonly(mt, true)
+
 
 
 
@@ -5087,7 +5281,7 @@ Notification.new("success", "Loaded", "Loaded Nexify V3 For " ..identifyexecutor
                 task.wait(3)
        --         coroutine.wrap(changeRemoteNames)
  
- Notification.new("warning", "[ FUNCTIONS ]", "Created Nexify Functions In Workspace. Do Not Attempt To Remove Them!",true,5 )
+ Notification.new("warning", "[ FUNCTIONS ]", "Created Nexify Functions In Workspace. Do Not Attempt To Remove Them!" ,true,5)
                 task.wait(3.5)
                  statusFolder = game.ReplicatedStorage:WaitForChild("ServerStatus")
 local versionAttr = statusFolder:GetAttribute("Version")
@@ -5135,12 +5329,12 @@ Notification.new("success", "[NEXIFY]", "Injected Nexify.",true,5)
                 createfakesys()
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 wait(1)
-Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,2)
+Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,5)
 wait(0.3)
-Notification.new("error", "Watermark", "Failed To Start Watermark Core.",true,5)
+--Notification.new("error", "Watermark", "Failed To Start Watermark Core.",true,5)
 
 
-Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor(),true,3)
+Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor(),true,5)
 
 
         
