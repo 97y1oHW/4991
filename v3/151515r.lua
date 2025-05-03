@@ -876,8 +876,9 @@ local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",s
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
 local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 90})
 local WaterTab = AimingTab:section({name = "Water", side = "right",size = 60})
-local AAMainSection = RageTab:section({name = "Main", side = "left", size = 250})
+local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200})
 local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
+local DesyncTab = RageTab:section({name = "Desync", side = "left", size = 300})
 local AASettings = RageTab:section({name = "Settings", side = "right", size = 220})
 local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", size = 200})
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
@@ -885,7 +886,7 @@ local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 1
 local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 100})
 local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 210})
 local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 60})
-local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 145})
+local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 160})
 local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
 local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right", size = 88})
@@ -1991,6 +1992,229 @@ end})
 SilentAimSettings:toggle({name = "Gradiant Animation", def = false, callback = function(Boolean)
     animatexxx = Boolean  -- Use this to toggle the gradient animation
 end})
+local allvars = {}
+
+-- Vars
+allvars.desyncbool = false
+allvars.invisbool = false
+allvars.desyncPos = false
+allvars.desynXp = 0
+allvars.desynYp = 0
+allvars.desynZp = 0
+allvars.desyncOr = false
+allvars.desynXo = 0
+allvars.desynYo = 0
+allvars.desynZo = 0
+
+local desynctable = {}
+local desyncvis = nil
+local invisanim = Instance.new("Animation")
+invisanim.AnimationId = "rbxassetid://15609995579"
+local invisnum = 2.35
+local invistrack
+
+
+DesyncTab:toggle({
+    name = "Desync",
+    def = false,
+    callback = function(v)
+        allvars.desyncbool = v
+
+        desyncvis = Instance.new("Part", workspace)
+        desyncvis.Name = "DesyncVisual"
+        desyncvis.Anchored = true
+        desyncvis.CanQuery = false
+        desyncvis.CanCollide = false
+        desyncvis.Size = Vector3.new(4, 5, 1)
+        desyncvis.Color = Color3.fromRGB(255, 255, 255)
+        desyncvis.Material = Enum.Material.Neon
+        desyncvis.Transparency = 0.7
+        desyncvis.TopSurface = Enum.SurfaceType.Smooth 
+
+        while allvars.desyncbool do
+            task.wait(0.01)
+        end
+
+
+        localplayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
+
+
+        desyncvis:Destroy()
+        desyncvis = nil
+    end
+})
+
+
+
+
+
+--[[
+DesyncTab:toggle({
+    name = "Force underground",
+    def = false,
+    callback = function(v)
+        allvars.invisbool = v
+        invistrack = localplayer.Character.Humanoid.Animator:LoadAnimation(invisanim)
+
+        if allvars.desyncbool and v then
+            invistrack:Play(.01, 1, 0)
+        end
+
+        if not v and invistrack then
+            invistrack:Stop()
+            invistrack:Destroy()
+
+            for i,v in localplayer.Character.Humanoid.Animator:GetPlayingAnimationTracks() do
+                if v.Animation.AnimationId == "rbxassetid://15609995579" then
+                    v:Stop()
+                end
+            end
+        end
+    end
+})
+--]]
+
+
+
+-- Edit position toggle
+DesyncTab:toggle({
+    name = "Edit Position",
+    def = false,
+    callback = function(v)
+        allvars.desyncPos = v
+    end
+})
+
+-- Position sliders
+DesyncTab:slider({
+    name = "Position X",
+    def = allvars.desynXp,
+    min = -3,
+    max = 3,
+    rounding = true,
+    callback = function(v)
+        allvars.desynXp = v
+    end
+})
+
+DesyncTab:slider({
+    name = "Position Y",
+    def = allvars.desynYp,
+    min = -2.5,
+    max = 2.5,
+    rounding = true,
+    callback = function(v)
+        allvars.desynYp = v
+    end
+})
+
+DesyncTab:slider({
+    name = "Position Z",
+    def = allvars.desynZp,
+    min = -3,
+    max = 3,
+    rounding = true,
+    callback = function(v)
+        allvars.desynZp = v
+    end
+})
+
+-- Edit orientation toggle
+DesyncTab:toggle({
+    name = "Edit Rotation",
+    def = false,
+    callback = function(v)
+        allvars.desyncOr = v
+    end
+})
+
+-- Orientation sliders
+DesyncTab:slider({
+    name = "Rotation X",
+    def = allvars.desynXo,
+    min = -180,
+    max = 180,
+    rounding = true,
+    callback = function(v)
+        allvars.desynXo = v
+    end
+})
+
+DesyncTab:slider({
+    name = "Rotation Y",
+    def = allvars.desynYo,
+    min = -180,
+    max = 180,
+    rounding = true,
+    callback = function(v)
+        allvars.desynYo = v
+    end
+})
+
+DesyncTab:slider({
+    name = "Rotation Z",
+    def = allvars.desynZo,
+    min = -180,
+    max = 180,
+    rounding = true,
+    callback = function(v)
+        allvars.desynZo = v
+    end
+})
+local runs = game:GetService("RunService")
+
+-- Desync main logic
+runs.Heartbeat:Connect(function()
+    if allvars.desyncbool and localplayer.Character and localplayer.Character.HumanoidRootPart then
+        if allvars.invisbool and invistrack then
+            if not aimresolver then
+                invistrack:Stop()
+                invistrack = localplayer.Character.Humanoid.Animator:LoadAnimation(invisanim)
+                invistrack:Play(.01, 1, 0)
+                invistrack.TimePosition = invisnum
+
+                desynctable[1] = localplayer.Character.HumanoidRootPart.CFrame
+                desynctable[2] = localplayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+                local cf = localplayer.Character.HumanoidRootPart.CFrame
+                local posoffset = Vector3.new(0,-2.55,0)
+                local rotoffset = Vector3.new(90,0,0)
+                local spoofedcf = cf * CFrame.new(posoffset) * CFrame.Angles(math.rad(rotoffset.X), math.rad(rotoffset.Y), math.rad(rotoffset.Z))
+                desynctable[3] = spoofedcf
+
+                localplayer.Character.HumanoidRootPart.CFrame = spoofedcf
+                runs.RenderStepped:Wait()
+                localplayer.Character.HumanoidRootPart.CFrame = desynctable[1]
+                localplayer.Character.HumanoidRootPart.AssemblyLinearVelocity = desynctable[2]
+            end
+        else
+            desynctable[1] = localplayer.Character.HumanoidRootPart.CFrame
+            desynctable[2] = localplayer.Character.HumanoidRootPart.AssemblyLinearVelocity
+            local cf = localplayer.Character.HumanoidRootPart.CFrame
+            local posoffset = allvars.desyncPos and Vector3.new(allvars.desynXp, allvars.desynYp, allvars.desynZp) or Vector3.new()
+            local rotoffset = allvars.desyncOr and Vector3.new(allvars.desynXo, allvars.desynYo, allvars.desynZo) or Vector3.new()
+            local spoofedcf = cf * CFrame.new(posoffset) * CFrame.Angles(math.rad(rotoffset.X), math.rad(rotoffset.Y), math.rad(rotoffset.Z))
+            desynctable[3] = spoofedcf
+            localplayer.Character.HumanoidRootPart.CFrame = spoofedcf
+            runs.RenderStepped:Wait()
+            localplayer.Character.HumanoidRootPart.CFrame = desynctable[1]
+            localplayer.Character.HumanoidRootPart.AssemblyLinearVelocity = desynctable[2]
+        end
+    end
+end)
+
+-- Visual render
+runs.RenderStepped:Connect(function()
+    if desyncvis then
+        if desynctable[3] then  -- Only update if desynctable[3] is not nil
+            desyncvis.CFrame = desynctable[3] * CFrame.new(0, -0.7, 0)
+          --  desyncvis.Transparency = 1
+            localplayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+        end
+    end
+end)
+
+
+
 local statussssssss = false
 PlayerInfof:toggle({name = "Player Info UI", def = false, callback = function(Boolean)
     statussssssss = Boolean
@@ -2385,6 +2609,136 @@ end})
 -- Trigger Bot Section -- 
 local TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 100})
 local BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 40})
+local TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 140})
+
+
+
+-- Tracer Configs
+local tracbool = false
+local tracwait = 2
+local traccolor = Color3.fromRGB(255,255,255)
+local tractexture = nil
+local tractextures = {
+    ["None"] = nil,
+    ["Glow"] = "http://www.roblox.com/asset/?id=78260707920108",
+    ["Lighting"] = "http://www.roblox.com/asset/?id=131326755401058",
+}
+
+-- TracersSection: Toggle
+TracersSection:toggle({
+    name = "Enable Tracers",
+    def = false,
+    callback = function(v)
+        tracbool = v
+       
+    end
+})
+
+-- UI: Slider
+TracersSection:slider({
+    name = "Tracer Wait Time",
+    def = 2,
+    min = 0,
+    max = 10,
+    rounding = true,
+    callback = function(v)
+        tracwait = v
+        
+    end
+})
+
+-- UI: Dropdown (Texture)
+TracersSection:dropdown({
+    name = "Tracer Texture",
+    def = "None",
+    max =3,
+    options = {"None", "Glow", "Lighting"},
+    callback = function(selected)
+        tractexture = tractextures[selected]
+        
+    end
+})
+
+-- UI: Color Picker
+TracersSection:colorpicker({
+    name = "Tracer Color",
+    cpname = "",
+    def = Color3.fromRGB(255,255,255),
+    callback = function(color)
+        traccolor = color
+        
+    end
+})
+
+-- Tracer Function
+local function runtracer(start, endp)
+    if not tracbool then return end
+        local beam = Instance.new("Beam")
+        beam.Name = "LineBeam"
+        beam.Parent = workspace
+
+        local startpart = Instance.new("Part")
+        startpart.Size = Vector3.new(0.01, 0.01, 0.01)
+        startpart.Position = start
+        startpart.Anchored = true
+        startpart.Transparency = 1
+        startpart.CanCollide = false
+        startpart.CanQuery = false
+        startpart.Parent = workspace
+
+        local endpart = Instance.new("Part")
+        endpart.Size = Vector3.new(0.01, 0.01, 0.01)
+        endpart.Position = endp
+        endpart.Anchored = true
+        endpart.Transparency = 1
+        endpart.CanCollide = false
+        endpart.CanQuery = false
+        endpart.Parent = workspace
+
+        beam.Attachment0 = Instance.new("Attachment", startpart)
+        beam.Attachment1 = Instance.new("Attachment", endpart)
+        beam.Color = ColorSequence.new(traccolor, traccolor)
+        beam.Width0 = 0.05
+        beam.Width1 = 0.05
+        beam.FaceCamera = true
+        beam.Transparency = NumberSequence.new(0)
+        beam.LightEmission = 1
+
+        if tractexture then
+            beam.Texture = tractexture
+            if tractexture == "http://www.roblox.com/asset/?id=131326755401058" then
+                beam.TextureSpeed = 3
+                beam.TextureLength = (endp - start).Magnitude
+                beam.Width0 = 0.3
+                beam.Width1 = 0.3
+            end
+        end
+
+        task.delay(tracwait, function()
+            beam:Destroy()
+            startpart:Destroy()
+            endpart:Destroy()
+        end)
+    end
+
+-- Mouse Event: Click to Trigger Tracer
+local Player = game.Players.LocalPlayer
+local Mouse = Player:GetMouse()
+
+Mouse.Button1Down:Connect(function()
+    local char = Player.Character
+    if not char then return end
+
+    local head = char:FindFirstChild("Head")
+    if not head then return end
+
+    local start = head.Position
+    local target = Mouse.Hit and Mouse.Hit.Position
+    if target then
+        runtracer(start, target)
+    end
+end)
+
 
 
 TriggerbotSection:toggle({name = "Trigger Bot", def = false, callback = function(Boolean)
@@ -3684,6 +4038,61 @@ MiscNorSettings:button({name = "No Fog", callback = function()
     if Lighting:FindFirstChildOfClass("Atmosphere") then
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
  end;
+
+end})
+
+MiscNorSettings:button({name = "Car TP", callback = function()
+
+
+
+
+
+if not game.Players.LocalPlayer.Character then
+        return game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Error",
+            Text = "No character found",
+            Duration = 5
+        })
+    end;
+
+    local player = game.Players.LocalPlayer
+    local closestCar, closestDist = nil, math.huge
+
+    for _, vehicle in pairs(workspace:WaitForChild("Vehicles"):GetChildren()) do
+        if vehicle:FindFirstChild("Body") and vehicle.Body:FindFirstChildOfClass("MeshPart") then
+            local distance = (vehicle.Body:FindFirstChildOfClass("MeshPart").Position - workspace.CurrentCamera.CFrame.p).Magnitude
+            if distance < closestDist then
+                closestDist = distance
+                closestCar = vehicle
+            end;
+        end;
+    end;
+
+    if not closestCar then
+        return game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Error",
+            Text = "No cars nearby",
+            Duration = 3
+        })
+    end;
+
+    -- Attempt to teleport the character to the car
+    for _, seat in pairs(closestCar:GetDescendants()) do
+        if seat:IsA("Seat") and seat.Name == "SeatFR" then
+            seat:Sit(player.Character:FindFirstChildOfClass("Humanoid"))
+        end;
+    end;
+
+    wait(0.2)
+
+    game:GetService("ReplicatedStorage").Remotes.VehicleInteractions:FireServer({
+        ["Vehicle"] = closestCar,
+        ["Action"] = "Enter",
+        ["Door"] = closestCar.Body.FRdoor.FR_Door
+    })
+
+
+
 
 end})
 
