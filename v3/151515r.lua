@@ -70,6 +70,7 @@ if not plr.Character or not plr.Character:FindFirstChild("HumanoidRootPart") the
                     Description = "Waiting for you to spawn",
                     Duration = 5
                 })
+	warn("waiting for you to spawn")
                 
     plr.CharacterAdded:Wait()
 end
