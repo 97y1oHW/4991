@@ -70,7 +70,6 @@ if not plr.Character or not plr.Character:FindFirstChild("HumanoidRootPart") the
                     Description = "Waiting for you to spawn",
                     Duration = 5
                 })
-	warn("waiting for character")
                 
     plr.CharacterAdded:Wait()
 end
@@ -3306,7 +3305,7 @@ local zoomKey = Enum.KeyCode.Z
 local isZoomedIn = false
 local normalFOV = Camera.FieldOfView
 local zoomedFOV = 10
-local zoomTweenSpeed = 0.25
+local zoomTweenSpeed = 0.2
 
 local zoomTweenInfo = TweenInfo.new(zoomTweenSpeed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
