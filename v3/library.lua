@@ -1,5 +1,5 @@
 -- // variables
-local version = "0.27 BX ALPHA"
+local version = "0.28 BX ALPHA"
 warn("LIB VERSION: "  ..version)
 local mouseLockEnabled = false
 local mouseLockConnection = nil
@@ -1970,136 +1970,116 @@ end
 --
 function sections:slider(props)
 	-- // properties
-	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
-	local def = props.def or props.Def or props.default or props.Default or 0
-	local max = props.max or props.Max or props.maximum or props.Maximum or 100
-	local min = props.min or props.Min or props.minimum or props.Minimum or 0
-	local rounding = props.rounding or props.Rounding or props.round or props.Round or props.decimals or props.Decimals or false
-	local ticking = props.tick or props.Tick or props.ticking or props.Ticking or false
-	local measurement = props.measurement or props.Measurement or props.digit or props.Digit or props.calc or props.Calc or ""
-	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
-	def = math.clamp(def,min,max)
+	local name = props.name or props.Name or "new ui"
+	local def = props.def or props.default or 0
+	local max = props.max or 100
+	local min = props.min or 0
+	local rounding = props.rounding or false
+	local roundingvalue = props.roundingvalue or 0.01 -- << YENİ KRAL
+	local ticking = props.tick or false
+	local measurement = props.measurement or ""
+	local callback = props.callback or function() end
+	def = math.clamp(def, min, max)
+
 	-- // variables
 	local slider = {}
-	-- // main
-	local sliderholder = utility.new(
-		"Frame",
-		{
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,0,25),
-			Parent = self.content
-		}
-	)
-	--
-	local outline = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,0,0,12),
-			Position = UDim2.new(0,0,0,15),
-			Parent = sliderholder
-		}
-	)
-	--
-	local outline2 = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-			BorderColor3 = Color3.fromRGB(56, 56, 56),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,0,1,0),
-			Parent = outline
-		}
-	)	
-	--
-	local value = utility.new(
-		"TextLabel",
-		{
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,0,2),
-			Position = UDim2.new(0,0,0.5,0),
-			Font = self.library.font,
-			Text = def..measurement.."/"..max..measurement,
-			TextColor3 = Color3.fromRGB(255,255,255),
-			TextSize = self.library.textsize,
-			TextStrokeTransparency = 0,
-			ZIndex = 3,
-			Parent = outline
-		}
-	)
-	--
-	local color = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-			BorderSizePixel = 0,
-			Size = UDim2.new(1,0,1,0),
-			Parent = outline2
-		}
-	)
-	--
-	utility.new(
-		"UIGradient",
-		{
-			Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
-			Rotation = 90,
-			Parent = color
-		}
-	)
-	--
-	local slide = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = self.library.theme.accent,
-			BorderSizePixel = 0,
-			Size = UDim2.new((1 / color.AbsoluteSize.X) * (color.AbsoluteSize.X / (max - min) * (def - min)),0,1,0),
-			ZIndex = 2,
-			Parent = outline
-		}
-	)
-	table.insert(self.library.themeitems["accent"]["BackgroundColor3"],slide)
-	--
-	utility.new(
-		"UIGradient",
-		{
-			Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
-			Rotation = 90,
-			Parent = slide
-		}
-	)
-	--
-	local sliderbutton = utility.new(
-		"TextButton",
-		{
-			AnchorPoint = Vector2.new(0,0),
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,1,0),
-			Position = UDim2.new(0,0,0,0),
-			Text = "",
-			Parent = sliderholder
-		}
-	)
-	--
-	local title = utility.new(
-		"TextLabel",
-		{
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,0,15),
-			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
-			Text = name,
-			TextColor3 = Color3.fromRGB(255,255,255),
-			TextSize = self.library.textsize,
-			TextStrokeTransparency = 0,
-			TextXAlignment = "Left",
-			Parent = sliderholder
-		}
-	)
-	-- // slider tbl
+
+	-- // main UI
+	local sliderholder = utility.new("Frame", {
+		BackgroundTransparency = 1,
+		Size = UDim2.new(1, 0, 0, 25),
+		Parent = self.content
+	})
+
+	local outline = utility.new("Frame", {
+		BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+		BorderColor3 = Color3.fromRGB(12, 12, 12),
+		BorderMode = "Inset",
+		BorderSizePixel = 1,
+		Size = UDim2.new(1, 0, 0, 12),
+		Position = UDim2.new(0, 0, 0, 15),
+		Parent = sliderholder
+	})
+
+	local outline2 = utility.new("Frame", {
+		BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+		BorderColor3 = Color3.fromRGB(56, 56, 56),
+		BorderMode = "Inset",
+		BorderSizePixel = 1,
+		Size = UDim2.new(1, 0, 1, 0),
+		Parent = outline
+	})
+
+	local value = utility.new("TextLabel", {
+		BackgroundTransparency = 1,
+		Size = UDim2.new(1, 0, 0, 2),
+		Position = UDim2.new(0, 0, 0.5, 0),
+		Font = self.library.font,
+		Text = def .. measurement .. "/" .. max .. measurement,
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = self.library.textsize,
+		TextStrokeTransparency = 0,
+		ZIndex = 3,
+		Parent = outline
+	})
+
+	local color = utility.new("Frame", {
+		BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+		BorderSizePixel = 0,
+		Size = UDim2.new(1, 0, 1, 0),
+		Parent = outline2
+	})
+
+	utility.new("UIGradient", {
+		Color = ColorSequence.new {
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)),
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))
+		},
+		Rotation = 90,
+		Parent = color
+	})
+
+	local slide = utility.new("Frame", {
+		BackgroundColor3 = self.library.theme.accent,
+		BorderSizePixel = 0,
+		Size = UDim2.new((1 / color.AbsoluteSize.X) * (color.AbsoluteSize.X / (max - min) * (def - min)), 0, 1, 0),
+		ZIndex = 2,
+		Parent = outline
+	})
+	table.insert(self.library.themeitems["accent"]["BackgroundColor3"], slide)
+
+	utility.new("UIGradient", {
+		Color = ColorSequence.new {
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)),
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))
+		},
+		Rotation = 90,
+		Parent = slide
+	})
+
+	local sliderbutton = utility.new("TextButton", {
+		AnchorPoint = Vector2.new(0, 0),
+		BackgroundTransparency = 1,
+		Size = UDim2.new(1, 0, 1, 0),
+		Position = UDim2.new(0, 0, 0, 0),
+		Text = "",
+		Parent = sliderholder
+	})
+
+	local title = utility.new("TextLabel", {
+		BackgroundTransparency = 1,
+		Size = UDim2.new(1, 0, 0, 15),
+		Position = UDim2.new(0, 0, 0, 0),
+		Font = self.library.font,
+		Text = name,
+		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextSize = self.library.textsize,
+		TextStrokeTransparency = 0,
+		TextXAlignment = "Left",
+		Parent = sliderholder
+	})
+
+	-- slider table
 	slider = {
 		["library"] = self.library,
 		["outline"] = outline,
@@ -2114,99 +2094,96 @@ function sections:slider(props)
 		["measurement"] = measurement,
 		["tick"] = ticking,
 		["rounding"] = rounding,
-		["callback"] = callback
+		["callback"] = callback,
+		["roundingvalue"] = roundingvalue -- << YENİ KRAL
 	}
-	--
+
 	local function slide()
-		local size = math.clamp(plr:GetMouse().X - slider.color.AbsolutePosition.X ,0 ,slider.color.AbsoluteSize.X)
+		local size = math.clamp(plr:GetMouse().X - slider.color.AbsolutePosition.X, 0, slider.color.AbsoluteSize.X)
 		local result = (slider.max - slider.min) / slider.color.AbsoluteSize.X * size + slider.min
+
+		local newres
 		if slider.rounding then
-			local newres = math.floor(result)
-			value.Text = newres..slider.measurement.."/"..slider.max..slider.measurement
-			slider.current = newres
-			slider.callback(newres)
-			if slider.tick then
-				slider.slide:TweenSize(UDim2.new((1 / slider.color.AbsoluteSize.X) * (slider.color.AbsoluteSize.X / (slider.max - slider.min) * (newres - slider.min)) ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-			else
-				slider.slide:TweenSize(UDim2.new((1 / slider.color.AbsoluteSize.X) * size ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-			end
+			newres = math.floor(result)
 		else
-			local newres = utility.round(result ,2)
-			value.Text = newres..slider.measurement.."/"..slider.max..slider.measurement
-			slider.current = newres
-			slider.callback(newres)
-			if slider.tick then
-				slider.slide:TweenSize(UDim2.new((1 / slider.color.AbsoluteSize.X) * (slider.color.AbsoluteSize.X / (slider.max - slider.min) * (newres - slider.min)) ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-			else
-				slider.slide:TweenSize(UDim2.new((1 / slider.color.AbsoluteSize.X) * size ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-			end
+			newres = math.floor(result / slider.roundingvalue + 0.5) * slider.roundingvalue
+		end
+
+		newres = math.clamp(newres, slider.min, slider.max)
+
+		value.Text = newres .. slider.measurement .. "/" .. slider.max .. slider.measurement
+		slider.current = newres
+		slider.callback(newres)
+
+		if slider.tick then
+			slider.slide:TweenSize(UDim2.new((1 / slider.color.AbsoluteSize.X) * (slider.color.AbsoluteSize.X / (slider.max - slider.min) * (newres - slider.min)), 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
+		else
+			slider.slide:TweenSize(UDim2.new((1 / slider.color.AbsoluteSize.X) * size, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
 		end
 	end
-	--
+
 	sliderbutton.MouseButton1Down:Connect(function()
 		slider.holding = true
 		slide()
-		table.insert(self.library.themeitems["accent"]["BorderColor3"],outline)
+		table.insert(self.library.themeitems["accent"]["BorderColor3"], outline)
 		outline.BorderColor3 = self.library.theme.accent
 	end)
-	--
+
 	uis.InputChanged:Connect(function()
 		if slider.holding then
 			slide()
 		end
 	end)
-	--
+
 	uis.InputEnded:Connect(function(Input)
 		if Input.UserInputType.Name == 'MouseButton1' and slider.holding then
 			slider.holding = false
 			outline.BorderColor3 = Color3.fromRGB(12, 12, 12)
-			local find = table.find(self.library.themeitems["accent"]["BorderColor3"],outline)
+			local find = table.find(self.library.themeitems["accent"]["BorderColor3"], outline)
 			if find then
-				table.remove(self.library.themeitems["accent"]["BorderColor3"],find)
+				table.remove(self.library.themeitems["accent"]["BorderColor3"], find)
 			end
 		end
 	end)
-	--
-	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+
+	local pointer = props.pointer or nil
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = slider
 		end
 	end
-	--
-	self.library.labels[#self.library.labels+1] = title
-	self.library.labels[#self.library.labels+1] = value
-	-- // metatable indexing + return
+
+	self.library.labels[#self.library.labels + 1] = title
+	self.library.labels[#self.library.labels + 1] = value
+
 	setmetatable(slider, sliders)
 	return slider
 end
---
+
 function sliders:set(value)
-	local size = math.clamp((self.color.AbsoluteSize.X / (self.max - self.min) * (value - self.min)) ,0 ,self.color.AbsoluteSize.X)
+	local size = math.clamp((self.color.AbsoluteSize.X / (self.max - self.min) * (value - self.min)), 0, self.color.AbsoluteSize.X)
 	local result = value
+
+	local newres
 	if self.rounding then
-		local newres = math.floor(result)
-		self.value.Text = newres..self.measurement.."/"..self.max..self.measurement
-		self.current = newres
-		self.callback(newres)
-		if self.tick then
-			self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * (self.color.AbsoluteSize.X / (self.max - self.min) * (newres - self.min)) ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-		else
-			self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * size ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-		end
+		newres = math.floor(result)
 	else
-		local newres = utility.round(result ,2)
-		self.value.Text = newres..self.measurement.."/"..self.max..self.measurement
-		self.current = newres
-		self.callback(newres)
-		if self.tick then
-			self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * (self.color.AbsoluteSize.X / (self.max - self.min) * (newres - self.min)) ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-		else
-			self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * size ,0 ,1 ,0) ,Enum.EasingDirection.Out ,Enum.EasingStyle.Quad ,0.15 ,true)
-		end
+		newres = math.floor(result / self.roundingvalue + 0.5) * self.roundingvalue
+	end
+
+	newres = math.clamp(newres, self.min, self.max)
+
+	self.value.Text = newres .. self.measurement .. "/" .. self.max .. self.measurement
+	self.current = newres
+	self.callback(newres)
+
+	if self.tick then
+		self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * (self.color.AbsoluteSize.X / (self.max - self.min) * (newres - self.min)), 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
+	else
+		self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * size, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
 	end
 end
+
 --
 function library:closewindows(ignore)
 	local window = self
