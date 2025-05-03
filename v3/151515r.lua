@@ -897,7 +897,7 @@ local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 26
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local GameLogsTab = MiscTab:section({name = "Game Logs",side = "right", size = 80})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 230})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 250})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
