@@ -870,7 +870,7 @@ local RageTab = Window:page({name = "Rage"})
 local VisualTab = Window:page({name = "Visauls"})
 local MiscTab = Window:page({name = "Misc"})
 local UISettings = Window:page({name = "UI"})
-local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 190})
+local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 100})
 local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",size = 215})
 local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
@@ -883,18 +883,19 @@ local AASettings = RageTab:section({name = "Settings", side = "right", size = 22
 local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", size = 200})
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
 local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
-local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 100})
+local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 200})
 local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 210})
 local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 60})
 local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 160})
 local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
+local Brightt = MiscTab:section({name = "Bright",side = "left", size = 70})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
 local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right", size = 88})
 local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size = 150})
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 200})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 230})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
@@ -1187,6 +1188,8 @@ local function setFireRateForAllItems(rate)
     end
 end
 
+
+
 GunMods:toggle({name = "Rapid Fire", def = false , pointer = "rapidfire", callback = function(state)
      if state then
             -- Enable rapid fire
@@ -1198,6 +1201,18 @@ GunMods:toggle({name = "Rapid Fire", def = false , pointer = "rapidfire", callba
             print("Rapid Fire disabled.")
         end
 end})
+
+GunMods:slider({
+	name = "Rapid Fire Delay",
+	def = 0.001,
+	max = 0.005,
+	min = 0.000001,
+	roundingvalue = 0.000001,
+	callback = function(State)
+		newFireRate = State
+	end
+})
+
 
 
         GunMods:toggle({name = "Instant Aim", def = false, pointer = "instaaim", callback = function(state)
@@ -1615,9 +1630,7 @@ SAimSection:toggle({name = "Wall Check", def = false, callback = function(Boolea
 end})
 
 
-SAimSection:toggle({name = "Notification Mode", def = false, callback = function(Boolean)
-    PuppySettings.SilentAim.NotificationMode = Boolean
-end})
+
 
 Lighting = game:GetService("Lighting") 
  fullBrightActive = false 
@@ -1649,7 +1662,7 @@ end;
 
 
 
-SAimSection:toggle({name = "Full Bright", def = false, callback = function(state)
+Brightt:toggle({name = "Full Bright", def = false, callback = function(state)
             fullBrightActive = state
         if fullBrightActive then
             enableFullBright() 
@@ -2602,7 +2615,7 @@ SilentAimSettings:toggle({name = "Gradiant Toggle", def = false, callback = func
     gradientxx_upval.Enabled = Boolean
 end})
 
-SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, min = 0, rounding = 3, callback = function(Value)
+SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, min = 0, roundingvalue = 0.1, callback = function(Value)
  frame231.BackgroundTransparency = Value
 end})
 
@@ -2614,11 +2627,11 @@ local TracersSection = VisualTab:section({name = "Tracers", side = "left",size =
 
 
 -- Tracer Configs
-local tracbool = false
-local tracwait = 2
-local traccolor = Color3.fromRGB(255,255,255)
-local tractexture = nil
-local tractextures = {
+ tracbool = false
+ tracwait = 2
+ traccolor = Color3.fromRGB(255,255,255)
+ tractexture = nil
+ tractextures = {
     ["None"] = nil,
     ["Glow"] = "http://www.roblox.com/asset/?id=78260707920108",
     ["Lighting"] = "http://www.roblox.com/asset/?id=131326755401058",
@@ -3130,20 +3143,23 @@ AAMainSection:toggle({name = "Menu Blur", def = true, callback = function(value)
 game.Lighting.InventoryBlur.Enabled = value
 
 end})
-
 getgenv().animpos = 2.3
 getgenv().underground = -2.6
 
 local enabled = false
+local protectYOffset = false
 local runserv = game:GetService("RunService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local lplr = game:GetService("Players").LocalPlayer
 local mouse = lplr:GetMouse()
+local camera = game:GetService("Workspace").CurrentCamera
 local animation = Instance.new("Animation")
 animation.AnimationId = "http://www.roblox.com/asset/?id=15609995579"
 local danceTrack
 local dysenc = {}
 local temp = 1
+local savedCameraHeight = nil
+
 runserv.Heartbeat:Connect(function()
     temp = temp + 1
     if enabled and lplr.Character and lplr.Character.HumanoidRootPart then
@@ -3154,6 +3170,16 @@ runserv.Heartbeat:Connect(function()
         SpoofThis = SpoofThis * CFrame.Angles(math.rad(97.4), math.rad(-0.8), math.rad(99.0))
         SpoofThis = SpoofThis + Vector3.new(0, getgenv().underground, 0)
         lplr.Character.HumanoidRootPart.CFrame = SpoofThis
+        
+        -- Maintain camera height if protectYOffset is enabled
+        if protectYOffset and savedCameraHeight then
+            local currentCFrame = camera.CFrame
+            camera.CFrame = CFrame.new(
+                Vector3.new(currentCFrame.X, savedCameraHeight, currentCFrame.Z),
+                currentCFrame.Position + currentCFrame.LookVector * 10
+            )
+        end
+        
         runserv.RenderStepped:Wait()
         if lplr.Character and lplr.Character.HumanoidRootPart then
             lplr.Character.HumanoidRootPart.CFrame = dysenc[1]
@@ -3162,29 +3188,37 @@ runserv.Heartbeat:Connect(function()
     end
 end)
 
-
 AAMainSection:toggle({name = "Moderator Detector UI", def = false, callback = function(value)
-createModDetectorGUI(value)
-
+    createModDetectorGUI(value)
 end})
+
 AAMainSection:toggle({name = "Underground", def = false, callback = function(value)
-
- pcall(function()
-            if enabled == false then
-                enabled = true
-                danceTrack = lplr.Character:FindFirstChildWhichIsA("Humanoid"):LoadAnimation(animation)
-                danceTrack.Looped = false
-                danceTrack:Play(.1, 1, 0)
-                replicatedStorage.Remotes.UpdateTilt:FireServer(0/0 or 0)
-            elseif enabled then
-                enabled = false
-                danceTrack:Stop()
-                danceTrack:Destroy()
-                replicatedStorage.Remotes.UpdateTilt:FireServer(false and 0/0 or 0)
-            end
-        end)
-
+    pcall(function()
+        if enabled == false then
+            enabled = true
+            -- Save camera height before going underground
+            savedCameraHeight = camera.CFrame.Y
+            danceTrack = lplr.Character:FindFirstChildWhichIsA("Humanoid"):LoadAnimation(animation)
+            danceTrack.Looped = false
+            danceTrack:Play(.1, 1, 0)
+            replicatedStorage.Remotes.UpdateTilt:FireServer(0/0 or 0)
+        elseif enabled then
+            enabled = false
+            -- Clear saved camera height when exiting underground
+            savedCameraHeight = nil
+            danceTrack:Stop()
+            danceTrack:Destroy()
+            replicatedStorage.Remotes.UpdateTilt:FireServer(false and 0/0 or 0)
+        end
+    end)
 end})
+
+--[[
+
+AAMainSection:toggle({name = "Protect Y Offset For Underground", def = true, callback = function(value)
+    protectYOffset = value
+end})]]
+
 
 AAMainSection:toggle({name = "Remove Fall Damage", def = false, callback = function(value)
 
@@ -3235,10 +3269,6 @@ end})
 terrain = game:GetService("Workspace").Terrain
 originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
 
-
-SAimSection:dropdown({name = "Silent Aim Part", def = "Head", max = 2, options = {"Head","UpperTorso","HumanoidRootPart"}, callback = function(part)
-    silent_aim.part = part
-end})
 
 Envioromental:colorpicker({name = "Ambient Color Picker", cpname = "", def = game.Lighting.Ambient, callback = function(color)
     game.Lighting.Ambient = color
@@ -3528,92 +3558,6 @@ CorpseEsp:colorpicker({
 })
 
 
-players = game:GetService("Players")
-player = players.LocalPlayer
-camera = workspace.CurrentCamera
-botesplegacy = false
-updateCoroutine = nil -- Reference for the coroutine
-
-function isNPC(model)
-    return model:FindFirstChild("Humanoid") 
-       and model:FindFirstChild("HumanoidRootPart") 
-       and not players:GetPlayerFromCharacter(model)
-end;
-
-fontforbotesp = Enum.Font.Arcade
-
-function createLabel(npc)
-    local billboardGui = Instance.new("BillboardGui")
-    billboardGui.Name = "NPCLabel"
-    billboardGui.Parent = npc:FindFirstChild("HumanoidRootPart") or npc.PrimaryPart
-    billboardGui.Size = UDim2.new(0, 100, 0, 25)
-    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
-    billboardGui.AlwaysOnTop = true
-
-    local textLabel = Instance.new("TextLabel")
-    textLabel.Parent = billboardGui
-    textLabel.Size = UDim2.new(1, 0, 1, 0)
-    textLabel.BackgroundTransparency = 1
-    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    textLabel.Font = fontforbotesp
-    textLabel.TextScaled = true
-    textLabel.TextStrokeTransparency = 0
-
-    return textLabel
-end;
-
-function updateLabel(npc, textLabel)
-    local distance = (npc.PrimaryPart.Position - player.Character.PrimaryPart.Position).Magnitude
-    textLabel.Text = string.format("%s\n%.1f meters", npc.Name, distance)
-end;
-
-function updateNPCLabels()
-    for _, npc in ipairs(workspace:GetDescendants()) do
-        if npc:IsA("Model") and isNPC(npc) then
-            local label = npc:FindFirstChild("HumanoidRootPart"):FindFirstChild("NPCLabel")
-            if not label then
-                local textLabel = createLabel(npc)
-                updateLabel(npc, textLabel)
-            else
-                updateLabel(npc, label.TextLabel)
-            end;
-        end;
-    end;
-end;
-
-function removeNPCLabels()
-    for _, npc in ipairs(workspace:GetDescendants()) do
-        if npc:IsA("Model") and isNPC(npc) then
-            local label = npc:FindFirstChild("HumanoidRootPart"):FindFirstChild("NPCLabel")
-            if label then
-                label:Destroy() -- Destroy the label
-            end;
-        end;
-    end;
-end;
-
-waittimeforbotesp = 1
-
-function toggleNPCLabels()
-    botesplegacy = not botesplegacy
-    if botesplegacy then
-        -- Start the coroutine
-        updateCoroutine = coroutine.wrap(function()
-            while botesplegacy do
-                updateNPCLabels()
-task.wait(waittimeforbotesp)  -- Update every 0.5 seconds instead of 0.1 seconds
-
-            end;
-        end);
-        wait(0.6)
-        updateCoroutine() -- Start the coroutine immediately
-    else
-        -- Stop the coroutine and remove the labels
-        removeNPCLabels() -- Clean up the labels
-    end;
-end;
-
-
 
 
 
@@ -3799,24 +3743,194 @@ end})
 
 
 
-BotEsp:toggle({name = "Bot Esp", def = false, callback = function(value)
-    if _____ == "?" then
+_G.players = game:GetService("Players")
+_G.player = _G.players.LocalPlayer
+_G.terrain = workspace.Terrain
 
-        toggleNPCLabels()
+_G.botesplegacy = false
+_G.updateCoroutine = nil
+_G.waittimeforbotesp = 1
+_G.fontforbotesp = Enum.Font.Arcade
 
-    end;
-end})
+_G.customChamColor = Color3.fromRGB(255, 255, 255)
+_G.customOutlineColor = Color3.fromRGB(0, 0, 0)
+_G.customFillTransparency = 0.5
+
+function isNPC(model)
+    return model:FindFirstChild("Humanoid")
+        and model:FindFirstChild("HumanoidRootPart")
+        and not _G.players:GetPlayerFromCharacter(model)
+        and not model:IsDescendantOf(workspace.CurrentCamera) -- viewmodel kontrolü
+end
+
+function createLabel(npc)
+    local billboardGui = Instance.new("BillboardGui")
+    billboardGui.Name = "NPCLabel"
+    billboardGui.Parent = npc:FindFirstChild("HumanoidRootPart") or npc.PrimaryPart
+    billboardGui.Size = UDim2.new(0, 150, 0, 35)
+    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+    billboardGui.AlwaysOnTop = true
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Name = "TextLabel"
+    textLabel.Parent = billboardGui
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textLabel.Font = _G.fontforbotesp
+    textLabel.TextScaled = true
+    textLabel.TextStrokeTransparency = 0
+    textLabel.Text = "..."
+
+    return textLabel
+end
+
+function createHighlight(npc)
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "NPCCham"
+    highlight.FillColor = _G.customChamColor
+    highlight.OutlineColor = _G.customOutlineColor
+    highlight.FillTransparency = _G.customFillTransparency
+    highlight.OutlineTransparency = 0
+    highlight.Adornee = npc
+    highlight.Parent = npc
+    return highlight
+end
+
+function updateLabel(npc, textLabel)
+    local hrp = npc:FindFirstChild("HumanoidRootPart")
+    local humanoid = npc:FindFirstChild("Humanoid")
+    local myRoot = _G.player.Character and _G.player.Character:FindFirstChild("HumanoidRootPart")
+
+    if hrp and myRoot and humanoid then
+        local distance = (hrp.Position - myRoot.Position).Magnitude
+        local health = math.floor(humanoid.Health)
+        local maxHealth = math.floor(humanoid.MaxHealth)
+
+        local color
+        if distance < 100 then
+            color = Color3.fromRGB(0, 255, 0)
+        elseif distance < 300 then
+            color = Color3.fromRGB(255, 170, 0)
+        else
+            color = Color3.fromRGB(255, 0, 0)
+        end
+
+        textLabel.TextColor3 = color
+        textLabel.Text = string.format("%s\n%.1f meters\n%d/%d HP", npc.Name, distance, health, maxHealth)
+
+        local cham = npc:FindFirstChild("NPCCham")
+        if not cham then
+            cham = createHighlight(npc)
+        end
+        cham.FillColor = _G.customChamColor
+        cham.OutlineColor = _G.customOutlineColor
+        cham.FillTransparency = _G.customFillTransparency
+    end
+end
+
+function updateNPCLabels()
+    for _, npc in ipairs(workspace:GetDescendants()) do
+        if npc:IsA("Model") and isNPC(npc) then
+            local hrp = npc:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local gui = hrp:FindFirstChild("NPCLabel")
+                if not gui then
+                    local textLabel = createLabel(npc)
+                    updateLabel(npc, textLabel)
+                else
+                    local textLabel = gui:FindFirstChild("TextLabel")
+                    if textLabel then
+                        updateLabel(npc, textLabel)
+                    end
+                end
+            end
+        end
+    end
+end
+
+function removeNPCLabels()
+    for _, npc in ipairs(workspace:GetDescendants()) do
+        if npc:IsA("Model") and isNPC(npc) then
+            local hrp = npc:FindFirstChild("HumanoidRootPart")
+            local gui = hrp and hrp:FindFirstChild("NPCLabel")
+            if gui then gui:Destroy() end
+
+            local cham = npc:FindFirstChild("NPCCham")
+            if cham then cham:Destroy() end
+        end
+    end
+end
+
+function toggleNPCLabels()
+    _G.botesplegacy = not _G.botesplegacy
+    if _G.botesplegacy then
+        _G.updateCoroutine = coroutine.create(function()
+            while _G.botesplegacy do
+                updateNPCLabels()
+                task.wait(_G.waittimeforbotesp)
+            end
+        end)
+        coroutine.resume(_G.updateCoroutine)
+    else
+        removeNPCLabels()
+    end
+end
+
+-- UI entegre
+_G._____ = "?"
+
+BotEsp:toggle({
+    name = "Bot Esp", 
+    def = false, 
+    callback = function(value)
+        if _G._____ == "?" then
+            toggleNPCLabels()
+        end
+    end
+})
 
 BotEsp:slider({
     name = "Bot Esp Renew Value",
-    def = 10,
-    min = 2,
+    def = 1,
+    min = 0.1,
     max = 10,
     rounding = true,
     callback = function(val)
-        waittimeforbotesp = val
+        _G.waittimeforbotesp = val
     end
 })
+
+BotEsp:colorpicker({
+    name = "Cham Fill Color",
+    cpname = "chamfill",
+    def = Color3.fromRGB(255, 255, 255),
+    callback = function(val)
+        _G.customChamColor = val
+    end
+})
+
+BotEsp:colorpicker({
+    name = "Cham Outline Color",
+    cpname = "chamoutline",
+    def = Color3.fromRGB(0, 0, 0),
+    callback = function(val)
+        _G.customOutlineColor = val
+    end
+})
+
+BotEsp:slider({
+    name = "Cham Transparency",
+    def = 0.5,
+    min = 0,
+    max = 1,
+    roundingvalue = 0.1,
+    callback = function(val)
+        _G.customFillTransparency = val
+    end
+})
+
+
 ----
 
 
