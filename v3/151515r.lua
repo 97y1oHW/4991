@@ -1199,7 +1199,7 @@ GunMods:toggle({name = "Rapid Fire", def = false , pointer = "rapidfire", callba
 end})
 
 
-        GunMods:toggle({name = "Instant Aim", def = false, pointer = "instaaim", callback = function(Value)
+        GunMods:toggle({name = "Instant Aim", def = false, pointer = "instaaim", callback = function(state)
             -- Iterate through each weapon in the local player's inventory
         local inventory = game.ReplicatedStorage.Players[localplayernameee].Inventory:GetChildren()
         
@@ -2546,8 +2546,7 @@ end})
 
 
 -- Anti Aim Section --
-
-AAMainSection:toggle({name = "Anti Aim Enabled", def = false, callback = function(Boolean)
+--[[ AMainSection:toggle({name = "Anti Aim Enabled", def = false, callback = function(Boolean)
     PuppySettings.AntiAim.Enabled = Boolean
 end})
 
@@ -2560,7 +2559,7 @@ end})
 AAMainSection:toggle({name = "Legit AA Enabled", def = false, callback = function(Boolean)
     PuppySettings.AntiAim.Legit = Boolean
 end})
-
+]]
 
  plrs = game.Players
 localplayer = plrs.LocalPlayer
@@ -3054,146 +3053,109 @@ end})
 
 --corpse esp
 
-
-Settingsofhiglight = {
+local Settingsofhiglight = {
     HighlightColor = Color3.fromRGB(255, 165, 0),
     HighlightTransparency = 0.5,
     enabledCorpseHighlight = false,
     enableDebug = false,
     requiredHumanoid = true,
-    enabledHighlightToggle = false -- New toggle to enable/disable highlighting
+    enabledHighlightToggle = false
 }
 
 function AddHighlight(model)
-    -- Check if highlight is globally enabled
-    if not Settingsofhiglight.enabledHighlightToggle then
+    if not Settingsofhiglight.enabledHighlightToggle or not Settingsofhiglight.enabledCorpseHighlight then
         if Settingsofhiglight.enableDebug then
-            print("Highlighting is disabled, skipping model: " .. model.Name)
-        end
-        return
-    end
-    
-    if Settingsofhiglight.enableDebug then
-        print("Checking model: " .. model.Name)
-    end
-    
-    if model:FindFirstChild("Highlight") then
-        if Settingsofhiglight.enableDebug then
-            print("Highlight already exists for model: " .. model.Name)
-        end
-        return
-    end
-
-    humanoid = model:FindFirstChildOfClass("Humanoid")
-    if not humanoid then
-        if Settingsofhiglight.enableDebug then
-            print("No humanoid found in model: " .. model.Name)
+            warn("[CorpseESP] Highlight kapalı: " .. model.Name)
         end
         return
     end
 
     if not model.PrimaryPart then
-        if Settingsofhiglight.enableDebug then
-            print("No PrimaryPart found in model: " .. model.Name)
-        end
+        model:WaitForChild("Head", 1)
         model.PrimaryPart = model:FindFirstChild("Head") or model:FindFirstChild("Torso")
         if not model.PrimaryPart then
             if Settingsofhiglight.enableDebug then
-                print("Couldn't find a valid PrimaryPart for model: " .. model.Name)
+                warn("[CorpseESP] PrimaryPart yok: " .. model.Name)
             end
             return
         end
     end
 
-    if Settingsofhiglight.enabledCorpseHighlight then
-        if Settingsofhiglight.enableDebug then
-            print("Adding Highlight to model: " .. model.Name)
-        end
+    local old = model:FindFirstChildOfClass("Highlight")
+    if old then old:Destroy() end
 
-        highlight = Instance.new("Highlight")
-        highlight.Name = "CORPSEEESSSP"
-        highlight.Adornee = model
-        highlight.Parent = model
-        highlight.FillColor = Settingsofhiglight.HighlightColor
-        highlight.FillTransparency = Settingsofhiglight.HighlightTransparency
-        highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
-        highlight.OutlineTransparency = 0.8
-    end
-end
-
-function SearchDroppedItems()
-    droppedItems = game.Workspace:WaitForChild("DroppedItems")
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "CORPSEEESSSP"
+    highlight.Adornee = model.PrimaryPart
+    highlight.FillColor = Settingsofhiglight.HighlightColor
+    highlight.FillTransparency = Settingsofhiglight.HighlightTransparency
+    highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+    highlight.OutlineTransparency = 0.8
+    highlight.Parent = model
 
     if Settingsofhiglight.enableDebug then
-        print("Searching for models in DroppedItems...")
+        print("[CorpseESP] Highlight eklendi: " .. model.Name)
     end
+end
 
+function SetupExistingCorpseHighlights()
+    local droppedItems = game.Workspace:WaitForChild("DroppedItems")
     for _, item in ipairs(droppedItems:GetChildren()) do
-        if Settingsofhiglight.enableDebug then
-            print("Checking item: " .. item.Name)
-        end
-        
         if item:IsA("Model") then
-            if Settingsofhiglight.enableDebug then
-                print("Item is a model: " .. item.Name)
-            end
+            local humanoid = item:FindFirstChildOfClass("Humanoid")
+            local hasHumanoid = humanoid ~= nil
 
-            humanoid = item:FindFirstChildOfClass("Humanoid")
-            hasHumanoid = humanoid ~= nil
-            
-            if Settingsofhiglight.requiredHumanoid then
-                if hasHumanoid then
-                    AddHighlight(item)
-                else
-                    if Settingsofhiglight.enableDebug then
-                        print("Model " .. item.Name .. " has no humanoid, skipping.")
-                    end
-                end
-            else
-                if not hasHumanoid then
-                    AddHighlight(item)
-                else
-                    if Settingsofhiglight.enableDebug then
-                        print("Model " .. item.Name .. " has a humanoid, skipping.")
-                    end
-                end
-            end
-        else
-            if Settingsofhiglight.enableDebug then
-                print("Item is not a model: " .. item.Name)
+            if Settingsofhiglight.requiredHumanoid and hasHumanoid then
+                AddHighlight(item)
+            elseif not Settingsofhiglight.requiredHumanoid and not hasHumanoid then
+                AddHighlight(item)
             end
         end
     end
 end
-function mainnnn()
-while true do
-    if game and game.Workspace and game.Workspace:FindFirstChild("DroppedItems") then
-        if Settingsofhiglight.enableDebug then
-            print("DroppedItems folder found. Searching...")
+
+function SetupCorpseListener()
+    local droppedItems = game.Workspace:WaitForChild("DroppedItems")
+    droppedItems.ChildAdded:Connect(function(child)
+        wait(0.1)
+        if child:IsA("Model") then
+            local humanoid = child:FindFirstChildOfClass("Humanoid")
+            local hasHumanoid = humanoid ~= nil
+
+            if Settingsofhiglight.requiredHumanoid and hasHumanoid then
+                AddHighlight(child)
+            elseif not Settingsofhiglight.requiredHumanoid and not hasHumanoid then
+                AddHighlight(child)
+            end
         end
-        SearchDroppedItems()
+    end)
+end
+
+task.spawn(function()
+    while not game:IsLoaded() do wait() end
+    if game.Workspace:FindFirstChild("DroppedItems") then
+        SetupExistingCorpseHighlights()
+        SetupCorpseListener()
     else
-        if Settingsofhiglight.enableDebug then
-            print("DroppedItems folder not found or Workspace not loaded properly.")
-        end
+        repeat wait(1) until game.Workspace:FindFirstChild("DroppedItems")
+        SetupExistingCorpseHighlights()
+        SetupCorpseListener()
     end
-    wait(2)
-end
-end
+end)
 
-task.spawn(mainnnn)
-
-
-
-CorpseEsp:toggle({name = "Corpse Esp", def = false, callback = function(value)
-Settingsofhiglight.enabledHighlightToggle = value
-Settingsofhiglight.enabledCorpseHighlight = value
-end})
-
+-- UI Bağlantıları
+CorpseEsp:toggle({
+    name = "Corpse Esp",
+    def = false,
+    callback = function(value)
+        Settingsofhiglight.enabledHighlightToggle = value
+        Settingsofhiglight.enabledCorpseHighlight = value
+    end
+})
 
 CorpseEsp:slider({
     name = "Corpse ESP Highlight Transparency",
-    def = 0,
+    def = 0.5,
     min = 0,
     max = 1,
     rounding = true,
@@ -3202,10 +3164,15 @@ CorpseEsp:slider({
     end
 })
 
+CorpseEsp:colorpicker({
+    name = "Corpse Esp Color",
+    cpname = "",
+    def = Settingsofhiglight.HighlightColor,
+    callback = function(color)
+        Settingsofhiglight.HighlightColor = color
+    end
+})
 
-CorpseEsp:colorpicker({name = "Corpse Esp Color", cpname = "", def = Settingsofhiglight.HighlightColor, callback = function(color)
-    Settingsofhiglight.HighlightColor = color
-end})
 
 players = game:GetService("Players")
 player = players.LocalPlayer
