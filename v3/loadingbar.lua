@@ -213,7 +213,7 @@ TweenService:Create(text, TweenTable["xsxRotation"], {TextTransparency = 0}):Pla
 TweenService:Create(n3TextLabel, TweenTable["xsxRotation"], {TextTransparency = 0}):Play()
 wait(0.3)
 TweenService:Create(xsxLogo, TweenTable["xsxRotation"], {ImageTransparency = 0}):Play()
-wait(math.random(1,6))
+wait(math.random(3,9))
 TweenService:Create(xsxLogo, TweenTable["xsxRotation"], {ImageTransparency = 1}):Play()
 wait(0.2)
 TweenService:Create(n3TextLabel, TweenTable["xsxRotation"], {TextTransparency = 1}):Play()
