@@ -71,14 +71,148 @@ Notification.new("warning", "Warning Heading", "Warning body message.") -- Args(
 Notification.new("message", "Message Heading", "Message body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
 ]]
 
+Notification.new("info", "Executor Memory Check", "Performing A Executor Check...",true,3)
+
+function checker()
+
+print("=============================================================")
+
+local function safeCheck(name, func)
+	local success, result = pcall(function()
+		return typeof(func) == "function" and func or nil
+	end)
+	local status = (success and result) and "🟢" or "🔴"
+	print(name .. ": " .. status)
+	return status == "🟢"
+end
+
+-- Advanced Roblox Executor Functions
+-- A comprehensive list of functions for Roblox scripting and executor environments
+local checkList = {
+    -- Core Lua and Environment Manipulation
+    getgc = getgc, -- Retrieves the Lua garbage collector table
+    hookmetamethod = hookmetamethod, -- Hooks a metamethod for an object
+    hookfunction = hookfunction, -- Replaces a function with a custom implementation
+    setrawmetatable = setrawmetatable, -- Sets a raw metatable without invoking __metatable
+    setmetatable = setmetatable, -- Sets a metatable for a table
+    getmetatable = getmetatable, -- Retrieves the metatable of a table or userdata
+    setfenv = setfenv, -- Sets the function environment
+    getfenv = getfenv, -- Gets the function environment
+    loadstring = loadstring, -- Compiles and executes a string as Lua code
+    load = load, -- Loads a chunk of Lua code
+    pcall = pcall, -- Calls a function in protected mode to catch errors
+    xpcall = xpcall, -- Calls a function with an error handler
+    getupvalue = getupvalue, -- Retrieves an upvalue from a function
+    setupvalue = setupvalue, -- Sets an upvalue for a function
+    getregistry = getregistry, -- Accesses the Lua registry
+
+    -- Debugging and Inspection
+    debug = debug.getconstant or debug.getconstants or debug.getinfo or debug.getlocal or debug.getmetatable or debug.getupvalue or debug.setconstant or debug.setconstants or debug.setlocal or debug.setmetatable or debug.setupvalue or debug.traceback,
+
+    getinfo = debug.getinfo, -- Retrieves information about a function
+    traceback = debug.traceback, -- Returns a stack traceback
+    rawequal = rawequal, -- Compares two values without invoking __eq
+    rawget = rawget, -- Retrieves a table value without invoking __index
+    rawset = rawset, -- Sets a table value without invoking __newindex
+    issecure = issecure, -- Checks if a function is running in a secure context
+    setreadonly = setreadonly, -- Sets a table as read-only or writable
+
+    -- Roblox-Specific Utilities
+    getconnections = getconnections, -- Retrieves signal connections for an event
+    firesignal = firesignal, -- Manually triggers a Roblox signal
+    setsimulationradius = setsimulationradius, -- Sets the simulation radius for physics
+    getinstances = getinstances, -- Retrieves all instances in the game
+    getnilinstances = getnilinstances, -- Retrieves instances parented to nil
+    getplayers = getplayers, -- Retrieves all players in the game
+    getplayer = getplayer, -- Retrieves a specific player by name or ID
+    getasset = getasset, -- Loads an asset by its ID
+
+    -- File and Clipboard Operations
+    setclipboard = setclipboard, -- Sets the system clipboard content
+    getclipboard = getclipboard, -- Retrieves the system clipboard content
+    isfile = isfile, -- Checks if a file exists
+    readfile = readfile, -- Reads content from a file
+    writefile = writefile, -- Writes content to a file
+    appendfile = appendfile, -- Appends content to a file
+    isfolder = isfolder, -- Checks if a folder exists
+    makefolder = makefolder, -- Creates a new folder
+    delfolder = delfolder, -- Deletes a folder
+    delfile = delfile, -- Deletes a file
+
+    -- GUI and Instance Manipulation
+    make_gui_visible = function(gui) -- Makes a GUI element visible
+        gui.Visible = true
+    end,
+    make_gui_invisible = function(gui) -- Hides a GUI element
+        gui.Visible = false
+    end,
+    create = create, -- Creates a new instance (e.g., GUI or part)
+    clone = clone, -- Clones an instance
+    newproxy = newproxy, -- Creates a new proxy object
+
+    -- Anti-Cheat and Security
+    secure_hook = function(func) -- Creates a secure hook for a function
+        return hookfunction(func, function(...)
+            -- Add security checks or logging here
+            return func(...)
+        end)
+    end,
+    bypass_anticheat = function() -- Placeholder for anti-cheat bypass logic
+        -- Implement custom anti-cheat bypass (e.g., spoofing detections)
+        warn("Anti-cheat bypass not fully implemented")
+    end,
+
+    -- Advanced Utilities
+    getcallingscript = getcallingscript, -- Retrieves the script that called the current function
+    getthreadidentity = getthreadidentity, -- Gets the identity level of the current thread
+    setthreadidentity = setthreadidentity, -- Sets the identity level of the current thread
+    crypt = crypt.base64.decode or  crypt.base64.encode or crypt.decrypt, -- Encrypts or decrypts data (if supported by executor)
+    httpget = httpget, -- Performs an HTTP GET request
+    httppost = httppost, -- Performs an HTTP POST request
+    getobjects = getobjects, -- Loads objects from Roblox assets
+    syn_io_read = syn_io_read, -- Synapse-specific file reading (if supported)
+    syn_io_write = syn_io_write, -- Synapse-specific file writing (if supported)
+    newcclosure = newclosure,
+    getrawmetatable = getrawmetatable, -- Retrieves raw metatable without restrictions
+}
+
+local total = 0
+local passed = 0
+
+for name, func in pairs(checkList) do
+	total += 1
+	if safeCheck(name, func) then
+		passed += 1
+	end
+end
+
+local rate = math.floor((passed / total) * 100)
+print("\nExecutor Check Result: " .. rate .. "% passed ✅")
+
+if rate == 100 then
+	print("Status: Passed")
+    Notification.new("Success", "Pass", "Executor meets the standart for Nexify V3",true,5)
+    wait(3)
+elseif rate >= 50 then
+Notification.new("warning","Failed", "Does not meet the standarts for Nexify v3",true,5)
+	return print("Status: Partially Functional ⚠️ \n Script will not run")
+else
+Notification.new("error","Failed", "Check Failed",true,3)
+	return print("Executor Is Very Bad")
+end
+
+end
+
+checker()
+
 local Notify = NotifyLibrary.Notify
 --// Service Handler \\--
-Notification.new("info", "Loading", "Loading Nexify V3 For: " ..identifyexecutor())
+Notification.new("info", "Loading", "Loading Nexify V3 For: " ..identifyexecutor(),true,5)
 
  plr = game:GetService("Players").LocalPlayer
 
 if not plr.Character or not plr.Character:FindFirstChild("HumanoidRootPart") then
-Notification.new("warning", "Waiting For You To Spawn...")
+Notification.new("warning", "Waiting For You To Spawn...",true,3)
                 
     plr.CharacterAdded:Wait()
 end
@@ -90,7 +224,7 @@ local GetService = setmetatable({}, {
 })
 function anticheatbypass()
 print("Anti cheat bypassed")
-Notification.new("success", "Anti Cheat", "Bypassed Anti Cheat.")
+Notification.new("success", "Anti Cheat", "Bypassed Anti Cheat.",true,5)
                 --[[
 local old
 game:GetService("RunService"):Connected(function()
@@ -568,7 +702,7 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
    end;
 end;
 
-Notification.new("Info", "ESP LIBRARY", "Loaded Esp Library.")
+Notification.new("Info", "ESP LIBRARY", "Loaded Esp Library.",true,5)
 
 --- ESP END
 
@@ -3110,15 +3244,24 @@ GameLogsTab:toggle({
 	end
 })
 
+local waittimeforlogs = 3
+
+GameLogsTab:slider({name = "Log Timeout Time", def = 2, max = 5, min = 1, rounding = true, callback = function(State)
+
+
+waittimeforlogs = State
+
+end})
+
 Players.PlayerAdded:Connect(function(player)
 	if JoinLogEnabled then
-		Notification.new("info", "Player Has Joined The Game: ", player.Name .. "")
+		Notification.new("info", "Player Has Joined The Game: ", player.Name .. "",true,waittimeforlogs)
 	end
 end)
 
 Players.PlayerRemoving:Connect(function(player)
 	if LeaveLogEnabled then
-		Notification.new("info", "Player Has Left: ", player.Name .. "")
+		Notification.new("info", "Player Has Left: ", player.Name .. "",true,waittimeforlogs)
 	end
 end)
 
@@ -4258,7 +4401,7 @@ if not game.Players.LocalPlayer.Character then
     end;
 
     if not closestCar then
-        return Notification.new("error", "ERROR", " No Cars Nearby.")
+        return Notification.new("error", "ERROR", " No Cars Nearby.",true,2)
     end;
 
     -- Attempt to teleport the character to the car
@@ -4939,12 +5082,12 @@ end)
 
 
 
-Notification.new("success", "Loaded", "Loaded Nexify V3 For " ..identifyexecutor())
+Notification.new("success", "Loaded", "Loaded Nexify V3 For " ..identifyexecutor(),true,5)
 
                 task.wait(3)
        --         coroutine.wrap(changeRemoteNames)
  
- Notification.new("warning", "[ FUNCTIONS ]", "Created Nexify Functions In Workspace. Do Not Attempt To Remove Them!" )
+ Notification.new("warning", "[ FUNCTIONS ]", "Created Nexify Functions In Workspace. Do Not Attempt To Remove Them!",true,5 )
                 task.wait(3.5)
                  statusFolder = game.ReplicatedStorage:WaitForChild("ServerStatus")
 local versionAttr = statusFolder:GetAttribute("Version")
@@ -4988,16 +5131,16 @@ wm:updateside("topright")
 wm:toggle(true)
 wait(1)
 ]]
-Notification.new("success", "[NEXIFY]", "Injected Nexify.")
+Notification.new("success", "[NEXIFY]", "Injected Nexify.",true,5)
                 createfakesys()
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 wait(1)
-Notification.new("info", "Watermark", "Attempt To Start Watermark Core!")
+Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,2)
 wait(0.3)
-Notification.new("error", "Watermark", "Failed To Start Watermark Core.")
+Notification.new("error", "Watermark", "Failed To Start Watermark Core.",true,5)
 
 
-Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor())
+Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor(),true,3)
 
 
         
