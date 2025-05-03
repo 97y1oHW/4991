@@ -36,6 +36,14 @@ xxx=[[
 ██████████████████████████████████████████████████   ████
 ]]
 
+--[[
+Notification.new("error", "Error Heading", "Error body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("success", "Success Heading", "Success body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("info", "Information Heading", "Information body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("warning", "Warning Heading", "Warning body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("message", "Message Heading", "Message body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+]]
+
 
 print(xxx)
 
@@ -54,22 +62,23 @@ wait(3)
 --// Main Libarys \\--
 local libary = loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/main/v3/library.lua"))()
 local NotifyLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/main/v3/notifylibrary.lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/v3/notifyv2.lua", true))()
+--[[
+Notification.new("error", "Error Heading", "Error body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("success", "Success Heading", "Success body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("info", "Information Heading", "Information body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("warning", "Warning Heading", "Warning body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("message", "Message Heading", "Message body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+]]
+
 local Notify = NotifyLibrary.Notify
 --// Service Handler \\--
-                Notify({
-                    Title = "Loading",
-                    Description = "Loading Nexify V3 For "..identifyexecutor(),
-                    Duration = 3
-                })
+Notification.new("info", "Loading", "Loading Nexify V3 For: " ..identifyexecutor())
 
  plr = game:GetService("Players").LocalPlayer
 
 if not plr.Character or not plr.Character:FindFirstChild("HumanoidRootPart") then
-                Notify({
-                    Title = "Waiting For You",
-                    Description = "Waiting for you to spawn",
-                    Duration = 5
-                })
+Notification.new("warning", "Waiting For You To Spawn...")
                 
     plr.CharacterAdded:Wait()
 end
@@ -81,11 +90,7 @@ local GetService = setmetatable({}, {
 })
 function anticheatbypass()
 print("Anti cheat bypassed")
-                                                Notify({
-                    Title = "[ NEXIFY ]",
-                    Description = "Bypassed Anti Cheat",
-                    Duration = 3,
-                })
+Notification.new("success", "Anti Cheat", "Bypassed Anti Cheat.")
                 --[[
 local old
 game:GetService("RunService"):Connected(function()
@@ -563,11 +568,7 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
    end;
 end;
 
-                Notify({
-                    Title = "[ ESP ]",
-                    Description = "Loaded Esp Library ",
-                    Duration = 5
-                })
+Notification.new("Info", "ESP LIBRARY", "Loaded Esp Library.")
 
 --- ESP END
 
@@ -894,6 +895,7 @@ local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right
 local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size = 150})
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
+local GameLogsTab = MiscTab:section({name = "Game Logs",side = "right", size = 80})
 local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
 local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 230})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
@@ -1202,16 +1204,7 @@ GunMods:toggle({name = "Rapid Fire", def = false , pointer = "rapidfire", callba
         end
 end})
 
-GunMods:slider({
-	name = "Rapid Fire Delay",
-	def = 0.001,
-	max = 0.005,
-	min = 0.000001,
-	roundingvalue = 0.000001,
-	callback = function(State)
-		newFireRate = State
-	end
-})
+
 
 
 
@@ -1258,6 +1251,52 @@ GunMods:toggle({name = "Instant Equip", def = false, callback = function(Value)
         end)
 end
 })
+
+local instanthit = false
+
+-- Toggle ekle
+GunMods:toggle({
+    name = "Instant Hit",
+    def = false,
+    pointer = "instanthit",
+    callback = function(state)
+        instanthit = state
+    end
+})
+
+-- Hook sistemi
+local function hookHandler(self, method, ...)
+    local args = {...}
+
+    if method == "FireServer" and instanthit then
+        if self.Name == "ProjectileInflict" then
+            if type(args[3]) == "number" and args[3] >= 0 and args[3] <= 10 then
+                return coroutine.yield()
+            end
+            args[4] = 0/0
+            return createNCHook(self, unpack(args))
+        end
+    end
+
+    if method == "Raycast" and instanthit then
+        local trace = debug.traceback()
+        if trace and trace:find("onStep", 1, true) then
+            if aimbot and aimbot.target and aimbot.target.TargetBone then
+                local diff = (aimbot.target.TargetBone.Position - args[1]).Magnitude
+                local multiplier = diff * 1.5
+                args[2] = args[2] * multiplier
+                return createNCHook(self, unpack(args))
+            else 
+                args[2] = args[2] * 50
+                return createNCHook(self, unpack(args))
+            end
+        end
+    end
+
+    return createNCHook(self, ...)
+end
+
+
         GunMods:toggle({name = "Instant Reload", def = false, callback = function(Value)
 
 
@@ -1454,6 +1493,16 @@ GunMods:slider({name = "Recoil Slider", def = 230, max = 583, min = 0, rounding 
 
 
 end})
+GunMods:slider({
+	name = "Rapid Fire Delay",
+	def = 0.001,
+	max = 0.005,
+	min = 0.000001,
+	roundingvalue = 0.000001,
+	callback = function(State)
+		newFireRate = State
+	end
+})
 local FOVConfig = {
     Size = 276,
     Color = Color3.new(1, 1, 1),
@@ -3040,6 +3089,40 @@ AASettings:keybind({name = "Legit AA Keybind", def = Enum.KeyCode.Z, callback = 
  PuppySettings.AntiAim.LegitAAKey = Key
 end})
 
+local Players = game:GetService("Players")
+
+local JoinLogEnabled = false
+local LeaveLogEnabled = false
+
+GameLogsTab:toggle({
+	name = "Player Joined Log",
+	def = false,
+	callback = function(Value)
+		JoinLogEnabled = Value
+	end
+})
+
+GameLogsTab:toggle({
+	name = "Player Leaved Log",
+	def = false,
+	callback = function(Value)
+		LeaveLogEnabled = Value
+	end
+})
+
+Players.PlayerAdded:Connect(function(player)
+	if JoinLogEnabled then
+		Notification.new("info", "Player Has Joined The Game: ", player.Name .. "")
+	end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+	if LeaveLogEnabled then
+		Notification.new("info", "Player Has Left: ", player.Name .. "")
+	end
+end)
+
+
 AASettings:keybind({name = "Auto Peak Keybind", def = Enum.KeyCode.N, callback = function(Key)
  PuppySettings.AutoPeak.APKey = Key
 end})
@@ -3436,6 +3519,7 @@ end})
 
 
 --corpse esp
+-- corpse esp v2 - kral edition
 
 local Settingsofhiglight = {
     HighlightColor = Color3.fromRGB(255, 165, 0),
@@ -3446,6 +3530,13 @@ local Settingsofhiglight = {
     enabledHighlightToggle = false
 }
 
+-- MODELİN GERÇEKTEN "CESET" OLDUĞUNU ANLAMAK İÇİN
+local function IsValidCorpse(model)
+    return model:IsA("Model")
+        and model:FindFirstChildOfClass("Humanoid")
+        and model:FindFirstChild("Head")
+end
+
 function AddHighlight(model)
     if not Settingsofhiglight.enabledHighlightToggle or not Settingsofhiglight.enabledCorpseHighlight then
         if Settingsofhiglight.enableDebug then
@@ -3454,23 +3545,22 @@ function AddHighlight(model)
         return
     end
 
-    if not model.PrimaryPart then
-        model:WaitForChild("Head", 1)
-        model.PrimaryPart = model:FindFirstChild("Head") or model:FindFirstChild("Torso")
-        if not model.PrimaryPart then
-            if Settingsofhiglight.enableDebug then
-                warn("[CorpseESP] PrimaryPart yok: " .. model.Name)
-            end
-            return
+    if not IsValidCorpse(model) then
+        if Settingsofhiglight.enableDebug then
+            warn("[CorpseESP] Geçerli ceset değil: " .. model.Name)
         end
+        return
     end
+
+    model.PrimaryPart = model.PrimaryPart or model:FindFirstChild("Head") or model:FindFirstChild("Torso")
+    if not model.PrimaryPart then return end
 
     local old = model:FindFirstChildOfClass("Highlight")
     if old then old:Destroy() end
 
     local highlight = Instance.new("Highlight")
     highlight.Name = "CORPSEEESSSP"
-    highlight.Adornee = model.PrimaryPart
+    highlight.Adornee = model
     highlight.FillColor = Settingsofhiglight.HighlightColor
     highlight.FillTransparency = Settingsofhiglight.HighlightTransparency
     highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
@@ -3485,15 +3575,8 @@ end
 function SetupExistingCorpseHighlights()
     local droppedItems = game.Workspace:WaitForChild("DroppedItems")
     for _, item in ipairs(droppedItems:GetChildren()) do
-        if item:IsA("Model") then
-            local humanoid = item:FindFirstChildOfClass("Humanoid")
-            local hasHumanoid = humanoid ~= nil
-
-            if Settingsofhiglight.requiredHumanoid and hasHumanoid then
-                AddHighlight(item)
-            elseif not Settingsofhiglight.requiredHumanoid and not hasHumanoid then
-                AddHighlight(item)
-            end
+        if IsValidCorpse(item) then
+            AddHighlight(item)
         end
     end
 end
@@ -3502,29 +3585,17 @@ function SetupCorpseListener()
     local droppedItems = game.Workspace:WaitForChild("DroppedItems")
     droppedItems.ChildAdded:Connect(function(child)
         wait(0.1)
-        if child:IsA("Model") then
-            local humanoid = child:FindFirstChildOfClass("Humanoid")
-            local hasHumanoid = humanoid ~= nil
-
-            if Settingsofhiglight.requiredHumanoid and hasHumanoid then
-                AddHighlight(child)
-            elseif not Settingsofhiglight.requiredHumanoid and not hasHumanoid then
-                AddHighlight(child)
-            end
+        if IsValidCorpse(child) then
+            AddHighlight(child)
         end
     end)
 end
 
 task.spawn(function()
     while not game:IsLoaded() do wait() end
-    if game.Workspace:FindFirstChild("DroppedItems") then
-        SetupExistingCorpseHighlights()
-        SetupCorpseListener()
-    else
-        repeat wait(1) until game.Workspace:FindFirstChild("DroppedItems")
-        SetupExistingCorpseHighlights()
-        SetupCorpseListener()
-    end
+    repeat wait(1) until game.Workspace:FindFirstChild("DroppedItems")
+    SetupExistingCorpseHighlights()
+    SetupCorpseListener()
 end)
 
 -- UI Bağlantıları
@@ -3534,6 +3605,7 @@ CorpseEsp:toggle({
     callback = function(value)
         Settingsofhiglight.enabledHighlightToggle = value
         Settingsofhiglight.enabledCorpseHighlight = value
+        SetupExistingCorpseHighlights()
     end
 })
 
@@ -3542,9 +3614,10 @@ CorpseEsp:slider({
     def = 0.5,
     min = 0,
     max = 1,
-    rounding = true,
+    roundingvalue = 0.1,
     callback = function(val)
         Settingsofhiglight.HighlightTransparency = val
+        SetupExistingCorpseHighlights()
     end
 })
 
@@ -3554,8 +3627,10 @@ CorpseEsp:colorpicker({
     def = Settingsofhiglight.HighlightColor,
     callback = function(color)
         Settingsofhiglight.HighlightColor = color
+        SetupExistingCorpseHighlights()
     end
 })
+
 
 
 
@@ -4183,11 +4258,7 @@ if not game.Players.LocalPlayer.Character then
     end;
 
     if not closestCar then
-        return game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "Error",
-            Text = "No cars nearby",
-            Duration = 3
-        })
+        return Notification.new("error", "ERROR", " No Cars Nearby.")
     end;
 
     -- Attempt to teleport the character to the car
@@ -4868,19 +4939,12 @@ end)
 
 
 
-                Notify({
-                    Title = "Loaded",
-                    Description = "Loaded Nexify V3 For "..identifyexecutor(),
-                    Duration = 3
-                })
+Notification.new("success", "Loaded", "Loaded Nexify V3 For " ..identifyexecutor())
 
                 task.wait(3)
        --         coroutine.wrap(changeRemoteNames)
-                                Notify({
-                    Title = "[ NEXIFY FUNCTIONS ]",
-                    Description = "Created Nexify Functions In Workspace. \n Do Not Attempt To Remove Them!",
-                    Duration = math.random(7,13)
-                })
+ 
+ Notification.new("warning", "[ FUNCTIONS ]", "Created Nexify Functions In Workspace. Do Not Attempt To Remove Them!" )
                 task.wait(3.5)
                  statusFolder = game.ReplicatedStorage:WaitForChild("ServerStatus")
 local versionAttr = statusFolder:GetAttribute("Version")
@@ -4924,26 +4988,16 @@ wm:updateside("topright")
 wm:toggle(true)
 wait(1)
 ]]
-                                Notify({
-                    Title = "[ NEXIFY ]",
-                    Description = "Injected Nexify",
-                    Duration = math.random(10,15)
-                })
+Notification.new("success", "[NEXIFY]", "Injected Nexify.")
                 createfakesys()
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 wait(1)
-                                Notify({
-                    Title = "[ NEXIFY ]",
-                    Description = "Attempt To Start Watermark Core",
-                    Duration = math.random(1)
-                })
+Notification.new("info", "Watermark", "Attempt To Start Watermark Core!")
+wait(0.3)
+Notification.new("error", "Watermark", "Failed To Start Watermark Core.")
 
 
-                                            Notify({
-                    Title = "[ NEXIFY ]",
-                    Description = identifyexecutor(),
-                    Duration = math.random(2)
-                })
+Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor())
 
 
         
