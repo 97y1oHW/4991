@@ -11,7 +11,9 @@
 ██████████████████████████████████████████████████   ████
 
 NEXIFY V3.2
-30.04.2025
+3.05.2025
+
+24 december 💗
 
 ADVANCADED VERSION TS:::
 
@@ -36,6 +38,10 @@ xxx=[[
 
 
 print(xxx)
+
+
+
+
 --if getgenv().nexifye == true then return end 
 getgenv().nexifye = true
 getgenv().SilentKeyy = 'q'
@@ -56,6 +62,17 @@ local Notify = NotifyLibrary.Notify
                     Duration = 3
                 })
 
+ plr = game:GetService("Players").LocalPlayer
+
+if not plr.Character or not plr.Character:FindFirstChild("HumanoidRootPart") then
+                Notify({
+                    Title = "Waiting For You",
+                    Description = "Waiting for you to spawn",
+                    Duration = 5
+                })
+                
+    plr.CharacterAdded:Wait()
+end
 
 local GetService = setmetatable({}, {
     __index = function(self, key)
@@ -853,7 +870,8 @@ local RageTab = Window:page({name = "Rage"})
 local VisualTab = Window:page({name = "Visauls"})
 local MiscTab = Window:page({name = "Misc"})
 local UISettings = Window:page({name = "UI"})
-local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 280})
+local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 190})
+local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",size = 215})
 local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
 local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 90})
@@ -1420,19 +1438,25 @@ GunMods:slider({name = "Recoil Slider", def = 230, max = 583, min = 0, rounding 
 
 
 end})
-
 local FOVConfig = {
-    Size = 176,
+    Size = 276,
     Color = Color3.new(1, 1, 1),
     Thickness = 1,
-    Visible = false
+    Visible = false,
+    InternalFOV = false,
+    InternalColor = Color3.fromRGB(255, 255, 255),
+    RotationSpeed = 1,
+    ShowNameTag = false
 }
 
 local plr = game:GetService("Players").LocalPlayer
+local cam = workspace.CurrentCamera
+local mouse = plr:GetMouse()
 local gui = plr:FindFirstChildOfClass("PlayerGui"):FindFirstChild("ScreenGui") or Instance.new("ScreenGui", plr:FindFirstChildOfClass("PlayerGui"))
 
 local fovCircle = Instance.new("Frame")
 fovCircle.Name = "FOVCircle"
+gui.DisplayOrder = 99999
 fovCircle.Size = UDim2.new(0, FOVConfig.Size, 0, FOVConfig.Size)
 fovCircle.Position = UDim2.new(0.5, -FOVConfig.Size/2, 0.5, -FOVConfig.Size/2)
 fovCircle.BackgroundTransparency = 1
@@ -1449,27 +1473,141 @@ stroke.Thickness = FOVConfig.Thickness
 stroke.Color = FOVConfig.Color
 stroke.Parent = fovCircle
 
+local filler = Instance.new("Frame")
+filler.Name = "InternalFOV"
+filler.Size = UDim2.new(1, 0, 1, 0)
+filler.BackgroundColor3 = FOVConfig.InternalColor
+filler.BackgroundTransparency = 0.8
+filler.BorderSizePixel = 0
+filler.Visible = false
+filler.ClipsDescendants = true
+filler.ZIndex = -1
+filler.Parent = fovCircle
 
-SAimSection:toggle({name = "Show FOV", def = false, callback = function(Boolean)
-    FOVConfig.Visible = Boolean
-    fovCircle.Visible = Boolean
+local fillerCorner = Instance.new("UICorner")
+fillerCorner.CornerRadius = UDim.new(1, 0)
+fillerCorner.Parent = filler
+
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 128, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+}
+gradient.Rotation = 0
+gradient.Parent = filler
+
+local nearestLabel = Instance.new("TextLabel")
+nearestLabel.Size = UDim2.new(0, 200, 0, 60)
+nearestLabel.Position = UDim2.new(0.5, -100, 0.5, FOVConfig.Size/2 + 5)
+nearestLabel.BackgroundTransparency = 1
+nearestLabel.TextStrokeTransparency = 0
+nearestLabel.Font = Enum.Font.SourceSansBold
+nearestLabel.TextSize = 16
+nearestLabel.TextYAlignment = Enum.TextYAlignment.Top
+nearestLabel.Visible = false
+nearestLabel.RichText = true
+nearestLabel.Text = ""
+nearestLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+nearestLabel.Parent = gui
+
+local lockedPlayer = nil
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if filler.Visible then
+        gradient.Rotation = (gradient.Rotation + (FOVConfig.RotationSpeed or 1)) % 360
+    end
+
+    local closestDist = math.huge
+    local closestPlayer = nil
+
+    for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v ~= plr and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") then
+            local pos, onScreen = cam:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+            if onScreen then
+                local dist = (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).Magnitude
+                if dist < FOVConfig.Size/2 and dist < closestDist then
+                    closestDist = dist
+                    closestPlayer = v
+                end
+            end
+        end
+    end
+
+    lockedPlayer = closestPlayer
+
+    if FOVConfig.ShowNameTag and lockedPlayer then
+        local char = lockedPlayer.Character
+        local hp = math.floor(char.Humanoid.Health)
+        local maxhp = math.floor(char.Humanoid.MaxHealth)
+        local hpColor = "rgb(255,255,255)"
+
+        if hp >= 80 then
+            hpColor = "rgb(0,255,0)"
+        elseif hp >= 50 then
+            hpColor = "rgb(255,255,0)"
+        elseif hp >= 30 then
+            hpColor = "rgb(255,165,0)"
+        else
+            hpColor = "rgb(255,0,0)"
+        end
+
+        local isMod = char:FindFirstChild("Head") and char.Head.Transparency >= 1
+        local modColor = isMod and "rgb(255,0,0)" or "rgb(0,255,0)"
+        local modText = isMod and "true" or "false"
+
+        nearestLabel.Text = "Locked To: " .. lockedPlayer.Name ..
+            "\nHealth: " .. maxhp .. "/<font color=\""..hpColor.."\">" .. hp .. "</font>" ..
+            "\nModerator: <font color=\""..modColor.."\">" .. modText .. "</font>"
+
+        nearestLabel.Visible = FOVConfig.Visible
+    else
+        nearestLabel.Text = ""
+        nearestLabel.Visible = false
+        lockedPlayer = nil
+    end
+end)
+
+fovsettingsss:toggle({name = "Show FOV", def = false, callback = function(bool)
+    FOVConfig.Visible = bool
+    fovCircle.Visible = bool
 end})
 
-SAimSection:slider({name = "FOV Size", def = 276, max = 276, min = 270, rounding = true, callback = function(Value)
-    FOVConfig.Size = Value
-    fovCircle.Size = UDim2.new(0, Value, 0, Value)
-    fovCircle.Position = UDim2.new(0.5, -Value/2, 0.5, -Value/2)
+fovsettingsss:slider({name = "FOV Size", def = 276, max = 276, min = 270, rounding = true, callback = function(val)
+    FOVConfig.Size = val
+    fovCircle.Size = UDim2.new(0, val, 0, val)
+    fovCircle.Position = UDim2.new(0.5, -val/2, 0.5, -val/2)
+    nearestLabel.Position = UDim2.new(0.5, -100, 0.5, val/2 + 5)
 end})
 
-SAimSection:slider({name = "FOV Thickness Size", def = 2, max = 3, min = 1, rounding = true, callback = function(Value)
-    FOVConfig.Thickness = Value
-    stroke.Thickness = Value
+fovsettingsss:slider({name = "FOV Thickness", def = 1, max = 3, min = 1, rounding = true, callback = function(val)
+    FOVConfig.Thickness = val
+    stroke.Thickness = val
+end})
+
+fovsettingsss:colorpicker({name = "FOV Color", def = Color3.new(1, 1, 1), callback = function(col)
+    FOVConfig.Color = col
+    stroke.Color = col
+end})
+
+fovsettingsss:toggle({name = "Internal FOV", def = false, callback = function(bool)
+    FOVConfig.InternalFOV = bool
+    filler.Visible = bool
+end})
+
+fovsettingsss:colorpicker({name = "Inner FOV Color", def = Color3.fromRGB(255, 255, 255), callback = function(col)
+    FOVConfig.InternalColor = col
+    filler.BackgroundColor3 = col
+end})
+
+fovsettingsss:slider({name = "Rotation Speed", def = 1, max = 10, min = 0, rounding = true, callback = function(val)
+    FOVConfig.RotationSpeed = val
+end})
+
+fovsettingsss:toggle({name = "Show Player Info", def = false, callback = function(bool)
+    FOVConfig.ShowNameTag = bool
 end})
 
 
-SAimSection:colorpicker({name = "FOV Color", cpname = "", def = Color3.new(255, 255, 255), callback = function(color)
-    FOVConfig.Color = color
-end})
 
 SAimSection:toggle({name = "Wall Check", def = false, callback = function(Boolean)
     PuppySettings.SilentAim.WallCheck = Boolean
@@ -3167,7 +3305,7 @@ local zoomKey = Enum.KeyCode.Z
 local isZoomedIn = false
 local normalFOV = Camera.FieldOfView
 local zoomedFOV = 10
-local zoomTweenSpeed = 1.2
+local zoomTweenSpeed = 0.4
 
 local zoomTweenInfo = TweenInfo.new(zoomTweenSpeed, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
@@ -3227,7 +3365,7 @@ local HitmarkerSounds = {
 }
 
 MiscCamSettings:dropdown({name = "Camera Mode", def = "Custom", max = 7, options = {"Attach","Custom","Fixed","Follow","Orbital","Scriptable","Track","Watch"}, callback = function(part)
-    silent_aim.part = part
+     game.workspace.Camera.CameraType = part
 end})
 
 HitSoundsTab:dropdown({name = "Custom Hit Sounds Sound", def = "Gamesense", max = 9, options = { 'TF2', 'Gamesense', 'Rust', 'Neverlose', 'Bubble', 'Quake', 'Among-Us', 'Ding', 'Minecraft', 'Blackout', 'Osu!' }, callback = function(state)
@@ -3244,11 +3382,11 @@ HitSoundsTab:dropdown({name = "Custom Hit Sounds Sound", def = "Gamesense", max 
             SFXDIRECTORY.Hits.HitMarkers.Bodyshot.SoundId = globalhitsounds
             SFXDIRECTORY.Hits.HitMarkers.Headshot.SoundId = globalhitsounds
 				
-	    SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.Volume = 10
-            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.Volume = 10
-            SFXDIRECTORY.Hits.HitMarkers.Helmet.Volume = 10
-            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.Volume = 10
-            SFXDIRECTORY.Hits.HitMarkers.Headshot.Volume = 10
+	    SFXDIRECTORY.Hits.MeleeHits.Blood.Hit.Volume = math.huge
+            SFXDIRECTORY.Hits.ProjectileHits.Blood.Hit.Volume = math.huge
+            SFXDIRECTORY.Hits.HitMarkers.Helmet.Volume = math.huge
+            SFXDIRECTORY.Hits.HitMarkers.Bodyshot.Volume = math.huge
+            SFXDIRECTORY.Hits.HitMarkers.Headshot.Volume = math.huge
         else
             warn("Selected hit sound is not available!")
         end;
