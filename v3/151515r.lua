@@ -892,7 +892,7 @@ local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",si
 local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
 local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 141})
-local WaterTab = AimingTab:section({name = "Water", side = "right",size = 60})
+local WaterTab = MiscTab:section({name = "Water", side = "left",size = 60})
 local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200})
 local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
 local DesyncTab = RageTab:section({name = "Desync", side = "left", size = 300})
@@ -901,12 +901,13 @@ local AASettings = RageTab:section({name = "Settings", side = "right", size = 22
 local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", size = 200})
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
 local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
-local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 200})
-local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 210})
+local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 180})
+local nograsstab = VisualTab:section({name = "Grass", side = "right",size = 75})
+local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 181})
 local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 60})
 local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 160})
 local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
-local Brightt = MiscTab:section({name = "Bright",side = "left", size = 70})
+local Brightt = MiscTab:section({name = "Bright",side = "left", size = 40})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
 local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right", size = 88})
 local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size = 120})
@@ -1655,17 +1656,6 @@ fovsettingsss:toggle({name = "Show FOV", def = false, callback = function(bool)
     fovCircle.Visible = bool
 end})
 
-fovsettingsss:slider({name = "FOV Size", def = 276, max = 276, min = 270, rounding = true, callback = function(val)
-    FOVConfig.Size = val
-    fovCircle.Size = UDim2.new(0, val, 0, val)
-    fovCircle.Position = UDim2.new(0.5, -val/2, 0.5, -val/2)
-    nearestLabel.Position = UDim2.new(0.5, -100, 0.5, val/2 + 5)
-end})
-
-fovsettingsss:slider({name = "FOV Thickness", def = 1, max = 3, min = 1, rounding = true, callback = function(val)
-    FOVConfig.Thickness = val
-    stroke.Thickness = val
-end})
 
 
 
@@ -1679,14 +1669,27 @@ fovsettingsss:colorpicker({name = "Inner FOV Color", def = Color3.fromRGB(255, 2
     filler.BackgroundColor3 = col
 end})
 
-fovsettingsss:slider({name = "Rotation Speed", def = 1, max = 10, min = 0, rounding = true, callback = function(val)
-    FOVConfig.RotationSpeed = val
-end})
+
 
 fovsettingsss:toggle({name = "Show Player Info", def = false, callback = function(bool)
     FOVConfig.ShowNameTag = bool
 end})
 
+fovsettingsss:slider({name = "FOV Size", def = 276, max = 276, min = 270, rounding = true, callback = function(val)
+    FOVConfig.Size = val
+    fovCircle.Size = UDim2.new(0, val, 0, val)
+    fovCircle.Position = UDim2.new(0.5, -val/2, 0.5, -val/2)
+    nearestLabel.Position = UDim2.new(0.5, -100, 0.5, val/2 + 5)
+end})
+
+fovsettingsss:slider({name = "FOV Thickness", def = 1, max = 3, min = 1, rounding = true, callback = function(val)
+    FOVConfig.Thickness = val
+    stroke.Thickness = val
+end})
+
+fovsettingsss:slider({name = "Rotation Speed", def = 1, max = 10, min = 0, rounding = true, callback = function(val)
+    FOVConfig.RotationSpeed = val
+end})
 
 
 SAimSection:toggle({name = "Wall Check", def = false, callback = function(Boolean)
@@ -2217,36 +2220,42 @@ invisanim.AnimationId = "rbxassetid://15609995579"
 local invisnum = 2.35
 local invistrack
 
-
 DesyncTab:toggle({
     name = "Desync",
     def = false,
     callback = function(v)
         allvars.desyncbool = v
 
-        desyncvis = Instance.new("Part", workspace)
-        desyncvis.Name = "DesyncVisual"
-        desyncvis.Anchored = true
-        desyncvis.CanQuery = false
-        desyncvis.CanCollide = false
-        desyncvis.Size = Vector3.new(4, 5, 1)
-        desyncvis.Color = Color3.fromRGB(255, 255, 255)
-        desyncvis.Material = Enum.Material.Neon
-        desyncvis.Transparency = 1
-        desyncvis.TopSurface = Enum.SurfaceType.Smooth 
+        if v then
+            desyncvis = Instance.new("Part", workspace)
+            desyncvis.Name = "DesyncVisual"
+            desyncvis.Anchored = true
+            desyncvis.CanQuery = false
+            desyncvis.CanCollide = false
+            desyncvis.Size = Vector3.new(4, 5, 1)
+            desyncvis.Color = Color3.fromRGB(255, 255, 255)
+            desyncvis.Material = Enum.Material.Neon
+            desyncvis.Transparency = 1
+            desyncvis.TopSurface = Enum.SurfaceType.Smooth 
 
-        while allvars.desyncbool do
-            task.wait(0.01)
+            task.spawn(function()
+                while allvars.desyncbool do
+                    task.wait(0.01)
+                end
+
+                localplayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
+
+                if desyncvis then
+                    desyncvis:Destroy()
+                    desyncvis = nil
+                end
+            end)
+        else
+            allvars.desyncbool = false
         end
-
-
-        localplayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
-
-
-        desyncvis:Destroy()
-        desyncvis = nil
     end
 })
+
 
 
 
@@ -2810,8 +2819,6 @@ SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, mi
  frame231.BackgroundTransparency = Value
 end})
 
--- Trigger Bot Section -- 
- TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 80})
  DoubleJump = AimingTab:section({name = "Double Jump", side = "left",size = 75})
  BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 70})
  TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 160})
@@ -3203,10 +3210,11 @@ ViewModelChams:colorpicker({
 
 --]]
 
-
+--[[
 TriggerbotSection:toggle({name = "Trigger Bot", def = false, callback = function(Boolean)
  PuppySettings.TriggerBot.Enabled = Boolean
 end})
+--]]
 
 local BobEnabled = false
 local applied = false
@@ -3320,22 +3328,8 @@ BobbingSection:toggle({
 
 
 
-TriggerbotSection:slider({name = "Delay (Ammount)", def = 0, max = 60, min = 0, rounding = true, callback = function(Value)
- PuppySettings.TriggerBot.DelayAmount = Value
-end})
 
-Bulletset:slider({name = "Bullet Speed", def = 2145, max = 3000, min = 10, rounding = true, callback = function(Value)
-     local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
-        if ammoTypesFolder then
-            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
-                if item:IsA("Instance") then
-                    item:SetAttribute("MuzzleVelocity", Value)
-                end;
-            end;
-        else
-            warn("AmmoTypes folder not found in ReplicatedStorage")
-        end;
-end})
+
 
 
 
@@ -3380,6 +3374,19 @@ Bulletset:toggle({name = "Force Tracer", def = false, callback = function(isEnab
             warn("AmmoTypes folder not found in ReplicatedStorage")
         end;
 
+end})
+
+Bulletset:slider({name = "Bullet Speed", def = 2145, max = 3000, min = 10, rounding = true, callback = function(Value)
+     local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
+        if ammoTypesFolder then
+            for _, item in ipairs(ammoTypesFolder:GetChildren()) do
+                if item:IsA("Instance") then
+                    item:SetAttribute("MuzzleVelocity", Value)
+                end;
+            end;
+        else
+            warn("AmmoTypes folder not found in ReplicatedStorage")
+        end;
 end})
 
 
@@ -4177,17 +4184,7 @@ CorpseEsp:toggle({
     end
 })
 
-CorpseEsp:slider({
-    name = "Corpse ESP Highlight Transparency",
-    def = 0.5,
-    min = 0,
-    max = 1,
-    roundingvalue = 0.1,
-    callback = function(val)
-        Settingsofhiglight.HighlightTransparency = val
-        SetupExistingCorpseHighlights()
-    end
-})
+
 
 CorpseEsp:colorpicker({
     name = "Corpse Esp Color",
@@ -4199,7 +4196,17 @@ CorpseEsp:colorpicker({
     end
 })
 
-
+CorpseEsp:slider({
+    name = "Corpse ESP Highlight Transparency",
+    def = 0.5,
+    min = 0,
+    max = 1,
+    roundingvalue = 0.1,
+    callback = function(val)
+        Settingsofhiglight.HighlightTransparency = val
+        SetupExistingCorpseHighlights()
+    end
+})
 
 
 
@@ -4656,7 +4663,7 @@ end;
 
 
 
-MiscMoveSettings:slider({
+MiscNorSettings:slider({
     name = "Time Changer",
     def = game.Lighting.ClockTime,
     min = 0,
@@ -4774,7 +4781,7 @@ MiscNorSettings:keybind({name = "AutoClicker Keybind", def = Enum.KeyCode.B, cal
 end})
 ]]
 
-MiscNorSettings:toggle({name = "No Grass", def = false, callback = function(first)
+nograsstab:toggle({name = "No Grass", def = false, callback = function(first)
  sethiddenproperty(game:GetService("Workspace").Terrain, "Decoration", not first)
 end})
 
