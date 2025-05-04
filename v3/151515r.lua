@@ -2240,12 +2240,24 @@ DesyncTab:toggle({
             local camZoom = game.Players.LocalPlayer.CameraMaxZoomDistance
             desyncvis.Transparency = (camZoom > 2) and 0.8 or 1
 
+            local conn
+            conn = game.Players.LocalPlayer:GetPropertyChangedSignal("CameraMaxZoomDistance"):Connect(function()
+                if desyncvis then
+                    local newZoom = game.Players.LocalPlayer.CameraMaxZoomDistance
+                    desyncvis.Transparency = (newZoom > 2) and 0.8 or 1
+                end
+            end)
+
             task.spawn(function()
                 while allvars.desyncbool do
                     task.wait(0.01)
                 end
 
                 localplayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
+
+                if conn then
+                    conn:Disconnect()
+                end
 
                 if desyncvis then
                     desyncvis:Destroy()
@@ -2257,6 +2269,7 @@ DesyncTab:toggle({
         end
     end
 })
+
 
 
 
