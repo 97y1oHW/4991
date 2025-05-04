@@ -897,6 +897,7 @@ local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200}
 local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
 local DesyncTab = RageTab:section({name = "Desync", side = "left", size = 300})
 local AASettings = RageTab:section({name = "Settings", side = "right", size = 220})
+--local ViewModelChams = VisualTab:section({name = "ViewModel Chams", side = "right", size = 220})
 local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", size = 200})
 local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
 local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
@@ -2809,7 +2810,7 @@ end})
  TriggerbotSection = AimingTab:section({name = "Trigger Bot", side = "left",size = 80})
  DoubleJump = AimingTab:section({name = "Double Jump", side = "left",size = 75})
  BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 70})
- TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 140})
+ TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 160})
 
 
 
@@ -2885,27 +2886,33 @@ DoubleJump:slider({
 })
 
 
-
-
-
 -- Tracer Configs
- tracbool = false
- tracwait = 2
- traccolor = Color3.fromRGB(255,255,255)
- tractexture = nil
- tractextures = {
+local tracbool = false
+local tracwait = 2
+local traccolor = Color3.fromRGB(255, 255, 255)
+local tractexture = nil
+local smoothfade = false
+local tractextures = {
     ["None"] = nil,
     ["Glow"] = "http://www.roblox.com/asset/?id=78260707920108",
     ["Lighting"] = "http://www.roblox.com/asset/?id=131326755401058",
 }
 
--- TracersSection: Toggle
+-- UI: Toggle
 TracersSection:toggle({
     name = "Enable Tracers",
     def = false,
     callback = function(v)
         tracbool = v
-       
+    end
+})
+
+-- UI: Toggle for Smooth Fade
+TracersSection:toggle({
+    name = "Smooth Tracer Fade",
+    def = false,
+    callback = function(v)
+        smoothfade = v
     end
 })
 
@@ -2918,7 +2925,6 @@ TracersSection:slider({
     rounding = true,
     callback = function(v)
         tracwait = v
-        
     end
 })
 
@@ -2926,11 +2932,10 @@ TracersSection:slider({
 TracersSection:dropdown({
     name = "Tracer Texture",
     def = "None",
-    max =3,
+    max = 3,
     options = {"None", "Glow", "Lighting"},
     callback = function(selected)
         tractexture = tractextures[selected]
-        
     end
 })
 
@@ -2938,82 +2943,249 @@ TracersSection:dropdown({
 TracersSection:colorpicker({
     name = "Tracer Color",
     cpname = "",
-    def = Color3.fromRGB(255,255,255),
+    def = Color3.fromRGB(255, 255, 255),
     callback = function(color)
         traccolor = color
-        
     end
 })
 
 -- Tracer Function
-local function runtracer(start, endp)
+ function runtracer(start, endp)
     if not tracbool then return end
-        local beam = Instance.new("Beam")
-        beam.Name = "LineBeam"
-        beam.Parent = workspace
 
-        local startpart = Instance.new("Part")
-        startpart.Size = Vector3.new(0.01, 0.01, 0.01)
-        startpart.Position = start
-        startpart.Anchored = true
-        startpart.Transparency = 1
-        startpart.CanCollide = false
-        startpart.CanQuery = false
-        startpart.Parent = workspace
+    local beam = Instance.new("Beam")
+    beam.Name = "LineBeam"
+    beam.Parent = workspace
 
-        local endpart = Instance.new("Part")
-        endpart.Size = Vector3.new(0.01, 0.01, 0.01)
-        endpart.Position = endp
-        endpart.Anchored = true
-        endpart.Transparency = 1
-        endpart.CanCollide = false
-        endpart.CanQuery = false
-        endpart.Parent = workspace
+    local startpart = Instance.new("Part")
+    startpart.Size = Vector3.new(0.01, 0.01, 0.01)
+    startpart.Position = start
+    startpart.Anchored = true
+    startpart.Transparency = 1
+    startpart.CanCollide = false
+    startpart.CanQuery = false
+    startpart.Parent = workspace
 
-        beam.Attachment0 = Instance.new("Attachment", startpart)
-        beam.Attachment1 = Instance.new("Attachment", endpart)
-        beam.Color = ColorSequence.new(traccolor, traccolor)
-        beam.Width0 = 0.05
-        beam.Width1 = 0.05
-        beam.FaceCamera = true
-        beam.Transparency = NumberSequence.new(0)
-        beam.LightEmission = 1
+    local endpart = Instance.new("Part")
+    endpart.Size = Vector3.new(0.01, 0.01, 0.01)
+    endpart.Position = endp
+    endpart.Anchored = true
+    endpart.Transparency = 1
+    endpart.CanCollide = false
+    endpart.CanQuery = false
+    endpart.Parent = workspace
 
-        if tractexture then
-            beam.Texture = tractexture
-            if tractexture == "http://www.roblox.com/asset/?id=131326755401058" then
-                beam.TextureSpeed = 3
-                beam.TextureLength = (endp - start).Magnitude
-                beam.Width0 = 0.3
-                beam.Width1 = 0.3
-            end
+    beam.Attachment0 = Instance.new("Attachment", startpart)
+    beam.Attachment1 = Instance.new("Attachment", endpart)
+    beam.Color = ColorSequence.new(traccolor, traccolor)
+    beam.Width0 = 0.05
+    beam.Width1 = 0.05
+    beam.FaceCamera = true
+    beam.Transparency = NumberSequence.new(0)
+    beam.LightEmission = 1
+
+    if tractexture then
+        beam.Texture = tractexture
+        if tractexture == "http://www.roblox.com/asset/?id=131326755401058" then
+            beam.TextureSpeed = 3
+            beam.TextureLength = (endp - start).Magnitude
+            beam.Width0 = 0.3
+            beam.Width1 = 0.3
         end
-
-        task.delay(tracwait, function()
-            beam:Destroy()
-            startpart:Destroy()
-            endpart:Destroy()
-        end)
     end
 
+    task.delay(tracwait, function()
+        if smoothfade then
+            local t = 0
+            local duration = 0.5
+            while t < duration do
+                t += task.wait()
+                local alpha = t / duration
+                beam.Transparency = NumberSequence.new(alpha)
+            end
+        end
+        beam:Destroy()
+        startpart:Destroy()
+        endpart:Destroy()
+    end)
+end
+
 -- Mouse Event: Click to Trigger Tracer
-local Player = game.Players.LocalPlayer
-local Mouse = Player:GetMouse()
+ Player = game.Players.LocalPlayer
+ Mouse = Player:GetMouse()
 
 Mouse.Button1Down:Connect(function()
-    local char = Player.Character
-    if not char then return end
+    if not tracbool then return end
 
-    local head = char:FindFirstChild("Head")
-    if not head then return end
+    local viewmodel = game.Workspace.Camera:FindFirstChild("ViewModel")
+    if not viewmodel then return end
 
-    local start = head.Position
+    local item = viewmodel:FindFirstChild("Item")
+    if not item then return end
+
+    local attachments = item:FindFirstChild("Attachments")
+    if not attachments then return end
+
+    local muzzle = attachments:FindFirstChild("Muzzle")
+    if not muzzle or not muzzle:IsA("BasePart") then return end
+
+    local start = muzzle.Position
     local target = Mouse.Hit and Mouse.Hit.Position
     if target then
         runtracer(start, target)
     end
 end)
 
+
+
+
+--[[
+
+-- UI BABA LEVEL
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local CurrentMaterial = Enum.Material.Plastic
+local CurrentColor = Color3.fromRGB(255, 255, 255)
+local ChamsEnabled = false
+local GunChamsOnly = false
+local Transparency = 0
+local HighlightEnabled = false
+local HighlightColor = Color3.fromRGB(255, 255, 255)
+local HighlightInstance = nil
+
+local function GetViewModel()
+	local cam = workspace:FindFirstChild("Camera")
+	if cam then
+		return cam:FindFirstChild("ViewModel")
+	end
+end
+
+local function ResetPart(part)
+	part.Material = Enum.Material.Plastic
+	part.Color = Color3.fromRGB(255, 255, 255)
+	part.Transparency = 0
+end
+
+local function ApplyChamsToViewModel()
+	local vm = GetViewModel()
+	if not vm then return end
+
+	for _, part in pairs(vm:GetDescendants()) do
+		if part:IsA("BasePart") then
+			local isGunPart = false
+			if GunChamsOnly then
+				local item = vm:FindFirstChild("Item")
+				isGunPart = item and part:IsDescendantOf(item)
+			end
+
+			local apply = ChamsEnabled and (not GunChamsOnly or isGunPart)
+
+			if apply then
+				part.Material = CurrentMaterial
+				part.Color = CurrentColor
+				part.Transparency = Transparency
+			else
+				ResetPart(part)
+			end
+		end
+	end
+
+	if HighlightEnabled then
+		if not HighlightInstance then
+			HighlightInstance = Instance.new("Highlight")
+			HighlightInstance.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+			HighlightInstance.FillTransparency = 0.5
+			HighlightInstance.OutlineTransparency = 0
+			HighlightInstance.Parent = vm
+		end
+		HighlightInstance.Adornee = vm
+		HighlightInstance.FillColor = HighlightColor
+	else
+		if HighlightInstance then
+			HighlightInstance:Destroy()
+			HighlightInstance = nil
+		end
+	end
+end
+
+-- 🧠 Otomatik ViewModel Spawn Takibi
+RunService.RenderStepped:Connect(function()
+	local vm = GetViewModel()
+	if vm and not vm:FindFirstChild("_ChamsReady") then
+		local tag = Instance.new("BoolValue")
+		tag.Name = "_ChamsReady"
+		tag.Parent = vm
+		ApplyChamsToViewModel()
+	end
+end)
+
+ViewModelChams:toggle({
+	name = "Enable Viewmodel Chams",
+	def = false,
+	pointer = "viewmodel_chams_enabled",
+	callback = function(state)
+		ChamsEnabled = state
+	end
+})
+
+ViewModelChams:toggle({
+	name = "ViewModel Gun Chams",
+	def = false,
+	pointer = "gun_chams_only",
+	callback = function(state)
+		GunChamsOnly = state
+	end
+})
+
+ViewModelChams:dropdown({
+	name = "Chams Material",
+	def = "Plastic",
+	max = 3,
+	options = {"Neon", "ForceField", "Plastic"},
+	callback = function(mat)
+		CurrentMaterial = Enum.Material[mat]
+	end
+})
+
+ViewModelChams:colorpicker({
+	name = "Chams Color",
+	def = Color3.fromRGB(255, 255, 255),
+	callback = function(col)
+		CurrentColor = col
+	end
+})
+
+ViewModelChams:slider({
+	name = "Chams Transparency",
+	def = 0,
+	min = 0,
+	max = 1,
+	rounding = false,
+	callback = function(val)
+		Transparency = val
+	end
+})
+
+ViewModelChams:toggle({
+	name = "Enable Highlight",
+	def = false,
+	pointer = "highlight_enabled",
+	callback = function(state)
+		HighlightEnabled = state
+	end
+})
+
+ViewModelChams:colorpicker({
+	name = "Highlight Color",
+	def = Color3.fromRGB(255, 255, 255),
+	callback = function(col)
+		HighlightColor = col
+	end
+})
+
+
+--]]
 
 
 TriggerbotSection:toggle({name = "Trigger Bot", def = false, callback = function(Boolean)
