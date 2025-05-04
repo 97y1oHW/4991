@@ -2060,10 +2060,14 @@ game:GetService("RunService").Heartbeat:Connect(function()
 end)
 
 -- Silent Aim Settings Section --
-local SilentAimSettings = AimingTab:section({name = "Inventory Viewer", side = "right",size = 120})
+local SilentAimSettings = AimingTab:section({name = "Inventory Viewer", side = "right",size = 130})
 
 SilentAimSettings:toggle({name = "Inventory Viewer Toggle", def = false, callback = function(Boolean)
     frame231.Visible = Boolean
+end})
+
+SilentAimSettings:toggle({name = "Inventory Viewer Outline", def = true, callback = function(Boolean)
+    strokesdade.Enabled = Boolean
 end})
 
 SilentAimSettings:toggle({name = "Gradiant Animation", def = false, callback = function(Boolean)
@@ -2468,7 +2472,7 @@ Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame_2.BorderSizePixel = 0
 Frame_2.Position = UDim2.new(0.0189753324, 0, 0.449532062, 0)
-Frame_2.Size = UDim2.new(0, 278, 0, 122)
+Frame_2.Size = UDim2.new(0, 295, 0, 137)
 local Frame2 = Instance.new("UIStroke")
 Frame2.Parent = Frame_2
 Frame2.Name = 'UIStroke'
@@ -2481,7 +2485,7 @@ Frame_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Frame_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame_3.BorderSizePixel = 0
 Frame_3.Position = UDim2.new(0.0189753324, 0, 0.449532062, 0)
-Frame_3.Size = UDim2.new(0, 263, 0, 108)
+Frame_3.Size = UDim2.new(0, 295, 0, 137)
 local Frame3 = Instance.new("UIStroke")
 Frame3.Parent = Frame_3
 Frame3.Name = 'UIStroke'
@@ -2885,7 +2889,6 @@ DoubleJump:slider({
 	end
 })
 
-
 -- Tracer Configs
 local tracbool = false
 local tracwait = 2
@@ -2950,7 +2953,7 @@ TracersSection:colorpicker({
 })
 
 -- Tracer Function
- function runtracer(start, endp)
+function runtracer(start, endp)
     if not tracbool then return end
 
     local beam = Instance.new("Beam")
@@ -3010,31 +3013,44 @@ TracersSection:colorpicker({
     end)
 end
 
--- Mouse Event: Click to Trigger Tracer
- Player = game.Players.LocalPlayer
- Mouse = Player:GetMouse()
+-- Mouse Event: Hold to Trigger Tracers Continuously
+local Player = game.Players.LocalPlayer
+local Mouse = Player:GetMouse()
+
+local firing = false
 
 Mouse.Button1Down:Connect(function()
-    if not tracbool then return end
+    firing = true
 
-    local viewmodel = game.Workspace.Camera:FindFirstChild("ViewModel")
-    if not viewmodel then return end
+    task.spawn(function()
+        while firing and tracbool do
+            local viewmodel = game.Workspace.Camera:FindFirstChild("ViewModel")
+            if not viewmodel then break end
 
-    local item = viewmodel:FindFirstChild("Item")
-    if not item then return end
+            local item = viewmodel:FindFirstChild("Item")
+            if not item then break end
 
-    local attachments = item:FindFirstChild("Attachments")
-    if not attachments then return end
+            local attachments = item:FindFirstChild("Attachments")
+            if not attachments then break end
 
-    local muzzle = attachments:FindFirstChild("Muzzle")
-    if not muzzle or not muzzle:IsA("BasePart") then return end
+            local muzzle = attachments:FindFirstChild("Muzzle")
+            if not muzzle or not muzzle:IsA("BasePart") then break end
 
-    local start = muzzle.Position
-    local target = Mouse.Hit and Mouse.Hit.Position
-    if target then
-        runtracer(start, target)
-    end
+            local start = muzzle.Position
+            local target = Mouse.Hit and Mouse.Hit.Position
+            if target then
+                runtracer(start, target)
+            end
+
+            task.wait(0.05) -- istersen burayı ateş hızına göre değiştir, 0.05 hızlı
+        end
+    end)
 end)
+
+Mouse.Button1Up:Connect(function()
+    firing = false
+end)
+
 
 
 
@@ -3473,12 +3489,78 @@ game:GetService("RunService").RenderStepped:Connect(function()
         end
     end
 end)
+--[[
+ Players = game:GetService("Players")
+ RunService = game:GetService("RunService")
 
+ player = Players.LocalPlayer
+ character = player.Character or player.CharacterAdded:Wait()
+ humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+ humanoid = character:WaitForChild("Humanoid")
 
+-- Configuration
+ isEffectEnabled = false
+ particleColor = Color3.fromRGB(128, 0, 128) -- Default purple
+ particleLifespan = 1 -- Seconds
+ emissionRate = 10 -- Particles per second
+ particleSize = Vector3.new(0.2, 0.2, 0.2)
+ velocityThreshold = 0.1 -- Minimum velocity to trigger effect
 
-AAMainSection:toggle({name = "BackTracking", def = false, callback = function(Boolean)
-    PuppySettings.BackTracking.Enabled = Boolean
-end})
+-- Create attachment for particle emission
+ attachment = Instance.new("Attachment")
+attachment.Position = Vector3.new(0, 0, 1) -- Slightly behind the player
+attachment.Parent = humanoidRootPart
+
+-- Create particle emitter
+ particleEmitter = Instance.new("ParticleEmitter")
+particleEmitter.Color = ColorSequence.new(particleColor)
+particleEmitter.Size = NumberSequence.new(particleSize.X)
+particleEmitter.Lifetime = NumberRange.new(particleLifespan)
+particleEmitter.Rate = emissionRate
+particleEmitter.Speed = NumberRange.new(0) -- Stationary particles
+particleEmitter.Enabled = false
+particleEmitter.Parent = attachment
+
+-- Handle character respawn
+player.CharacterAdded:Connect(function(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    humanoid = character:WaitForChild("Humanoid")
+    attachment.Parent = humanoidRootPart
+    particleEmitter.Parent = attachment
+end)
+
+-- Update particle effect based on velocity
+RunService.Heartbeat:Connect(function()
+    if isEffectEnabled then
+        local velocity = humanoidRootPart.Velocity
+        local isMoving = velocity.Magnitude > velocityThreshold
+        particleEmitter.Enabled = isMoving
+    else
+        particleEmitter.Enabled = false
+    end
+end)
+
+-- Toggle for enabling/disabling the effect
+AAMainSection:toggle({
+    name = "BackTracking",
+    def = false,
+    callback = function(Boolean)
+        isEffectEnabled = Boolean
+    end
+})
+
+-- Color picker for particle color
+AAMainSection:colorpicker({
+    name = "BackTracking Color Picker",
+    cpname = "Particle Color",
+    def = particleColor,
+    callback = function(Value)
+        particleColor = Value
+        particleEmitter.Color = ColorSequence.new(particleColor)
+    end
+})
+]]
 
 AAMainSection:toggle({name = "Auto Peak", def = false, callback = function(Boolean)
     PuppySettings.AutoPeak.Enabled = Boolean
@@ -3730,16 +3812,31 @@ AAMainSection:toggle({name = "Protect Y Offset For Underground", def = true, cal
     protectYOffset = value
 end})]]
 
+AAMainSection:toggle({
+    name = "Remove Fall Damage", 
+    def = false, 
+    callback = function(value)
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("Humanoid") then
+            local humanoid = character.Humanoid
+            
+            -- Gravity'yi sadece serbest düşüş sırasında değiştirelim
+            game:GetService("RunService").Heartbeat:Connect(function()
+                if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                    if value == true then
+                        game.workspace.Gravity = math.huge  -- Gravity'yi sadece düşerken sonsuz yap
+                    else
+                        game.workspace.Gravity = 90  -- Normal gravity
+                    end
+                else
+                    game.workspace.Gravity = 90  -- Düşme dışında normal gravity
+                end
+            end)
+        end
+    end
+})
 
-AAMainSection:toggle({name = "Remove Fall Damage", def = false, callback = function(value)
 
-if value == true then
-game.workspace.Gravity = math.huge
-else
-game.workspace.Gravity = 90
-end
-
-end})
 
 --// Visual Sections
 VisualMainSection:toggle({name = "ESP Masterswitch", def = false, callback = function(enabled)
@@ -5506,7 +5603,7 @@ wait(0.3)
 --Notification.new("error", "Watermark", "Failed To Start Watermark Core.",true,5)
 
 
-Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor(),true,5)
+Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor(),true,3)
 
 
         
