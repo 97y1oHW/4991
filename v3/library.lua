@@ -1,8 +1,8 @@
 -- // variables
-local version = "0.29 BX ALPHA"
+local version = "0.29 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
 local blurEffect = Instance.new("BlurEffect")
-blurEffect.Size = 0
+blurEffect.Size = 50
 blurEffect.Parent = game:GetService("Lighting")
 local mouseLockEnabled = false
 local mouseLockConnection = nil
@@ -463,6 +463,7 @@ function library:new(props)
 						if window.x == false and window.y == false then
 							screen.Enabled = true
 								utility.lockMouse(false) -- Unlock mouse when UI is shown
+								blurEffect.Size = 50
 						else
 							utility.lockMouse(false) -- Unlock mouse when UI is shown
 								blurEffect.Size = 50
