@@ -450,7 +450,7 @@ function library:new(props)
 								utility.lockMouse(true) -- Unlock mouse when UI is shown
 								blurEffect.Size = 0
 						else
-								
+								blurEffect.Size = 0
 								utility.lockMouse(true) -- Unlock mouse when UI is shown
 								
 							ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.In), {Position = UDim2.new(xx,xxx,yy,yyy)}):Play()
