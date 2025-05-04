@@ -1,4 +1,5 @@
- --[[
+return game.Players.LocalPlayer:Kick("Unable To Access Nexify V2 Servers")
+--[[
 if game.workspace:FindFirstChild("ardaOkeremO1234") or game.workspace:FindFirstChild("egeebaal") then
 local forbiddenPlayers = {"ardaOkeremO1234", "egeebaal"}
 
