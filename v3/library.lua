@@ -1,6 +1,9 @@
 -- // variables
 local version = "0.28 BX ALPHA"
 warn("LIB VERSION: "  ..version)
+local blurEffect = Instance.new("BlurEffect")
+blurEffect.Size = 0
+blurEffect.Parent = game:GetService("Lighting")
 local mouseLockEnabled = false
 local mouseLockConnection = nil
 local library = {}
@@ -445,7 +448,9 @@ function library:new(props)
 						if window.x == false and window.y == false then
 							screen.Enabled = false
 								utility.lockMouse(true) -- Unlock mouse when UI is shown
+								blurEffect.Size = 0
 						else
+								
 								utility.lockMouse(true) -- Unlock mouse when UI is shown
 								
 							ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.In), {Position = UDim2.new(xx,xxx,yy,yyy)}):Play()
@@ -460,6 +465,7 @@ function library:new(props)
 								utility.lockMouse(false) -- Unlock mouse when UI is shown
 						else
 							utility.lockMouse(false) -- Unlock mouse when UI is shown
+								blurEffect.Size = 50
 								ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.Out), {Position = saved}):Play()
 						end
 						wait(0.5)
