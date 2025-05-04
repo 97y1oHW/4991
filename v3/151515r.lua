@@ -2232,11 +2232,13 @@ DesyncTab:toggle({
             desyncvis.Anchored = true
             desyncvis.CanQuery = false
             desyncvis.CanCollide = false
-            desyncvis.Size = Vector3.new(4, 5, 1)
+            desyncvis.Size = Vector3.new(4, 7, 1)
             desyncvis.Color = Color3.fromRGB(255, 255, 255)
             desyncvis.Material = Enum.Material.Neon
-            desyncvis.Transparency = 1
-            desyncvis.TopSurface = Enum.SurfaceType.Smooth 
+            desyncvis.TopSurface = Enum.SurfaceType.Smooth
+
+            local camZoom = game.Players.LocalPlayer.CameraMaxZoomDistance
+            desyncvis.Transparency = (camZoom > 2) and 0.8 or 1
 
             task.spawn(function()
                 while allvars.desyncbool do
@@ -2255,6 +2257,7 @@ DesyncTab:toggle({
         end
     end
 })
+
 
 
 
