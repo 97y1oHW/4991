@@ -1,5 +1,5 @@
 -- // variables
-local version = "0.28 BX ALPHA"
+local version = "0.29 BX ALPHA"
 warn("LIB VERSION: "  ..version)
 local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 0
