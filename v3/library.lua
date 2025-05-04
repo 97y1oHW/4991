@@ -1767,7 +1767,7 @@ function sections:toggle(props)
         {
             BackgroundTransparency = 1,
             Size = UDim2.new(1,0,0,15),
-            Parent = self.scrollingFrame
+            Parent = self.content
         }
     )
     --
