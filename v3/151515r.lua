@@ -888,10 +888,10 @@ local VisualTab = Window:page({name = "Visauls"})
 local MiscTab = Window:page({name = "Misc"})
 local UISettings = Window:page({name = "UI"})
 local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 100})
-local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",size = 215})
+local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",size = 195})
 local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
-local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 120})
+local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 141})
 local WaterTab = AimingTab:section({name = "Water", side = "right",size = 60})
 local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200})
 local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
@@ -3947,6 +3947,18 @@ Envioromental:colorpicker({
         task.spawn(function()
             changeAllProjectileColorsGradually(color)
         end)
+    end
+})
+
+
+Envioromental:colorpicker({
+    name = "Ambient Color Picker",
+    cpname = "",
+    def = game.Lighting.Ambient,
+    callback = function(color)
+
+game.Lighting.Ambient = color
+
     end
 })
 
