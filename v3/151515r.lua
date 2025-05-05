@@ -889,8 +889,8 @@ local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size =
 local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",size = 195})
 local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
 local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
-local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 141})
-local WaterTab = MiscTab:section({name = "Water", side = "left",size = 60})
+local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 160})
+local WaterTab = MiscTab:section({name = "Water", side = "left",size = 80})
 local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200})
 local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
 local DesyncTab = RageTab:section({name = "Desync", side = "left", size = 300})
@@ -914,7 +914,7 @@ local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 26
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local GameLogsTab = MiscTab:section({name = "Game Logs",side = "right", size = 80})
 local ConfigLoader = ConfigSection:configloader({folder = "XWare"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 250})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 270})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
@@ -1488,6 +1488,36 @@ GunMods:toggle({name = "No Sway", def = false, callback = function(Value)
 		end
 	end
 end})
+
+
+
+GunMods:toggle({
+    name = "No ADS Block",
+    def = false,
+    callback = function(Value)
+        if Value then
+            local checkcaller = checkcaller or function()
+                return getfenv(2).script ~= game
+            end
+
+            local Namecall
+            Namecall = hookmetamethod(game, "__namecall", function(self, ...)
+                local Args = { ... }
+                local Method = getnamecallmethod()
+                local ExecutorCall = checkcaller()
+
+                if not ExecutorCall and Method == "GetAttribute" then
+                    if Args[1] == "BlockADS" then
+                        return false
+                    end
+                end
+
+                return Namecall(self, ...)
+            end)
+        end
+    end
+})
+
 
 
 local ammo = game.ReplicatedStorage.AmmoTypes
@@ -3898,6 +3928,9 @@ end})
 terrain = game:GetService("Workspace").Terrain
 
 
+
+
+
 Envioromental:colorpicker({
     name = "Ground Color Picker",
     cpname = "",
@@ -3983,6 +4016,17 @@ game.Lighting.Ambient = color
     end
 })
 
+Envioromental:button({name = "No LandMines", callback = function()
+
+    if Workspace:FindFirstChild("AiZones") and Workspace.AiZones:FindFirstChild("OutpostLandmines") then 
+        for i, v in next, Workspace.AiZones.OutpostLandmines:GetChildren() do 
+            if v then 
+                v:Destroy()
+            end
+        end
+    end
+
+end})
 
 
 
@@ -4404,6 +4448,31 @@ end})
 WaterTab:colorpicker({name = "Water Color", cpname = "", def =game:GetService("Workspace").Terrain.WaterColor, callback = function(color)
     game:GetService("Workspace").Terrain.WaterColor = color
 end})
+
+WaterTab:toggle({
+    name = "No Drowning",
+    def = false,
+    callback = function(value)
+        if value then
+            local Namecall
+            Namecall = hookmetamethod(game, "__namecall", function(self, ...)
+                local Args = { ... }
+                local Method = getnamecallmethod()
+                local ExecutorCall = checkcaller()
+
+                if not ExecutorCall and Method == "FireServer" then
+                    if self.Name == "Drowning" then
+                        return
+                    end
+                end
+
+                return Namecall(self, ...)
+            end)
+        end
+    end
+})
+
+
 
 
 
