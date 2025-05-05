@@ -5632,8 +5632,42 @@ Notification.new("success", "[XWare]", "Injected XWare.",true,5)
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 wait(1)
 Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,5)
+pcall(
+local Watermark = loadstring(game:HttpGet("https://nexusscripts.online/api/scripts/b64ba414-4bf1-480d-a4e2-d31d7569e854/raw"))()
+
+local scriptWatermark = Watermark.new({
+    position = "topright",
+    scriptName = "XWare",
+    version = "1",
+    text = "Project Delta",
+    showTime = true,
+    showFPS = true,
+    showPing = true,
+    refreshRate = 0.5,
+    textSize = 13,
+    textFont = Enum.Font.Code,
+    padding = 8, 
+    cornerRadius = 4,
+    accentColor = Color3.fromRGB(138, 43, 226),
+    backgroundColor = Color3.fromRGB(20, 20, 25),
+    backgroundTransparency = 0.15, 
+    textColor = Color3.fromRGB(240, 240, 245), 
+    shadow = true,
+    shadowTransparency = 0.7,
+    borderSize = 1,
+    useAccentForBorder = true,
+    fadeTime = 0.2,
+    enablePulse = true, 
+    pulseSpeed = 0.7, 
+    pulseColorEnabled = true, 
+    pulseColorPrimary = Color3.fromRGB(240, 240, 245),
+    pulseColorSecondary = Color3.fromRGB(138, 43, 226),
+    pulseTextOnly = true
+})
+)
+
 wait(0.3)
---Notification.new("error", "Watermark", "Failed To Start Watermark Core.",true,5)
+Notification.new("info", "Watermark", "Watermark Started!",true,5)
 
 
 Notification.new("success", "[XWare]", "Supported Executor: " ..identifyexecutor(),true,3)
