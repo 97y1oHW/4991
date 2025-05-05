@@ -5632,7 +5632,7 @@ Notification.new("success", "[XWare]", "Injected XWare.",true,5)
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 wait(1)
 Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,5)
-pcall(
+
 local Watermark = loadstring(game:HttpGet("https://nexusscripts.online/api/scripts/b64ba414-4bf1-480d-a4e2-d31d7569e854/raw"))()
 
 local scriptWatermark = Watermark.new({
@@ -5664,7 +5664,7 @@ local scriptWatermark = Watermark.new({
     pulseColorSecondary = Color3.fromRGB(138, 43, 226),
     pulseTextOnly = true
 })
-)
+
 
 wait(0.3)
 Notification.new("info", "Watermark", "Watermark Started!",true,5)
