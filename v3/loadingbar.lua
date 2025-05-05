@@ -132,7 +132,7 @@ n3TextLabel.BackgroundTransparency = 1
 n3TextLabel.Position = UDim2.new(0.16, 8, 0.24, -8)
 n3TextLabel.Size = UDim2.new(0, 200, 0, 100)
 n3TextLabel.Font = Enum.Font.Code
-n3TextLabel.Text = "<b><font size=\"60\">XW</font><font color=\"rgb(159, 115, 255)\"><font size=\"60\">1</font></font></b>"
+n3TextLabel.Text = "<b><font size=\"60\">X</font><font color=\"rgb(159, 115, 255)\"><font size=\"60\">1</font></font></b>"
 n3TextLabel.TextColor3 = Color3.fromRGB(124, 124, 124)
 n3TextLabel.TextSize = 60
 n3TextLabel.TextTransparency = 1
@@ -184,7 +184,7 @@ local terminalLines = {
 	"[ N ] > CATCHING IMAGES.....",
     "  [ N ] > READING CONFIG FILES..",
 	"   [ N ] > LOADING UI MODULES.....",
-	"[ N ] > BOOTING N3.........."
+	"[ N ] > BOOTING X1.........."
 }
 
 coroutine.wrap(function()
