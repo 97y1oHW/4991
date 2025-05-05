@@ -5617,9 +5617,9 @@ writefile(filePath, textss)
 end
 
 if versionAttr then
-	statusFolder:SetAttribute("Version", versionAttr .. " | Injected Nexify ✅")
+	statusFolder:SetAttribute("Version", versionAttr .. " | Injected XWare ✅")
 else
-	statusFolder:SetAttribute("Version", "Injected Nexify ✅")
+	statusFolder:SetAttribute("Version", "Injected XWare ✅")
 end
 --[[
 wm:update({"Nexify V3.2 | "..identifyexecutor().." | Advancaded Version"})
@@ -5627,7 +5627,7 @@ wm:updateside("topright")
 wm:toggle(true)
 wait(1)
 ]]
-Notification.new("success", "[NEXIFY]", "Injected XWare.",true,5)
+Notification.new("success", "[XWare]", "Injected XWare.",true,5)
                 createfakesys()
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 wait(1)
@@ -5636,7 +5636,7 @@ wait(0.3)
 --Notification.new("error", "Watermark", "Failed To Start Watermark Core.",true,5)
 
 
-Notification.new("success", "[NEXIFY]", "Supported Executor: " ..identifyexecutor(),true,3)
+Notification.new("success", "[XWare]", "Supported Executor: " ..identifyexecutor(),true,3)
 
 
         
