@@ -1,26 +1,25 @@
 
 --[[
 
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░    ░░░░░   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   ░░░░░░░░░░░
-▒  ▒   ▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒   ▒   ▒▒   ▒▒▒▒   ▒▒▒▒▒   ▒▒▒   ▒▒▒▒▒    ▒  ▒▒   ▒▒▒   
-▓   ▓▓   ▓   ▓▓  ▓▓▓   ▓▓▓▓  ▓   ▓▓   ▓▓▓   ▓▓▓▓▓   ▓   ▓
-▓   ▓▓▓  ▓   ▓         ▓▓▓▓▓  ▓▓▓▓▓   ▓▓▓   ▓▓▓▓▓▓▓    ▓▓
-▓   ▓▓▓▓  ▓  ▓  ▓▓▓▓▓▓▓▓▓▓  ▓▓   ▓▓   ▓▓▓   ▓▓▓▓▓▓▓▓   ▓▓
-█   ██████   ███     ████   ███   █   ███   ███████   ███
-██████████████████████████████████████████████████   ████
+ ___    ___  ___       __    ________   ________   _______      
+|\  \  /  /||\  \     |\  \ |\   __  \ |\   __  \ |\  ___ \     
+\ \  \/  / /\ \  \    \ \  \\ \  \|\  \\ \  \|\  \\ \   __/|    
+ \ \    / /  \ \  \  __\ \  \\ \   __  \\ \   _  _\\ \  \_|/__  
+  /     \/    \ \  \|\__\_\  \\ \  \ \  \\ \  \\  \|\ \  \_|\ \ 
+ /  /\   \     \ \____________\\ \__\ \__\\ \__\\ _\ \ \_______\
+/__/ /\ __\     \|____________| \|__|\|__| \|__|\|__| \|_______|
+|__|/ \|__|                                                     
 
-NEXIFY V3.2
-3.05.2025
+XWare V1
+5.05.2025
 
 24 december 💗
 
 ADVANCADED VERSION TS:::
 
-IN NEXIFY, WE TRUST
+IN XWare, WE TRUST
 
-NEXIFY DEVELOPMENT TEAM
+XWare DEVELOPMENT TEAM
 :::
 S TI
 :::
@@ -29,15 +28,14 @@ TIER S
 
 xxx=[[ 
 
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░    ░░░░░   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   ░░░░░░░░░░░
-▒  ▒   ▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒   ▒   ▒▒   ▒▒▒▒   ▒▒▒▒▒   ▒▒▒   ▒▒▒▒▒    ▒  ▒▒   ▒▒▒   
-▓   ▓▓   ▓   ▓▓  ▓▓▓   ▓▓▓▓  ▓   ▓▓   ▓▓▓   ▓▓▓▓▓   ▓   ▓
-▓   ▓▓▓  ▓   ▓         ▓▓▓▓▓  ▓▓▓▓▓   ▓▓▓   ▓▓▓▓▓▓▓    ▓▓
-▓   ▓▓▓▓  ▓  ▓  ▓▓▓▓▓▓▓▓▓▓  ▓▓   ▓▓   ▓▓▓   ▓▓▓▓▓▓▓▓   ▓▓
-█   ██████   ███     ████   ███   █   ███   ███████   ███
-██████████████████████████████████████████████████   ████
+ ___    ___  ___       __    ________   ________   _______      
+|\  \  /  /||\  \     |\  \ |\   __  \ |\   __  \ |\  ___ \     
+\ \  \/  / /\ \  \    \ \  \\ \  \|\  \\ \  \|\  \\ \   __/|    
+ \ \    / /  \ \  \  __\ \  \\ \   __  \\ \   _  _\\ \  \_|/__  
+  /     \/    \ \  \|\__\_\  \\ \  \ \  \\ \  \\  \|\ \  \_|\ \ 
+ /  /\   \     \ \____________\\ \__\ \__\\ \__\\ _\ \ \_______\
+/__/ /\ __\     \|____________| \|__|\|__| \|__|\|__| \|_______|
+|__|/ \|__|                                                     
 ]]
 
 --[[
@@ -89,7 +87,7 @@ Notification.new("message", "Message Heading", "Message body message.") -- Args(
 
 local Notify = NotifyLibrary.Notify
 --// Service Handler \\--
-Notification.new("info", "Loading", "Loading Nexify V3 For: " ..identifyexecutor(),true,5)
+Notification.new("info", "Loading", "Loading XWare V3 For: " ..identifyexecutor(),true,5)
 
  plr = game:GetService("Players").LocalPlayer
 
@@ -605,7 +603,7 @@ Notification.new("Info", "ESP LIBRARY", "Loaded Esp Library.",true,5)
  ReplicatedStorage = GetService.ReplicatedStorage
  http = GetService.HttpService
  lighting = GetService.Lighting
-makefolder("nexifyv3")
+makefolder("XWare")
 
 --// Start \\--
 local PuppySettings = {
@@ -880,7 +878,7 @@ end))
 collorofui = Color3.fromRGB(150, 13, 242)
 ----
 
-local tabnxxame = 'NEXIFY | PD | V3.2 | ' ..identifyexecutor()
+local tabnxxame = 'XWARE | PD | V3.2 | ' ..identifyexecutor()
 local Window = libary:new({name = tabnxxame, accent =collorofui, textsize = 13})
 local AimingTab = Window:page({name = "Combat"})
 local RageTab = Window:page({name = "Rage"})
@@ -915,7 +913,7 @@ local KnifeModss = RageTab:section({name = "Knife Mods", side = "right",size = 2
 local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
 local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
 local GameLogsTab = MiscTab:section({name = "Game Logs",side = "right", size = 80})
-local ConfigLoader = ConfigSection:configloader({folder = "nexifyv3"})
+local ConfigLoader = ConfigSection:configloader({folder = "XWare"})
 local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 250})
 SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
@@ -1089,7 +1087,7 @@ for i = 0, labelCountX - 1 do
         local posX = i * labelWidth / screenWidth
         local posY = j * labelHeight / screenHeight
         local rotation = math.random(-15, 15)  -- Random tilt between -15 and 15 degrees
-        createWatermarkLabel("NEXIFY", UDim2.new(posX, 0, posY, 0), rotation)
+        createWatermarkLabel("XWare", UDim2.new(posX, 0, posY, 0), rotation)
     end
 end
 
@@ -5472,7 +5470,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 end)
 
 --==[ NEXIFY SECURE CORE ]==--
-local FOLDER_ID = "Nexifyfunctions"
+local FOLDER_ID = "XWareFunctions"
 local NEXIFY = Instance.new("Folder")
 NEXIFY.Name = FOLDER_ID
 NEXIFY.Parent = workspace
@@ -5504,7 +5502,7 @@ local sourceofscripttt=[[
         --27.43
   --      DR-A
 
-    --    NEXIFY V3
+    --    XWare
  --       DEV - 4551E
    --     TYPECHECK=pass
 
@@ -5580,22 +5578,22 @@ setreadonly(mt, true)
 
 
 
-Notification.new("success", "Loaded", "Loaded Nexify V3 For " ..identifyexecutor(),true,5)
+Notification.new("success", "Loaded", "Loaded XWare V3 For " ..identifyexecutor(),true,5)
 
                 task.wait(3)
        --         coroutine.wrap(changeRemoteNames)
  
- Notification.new("warning", "[ FUNCTIONS ]", "Created Nexify Functions In Workspace. Do Not Attempt To Remove Them!" ,true,5)
+ Notification.new("warning", "[ FUNCTIONS ]", "Created XWare Functions In Workspace. Do Not Attempt To Remove Them!" ,true,5)
                 task.wait(3.5)
                  statusFolder = game.ReplicatedStorage:WaitForChild("ServerStatus")
 local versionAttr = statusFolder:GetAttribute("Version")
 
 function createfakesys()
-local folderName = "nexifyv3"
+local folderName = "XWare"
 if not isfolder(folderName) then
     makefolder(folderName)
 end
-local filePath = folderName .. "/nexify.cfg"
+local filePath = folderName .. "/XWare.cfg"
 local textss = [[
 nexify.sys
 
@@ -5629,7 +5627,7 @@ wm:updateside("topright")
 wm:toggle(true)
 wait(1)
 ]]
-Notification.new("success", "[NEXIFY]", "Injected Nexify.",true,5)
+Notification.new("success", "[NEXIFY]", "Injected XWare.",true,5)
                 createfakesys()
 loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
 wait(1)
