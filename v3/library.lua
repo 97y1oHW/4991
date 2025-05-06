@@ -2239,6 +2239,9 @@ end
 -- [Previous code remains unchanged until the sections:configloader function]
 
 -- Add this new function after sections:configloader
+-- [Previous code remains unchanged until sections:configloader]
+
+-- Updated pluginloader function
 function sections:pluginloader(props)
     -- // properties
     local folder = props.folder or props.Folder or "nexifyv3_plugins" -- Default to nexifyv3_plugins if not provided
@@ -2250,6 +2253,7 @@ function sections:pluginloader(props)
         {
             BackgroundTransparency = 1,
             Size = UDim2.new(1, 0, 0, 222),
+            Position = UDim2.new(0, 0, 0, 10), -- Moved UI down by setting Y offset to 10
             Parent = self.content
         }
     )
@@ -2312,6 +2316,7 @@ function sections:pluginloader(props)
     --
     table.insert(self.library.themeitems["accent"]["BackgroundColor3"], color)
     --
+CST, 2025
     local buttonsholder = utility.new(
         "Frame",
         {
@@ -2577,12 +2582,20 @@ function sections:pluginloader(props)
                         return loadstring(content)()
                     end)
                     if success and plugin and plugin.variant == "button" then
-                        local callback_func = loadstring("return function(state) " .. plugin.callback .. " end")()
-                        MiscNorSettings:toggle({
-                            name = plugin.name,
-                            def = plugin.default,
-                            callback = callback_func
-                        })
+                        local success, callback_func = pcall(function()
+                            return loadstring("return function(state) " .. plugin.callback .. " end")()
+                        end)
+                        if success and callback_func then
+                            MiscNorSettings:toggle({
+                                name = plugin.name,
+                                def = plugin.default,
+                                callback = callback_func
+                            })
+                        else
+                            warn("Failed to create callback for plugin: " .. plugin.name)
+                        end
+                    else
+                        warn("Failed to load plugin from file: " .. v)
                     end
                 end
             end
@@ -2610,17 +2623,31 @@ function sections:pluginloader(props)
                     return loadstring(content)()
                 end)
                 if success and plugin and plugin.variant == "button" then
-                    local callback_func = loadstring("return function(state) " .. plugin.callback .. " end")()
-                    props.MiscNorSettings:toggle({
-                        name = plugin.name,
-                        def = plugin.default,
-                        callback = callback_func
-                    })
-                    load[2].BorderColor3 = self.library.theme.accent
-                    wait(0.05)
-                    load[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                    local success, callback_func = pcall(function()
+                        return loadstring("return function(state) " .. plugin.callback .. " end")()
+                    end)
+                    if success and callback_func then
+                        pcall(function()
+                            props.MiscNorSettings:toggle({
+                                name = plugin.name,
+                                def = plugin.default,
+                                callback = callback_func
+                            })
+                            load[2].BorderColor3 = self.library.theme.accent
+                            wait(0.05)
+                            load[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                        end)
+                    else
+                        warn("Failed to create callback for plugin: " .. selected.name)
+                    end
+                else
+                    warn("Failed to load plugin: " .. selected.name)
                 end
+            else
+                warn("Plugin file not found: " .. filepath)
             end
+        else
+            warn("No plugin selected")
         end
     end)
     --
@@ -2648,6 +2675,9 @@ function sections:pluginloader(props)
     setmetatable(pluginloader, configloaders) -- Reusing configloaders metatable as the functionality is similar
     return pluginloader
 end
+
+-- [Rest of the original code remains unchanged]
+
 
 
 
