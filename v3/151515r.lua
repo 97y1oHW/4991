@@ -27,15 +27,14 @@ TIER S
 ]]
 
 xxx=[[ 
-
- ___    ___  ___       __    ________   ________   _______      
-|\  \  /  /||\  \     |\  \ |\   __  \ |\   __  \ |\  ___ \     
-\ \  \/  / /\ \  \    \ \  \\ \  \|\  \\ \  \|\  \\ \   __/|    
- \ \    / /  \ \  \  __\ \  \\ \   __  \\ \   _  _\\ \  \_|/__  
-  /     \/    \ \  \|\__\_\  \\ \  \ \  \\ \  \\  \|\ \  \_|\ \ 
- /  /\   \     \ \____________\\ \__\ \__\\ \__\\ _\ \ \_______\
-/__/ /\ __\     \|____________| \|__|\|__| \|__|\|__| \|_______|
-|__|/ \|__|                                                     
+; ___    ___  ___       __    ________   ________   _______      ;
+;|\  \  /  /||\  \     |\  \ |\   __  \ |\   __  \ |\  ___ \     ;
+;\ \  \/  / /\ \  \    \ \  \\ \  \|\  \\ \  \|\  \\ \   __/|    ;
+; \ \    / /  \ \  \  __\ \  \\ \   __  \\ \   _  _\\ \  \_|/__  ;
+;  /     \/    \ \  \|\__\_\  \\ \  \ \  \\ \  \\  \|\ \  \_|\ \ ;
+; /  /\   \     \ \____________\\ \__\ \__\\ \__\\ _\ \ \_______\;
+;/__/ /\ __\     \|____________| \|__|\|__| \|__|\|__| \|_______|;
+;|__|/ \|__|                                                     ;                                         
 ]]
 
 --[[
@@ -50,16 +49,18 @@ Notification.new("message", "Message Heading", "Message body message.") -- Args(
 print(xxx)
 
 function fixhealth()
+while wait(0.5) do
 	for _, player in pairs(game.Players:GetPlayers()) do
 		if player.Character and player.Character:FindFirstChild("Humanoid") then
 			local hum = player.Character.Humanoid
-			if hum.Health < 0 then
+			if hum.Health < 1 then
+            wait(1)
 				hum.Health = 0
 			end
 		end
 	end
 end
-
+end
 task.spawn(fixhealth)
 
 
