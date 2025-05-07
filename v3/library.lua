@@ -1,4 +1,4 @@
-local version = "0.29.5 B-X ALPHA"
+local version = "0.30 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
 local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
@@ -5626,7 +5626,7 @@ function library:settingspage(props)
     
     createInfoLabel("Library", "XWare | V3")
     createInfoLabel("Version", version)
-    createInfoLabel("Developed by", "Mafaka")
+    createInfoLabel("Developed by", "Gabr1")
     createInfoLabel("Edited by", "NexusScripts")
     
     local separator = utility.new(
