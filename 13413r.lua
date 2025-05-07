@@ -1,4 +1,4 @@
-return game.Players.LocalPlayer:Kick("Unable To Access Nexify V2 Servers")
+return game.Players.LocalPlayer:Kick("\n\n XWARE V3 \n\n Nexify Is Bought By Gabr1.\n\n XWare Does Not Support Solara Anymore. \n\n" ..identifyexecutor())
 --[[
 if game.workspace:FindFirstChild("ardaOkeremO1234") or game.workspace:FindFirstChild("egeebaal") then
 local forbiddenPlayers = {"ardaOkeremO1234", "egeebaal"}
