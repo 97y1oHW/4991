@@ -1,5 +1,4 @@
--- // variables
-local version = "0.30.5 B-X ALPHA"
+local version = "0.29.5 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
 local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
@@ -24,9 +23,8 @@ local colorpickers = {}
 local configloaders = {}
 local watermarks = {}
 local loaders = {}
---
 local utility = {}
---
+
 local check_exploit = (syn and "Synapse") or (KRNL_LOADED and "Krnl") or (isourclosure and "ScriptWare") or nil
 local plrs = game:GetService("Players")
 local cre = game:GetService("CoreGui")
@@ -37,7 +35,7 @@ local hs = game:GetService("HttpService")
 local ws = game:GetService("Workspace")
 local plr = plrs.LocalPlayer
 local cam = ws.CurrentCamera
--- // indexes
+
 library.__index = library
 pages.__index = pages
 esppreviews.__index = esppreviews
@@ -56,29 +54,26 @@ colorpickers.__index = colorpickers
 configloaders.__index = configloaders
 watermarks.__index = watermarks
 loaders.__index = loaders
--- // functions
+
 utility.new = function(instance,properties) 
-	-- // instance
 	local ins = Instance.new(instance)
-	-- // properties setting
 	for property,value in pairs(properties) do
 		ins[property] = value
 	end
-	-- // return
 	return ins
 end
---
+
 utility.dragify = function(ins,touse)
 	local dragging
 	local dragInput
 	local dragStart
 	local startPos
-	--
+
 	local function update(input)
 		local delta = input.Position - dragStart
 		touse:TweenPosition(UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.1,true)
 	end
-	--
+
 	ins.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
@@ -92,18 +87,24 @@ utility.dragify = function(ins,touse)
 			end)
 		end
 	end)
-	--
+
 	ins.InputChanged:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 			dragInput = input
 		end
 	end)
-	--
+
 	uis.InputChanged:Connect(function(input)
 		if input == dragInput and dragging then
 			update(input)
 		end
 	end)
+end
+
+utility.tweenColor = function(object, property, color, duration)
+    duration = duration or 0.2
+    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    ts:Create(object, tweenInfo, {[property] = color}):Play()
 end
 
 utility.tweenTransparency = function(object, duration, transparency)
@@ -117,9 +118,7 @@ utility.tweenTransparency = function(object, duration, transparency)
     end
 end
 
---
 utility.getFullPath = function(folder)
-    -- Ensure folder path ends with a separator and is valid
     if folder:sub(-1) ~= "/" and folder:sub(-1) ~= "\\" then
         folder = folder .. "/"
     end
@@ -129,15 +128,13 @@ end
 utility.round = function(n,d)
 	return tonumber(string.format("%."..(d or 0).."f",n))
 end
---
+
 utility.zigzag = function(X)
 	return math.acos(math.cos(X*math.pi))/math.pi
 end
 
--- Add this function to your utility section
 utility.lockMouse = function(state)
     if state then
-        -- Lock mouse
         if not mouseLockEnabled then
             mouseLockEnabled = true
             if mouseLockConnection then
@@ -150,7 +147,6 @@ utility.lockMouse = function(state)
             end)
         end
     else
-        -- Unlock mouse
         if mouseLockEnabled then
             mouseLockEnabled = false
             if mouseLockConnection then
@@ -161,42 +157,45 @@ utility.lockMouse = function(state)
         end
     end
 end
---
+
 utility.capatalize = function(s)
+	if string.match(s, "^F%d+$") then
+		return s
+	end
+	
 	local l = ""
 	for v in s:gmatch('%u') do
 		l = l..v
 	end
 	return l
 end
---
+
 utility.splitenum = function(enum)
 	local s = tostring(enum):split(".")
 	return s[#s]
 end
---
+
 utility.from_hex = function(h)
 	local r,g,b = string.match(h,"^#?(%w%w)(%w%w)(%w%w)$")
 	return Color3.fromRGB(tonumber(r,16), tonumber(g,16), tonumber(b,16))
 end
---
+
 utility.to_hex = function(c)
 	return string.format("#%02X%02X%02X",c.R *255,c.G *255,c.B *255)
 end
---
+
 utility.removespaces = function(s)
    return s:gsub(" ","")
 end
--- // main
+
 function library:new(props)
-	-- // properties
 	local textsize = props.textsize or props.TextSize or props.textSize or props.Textsize or 12
 	local font = props.font or props.Font or "RobotoMono"
 	local name = props.name or props.Name or props.UiName or props.Uiname or props.uiName or props.username or props.Username or props.UserName or props.userName or "new ui"
 	local color = props.color or props.Color or props.mainColor or props.maincolor or props.MainColor or props.Maincolor or props.Accent or props.accent or Color3.fromRGB(225, 58, 81)
-	-- // variables
+	
 	local window = {}
-	-- // main
+	
 	local screen = utility.new(
 		"ScreenGui",
 		{
@@ -207,11 +206,11 @@ function library:new(props)
 			Parent = cre
 		}
 	)
-	--
+	
         if (check_exploit == "Synapse" and syn.request) then
 	syn.protect_gui(screen)
         end
-	-- 1
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -225,7 +224,7 @@ function library:new(props)
 			Parent = screen
 		}
 	)
-	-- 2
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -238,7 +237,7 @@ function library:new(props)
 			Parent = outline
 		}
 	)
-	-- 3
+	
 	local indent = utility.new(
 		"Frame",
 		{
@@ -252,7 +251,7 @@ function library:new(props)
 			Parent = outline2
 		}
 	)
-	-- 4
+	
 	local main = utility.new(
 		"Frame",
 		{
@@ -266,7 +265,7 @@ function library:new(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"Frame",
 		{
@@ -277,7 +276,7 @@ function library:new(props)
 			Parent = outline2
 		}
 	)
-	-- 5
+	
 	local outline3 = utility.new(
 		"Frame",
 		{
@@ -291,7 +290,7 @@ function library:new(props)
 			Parent = main
 		}
 	)
-	--
+	
 	local titletext = utility.new(
 		"TextLabel",
 		{
@@ -308,7 +307,7 @@ function library:new(props)
 			Parent = title
 		}
 	)
-	-- 6
+	
 	local holder = utility.new(
 		"Frame",
 		{
@@ -319,7 +318,7 @@ function library:new(props)
 			Parent = main
 		}
 	)
-	-- 7
+	
 	local holder = utility.new(
 		"Frame",
 		{
@@ -330,7 +329,7 @@ function library:new(props)
 			Parent = main
 		}
 	)
-	-- 8
+	
 	local tabs = utility.new(
 		"Frame",
 		{
@@ -344,7 +343,7 @@ function library:new(props)
 			Parent = holder
 		}
 	)
-	--
+	
 	local tabsbuttons = utility.new(
 		"Frame",
 		{
@@ -356,7 +355,7 @@ function library:new(props)
 			Parent = holder
 		}
 	)
-	-- 9
+	
 	local outline4 = utility.new(
 		"Frame",
 		{
@@ -369,7 +368,7 @@ function library:new(props)
 			Parent = tabs
 		}
 	)
-	--
+	
 	utility.new(
 		"UIListLayout",
 		{
@@ -378,9 +377,9 @@ function library:new(props)
 			Parent = tabsbuttons
 		}
 	)
-	--
+	
 	utility.dragify(title,outline)
-	-- // window tbl
+	
 	window = {
 		["screen"] = screen,
 		["holder"] = holder,
@@ -410,13 +409,13 @@ function library:new(props)
 			}
 		}
 	}
-	--
+	
 	table.insert(window.themeitems["accent"]["BackgroundColor3"],outline)
-	--
+	
 	local toggled = true
 	local cooldown = false
 	local saved = UDim2.new(0,0,0,0)
-	--
+	
 	uis.InputBegan:Connect(function(Input)
 		if Input.UserInputType == Enum.UserInputType.Keyboard then
 			if Input.KeyCode == window.key then
@@ -427,13 +426,13 @@ function library:new(props)
 						saved = outline.Position
 						local xx,yy = 0,0
 						local xxx,yyy = 0,0
-						--
+						
 						if (outline.AbsolutePosition.X+(outline.AbsoluteSize.X/2)) < (cam.ViewportSize.X/2) then
 							xx = -3
 						else
 							xx = 3
 						end
-						--
+						
 						if window.y then
 							if (outline.AbsolutePosition.Y+(outline.AbsoluteSize.Y/2)) < (cam.ViewportSize.Y/2) then
 								yy = -3
@@ -444,14 +443,14 @@ function library:new(props)
 							yy = saved.Y.Scale
 							yyy = saved.Y.Offset
 						end
-						--
+					
 						if window.x == false and window.y == false then
 							screen.Enabled = false
-								utility.lockMouse(true) -- Unlock mouse when UI is shown
+								utility.lockMouse(true)
 								blurEffect.Size = 0
 						else
 								blurEffect.Size = 0
-								utility.lockMouse(true) -- Unlock mouse when UI is shown
+								utility.lockMouse(true) 
 								
 							ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.In), {Position = UDim2.new(xx,xxx,yy,yyy)}):Play()
 						end
@@ -462,10 +461,10 @@ function library:new(props)
 						toggled = not toggled
 						if window.x == false and window.y == false then
 							screen.Enabled = true
-								utility.lockMouse(false) -- Unlock mouse when UI is shown
+								utility.lockMouse(false)
 								blurEffect.Size = 50
 						else
-							utility.lockMouse(false) -- Unlock mouse when UI is shown
+							utility.lockMouse(false) 
 								blurEffect.Size = 50
 								ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.Out), {Position = saved}):Play()
 						end
@@ -476,19 +475,35 @@ function library:new(props)
 			end
 		end
 	end)
-	--
+	
 	window.labels[#window.labels+1] = titletext
-	-- // metatable indexing + return
+	
 	setmetatable(window, library)
 	return window
 end
---
-local RunService = game:GetService("RunService")
 
-function library:watermark()
+local RunService = game:GetService("RunService")
+local Stats = game:GetService("Stats")
+
+local fpsUpdateInterval = 0.5 
+local lastFpsUpdate = 0
+local frameCount = 0
+local currentFps = 0
+
+local pingUpdateInterval = 1.0 
+local lastPingUpdate = 0
+local currentPing = 0
+
+function library:watermark(props)
+	local props = props or {}
+	local showFps = props.fps or props.Fps or props.FPS or props.showFps or props.ShowFps or props.showFPS or false
+	local showPing = props.ping or props.Ping or props.PING or props.showPing or props.ShowPing or props.showPING or false
+	local side = props.side or props.Side or props.position or props.Position or "topright"
+	local visible = props.visible or props.Visible or props.show or props.Show or false
+	local content = props.content or props.Content or props.data or props.Data or {}
+	
 	local watermark = {}
 	
-	-- Creating main frame with gradient
 	local outline = utility.new(
 		"Frame",
 		{
@@ -498,12 +513,11 @@ function library:watermark()
 			Size = UDim2.new(0,300,0,26),
 			Position = UDim2.new(1,-10,0,10),
 			ZIndex = 9900,
-			Visible = false,
+			Visible = visible,
 			Parent = self.screen
 		}
 	)
 	
-	-- Adding gradient
 	local gradient = utility.new(
 		"UIGradient",
 		{
@@ -516,13 +530,12 @@ function library:watermark()
 		}
 	)
 	
-	-- Inner frame for terminal effect
 	local outline2 = utility.new(
 		"Frame",
 		{
 			AnchorPoint = Vector2.new(0.5,0.5),
 			BackgroundColor3 = Color3.fromRGB(10, 10, 10),
-			BorderColor3 = Color3.fromRGB(0, 255, 128),
+			BorderColor3 = self.theme.accent, 
 			BorderSizePixel = 1,
 			Size = UDim2.new(1,-4,1,-4),
 			Position = UDim2.new(0.5,0,0.5,0),
@@ -531,11 +544,12 @@ function library:watermark()
 		}
 	)
 	
-	-- Scanline effect
+	table.insert(self.themeitems["accent"]["BorderColor3"], outline2)
+	
 	local scanline = utility.new(
 		"Frame",
 		{
-			BackgroundColor3 = Color3.fromRGB(0, 255, 128),
+			BackgroundColor3 = self.theme.accent,
 			BackgroundTransparency = 0.95,
 			Size = UDim2.new(1,0,0,1),
 			Position = UDim2.new(0,0,0,0),
@@ -544,7 +558,8 @@ function library:watermark()
 		}
 	)
 	
-	-- Terminal text
+	table.insert(self.themeitems["accent"]["BackgroundColor3"], scanline)
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -554,7 +569,7 @@ function library:watermark()
 			Position = UDim2.new(0.5,0,0,0),
 			Font = Enum.Font.Code,
 			Text = "",
-			TextColor3 = Color3.fromRGB(0, 255, 128),
+			TextColor3 = self.theme.accent,
 			TextXAlignment = "Left",
 			TextSize = self.textsize,
 			TextStrokeTransparency = 0.8,
@@ -563,11 +578,12 @@ function library:watermark()
 		}
 	)
 	
-	-- Blinking cursor
+	table.insert(self.themeitems["accent"]["TextColor3"], title)
+	
 	local cursor = utility.new(
 		"Frame",
 		{
-			BackgroundColor3 = Color3.fromRGB(0, 255, 128),
+			BackgroundColor3 = self.theme.accent, 
 			Size = UDim2.new(0,2,0,14),
 			Position = UDim2.new(0,0,0.5,-7),
 			ZIndex = 9904,
@@ -575,24 +591,25 @@ function library:watermark()
 		}
 	)
 	
-	-- Gradient animation
+	table.insert(self.themeitems["accent"]["BackgroundColor3"], cursor)
+	
 	local t = 0
 	local connection = RunService.RenderStepped:Connect(function(dt)
 		t = t + dt
 		gradient.Offset = Vector2.new(math.sin(t * 0.5) * 0.5, 0)
 		
-		-- Pulse effect for border
 		local pulse = (math.sin(t * 2) + 1) / 2
-		outline2.BorderColor3 = Color3.fromRGB(0, 128 + 127 * pulse, 128)
+		outline2.BorderColor3 = Color3.new(
+			self.theme.accent.R * (0.5 + 0.5 * pulse),
+			self.theme.accent.G * (0.5 + 0.5 * pulse),
+			self.theme.accent.B * (0.5 + 0.5 * pulse)
+		)
 		
-		-- Cursor blink
 		cursor.Visible = math.floor(t * 2) % 2 == 0
 		
-		-- Scanline movement
 		scanline.Position = UDim2.new(0, 0, math.sin(t * 0.3) * 0.5 + 0.5, 0)
 	end)
 	
-	-- Size adjustment
 	local textConnection
 	textConnection = title:GetPropertyChangedSignal("TextBounds"):Connect(function()
 		outline.Size = UDim2.new(0, title.TextBounds.X + 30, 0, 26)
@@ -600,24 +617,75 @@ function library:watermark()
 	end)
 	
 	watermark = {
+		["library"] = self,
 		["outline"] = outline,
 		["outline2"] = outline2,
 		["gradient"] = gradient,
 		["scanline"] = scanline,
+		
 		["title"] = title,
 		["cursor"] = cursor,
 		["connection"] = connection,
-		["textConnection"] = textConnection
+		["textConnection"] = textConnection,
+		["autoUpdateFps"] = false,
+		["autoUpdatePing"] = false,
+		["content"] = content,
+		["updateConnection"] = nil
 	}
 	
 	self.labels[#self.labels+1] = title
 	setmetatable(watermark, watermarks)
+	
+	if side then
+		watermark:updateside(side)
+	end
+	
+	if next(content) then
+		watermark:update(content)
+	end
+	
+	if showFps then
+		watermark:enableFpsCounter(true)
+	end
+	
+	if showPing then
+		watermark:enablePingCounter(true)
+	end
+	
 	return watermark
+end
+
+local function calculateFps()
+	frameCount = frameCount + 1
+	local currentTime = tick()
+	local elapsed = currentTime - lastFpsUpdate
+	
+	if elapsed >= fpsUpdateInterval then
+		currentFps = math.floor(frameCount / elapsed)
+		frameCount = 0
+		lastFpsUpdate = currentTime
+	end
+	
+	return currentFps
+end
+
+local function getPing()
+	local currentTime = tick()
+	local elapsed = currentTime - lastPingUpdate
+	
+	if elapsed >= pingUpdateInterval then
+		currentPing = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+		lastPingUpdate = currentTime
+	end
+	
+	return currentPing
 end
 
 function watermarks:update(content)
 	local content = content or {}
 	local watermark = self
+	
+	watermark.content = content
 	
 	local text = "> "
 	for i,v in pairs(content) do
@@ -655,14 +723,65 @@ function watermarks:updateside(side)
 		self.outline.Position = sides[side].Position
 	end
 end
---
+
+function watermarks:enableFpsCounter(state)
+	self.autoUpdateFps = state == true
+	self:setupAutoUpdate()
+end
+
+function watermarks:enablePingCounter(state)
+	self.autoUpdatePing = state == true
+	self:setupAutoUpdate()
+end
+
+function watermarks:setupAutoUpdate()
+	if self.updateConnection then
+		self.updateConnection:Disconnect()
+		self.updateConnection = nil
+	end
+	
+	if self.autoUpdateFps or self.autoUpdatePing then
+		self.updateConnection = RunService.RenderStepped:Connect(function()
+			local content = {}
+			
+			for i, v in pairs(self.content) do
+				content[i] = v
+			end
+			
+			if self.autoUpdateFps then
+				content["FPS"] = tostring(calculateFps())
+			end
+			
+			if self.autoUpdatePing then
+				content["Ping"] = tostring(getPing()) .. "ms"
+			end
+			
+			local text = "> "
+			for i, v in pairs(content) do
+				text = text .. i .. ": " .. v .. "  "
+			end
+			text = text:sub(0, -3)
+			
+			self.title.Text = text
+		end)
+	end
+end
+
+function watermarks:toggle(state)
+	if state ~= nil then
+		self.outline.Visible = state
+	else
+		self.outline.Visible = not self.outline.Visible
+	end
+	return self
+end
+
 function library:loader(props)
 	local name = props.name or props.Name or props.LoaderName or props.Loadername or props.loaderName or props.loadername or "Loader"
 	local scriptname = props.scriptname or props.Scriptname or props.ScriptName or props.scriptName or "Universal"
 	local closed = props.close or props.Close or props.closecallback or props.Closecallback or props.CloseCallback or props.closeCallback or function()end
 	local logedin = props.login or props.Login or props.logincallback or props.Logincallback or props.LoginCallback or props.loginCallback or function()end
 	local loader = {}
-	--
 	local screen = utility.new(
 		"ScreenGui",
 		{
@@ -675,8 +794,8 @@ function library:loader(props)
 	)
         if (check_exploit == "Synapse" and syn.request) then
 	syn.protect_gui(screen)
-        end
-	--
+		end
+
 	local outline = utility.new(
 		"Frame",
 		{
@@ -691,7 +810,7 @@ function library:loader(props)
 			Parent = screen
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -705,7 +824,7 @@ function library:loader(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local indent = utility.new(
 		"Frame",
 		{
@@ -719,7 +838,7 @@ function library:loader(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -737,7 +856,7 @@ function library:loader(props)
 			Parent = indent
 		}
 	)
-	--
+	
 	local scripttitle = utility.new(
 		"TextLabel",
 		{
@@ -755,7 +874,7 @@ function library:loader(props)
 			Parent = indent
 		}
 	)
-	--
+	
 	local makebutton = function(name,parent)
 		local button_holder = utility.new(
 			"Frame",
@@ -766,7 +885,7 @@ function library:loader(props)
 				Parent = parent
 			}
 		)
-		--
+		
 		local button_outline = utility.new(
 			"Frame",
 			{
@@ -780,7 +899,7 @@ function library:loader(props)
 				Parent = button_holder
 			}
 		)
-		--
+		
 		local button_outline2 = utility.new(
 			"Frame",
 			{
@@ -794,7 +913,7 @@ function library:loader(props)
 				Parent = button_outline
 			}
 		)
-		--
+	
 		local button_color = utility.new(
 			"Frame",
 			{
@@ -807,7 +926,7 @@ function library:loader(props)
 				Parent = button_outline2
 			}
 		)
-		--
+		
 		utility.new(
 			"UIGradient",
 			{
@@ -816,7 +935,7 @@ function library:loader(props)
 				Parent = button_color
 			}
 		)
-		--
+	
 		local button_button = utility.new(
 			"TextButton",
 			{
@@ -833,21 +952,21 @@ function library:loader(props)
 				Parent = button_holder
 			}
 		)
-		--
+	
 		return {button_holder,button_outline,button_button}
 	end
-	--
+	
 	local close = makebutton("close",indent)
 	local login = makebutton("login",indent)
-	--
+	
 	close[1].AnchorPoint = Vector2.new(0.5,0)
 	close[1].Size = UDim2.new(0.5,0,0,20)
 	close[1].Position = UDim2.new(0.5,0,0,40)
-	--
+
 	login[1].AnchorPoint = Vector2.new(0.5,0)
 	login[1].Size = UDim2.new(0.5,0,0,20)
 	login[1].Position = UDim2.new(0.5,0,0,62)
-	--
+	
 	close[3].MouseButton1Down:Connect(function()
 		close[2].BorderColor3 = Color3.fromRGB(168, 52, 235)
 		outline:TweenPosition(UDim2.new(-1.5,0,0.5,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.75,true)
@@ -857,7 +976,7 @@ function library:loader(props)
 		wait(0.7)
 		screen:Remove()
 	end)
-	--
+	
 	login[3].MouseButton1Down:Connect(function()
 		login[2].BorderColor3 = Color3.fromRGB(168, 52, 235)
 		outline:TweenPosition(UDim2.new(1.5,0,0.5,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.75,true)
@@ -867,26 +986,20 @@ function library:loader(props)
 		wait(0.7)
 		screen:Remove()
 	end)
-	--
+	
 	loader = {
 		["outline"] = outline,
 		["outline2"] = outline2,
 		["indent"] = indent,
 		["title"] = title
 	}
-	--
+	
 	setmetatable(loader,loaders)
 	return loader
 end
---
+
 function loaders:toggle()
 	self.outline.Visible = true
-end
---
-function watermarks:toggle(bool)
-	local watermark = self
-	--
-	watermark.outline.Visible = bool
 end
 
 function library:graphcheck()
@@ -954,372 +1067,183 @@ function library:graphcheck()
 	end)
 end
 
---
+
 function library:saveconfig()
     local cfg = {}
-    print("Debug: self.pointers = ", hs:JSONEncode(self.pointers))
-    for i, v in pairs(self.pointers) do
-        cfg[i] = {}
-        print("Debug: Processing pointer ", i, " with value ", hs:JSONEncode(v))
-        for c, d in pairs(v) do
-            cfg[i][c] = {}
-            print("Debug: Processing sub-pointer ", c, " with value ", hs:JSONEncode(d))
-            for x, z in pairs(d) do
-                if z.current ~= nil then
-                    if typeof(z.current) == "Color3" then
-                        cfg[i][c][x] = {z.current.R, z.current.G, z.current.B}
+    local processedTables = {} 
+    
+    local function recursivelyGetValues(tbl, depth)
+        if depth > 10 then return {} end
+        
+        if processedTables[tbl] then return {} end
+        processedTables[tbl] = true
+        
+        local result = {}
+        for k, v in pairs(tbl) do
+            if type(v) == "table" then
+                if v.current ~= nil then
+                    if typeof(v.current) == "Color3" then
+                        result[k] = {v.current.R, v.current.G, v.current.B}
+                    elseif typeof(v.current) == "table" and v.current[1] and v.current[2] then
+                        result[k] = v.current
                     else
-                        cfg[i][c][x] = z.current
+                        result[k] = v.current
                     end
-                    print("Debug: Saved ", x, " with value ", cfg[i][c][x])
+                elseif v.pointers and not processedTables[v.pointers] then
+                    local nested = recursivelyGetValues(v.pointers, depth + 1)
+                    if next(nested) ~= nil then
+                        result[k] = nested
+                    end
+                elseif not processedTables[v] then
+                    local nested = recursivelyGetValues(v, depth + 1)
+                    if next(nested) ~= nil then
+                        result[k] = nested
+                    end
+                end
+            end
+        end
+        return result
+    end
+    
+    for pointer_name, pointer_value in pairs(self.pointers) do
+        if type(pointer_value) == "table" then
+            if pointer_value.current ~= nil then
+                if typeof(pointer_value.current) == "Color3" then
+                    cfg[pointer_name] = {pointer_value.current.R, pointer_value.current.G, pointer_value.current.B}
+                elseif typeof(pointer_value.current) == "table" and pointer_value.current[1] and pointer_value.current[2] then
+                    cfg[pointer_name] = pointer_value.current
                 else
-                    warn("Debug: Skipping ", x, " because z.current is nil")
+                    cfg[pointer_name] = pointer_value.current
+                end
+            else
+                processedTables = {} 
+                local nestedValues = recursivelyGetValues(pointer_value, 1)
+                if next(nestedValues) ~= nil then
+                    cfg[pointer_name] = nestedValues
                 end
             end
         end
     end
+    
     local json_data = hs:JSONEncode(cfg)
     if json_data == "{}" or json_data == "[]" then
         warn("No configuration data to save: cfg table is empty")
-    else
-        print("Debug: Config data to save: ", json_data)
     end
+    
     return json_data
 end
---
+
 function library:loadconfig(cfg)
-	local cfg = hs:JSONDecode(readfile(cfg))
-	for i,v in pairs(cfg) do
-		for c,d in pairs(v) do
-			for x,z in pairs(d) do
-				if z ~= nil then
-					if self.pointers[i] ~= nil and self.pointers[i][c] ~= nil and self.pointers[i][c][x] ~= nil then
-						self.pointers[i][c][x]:set(z)
-					end
-				end
-			end
-		end
-	end
-end
---
-function library:settheme(theme,color)
-	local window = self
-	--
-	if window.theme[theme] then
-		window.theme[theme] = color
-	end
-	--
-	if window.themeitems[theme] then
-		for i,v in pairs(window.themeitems[theme]) do
-			for z,x in pairs(v) do
-				x[i] = color
-			end
-		end
-	end
-end
---
-function library:setkey(key)
-	if typeof(key) == "EnumItem" then
-		local window = self
-		window.key = key
-	end
-end
---
-function library:settoggle(side,bool)
-	if side == "x" then
-		self.x = bool
-	else
-		self.y = bool
-	end
-end
---
-function library:setfont(font)
-	if font ~= nil then
-		local window = self
-		for i,v in pairs(window.labels) do
-			if v ~= nil then
-				v.Font = font
-			end
-		end
-	end
-end
---
-function library:settextsize(size)
-	if size ~= nil then
-		local window = self
-		for i,v in pairs(window.labels) do
-			if v ~= nil then
-				v.TextSize = size
-			end
-		end
-	end
-end
---
-function library:page(props)
-	-- // properties
-	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
-	-- // variables
-	local page = {}
-	-- // main
-	local tabbutton = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(20, 20, 20),
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(0,75,1,0),
-			Parent = self.tabsbuttons
-		}
-	)
-	--
-	local outline = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-			BorderColor3 = Color3.fromRGB(56, 56, 56),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(1,0,1,0),
-			Position = UDim2.new(0,0,0,0),
-			Parent = tabbutton
-		}
-	)
-	--
-	local button = utility.new(
-		"TextButton",
-		{
-			AnchorPoint = Vector2.new(0,0),
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,1,0),
-			Position = UDim2.new(0,0,0,0),
-			Text = "",
-			Parent = tabbutton
-		}
-	)
-	--
-	local r_line = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(56, 56, 56),
-			BorderSizePixel = 0,
-			Size = UDim2.new(0,1,0,1),
-			Position = UDim2.new(1,0,1,1),
-			ZIndex = 2,
-			Parent = outline
-		}
-	)
-	--
-	local l_line = utility.new(
-		"Frame",
-		{
-			AnchorPoint = Vector2.new(1,0),
-			BackgroundColor3 = Color3.fromRGB(56, 56, 56),
-			BorderSizePixel = 0,
-			Size = UDim2.new(0,1,0,1),
-			Position = UDim2.new(0,0,1,1),
-			ZIndex = 2,
-			Parent = outline
-		}
-	)
-	--
-utility.tweenColor = function(object, property, color, duration)
-    duration = duration or 0.2
-    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    ts:Create(object, tweenInfo, {[property] = color}):Play()
-end
-	
-	local line = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-			BorderSizePixel = 0,
-			Size = UDim2.new(1,0,0,2),
-			Position = UDim2.new(0,0,1,0),
-			ZIndex = 2,
-			Parent = outline
-		}
-	)
-	--
-	local label = utility.new(
-		"TextLabel",
-		{
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,0,20),
-			Position = UDim2.new(0,0,0,0),
-			Font = self.font,
-			Text = name,
-			TextColor3 = Color3.fromRGB(255,255,255),
-			TextSize = self.textsize,
-			TextStrokeTransparency = 0,
-			Parent = outline
-		}
-	)
-	--
-	local pageholder = utility.new(
-		"Frame",
-		{
-			AnchorPoint = Vector2.new(0.5,0.5),
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,-20,1,-20),
-			Position = UDim2.new(0.5,0,0.5,0),
-			Visible = false,
-			Parent = self.tabs
-		}
-	)
-	--
-	local left = utility.new(
-		"ScrollingFrame",
-		{
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			Size = UDim2.new(0.5,-5,1,0),
-			Position = UDim2.new(0,0,0,0),
-			AutomaticCanvasSize = "Y",
-			CanvasSize = UDim2.new(0,0,0,0),
-			ScrollBarImageTransparency = 1,
-			ScrollBarImageColor3 = Color3.fromRGB(0,0,0),
-			ScrollBarThickness = 0,
-			ClipsDescendants = false,
-			VerticalScrollBarInset = "None",
-			VerticalScrollBarPosition = "Right",
-			Parent = pageholder
-		}
-	)
-	--
-	utility.new(
-		"UIListLayout",
-		{
-			FillDirection = "Vertical",
-			Padding = UDim.new(0,10),
-			Parent = left
-		}
-	)
-	--
-	local right = utility.new(
-		"ScrollingFrame",
-		{
-			AnchorPoint = Vector2.new(1,0),
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			Size = UDim2.new(0.5,-5,1,0),
-			Position = UDim2.new(1,0,0,0),
-			AutomaticCanvasSize = "Y",
-			CanvasSize = UDim2.new(0,0,0,0),
-			ScrollBarImageTransparency = 1,
-			ScrollBarImageColor3 = Color3.fromRGB(0,0,0),
-			ScrollBarThickness = 0,
-			ClipsDescendants = false,
-			VerticalScrollBarInset = "None",
-			VerticalScrollBarPosition = "Right",
-			Parent = pageholder
-		}
-	)
-	--
-	utility.new(
-		"UIListLayout",
-		{
-			FillDirection = "Vertical",
-			Padding = UDim.new(0,10),
-			Parent = right
-		}
-	)
-	-- // page tbl
-	page = {
-		["library"] = self,
-		["outline"] = outline,
-		["r_line"] = r_line,
-		["l_line"] = l_line,
-		["line"] = line,
-		["page"] = pageholder,
-		["left"] = left,
-		["right"] = right,
-		["open"] = false,
-		["pointers"] = {}
-	}
-	--
-	table.insert(self.pages,page)
-	--
-	button.MouseButton1Down:Connect(function()
-			
-		if page.open == false then
-			for i,v in pairs(self.pages) do
-				if v ~= page then
-					if v.open then
-						v.page.Visible = false
-						v.open = false
-						v.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-						v.line.Size = UDim2.new(1,0,0,2)
-						v.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-					end
-				end
-			end
-			--
-			self:closewindows()
-			--
-			page.page.Visible = true
-			page.open = true
-			page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-			page.line.Size = UDim2.new(1,0,0,3)
-			page.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-
-				for _, esppreview in pairs(self.esppreviews or {}) do
-    utility.tweenTransparency(esppreview.previewholder, 0.5, 1)
-    esppreview.previewholder.Visible = false
-end
-if page.esppreview then
-    utility.tweenTransparency(page.esppreview.previewholder, 0.5, 0)
-    page.esppreview.previewholder.Visible = true
-end
-
-		end
+	local success, configData = pcall(function()
+		return hs:JSONDecode(readfile(cfg))
 	end)
-	--
-	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
-	if pointer then
-		self.pointers[tostring(pointer)] = page.pointers
+	
+	if not success then
+		warn("Failed to load config: " .. tostring(configData))
+		return false
 	end
-	--
-	self.labels[#self.labels+1] = label
-	-- // metatable indexing + return
-	setmetatable(page, pages)
-	return page
-end
---
-function pages:openpage()
-	local page = self
-	--
-	if page.open == false then
-		for i,v in pairs(page.library.pages) do
-			if v ~= page then
-				if v.open then
-					v.page.Visible = false
-					v.open = false
-					v.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-					v.line.Size = UDim2.new(1,0,0,2)
-					v.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+	
+	local function getTableKeys(tbl)
+		local keys = {}
+		for k, _ in pairs(tbl) do
+			table.insert(keys, k)
+		end
+		return keys
+	end
+	
+	warn("Loading config with " .. tostring(#getTableKeys(configData)) .. " root entries")
+	
+	local processedTables = {}
+	
+	local function recursivelySetValues(tbl, config, depth)
+		
+		if depth > 10 then return end
+		
+		if processedTables[tbl] then return end
+		processedTables[tbl] = true
+		
+		for element_name, element_value in pairs(config) do
+			if type(element_value) == "table" then
+				local isContainer = false
+				for k, _ in pairs(element_value) do
+					if type(k) == "string" then
+						isContainer = true
+						break
+					end
+				end
+				
+				if not isContainer then
+					if tbl[element_name] and tbl[element_name].set then
+						pcall(function() 
+							tbl[element_name]:set(element_value)
+						end)
+					end
+				else
+					if tbl[element_name] then
+						if tbl[element_name].pointers and not processedTables[tbl[element_name].pointers] then
+							recursivelySetValues(tbl[element_name].pointers, element_value, depth + 1)
+						elseif not processedTables[tbl[element_name]] then
+							recursivelySetValues(tbl[element_name], element_value, depth + 1)
+						end
+					end
+				end
+			else
+				if tbl[element_name] and tbl[element_name].set then
+					pcall(function() 
+						tbl[element_name]:set(element_value)
+					end)
 				end
 			end
 		end
-		--
-		page.page.Visible = true
-		page.open = true
-		page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-		page.line.Size = UDim2.new(1,0,0,3)
-		page.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 	end
+	
+	for pointer_name, value in pairs(configData) do
+		if self.pointers[pointer_name] == nil then
+			warn("Pointer not found: " .. tostring(pointer_name))
+			continue
+		end
+		
+		if type(value) == "table" then
+			local isContainer = false
+			for k, _ in pairs(value) do
+				if type(k) == "string" then
+					isContainer = true
+					break
+				end
+			end
+			
+			if isContainer then
+				processedTables = {} 
+				recursivelySetValues(self.pointers[pointer_name], value, 1)
+			else
+				if self.pointers[pointer_name].set then
+					pcall(function() 
+						self.pointers[pointer_name]:set(value)
+					end)
+				else
+					warn("Pointer has no set method: " .. tostring(pointer_name))
+				end
+			end
+		else
+			if self.pointers[pointer_name].set then
+				pcall(function() 
+					self.pointers[pointer_name]:set(value)
+				end)
+			else
+				warn("Pointer has no set method: " .. tostring(pointer_name))
+			end
+		end
+	end
+	
+	return true
 end
---
+
 function pages:section(props)
-	-- // properties
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
 	local side = props.side or props.Side or props.sectionside or props.Sectionside or props.SectionSide or props.sectionSide or "left"
 	local size = props.size or props.Size or props.yaxis or props.yAxis or props.YAxis or props.Yaxis or 200
 	side = side:lower()
-	-- // variables
 	local section = {}
-	-- // main
 	local sectionholder = utility.new(
 		"Frame",
 		{
@@ -1331,7 +1255,7 @@ function pages:section(props)
 			Parent = self[side]
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -1343,7 +1267,7 @@ function pages:section(props)
 			Parent = sectionholder
 		}
 	)
-	--
+
 	local color = utility.new(
 		"Frame",
 		{
@@ -1355,9 +1279,9 @@ function pages:section(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color)
-	--
+
 	local content = utility.new(
 		"Frame",
 		{
@@ -1369,7 +1293,7 @@ function pages:section(props)
 			Parent = outline
 		}
 	)
-	--
+
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -1385,8 +1309,8 @@ function pages:section(props)
 			Parent = outline
 		}
 	)
-	--
-	utility.new(
+
+	local listLayout = utility.new(
 		"UIListLayout",
 		{
 			FillDirection = "Vertical",
@@ -1394,38 +1318,59 @@ function pages:section(props)
 			Parent = content
 		}
 	)
-	-- // section tbl
+
+	local listLayoutConnection
+	listLayoutConnection = listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+		local contentSize = listLayout.AbsoluteContentSize.Y
+		local paddingSize = 30 
+		local newSize = math.max(size, contentSize + paddingSize)
+		sectionholder.Size = UDim2.new(1, 0, 0, newSize)
+	end)
+
+	local function updateSectionSize()
+		local contentSize = listLayout.AbsoluteContentSize.Y
+		local paddingSize = 30 
+		local newSize = math.max(size, contentSize + paddingSize)
+		sectionholder.Size = UDim2.new(1, 0, 0, newSize)
+	end
+
 	section = {
 		["library"] = self.library,
 		["sectionholder"] = sectionholder,
 		["color"] = color,
 		["content"] = content,
+		["listLayout"] = listLayout,
+		["listLayoutConnection"] = listLayoutConnection,
+		["updateSectionSize"] = updateSectionSize,
 		["pointers"] = {}
 	}
-	--
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+	
 	if pointer then
+		warn("Registering section pointer: " .. tostring(pointer))
 		if self.pointers then
 			self.pointers[tostring(pointer)] = section.pointers
+			warn("  Registered at: self.pointers[" .. tostring(pointer) .. "]")
+		else
+			warn("  No pointers table in page!")
+			self.pointers = {}
+			self.pointers[tostring(pointer)] = section.pointers
+			warn("  Created pointers table and registered at: self.pointers[" .. tostring(pointer) .. "]")
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = title
-	-- // metatable indexing + return
 	setmetatable(section, sections)
 	return section
 end
---
+
 function pages:multisection(props)
-	-- // properties
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
 	local side = props.side or props.Side or props.sectionside or props.Sectionside or props.SectionSide or props.sectionSide or "left"
 	local size = props.size or props.Size or props.yaxis or props.yAxis or props.YAxis or props.Yaxis or 200
 	side = side:lower()
-	-- // variables
 	local multisection = {}
-	-- // main
 	local sectionholder = utility.new(
 		"Frame",
 		{
@@ -1437,7 +1382,7 @@ function pages:multisection(props)
 			Parent = self[side]
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -1449,7 +1394,7 @@ function pages:multisection(props)
 			Parent = sectionholder
 		}
 	)
-	--
+	
 	local color = utility.new(
 		"Frame",
 		{
@@ -1461,9 +1406,9 @@ function pages:multisection(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color)
-	--
+	
 	local tabsholder = utility.new(
 		"Frame",
 		{
@@ -1475,7 +1420,7 @@ function pages:multisection(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -1491,7 +1436,7 @@ function pages:multisection(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local buttons = utility.new(
 		"Frame",
 		{
@@ -1503,7 +1448,7 @@ function pages:multisection(props)
 			Parent = tabsholder
 		}
 	)
-	--
+	
 	local tabs = utility.new(
 		"Frame",
 		{
@@ -1517,7 +1462,7 @@ function pages:multisection(props)
 			Parent = tabsholder
 		}
 	)
-	--
+	
 	utility.new(
 		"UIListLayout",
 		{
@@ -1526,7 +1471,7 @@ function pages:multisection(props)
 			Parent = buttons
 		}
 	)
-	--
+	
 	local tabs_outline = utility.new(
 		"Frame",
 		{
@@ -1540,7 +1485,7 @@ function pages:multisection(props)
 			Parent = tabs
 		}
 	)
-	-- // section tbl
+	
 	multisection = {
 		["library"] = self.library,
 		["sectionholder"] = sectionholder,
@@ -1552,26 +1497,23 @@ function pages:multisection(props)
 		["tabs_outline"] = tabs_outline,
 		["pointers"] = {}
 	}
-	--
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+	
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = multisection.pointers
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = title
-	-- // metatable indexing + return
 	setmetatable(multisection,multisections)
 	return multisection
 end
---
+	
 function multisections:section(props)
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
-	-- // variables
 	local mssection = {}
-	-- // main
 	local tabbutton = utility.new(
 		"Frame",
 		{
@@ -1583,7 +1525,7 @@ function multisections:section(props)
 			Parent = self.buttons
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -1596,7 +1538,7 @@ function multisections:section(props)
 			Parent = tabbutton
 		}
 	)
-	--
+	
 	local button = utility.new(
 		"TextButton",
 		{
@@ -1608,7 +1550,7 @@ function multisections:section(props)
 			Parent = tabbutton
 		}
 	)
-	--
+	
 	local r_line = utility.new(
 		"Frame",
 		{
@@ -1620,7 +1562,7 @@ function multisections:section(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local l_line = utility.new(
 		"Frame",
 		{
@@ -1633,7 +1575,7 @@ function multisections:section(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local line = utility.new(
 		"Frame",
 		{
@@ -1645,7 +1587,7 @@ function multisections:section(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local label = utility.new(
 		"TextLabel",
 		{
@@ -1660,7 +1602,32 @@ function multisections:section(props)
 			Parent = outline
 		}
 	)
-	--
+	
+	local underline = utility.new(
+		"Frame",
+		{
+				AnchorPoint = Vector2.new(0.5, 1),
+				BackgroundColor3 = self.library.theme.accent,
+				BorderSizePixel = 0,
+				Size = UDim2.new(0.8, 0, 0, 1),
+				Position = UDim2.new(0.5, 0, 0.9, 0),
+				Visible = false,
+				ZIndex = 3,
+				Parent = label
+			}
+		)
+	
+	table.insert(self.library.themeitems["accent"]["BackgroundColor3"], underline)
+	
+	local function updateTabWidth()
+		local textWidth = label.TextBounds.X
+		local padding = 16 
+		tabbutton.Size = UDim2.new(0, textWidth + padding, 0, 20)
+	end
+	
+	label:GetPropertyChangedSignal("TextBounds"):Connect(updateTabWidth)
+	updateTabWidth() 
+	
 	local content = utility.new(
 		"Frame",
 		{
@@ -1669,10 +1636,11 @@ function multisections:section(props)
 			BorderSizePixel = 0,
 			Size = UDim2.new(1,-6,1,-27),
 			Position = UDim2.new(0.5,0,1,-3),
+			Visible = false, 
 			Parent = self.tabs_outline
 		}
 	)
-	--
+	
 	utility.new(
 		"UIListLayout",
 		{
@@ -1681,7 +1649,6 @@ function multisections:section(props)
 			Parent = content
 		}
 	)
-	-- // mssection tbl
 	mssection = {
 		["library"] = self.library,
 		["outline"] = outline,
@@ -1690,57 +1657,115 @@ function multisections:section(props)
 		["line"] = line,
 		["content"] = content,
 		["open"] = false,
+		["underline"] = underline,
 		["pointers"] = {}
 	}
-	--
+	
 	table.insert(self.mssections,mssection)
-	--
-	button.MouseButton1Down:Connect(function()
-		if mssection.open == false then
-			for i,v in pairs(self.mssections) do
-				if v ~= mssection then
-					if v.open then
-						v.page.Visible = false
-						v.open = false
-						v.outline.BackgroundColor3 = Color3.fromRGB(31, 31 ,31)
-						v.line.Size = UDim2.new(1,0,0,2)
-						v.line.BackgroundColor3 = Color3.fromRGB(31, 31 ,31)
-					end
+	mssection.selectTab = function()
+		for i,v in pairs(self.mssections) do
+			if v ~= mssection then
+				if v.open then
+					v.content.Visible = false
+					v.open = false
+					v.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+					v.line.Size = UDim2.new(1,0,0,2)
+					v.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+					v.underline.Visible = false
 				end
 			end
-			--
-			mssection.library:closewindows()
-			--
-			mssection.content.Visible = true
-			mssection.open = true
-			mssection.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-			mssection.line.Size = UDim2.new(1,0,0,3)
-			mssection.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+		end
+		
+		mssection.library:closewindows()
+		
+		mssection.content.Visible = true
+		mssection.open = true
+		mssection.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+		mssection.line.Size = UDim2.new(1,0,0,3)
+		mssection.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+		mssection.underline.Visible = true
+	end
+	
+	button.MouseButton1Down:Connect(function()
+		if mssection.open == false then
+			mssection.selectTab()
 		end
 	end)
-	--
+	
+	if #self.mssections == 1 then
+		mssection.selectTab()
+	end
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = mssection.pointers
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = label
-	-- // metatable indexing + return
-	setmetatable(mssection,mssections)
+
+	function mssection:toggle(props)
+		return sections.toggle(self, props)
+	end
+
+	function mssection:button(props)
+		return sections.button(self, props)
+	end
+
+	function mssection:slider(props)
+		return sections.slider(self, props)
+	end
+
+	function mssection:dropdown(props)
+		return sections.dropdown(self, props)
+	end
+
+	function mssection:multibox(props)
+		return sections.multibox(self, props)
+	end
+
+	function mssection:buttonbox(props)
+		return sections.buttonbox(self, props)
+	end
+
+	function mssection:textbox(props)
+		return sections.textbox(self, props)
+	end
+
+	function mssection:keybind(props)
+		return sections.keybind(self, props)
+	end
+
+	function mssection:colorpicker(props)
+		return sections.colorpicker(self, props)
+	end
+
+	function mssection:configloader(props)
+		return sections.configloader(self, props)
+	end
+
+	function mssection:esppreview(props)
+		return sections.esppreview(self, props)
+	end
+
+	setmetatable(mssection, mssections)
 	return mssection
 end
---
+
+function multisections:selectTabIndex(index)
+	if self.mssections and self.mssections[index] then
+		self.mssections[index].selectTab()
+		return true
+	end
+	return false
+end
+
 function sections:toggle(props)
-    -- // properties
     local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
     local def = props.def or props.Def or props.default or props.Default or props.toggle or props.Toggle or props.toggled or props.Toggled or false
     local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
-    -- // variables
     local toggle = {}
-    -- // main
     local toggleholder = utility.new(
         "Frame",
         {
@@ -1749,7 +1774,7 @@ function sections:toggle(props)
             Parent = self.content
         }
     )
-    --
+    
     local outline = utility.new(
         "Frame",
         {
@@ -1761,7 +1786,7 @@ function sections:toggle(props)
             Parent = toggleholder
         }
     )
-    --
+
     local button = utility.new(
         "TextButton",
         {
@@ -1773,7 +1798,7 @@ function sections:toggle(props)
             Parent = toggleholder
         }
     )
-    --
+    
     local title = utility.new(
         "TextLabel",
         {
@@ -1789,7 +1814,7 @@ function sections:toggle(props)
             Parent = toggleholder
         }
     )
-    --
+    
     local color = utility.new(
         "Frame",
         {
@@ -1801,7 +1826,7 @@ function sections:toggle(props)
             Parent = outline
         }
     )
-    --
+    
     utility.new(
         "UIGradient",
         {
@@ -1810,7 +1835,7 @@ function sections:toggle(props)
             Parent = color
         }
     )
-    -- // toggle tbl
+    
     toggle = {
         ["library"] = self.library,
         ["toggleholder"] = toggleholder,
@@ -1819,11 +1844,11 @@ function sections:toggle(props)
         ["callback"] = callback,
         ["current"] = def
     }
-    --
+    
     if def then
         table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color)
     end
-    --
+    
     button.MouseButton1Down:Connect(function()
         if toggle.current then
             toggle.callback(false)
@@ -1840,21 +1865,24 @@ function sections:toggle(props)
             toggle.current = true
         end
     end)
-    --
+    
     local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-    --
+    
     if pointer then
+        warn("Registering toggle pointer: " .. tostring(pointer))
         if self.pointers then
             self.pointers[tostring(pointer)] = toggle
+            warn("  Registered at: self.pointers[" .. tostring(pointer) .. "]")
+        else
+            warn("  No pointers table in section!")
         end
     end
-    --
+    
     self.library.labels[#self.library.labels+1] = title
-    -- // metatable indexing + return
     setmetatable(toggle, toggles)
     return toggle
 end
---
+
 function toggles:set(bool)
     if bool ~= nil then
         local toggle = self
@@ -1872,14 +1900,11 @@ function toggles:set(bool)
         end
     end
 end
---
+
 function sections:button(props)
-	-- // properties
 	local name = props.name or props.Name or "new button"
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
-	-- // variables
 	local button = {}
-	-- // main
 	local buttonholder = utility.new(
 		"Frame",
 		{
@@ -1888,7 +1913,7 @@ function sections:button(props)
 			Parent = self.content
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -1900,7 +1925,7 @@ function sections:button(props)
 			Parent = buttonholder
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -1912,7 +1937,7 @@ function sections:button(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local color = utility.new(
 		"Frame",
 		{
@@ -1922,7 +1947,7 @@ function sections:button(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	utility.new(
 		"UIGradient",
 		{
@@ -1931,7 +1956,7 @@ function sections:button(props)
 			Parent = color
 		}
 	)
-	--
+	
 	local buttonb = utility.new(
 		"TextButton",
 		{
@@ -1947,52 +1972,47 @@ function sections:button(props)
 			Parent = buttonholder
 		}
 	)
-	--
-	-- // button tbl
+
 	button = {
 		["library"] = self.library,
 		["outline"] = outline,
 		["callback"] = callback
 	}
-	--
+	
 	buttonb.MouseButton1Down:Connect(function()
 		utility.tweenColor(outline, "BorderColor3", self.library.theme.accent, 0.15)
 		callback()
 		wait(0.05)
 		utility.tweenColor(outline, "BorderColor3", Color3.fromRGB(12,12,12), 0.15)
 	end)
-	--
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+	
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = button
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = buttonb
-	-- // metatable indexing + return
 	setmetatable(button, buttons)
 	return button
 end
---
+
 function sections:slider(props)
-	-- // properties
 	local name = props.name or props.Name or "new ui"
 	local def = props.def or props.default or 0
 	local max = props.max or 100
 	local min = props.min or 0
 	local rounding = props.rounding or false
-	local roundingvalue = props.roundingvalue or 0.01 -- << YENİ KRAL
+	local roundingvalue = props.roundingvalue or 0.01
 	local ticking = props.tick or false
 	local measurement = props.measurement or ""
 	local callback = props.callback or function() end
 	def = math.clamp(def, min, max)
 
-	-- // variables
 	local slider = {}
 
-	-- // main UI
 	local sliderholder = utility.new("Frame", {
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 25),
@@ -2087,7 +2107,6 @@ function sections:slider(props)
 		Parent = sliderholder
 	})
 
-	-- slider table
 	slider = {
 		["library"] = self.library,
 		["outline"] = outline,
@@ -2103,7 +2122,7 @@ function sections:slider(props)
 		["tick"] = ticking,
 		["rounding"] = rounding,
 		["callback"] = callback,
-		["roundingvalue"] = roundingvalue -- << YENİ KRAL
+		["roundingvalue"] = roundingvalue 
 	}
 
 	local function slide()
@@ -2169,33 +2188,51 @@ function sections:slider(props)
 end
 
 function sliders:set(value)
-	local size = math.clamp((self.color.AbsoluteSize.X / (self.max - self.min) * (value - self.min)), 0, self.color.AbsoluteSize.X)
-	local result = value
-
+	if value == nil then return self end
+	
+	local slider = self
+	value = math.clamp(value, slider.min, slider.max)
+	
+	local size = (slider.color.AbsoluteSize.X / (slider.max - slider.min) * (value - slider.min))
+	
 	local newres
-	if self.rounding then
-		newres = math.floor(result)
+	if slider.rounding then
+		newres = math.floor(value)
 	else
-		newres = math.floor(result / self.roundingvalue + 0.5) * self.roundingvalue
+		newres = math.floor(value / slider.roundingvalue + 0.5) * slider.roundingvalue
 	end
-
-	newres = math.clamp(newres, self.min, self.max)
-
-	self.value.Text = newres .. self.measurement .. "/" .. self.max .. self.measurement
-	self.current = newres
-	self.callback(newres)
-
-	if self.tick then
-		self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * (self.color.AbsoluteSize.X / (self.max - self.min) * (newres - self.min)), 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
+	
+	newres = math.clamp(newres, slider.min, slider.max)
+	
+	slider.value.Text = newres .. slider.measurement .. "/" .. slider.max .. slider.measurement
+	
+	slider.current = newres
+	
+	if slider.tick then
+		slider.slide:TweenSize(
+			UDim2.new((1 / slider.color.AbsoluteSize.X) * (slider.color.AbsoluteSize.X / (slider.max - slider.min) * (newres - slider.min)), 0, 1, 0),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quad,
+			0.15,
+			true
+		)
 	else
-		self.slide:TweenSize(UDim2.new((1 / self.color.AbsoluteSize.X) * size, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
+		slider.slide:TweenSize(
+			UDim2.new((1 / slider.color.AbsoluteSize.X) * size, 0, 1, 0),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quad,
+			0.15,
+			true
+		)
 	end
+	
+	slider.callback(newres)
+	
+	return self
 end
 
---
 function library:closewindows(ignore)
 	local window = self
-	--
 	for i,v in pairs(window.dropdowns) do
 		if v ~= ignore then
 			if v.open then
@@ -2205,7 +2242,6 @@ function library:closewindows(ignore)
 			end
 		end
 	end
-	--
 	for i,v in pairs(window.multiboxes) do
 		if v ~= ignore then
 			if v.open then
@@ -2215,7 +2251,6 @@ function library:closewindows(ignore)
 			end
 		end
 	end
-	--
 	for i,v in pairs(window.buttonboxs) do
 		if v ~= ignore then
 			if v.open then
@@ -2225,7 +2260,6 @@ function library:closewindows(ignore)
 			end
 		end
 	end
-	--
 	for i,v in pairs(window.colorpickers) do
 		if v ~= ignore then
 			if v.open then
@@ -2236,457 +2270,10 @@ function library:closewindows(ignore)
 	end
 end
 
--- [Previous code remains unchanged until the sections:configloader function]
-
--- Add this new function after sections:configloader
--- [Previous code remains unchanged until sections:configloader]
-
--- Updated pluginloader function
-function sections:pluginloader(props)
-    -- // properties
-    local folder = props.folder or props.Folder or "nexifyv3_plugins" -- Default to nexifyv3_plugins if not provided
-    -- // variables
-    local pluginloader = {}
-    -- // main
-    local plholder = utility.new(
-        "Frame",
-        {
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 0, 222),
-            Position = UDim2.new(0, 0, 0, 10), -- Moved UI down by setting Y offset to 10
-            Parent = self.content
-        }
-    )
-    --
-    local outline = utility.new(
-        "Frame",
-        {
-            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-            BorderColor3 = Color3.fromRGB(12, 12, 12),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(1, 0, 1, 0),
-            Parent = plholder
-        }
-    )
-    --
-    local outline2 = utility.new(
-        "Frame",
-        {
-            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-            BorderColor3 = Color3.fromRGB(56, 56, 56),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(1, 0, 1, 0),
-            Parent = outline
-        }
-    )
-    --
-    local title = utility.new(
-        "TextLabel",
-        {
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 0, 15),
-            Position = UDim2.new(0, 0, 0, 3),
-            Font = self.library.font,
-            Text = "plugins",
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            TextSize = self.library.textsize,
-            TextStrokeTransparency = 0,
-            TextXAlignment = "Center",
-            Parent = outline
-        }
-    )
-    --
-    self.library.labels[#self.library.labels + 1] = title
-    --
-    local color = utility.new(
-        "Frame",
-        {
-            AnchorPoint = Vector2.new(0.5, 0),
-            BackgroundColor3 = self.library.theme.accent,
-            BorderColor3 = Color3.fromRGB(12, 12, 12),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(1, -6, 0, 1),
-            Position = UDim2.new(0.5, 0, 0, 19),
-            Parent = outline
-        }
-    )
-    --
-    table.insert(self.library.themeitems["accent"]["BackgroundColor3"], color)
-    --
-    local buttonsholder = utility.new(
-        "Frame",
-        {
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            Size = UDim2.new(1, 0, 0, 64),
-            Position = UDim2.new(0, 0, 0, 150),
-            Parent = outline
-        }
-    )
-    --
-    local pluginsholder = utility.new(
-        "Frame",
-        {
-            AnchorPoint = Vector2.new(0.5, 0),
-            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-            BorderColor3 = Color3.fromRGB(12, 12, 12),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(1, -10, 0, 120),
-            Position = UDim2.new(0.5, 0, 0, 25),
-            Parent = outline
-        }
-    )
-    --
-    local outline3 = utility.new(
-        "Frame",
-        {
-            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-            BorderColor3 = Color3.fromRGB(56, 56, 56),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(1, 0, 1, 0),
-            Position = UDim2.new(0, 0, 0, 0),
-            Parent = pluginsholder
-        }
-    )
-    --
-    local outline4 = utility.new(
-        "ScrollingFrame",
-        {
-            BackgroundColor3 = Color3.fromRGB(56, 56, 56),
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            Size = UDim2.new(1, 0, 1, 0),
-            Position = UDim2.new(0, 0, 0, 0),
-            ClipsDescendants = true,
-            AutomaticCanvasSize = "Y",
-            CanvasSize = UDim2.new(0, 0, 0, 0),
-            ScrollBarImageTransparency = 0.25,
-            ScrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
-            ScrollBarThickness = 5,
-            VerticalScrollBarInset = "ScrollBar",
-            VerticalScrollBarPosition = "Right",
-            Parent = outline3
-        }
-    )
-    --
-    utility.new(
-        "UIListLayout",
-        {
-            FillDirection = "Vertical",
-            Padding = UDim.new(0, 0),
-            Parent = outline4
-        }
-    )
-    --
-    local createdbuttons = {}
-    local selected
-    --
-    local makebutton = function(name, toggled)
-        local createdbutton = utility.new(
-            "TextButton",
-            {
-                AnchorPoint = Vector2.new(0, 0),
-                BackgroundTransparency = 1,
-                Size = UDim2.new(1, 0, 0, 18),
-                Position = UDim2.new(0, 0, 0, 0),
-                Text = "",
-                Parent = outline4
-            }
-        )
-        --
-        local grey = utility.new(
-            "Frame",
-            {
-                AnchorPoint = Vector2.new(0.5, 0),
-                BackgroundColor3 = Color3.fromRGB(125, 125, 125),
-                BackgroundTransparency = 0.9,
-                BorderSizePixel = 0,
-                Size = UDim2.new(1, -4, 1, 0),
-                Position = UDim2.new(0.5, 0, 0, 0),
-                Visible = false,
-                Parent = createdbutton
-            }
-        )
-        --
-        local createdtitle = utility.new(
-            "TextLabel",
-            {
-                AnchorPoint = Vector2.new(0.5, 0),
-                BackgroundTransparency = 1,
-                Size = UDim2.new(1, -10, 1, 0),
-                Position = UDim2.new(0.5, 0, 0, 0),
-                Font = self.library.font,
-                Text = name,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextSize = self.library.textsize,
-                TextStrokeTransparency = 0,
-                TextXAlignment = "Left",
-                Parent = createdbutton
-            }
-        )
-        --
-        self.library.labels[#self.library.labels + 1] = createdtitle
-        --
-        local createdb = {
-            ["button"] = createdbutton,
-            ["grey"] = grey,
-            ["title"] = createdtitle,
-            ["name"] = name
-        }
-        --
-        table.insert(createdbuttons, createdb)
-        --
-        if toggled then
-            createdb.grey.Visible = true
-            createdb.title.TextColor3 = self.library.theme.accent
-            table.insert(self.library.themeitems["accent"]["TextColor3"], createdb.title)
-            selected = createdb
-        end
-        --
-        createdbutton.MouseButton1Down:Connect(function()
-            for i, v in pairs(createdbuttons) do
-                if v ~= createdb then
-                    v.grey.Visible = false
-                    v.title.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    local find = table.find(self.library.themeitems["accent"]["TextColor3"], v.title)
-                    if find then
-                        table.remove(self.library.themeitems["accent"]["TextColor3"], find)
-                    end
-                end
-            end
-            --
-            createdb.grey.Visible = true
-            createdb.title.TextColor3 = self.library.theme.accent
-            table.insert(self.library.themeitems["accent"]["TextColor3"], createdb.title)
-            selected = createdb
-        end)
-    end
-    --
-    local newbutton = function(parent, name)
-        local button_holder = utility.new(
-            "Frame",
-            {
-                BackgroundTransparency = 1,
-                BorderSizePixel = 0,
-                ZIndex = 5,
-                Parent = parent
-            }
-        )
-        --
-        local button_outline = utility.new(
-            "Frame",
-            {
-                BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-                BorderColor3 = Color3.fromRGB(12, 12, 12),
-                BorderMode = "Inset",
-                BorderSizePixel = 1,
-                Position = UDim2.new(0, 0, 0, 0),
-                Size = UDim2.new(1, 0, 1, 0),
-                ZIndex = 5,
-                Parent = button_holder
-            }
-        )
-        --
-        local button_outline2 = utility.new(
-            "Frame",
-            {
-                BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-                BorderColor3 = Color3.fromRGB(56, 56, 56),
-                BorderMode = "Inset",
-                BorderSizePixel = 1,
-                Position = UDim2.new(0, 0, 0, 0),
-                Size = UDim2.new(1, 0, 1, 0),
-                ZIndex = 5,
-                Parent = button_outline
-            }
-        )
-        --
-        local button_color = utility.new(
-            "Frame",
-            {
-                AnchorPoint = Vector2.new(0, 0),
-                BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-                BorderSizePixel = 0,
-                Size = UDim2.new(1, 0, 0, 0),
-                Position = UDim2.new(0, 0, 0, 0),
-                ZIndex = 5,
-                Parent = button_outline2
-            }
-        )
-        --
-        utility.new(
-            "UIGradient",
-            {
-                Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(199, 191, 204)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))},
-                Rotation = 90,
-                Parent = button_color
-            }
-        )
-        --
-        local button_button = utility.new(
-            "TextButton",
-            {
-                AnchorPoint = Vector2.new(0, 0),
-                BackgroundTransparency = 1,
-                Size = UDim2.new(1, 0, 1, 0),
-                Position = UDim2.new(0, 0, 0, 0),
-                Text = name,
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextSize = self.library.textsize,
-                TextStrokeTransparency = 0,
-                Font = self.library.font,
-                ZIndex = 5,
-                Parent = button_holder
-            }
-        )
-        --
-        self.library.labels[#self.library.labels + 1] = button_button
-        --
-        return {button_holder, button_outline, button_button}
-    end
-    --
-    local function refresh(MiscNorSettings)
-        for i, v in pairs(createdbuttons) do
-            v.button:Remove()
-            v.grey:Remove()
-            v.title:Remove()
-        end
-        createdbuttons = {}
-        -- Ensure folder exists
-        if not isfolder(folder) then
-            makefolder(folder)
-        end
-        local files = listfiles(folder)
-        for i, v in pairs(files) do
-            if v:sub(-4) == ".lua" then
-                local pluginname = v:sub(#tostring(folder) + 2, -5)
-                if i == 1 then
-                    makebutton(pluginname, true)
-                else
-                    makebutton(pluginname, false)
-                end
-            end
-        end
-        -- Add plugins to MiscNorSettings
-        if MiscNorSettings then
-            for i, v in pairs(files) do
-                if v:sub(-4) == ".lua" then
-                    local content = readfile(v)
-                    local success, plugin = pcall(function()
-                        return loadstring(content)()
-                    end)
-                    if success and plugin and plugin.variant == "button" then
-                        local success, callback_func = pcall(function()
-                            return loadstring("return function(state) " .. plugin.callback .. " end")()
-                        end)
-                        if success and callback_func then
-                            MiscNorSettings:toggle({
-                                name = plugin.name,
-                                def = plugin.default,
-                                callback = callback_func
-                            })
-                        else
-                            warn("Failed to create callback for plugin: " .. plugin.name)
-                        end
-                    else
-                        warn("Failed to load plugin from file: " .. v)
-                    end
-                end
-            end
-        end
-    end
-    --
-    local load = newbutton(buttonsholder, "Load")
-    local delete = newbutton(buttonsholder, "Delete")
-    --
-    load[1].Size = UDim2.new(0.5, -6, 0, 20)
-    delete[1].Size = UDim2.new(0.5, -6, 0, 20)
-    --
-    load[1].Position = UDim2.new(0, 5, 0, 22)
-    load[1].AnchorPoint = Vector2.new(0, 0)
-    --
-    delete[1].Position = UDim2.new(1, -5, 0, 22)
-    delete[1].AnchorPoint = Vector2.new(1, 0)
-    --
-    load[3].MouseButton1Down:Connect(function()
-        if selected then
-            local filepath = folder .. "/" .. selected.name .. ".lua"
-            if isfile(filepath) then
-                local content = readfile(filepath)
-                local success, plugin = pcall(function()
-                    return loadstring(content)()
-                end)
-                if success and plugin and plugin.variant == "button" then
-                    local success, callback_func = pcall(function()
-                        return loadstring("return function(state) " .. plugin.callback .. " end")()
-                    end)
-                    if success and callback_func then
-                        pcall(function()
-                            props.MiscNorSettings:toggle({
-                                name = plugin.name,
-                                def = plugin.default,
-                                callback = callback_func
-                            })
-                            load[2].BorderColor3 = self.library.theme.accent
-                            wait(0.05)
-                            load[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
-                        end)
-                    else
-                        warn("Failed to create callback for plugin: " .. selected.name)
-                    end
-                else
-                    warn("Failed to load plugin: " .. selected.name)
-                end
-            else
-                warn("Plugin file not found: " .. filepath)
-            end
-        else
-            warn("No plugin selected")
-        end
-    end)
-    --
-    delete[3].MouseButton1Down:Connect(function()
-        if selected then
-            local filepath = folder .. "/" .. selected.name .. ".lua"
-            if isfile(filepath) then
-                delfile(filepath)
-                delete[2].BorderColor3 = self.library.theme.accent
-                wait(0.05)
-                delete[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
-                wait()
-                refresh(props.MiscNorSettings)
-            end
-        end
-    end)
-    --
-    refresh(props.MiscNorSettings)
-    --
-    pluginloader = {
-        ["library"] = self.library,
-        ["refresh"] = function() refresh(props.MiscNorSettings) end
-    }
-    --
-    setmetatable(pluginloader, configloaders) -- Reusing configloaders metatable as the functionality is similar
-    return pluginloader
-end
-
--- [Rest of the original code remains unchanged]
-
-
-
-
 function sections:esppreview(props)
-    -- // properties
     local name = props.name or props.Name or "ESP Preview"
     local esp_color = props.color or props.Color or Color3.fromRGB(225, 58, 81)
-    -- // variables
     local esppreview = {}
-    -- // main
     local previewholder = utility.new(
         "Frame",
         {
@@ -2702,7 +2289,7 @@ function sections:esppreview(props)
             Parent = self.library.screen
         }
     )
-    --
+    
     local outline = utility.new(
         "Frame",
         {
@@ -2714,7 +2301,7 @@ function sections:esppreview(props)
             Parent = previewholder
         }
     )
-    --
+    
     local title = utility.new(
         "TextLabel",
         {
@@ -2731,7 +2318,7 @@ function sections:esppreview(props)
             Parent = outline
         }
     )
-    --
+    
     local viewport = utility.new(
         "ViewportFrame",
         {
@@ -2748,8 +2335,7 @@ function sections:esppreview(props)
             Parent = outline
         }
     )
-    --
-    -- Create dummy model
+    
     local dummy = Instance.new("Model")
     local humanoid = Instance.new("Humanoid")
     local rootPart = Instance.new("Part")
@@ -2761,8 +2347,7 @@ function sections:esppreview(props)
     humanoid.Parent = dummy
     dummy.PrimaryPart = rootPart
     dummy.Parent = viewport
-    --
-    -- Add ESP highlight
+    
     local highlight = Instance.new("Highlight")
     highlight.FillColor = esp_color
     highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
@@ -2770,20 +2355,16 @@ function sections:esppreview(props)
     highlight.OutlineTransparency = 0
     highlight.Adornee = dummy
     highlight.Parent = dummy
-    --
-    -- Setup camera
+    
     local camera = Instance.new("Camera")
     camera.CFrame = CFrame.new(Vector3.new(5, 2, 5), rootPart.Position)
     viewport.CurrentCamera = camera
-    --
-    -- Store in library
+    
     self.library.esppreviews = self.library.esppreviews or {}
     table.insert(self.library.esppreviews, esppreview)
-    --
-    -- Store in page
+    
     self.page.esppreview = esppreview
-    --
-    -- esppreview tbl
+    
     esppreview = {
         ["library"] = self.library,
         ["previewholder"] = previewholder,
@@ -2791,24 +2372,20 @@ function sections:esppreview(props)
         ["dummy"] = dummy,
         ["highlight"] = highlight
     }
-    --
+    
     self.library.labels[#self.library.labels + 1] = title
-    -- // metatable indexing + return
     setmetatable(esppreview, esppreviews)
     return esppreview
 end
 
---
+
 function sections:dropdown(props)
-    -- // properties
     local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
     local def = props.def or props.Def or props.default or props.Default or ""
     local max = props.max or props.Max or props.maximum or props.Maximum or 4
     local options = props.options or props.Options or props.Settings or props.settings or {}
     local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
-    -- // variables
     local dropdown = {}
-    -- // main
     local dropdownholder = utility.new(
         "Frame",
         {
@@ -2818,7 +2395,7 @@ function sections:dropdown(props)
             Parent = self.content
         }
     )
-    --
+    
     local outline = utility.new(
         "Frame",
         {
@@ -2831,7 +2408,7 @@ function sections:dropdown(props)
             Parent = dropdownholder
         }
     )
-    --
+    
     local outline2 = utility.new(
         "Frame",
         {
@@ -2844,7 +2421,7 @@ function sections:dropdown(props)
             Parent = outline
         }
     )
-    --
+    
     local color = utility.new(
         "Frame",
         {
@@ -2855,7 +2432,7 @@ function sections:dropdown(props)
             Parent = outline2
         }
     )
-    --
+    
     utility.new(
         "UIGradient",
         {
@@ -2864,7 +2441,7 @@ function sections:dropdown(props)
             Parent = color
         }
     )
-    --
+    
     local value = utility.new(
         "TextLabel",
         {
@@ -2882,7 +2459,7 @@ function sections:dropdown(props)
             Parent = outline
         }
     )
-    --
+    
     local indicator = utility.new(
         "TextLabel",
         {
@@ -2900,7 +2477,7 @@ function sections:dropdown(props)
             Parent = outline
         }
     )
-    --
+    
     local title = utility.new(
         "TextLabel",
         {
@@ -2916,7 +2493,7 @@ function sections:dropdown(props)
             Parent = dropdownholder
         }
     )
-    --
+    
     local dropdownbutton = utility.new(
         "TextButton",
         {
@@ -2928,7 +2505,7 @@ function sections:dropdown(props)
             Parent = dropdownholder
         }
     )
-    --
+    
     local optionsholder = utility.new(
         "Frame",
         {
@@ -2942,11 +2519,11 @@ function sections:dropdown(props)
             Parent = dropdownholder
         }
     )
-    --
+    
     local size = #options
-    --
+    
     size = math.clamp(size,1,max)
-    --
+    
     local optionsoutline = utility.new(
         "ScrollingFrame",
         {
@@ -2954,7 +2531,7 @@ function sections:dropdown(props)
             BorderColor3 = Color3.fromRGB(56, 56, 56),
             BorderMode = "Inset",
             BorderSizePixel = 1,
-            Size = UDim2.new(1,0,0,0), -- Start with height 0 for tweening
+            Size = UDim2.new(1,0,0,0), 
             Position = UDim2.new(0,0,0,0),
             ClipsDescendants = true,
             CanvasSize = UDim2.new(0,0,0,18*#options),
@@ -2967,7 +2544,7 @@ function sections:dropdown(props)
             Parent = optionsholder
         }
     )
-    --
+    
     utility.new(
         "UIListLayout",
         {
@@ -2975,7 +2552,7 @@ function sections:dropdown(props)
             Parent = optionsoutline
         }
     )
-    -- // dropdown tbl
+    
     dropdown = {
         ["library"] = self.library,
         ["optionsholder"] = optionsholder,
@@ -2989,9 +2566,9 @@ function sections:dropdown(props)
         ["callback"] = callback,
         ["optionsoutline"] = optionsoutline
     }
-    --
+    
     table.insert(dropdown.library.dropdowns,dropdown)
-    --
+    
     for i,v in pairs(options) do
         local ddoptionbutton = utility.new(
             "TextButton",
@@ -3004,7 +2581,7 @@ function sections:dropdown(props)
                 Parent = optionsoutline
             }
         )
-        --
+        
         local ddoptiontitle = utility.new(
             "TextLabel",
             {
@@ -3023,20 +2600,19 @@ function sections:dropdown(props)
                 Parent = ddoptionbutton
             }
         )
-        --
+        
         self.library.labels[#self.library.labels+1] = ddoptiontitle
-        --
+        
         table.insert(dropdown.titles,ddoptiontitle)
-        --
+        
         if v == dropdown.current then ddoptiontitle.TextColor3 = self.library.theme.accent end
-        --
+        
         ddoptionbutton.MouseButton1Down:Connect(function()
-            -- Tween the dropdown closed
             ts:Create(optionsoutline, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                 Size = UDim2.new(1, 0, 0, 0)
             }):Play()
             
-            wait(0.2) -- Wait for tween to complete
+            wait(0.2) 
             optionsholder.Visible = false
             dropdown.open = false
             indicator.Text = "+"
@@ -3052,7 +2628,7 @@ function sections:dropdown(props)
             dropdown.callback(v)
         end)
     end
-    --
+    
     dropdownbutton.MouseButton1Down:Connect(function()
         dropdown.library:closewindows(dropdown)
         for i,v in pairs(dropdown.titles) do
@@ -3064,18 +2640,16 @@ function sections:dropdown(props)
         end
         
         if dropdown.open then
-            -- Tween the dropdown closed
             ts:Create(optionsoutline, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                 Size = UDim2.new(1, 0, 0, 0)
             }):Play()
             
-            wait(0.2) -- Wait for tween to complete
+            wait(0.2) 
             optionsholder.Visible = false
             indicator.Text = "+"
         else
-            -- Show and tween the dropdown open
             optionsholder.Visible = true
-            optionsoutline.Size = UDim2.new(1, 0, 0, 0) -- Start at 0 height
+            optionsoutline.Size = UDim2.new(1, 0, 0, 0) 
             ts:Create(optionsoutline, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                 Size = UDim2.new(1, 0, size, 2)
             }):Play()
@@ -3084,32 +2658,28 @@ function sections:dropdown(props)
         
         dropdown.open = not dropdown.open
     end)
-    --
+    
     local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-    --
+    
     if pointer then
         if self.pointers then
             self.pointers[tostring(pointer)] = dropdown
         end
     end
-    --
+    
     self.library.labels[#self.library.labels+1] = title
     self.library.labels[#self.library.labels+1] = value
-    -- // metatable indexing + return
     setmetatable(dropdown, dropdowns)
     return dropdown
 end
---
+
 function sections:buttonbox(props)
-	-- // properties
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
 	local def = props.def or props.Def or props.default or props.Default or ""
 	local max = props.max or props.Max or props.maximum or props.Maximum or 4
 	local options = props.options or props.Options or props.Settings or props.settings or {}
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
-	-- // variables
 	local buttonbox = {}
-	-- // main
 	local buttonboxholder = utility.new(
 		"Frame",
 		{
@@ -3119,7 +2689,7 @@ function sections:buttonbox(props)
 			Parent = self.content
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -3132,7 +2702,7 @@ function sections:buttonbox(props)
 			Parent = buttonboxholder
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -3145,7 +2715,7 @@ function sections:buttonbox(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local color = utility.new(
 		"Frame",
 		{
@@ -3156,7 +2726,7 @@ function sections:buttonbox(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	utility.new(
 		"UIGradient",
 		{
@@ -3165,7 +2735,7 @@ function sections:buttonbox(props)
 			Parent = color
 		}
 	)
-	--
+	
 	local indicator = utility.new(
 		"TextLabel",
 		{
@@ -3183,7 +2753,7 @@ function sections:buttonbox(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -3199,7 +2769,7 @@ function sections:buttonbox(props)
 			Parent = buttonboxholder
 		}
 	)
-	--
+	
 	local buttonboxbutton = utility.new(
 		"TextButton",
 		{
@@ -3211,7 +2781,7 @@ function sections:buttonbox(props)
 			Parent = buttonboxholder
 		}
 	)
-	--
+	
 	local optionsholder = utility.new(
 		"Frame",
 		{
@@ -3225,11 +2795,9 @@ function sections:buttonbox(props)
 			Parent = buttonboxholder
 		}
 	)
-	--
+	
 	local size = #options
-	--
 	size = math.clamp(size,1,max)
-	--
 	local optionsoutline = utility.new(
 		"ScrollingFrame",
 		{
@@ -3250,7 +2818,7 @@ function sections:buttonbox(props)
 			Parent = optionsholder
 		}
 	)
-	--
+	
 	utility.new(
 		"UIListLayout",
 		{
@@ -3258,7 +2826,6 @@ function sections:buttonbox(props)
 			Parent = optionsoutline
 		}
 	)
-	-- // buttonbox tbl
 	buttonbox = {
 		["library"] = self.library,
 		["optionsholder"] = optionsholder,
@@ -3270,9 +2837,9 @@ function sections:buttonbox(props)
 		["current"] = def,
 		["callback"] = callback
 	}
-	--
+	
 	table.insert(buttonbox.library.buttonboxs,buttonbox)
-	--
+	
 	for i,v in pairs(options) do
 		local bboptionbutton = utility.new(
 			"TextButton",
@@ -3285,7 +2852,7 @@ function sections:buttonbox(props)
 				Parent = optionsoutline
 			}
 		)
-		--
+		
 		local bboptiontitle = utility.new(
 			"TextLabel",
 			{
@@ -3304,11 +2871,11 @@ function sections:buttonbox(props)
 				Parent = bboptionbutton
 			}
 		)
-		--
+		
 		self.library.labels[#self.library.labels+1] = bboptiontitle
-		--
+		
 		table.insert(buttonbox.titles,bboptiontitle)
-		--
+		
 		bboptionbutton.MouseButton1Down:Connect(function()
 			optionsholder.Visible = false
 			buttonbox.open = false
@@ -3317,7 +2884,6 @@ function sections:buttonbox(props)
 			buttonbox.callback(v)
 		end)
 	end
-	--
 	buttonboxbutton.MouseButton1Down:Connect(function()
 		buttonbox.library:closewindows(buttonbox)
 		optionsholder.Visible = not buttonbox.open
@@ -3328,41 +2894,56 @@ function sections:buttonbox(props)
 			indicator.Text = "+"
 		end
 	end)
-	--
+
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = buttonbox
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = title
-	-- // metatable indexing + return
 	setmetatable(buttonbox, buttonboxs)
 	return buttonbox
 end
---
+
 function dropdowns:set(value)
-	if value ~= nil then
-		local dropdown = self
-		if table.find(dropdown.options,value) then
-			self.current = tostring(value)
-			self.value.Text = tostring(value)
-			self.callback(tostring(value))
-			for z,x in pairs(dropdown.titles) do
-				if x.Text == value then
-					x.TextColor3 = dropdown.library.theme.accent
-				else
-					x.TextColor3 = Color3.fromRGB(255,255,255)
-				end
+	if value == nil then return self end
+	
+	local dropdown = self
+	if not table.find(dropdown.options, value) then return self end
+	
+	dropdown.current = value
+	dropdown.value.Text = value
+	
+	for _, title in pairs(dropdown.titles) do
+		if title.TextColor3 == dropdown.library.theme.accent then
+			title.TextColor3 = Color3.fromRGB(255, 255, 255)
+			local index = table.find(dropdown.library.themeitems["accent"]["TextColor3"], title)
+			if index then
+				table.remove(dropdown.library.themeitems["accent"]["TextColor3"], index)
 			end
 		end
+		
+		if title.Text == value then
+			title.TextColor3 = dropdown.library.theme.accent
+			table.insert(dropdown.library.themeitems["accent"]["TextColor3"], title)
+		end
 	end
+	
+	if dropdown.open then
+		dropdown.optionsholder.Visible = false
+		dropdown.indicator.Text = "+"
+		dropdown.open = false
+	end
+	
+	dropdown.callback(value)
+	
+	return self
 end
---
+
 function sections:multibox(props)
-	-- // properties
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
 	local def = props.def or props.Def or props.default or props.Default or {}
 	local max = props.max or props.Max or props.maximum or props.Maximum or 4
@@ -3382,9 +2963,7 @@ function sections:multibox(props)
 			defstr = defstr..v
 		end
 	end
-	-- // variables
 	local multibox = {}
-	-- // main
 	local multiboxholder = utility.new(
 		"Frame",
 		{
@@ -3394,7 +2973,7 @@ function sections:multibox(props)
 			Parent = self.content
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -3407,7 +2986,7 @@ function sections:multibox(props)
 			Parent = multiboxholder
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -3420,7 +2999,7 @@ function sections:multibox(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local color = utility.new(
 		"Frame",
 		{
@@ -3431,7 +3010,7 @@ function sections:multibox(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	utility.new(
 		"UIGradient",
 		{
@@ -3440,7 +3019,7 @@ function sections:multibox(props)
 			Parent = color
 		}
 	)
-	--
+	
 	local value = utility.new(
 		"TextLabel",
 		{
@@ -3458,7 +3037,7 @@ function sections:multibox(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local indicator = utility.new(
 		"TextLabel",
 		{
@@ -3476,7 +3055,7 @@ function sections:multibox(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -3492,7 +3071,7 @@ function sections:multibox(props)
 			Parent = multiboxholder
 		}
 	)
-	--
+	
 	local dropdownbutton = utility.new(
 		"TextButton",
 		{
@@ -3504,7 +3083,7 @@ function sections:multibox(props)
 			Parent = multiboxholder
 		}
 	)
-	--
+	
 	local optionsholder = utility.new(
 		"Frame",
 		{
@@ -3518,11 +3097,11 @@ function sections:multibox(props)
 			Parent = multiboxholder
 		}
 	)
-	--
+	
 	local size = #options
-	--
+	
 	size = math.clamp(size,1,max)
-	--
+	
 	local optionsoutline = utility.new(
 		"ScrollingFrame",
 		{
@@ -3543,7 +3122,7 @@ function sections:multibox(props)
 			Parent = optionsholder
 		}
 	)
-	--
+	
 	utility.new(
 		"UIListLayout",
 		{
@@ -3551,7 +3130,7 @@ function sections:multibox(props)
 			Parent = optionsoutline
 		}
 	)
-	-- // dropdown tbl
+	
 	multibox = {
 		["library"] = self.library,
 		["indicator"] = indicator,
@@ -3563,9 +3142,9 @@ function sections:multibox(props)
 		["current"] = def,
 		["callback"] = callback
 	}
-	--
+	
 	table.insert(multibox.library.multiboxes,multibox)
-	--
+	
 	for i,v in pairs(options) do
 		local ddoptionbutton = utility.new(
 			"TextButton",
@@ -3578,7 +3157,7 @@ function sections:multibox(props)
 				Parent = optionsoutline
 			}
 		)
-		--
+		
 		local ddoptiontitle = utility.new(
 			"TextLabel",
 			{
@@ -3597,13 +3176,13 @@ function sections:multibox(props)
 				Parent = ddoptionbutton
 			}
 		)
-		--
+		
 		self.library.labels[#self.library.labels+1] = ddoptiontitle
-		--
+		
 		table.insert(multibox.titles,ddoptiontitle)
-		--
+		
 		for c,b in pairs(def) do if v == b then ddoptiontitle.TextColor3 = self.library.theme.accent end end
-		--
+		
 		ddoptionbutton.MouseButton1Down:Connect(function()
 			local find = table.find(multibox.current,v)
 			if find == nil then
@@ -3648,7 +3227,7 @@ function sections:multibox(props)
 			end
 		end)
 	end
-	--
+	
 	dropdownbutton.MouseButton1Down:Connect(function()
 		multibox.library:closewindows(multibox)
 		for i,v in pairs(multibox.titles) do
@@ -3664,81 +3243,106 @@ function sections:multibox(props)
 			indicator.Text = "+"
 		end
 	end)
-	--
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = multibox
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = value
 	self.library.labels[#self.library.labels+1] = title
-	-- // metatable indexing + return
 	setmetatable(multibox, multiboxs)
 	return multibox
 end
---
+
 function buttonboxs:set(value)
-	if value ~= nil then
-		local dropdown = self
-		if table.find(dropdown.options,value) then
-			self.current = tostring(value)
-			self.callback(tostring(value))
-		end
+	if value == nil then return self end
+	
+	local buttonbox = self
+	if not table.find(buttonbox.options, value) then return self end
+	
+	buttonbox.current = value
+	
+	if buttonbox.open then
+		buttonbox.optionsholder.Visible = false
+		buttonbox.indicator.Text = "+"
+		buttonbox.open = false
 	end
+	
+	buttonbox.callback(value)
+	
+	return self
 end
---
+
 function multiboxs:set(tbl)
-	if tbl then
-		local multibox = self
-		if typeof(tbl) == "table" then
-			multibox.current = {}
-			for i,v in pairs(tbl) do
-				if table.find(multibox.options,v) then
-					table.insert(multibox.current,v)
-				end
-			end
-			--
-			for i,v in pairs(multibox.titles) do
-				if v.TextColor3 == multibox.library.theme.accent then
-					v.TextColor3 = Color3.fromRGB(255,255,255)
-				end
-				if table.find(tbl,v.Text) then
-					v.TextColor3 = multibox.library.theme.accent
-				end
-			end
-			--
-			local str = ""
-			if #multibox.current > 1 then
-				for i,v in pairs(multibox.current) do
-					if i == #multibox.current then
-						str = str..v
-					else
-						str = str..v..", "
-					end
-				end
-			else
-				for i,v in pairs(multibox.current) do
-					str = str..v
-				end
-			end
-			--
-			multibox.value.Text = str
+	if tbl == nil then return self end
+	
+	local multibox = self
+	if typeof(tbl) ~= "table" then return self end
+	
+	multibox.current = {}
+	
+	for i, v in pairs(multibox.titles) do
+		v.TextColor3 = Color3.fromRGB(255, 255, 255)
+		
+		local find = table.find(multibox.library.themeitems["accent"]["TextColor3"], v)
+		if find then
+			table.remove(multibox.library.themeitems["accent"]["TextColor3"], find)
 		end
 	end
+	
+	if #tbl == 0 then
+		if multibox.value then
+			multibox.value.Text = ""
+		end
+		
+		multibox.callback(multibox.current)
+		return self
+	end
+	
+	for i, v in pairs(tbl) do
+		if table.find(multibox.options, v) then
+			table.insert(multibox.current, v)
+		end
+	end
+	
+	for i, v in pairs(multibox.titles) do
+		if table.find(multibox.current, v.Text) then
+			v.TextColor3 = multibox.library.theme.accent
+			table.insert(multibox.library.themeitems["accent"]["TextColor3"], v)
+		end
+	end
+	
+	local displayText = ""
+	if #multibox.current > 1 then
+		for i, v in pairs(multibox.current) do
+			if i == #multibox.current then
+				displayText = displayText .. v
+			else
+				displayText = displayText .. v .. ", "
+			end
+		end
+	elseif #multibox.current == 1 then
+		displayText = multibox.current[1]
+	end
+	
+	if multibox.value then
+		multibox.value.Text = displayText
+	end
+	
+	multibox.callback(multibox.current)
+	
+	return self
 end
---
+
 function sections:textbox(props)
-	-- // properties
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
 	local def = props.def or props.Def or props.default or props.Default or ""
 	local placeholder = props.placeholder or props.Placeholder or props.placeHolder or props.PlaceHolder or props.placeholdertext or props.PlaceHolderText or props.PlaceHoldertext or props.placeHolderText or props.placeHoldertext or props.Placeholdertext or props.PlaceholderText or props.placeholderText or ""
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
-	-- // variables
 	local textbox = {}
-	-- // main
 	local textboxholder = utility.new(
 		"Frame",
 		{
@@ -3748,7 +3352,7 @@ function sections:textbox(props)
 			Parent = self.content
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -3761,7 +3365,7 @@ function sections:textbox(props)
 			Parent = textboxholder
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -3773,7 +3377,7 @@ function sections:textbox(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local color = utility.new(
 		"Frame",
 		{
@@ -3783,7 +3387,7 @@ function sections:textbox(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	local gradient = utility.new(
 		"UIGradient",
 		{
@@ -3792,7 +3396,7 @@ function sections:textbox(props)
 			Parent = color
 		}
 	)
-	--
+	
 	local button = utility.new(
 		"TextButton",
 		{
@@ -3808,7 +3412,7 @@ function sections:textbox(props)
 			Parent = textboxholder
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -3824,7 +3428,7 @@ function sections:textbox(props)
 			Parent = textboxholder
 		}
 	)
-	--
+	
 	local tbox = utility.new(
 		"TextBox",
 		{
@@ -3842,23 +3446,22 @@ function sections:textbox(props)
 			Parent = textboxholder
 		}
 	)
-	-- // textbox tbl
 	textbox = {
 		["library"] = self.library,
 		["tbox"] = tbox,
 		["current"] = def,
 		["callback"] = callback
 	}
-	--
+	
 	button.MouseButton1Down:Connect(function()
 		tbox:CaptureFocus()
 	end)
-	--
+	
 	tbox.Focused:Connect(function()
 		outline.BorderColor3 = self.library.theme.accent
 		table.insert(self.library.themeitems["accent"]["BorderColor3"],outline)
 	end)
-	--
+	
 	tbox.FocusLost:Connect(function(enterPressed)
 		textbox.current = tbox.Text
 		callback(tbox.Text)
@@ -3868,38 +3471,43 @@ function sections:textbox(props)
 			table.remove(self.library.themeitems["accent"]["BorderColor3"],find)
 		end
 	end)
-	--
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+	
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = textbox
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = title
 	self.library.labels[#self.library.labels+1] = tbox
-	-- // metatable indexing + return
 	setmetatable(textbox, textboxs)
 	return textbox
 end
---
+
 function textboxs:set(value)
-	self.tbox.Text = value
-	self.current = value
-	self.callback(value)
+	if value == nil then return self end
+	
+	local textbox = self
+	
+	textbox.tbox.Text = tostring(value)
+	textbox.current = tostring(value)
+	
+	textbox.callback(tostring(value))
+	
+	return self
 end
---
+
 function sections:keybind(props)
-	-- // properties
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
 	local def = props.def or props.Def or props.default or props.Default or nil
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
 	local allowed = props.allowed or props.Allowed or 1
-	--
+	
 	local default = ".."
 	local typeis = nil
-	--
+	
 	if typeof(def) == "EnumItem" then
 		if def == Enum.UserInputType.MouseButton1 then
 			if allowed == 1 then
@@ -3926,9 +3534,7 @@ function sections:keybind(props)
 			typeis = "KeyCode"
 		end
 	end
-	-- // variables
 	local keybind = {}
-	-- // main
 	local keybindholder = utility.new(
 		"Frame",
 		{
@@ -3937,7 +3543,7 @@ function sections:keybind(props)
 			Parent = self.content
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -3951,7 +3557,7 @@ function sections:keybind(props)
 			Parent = keybindholder
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -3964,7 +3570,7 @@ function sections:keybind(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local value = utility.new(
 		"TextLabel",
 		{
@@ -3980,9 +3586,9 @@ function sections:keybind(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	outline.Size = UDim2.new(0,value.TextBounds.X+20,1,0)
-	--
+	
 	local color = utility.new(
 		"Frame",
 		{
@@ -3993,7 +3599,7 @@ function sections:keybind(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	utility.new(
 		"UIGradient",
 		{
@@ -4002,7 +3608,7 @@ function sections:keybind(props)
 			Parent = color
 		}
 	)
-	--
+	
 	local button = utility.new(
 		"TextButton",
 		{
@@ -4018,7 +3624,7 @@ function sections:keybind(props)
 			Parent = keybindholder
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -4034,7 +3640,7 @@ function sections:keybind(props)
 			Parent = keybindholder
 		}
 	)
-	-- // keybind tbl
+
 	keybind = {
 		["library"] = self.library,
 		["down"] = false,
@@ -4045,7 +3651,7 @@ function sections:keybind(props)
 		["pressed"] = false,
 		["callback"] = callback
 	}
-	--
+	
 	button.MouseButton1Down:Connect(function()
 		if keybind.down == false then
 			outline.BorderColor3 = self.library.theme.accent
@@ -4054,7 +3660,7 @@ function sections:keybind(props)
 			keybind.down = true
 		end
 	end)
-	--
+	
 	button.MouseButton2Down:Connect(function()
 		keybind.down = false
 		keybind.current = {nil,nil}
@@ -4066,7 +3672,7 @@ function sections:keybind(props)
 		value.Text = ".."
 		outline.Size = UDim2.new(0,value.TextBounds.X+20,1,0)
 	end)
-	--
+	
 	local function turn(typeis,current)
 		outline.Size = UDim2.new(0,value.TextBounds.X+20,1,0)
 		keybind.down = false
@@ -4077,7 +3683,7 @@ function sections:keybind(props)
 			table.remove(self.library.themeitems["accent"]["BorderColor3"],find)
 		end
 	end
-	--
+	
 	uis.InputBegan:Connect(function(Input)
 		if keybind.down then
 			if Input.UserInputType == Enum.UserInputType.Keyboard then
@@ -4107,52 +3713,92 @@ function sections:keybind(props)
 			end
 		end
 	end)
-	--
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+	
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = keybind
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = title
 	self.library.labels[#self.library.labels+1] = value
-	-- // metatable indexing + return
 	setmetatable(keybind, keybinds)
 	return keybind
 end
---
+
 function keybinds:set(key)
-	if key then
-		if typeof(key) == "EnumItem" or typeof(key) == "table" then
-			if typeof(key) == "table" then
-				if key[1] and key[2] then
-					key = Enum[key[1]][key[2]]
-				else
-					return
+	if key == nil then return self end
+	
+	local keybind = self
+	
+	keybind.down = false
+	
+	if typeof(key) == "table" and #key >= 2 then
+		local typeis = key[1]
+		local keyName = key[2]
+		
+		keybind.outline.BorderColor3 = Color3.fromRGB(12, 12, 12)
+		local find = table.find(self.library.themeitems["accent"]["BorderColor3"], keybind.outline)
+		if find then
+			table.remove(self.library.themeitems["accent"]["BorderColor3"], find)
+		end
+		
+		if typeis == "KeyCode" then
+			if string.match(keyName, "^F%d+$") then
+				keybind.value.Text = keyName
+			else
+				local displayText = keyName
+				if #keyName > 1 then
+					displayText = utility.capatalize(keyName)
+				end
+				keybind.value.Text = displayText
+			end
+			keybind.current = {typeis, keyName}
+		elseif typeis == "UserInputType" then
+			if keyName == "MouseButton1" then
+				keybind.value.Text = "MB1"
+			elseif keyName == "MouseButton2" then
+				keybind.value.Text = "MB2"
+			elseif keyName == "MouseButton3" then
+				keybind.value.Text = "MB3"
+			else
+				keybind.value.Text = keyName
+			end
+			keybind.current = {typeis, keyName}
+		else
+			keybind.value.Text = ".."
+			keybind.current = {nil, nil}
+		end
+		
+		keybind.outline.Size = UDim2.new(0, keybind.value.TextBounds.X + 20, 1, 0)
+		
+		pcall(function()
+			if typeis ~= nil and keyName ~= nil then
+				local enumValue
+				if typeis == "KeyCode" then
+					enumValue = Enum.KeyCode[keyName]
+				elseif typeis == "UserInputType" then
+					enumValue = Enum.UserInputType[keyName]
+				end
+				
+				if enumValue then
+					keybind.callback(enumValue)
 				end
 			end
-			local keybind = self
-			local typeis = ""
-			--
-			local default = ".."
-			--
-			if key == Enum.UserInputType.MouseButton1 then
-				if keybind.allowed == 1 then
-					default = "MB1"
-					typeis = "UserInputType"
-				end
-			elseif key == Enum.UserInputType.MouseButton2 then
-				if keybind.allowed == 1 then
-					default = "MB2"
-					typeis = "UserInputType"
-				end
-			elseif key == Enum.UserInputType.MouseButton3 then
-				if keybind.allowed == 1 then
-					default = "MB3"
-					typeis = "UserInputType"
-				end
+		end)
+		
+		return self
+	end
+	
+	if typeof(key) == "EnumItem" then
+		local typeis = ""
+		local default = ".."
+		
+		if key.EnumType == Enum.KeyCode then
+			if string.match(key.Name, "^F%d+$") then
+				default = key.Name
 			else
 				local capd = utility.capatalize(key.Name)
 				if #capd > 1 then
@@ -4160,38 +3806,40 @@ function keybinds:set(key)
 				else
 					default = key.Name
 				end
-				typeis = "KeyCode"
 			end
-			--
-			keybind.value.Text = default
-			keybind.current = {typeis,utility.splitenum(key)}
-			keybind.callback(keybind.current)
-			keybind.outline.Size = UDim2.new(0,keybind.value.TextBounds.X+20,1,0)
-			--
-			if keybind.down then
-				keybind.down = false
-				keybind.outline.BorderColor3 = Color3.fromRGB(12, 12, 12)
-				local find = table.find(self.library.themeitems["accent"]["BorderColor3"],keybind.outline)
-				if find then
-					table.remove(self.library.themeitems["accent"]["BorderColor3"],find)
-				end
+			typeis = "KeyCode"
+		elseif key.EnumType == Enum.UserInputType then
+			if key == Enum.UserInputType.MouseButton1 and keybind.allowed == 1 then
+				default = "MB1"
+				typeis = "UserInputType"
+			elseif key == Enum.UserInputType.MouseButton2 and keybind.allowed == 1 then
+				default = "MB2"
+				typeis = "UserInputType"
+			elseif key == Enum.UserInputType.MouseButton3 and keybind.allowed == 1 then
+				default = "MB3"
+				typeis = "UserInputType"
 			end
 		end
+		
+		if typeis ~= "" then
+			keybind.value.Text = default
+			keybind.current = {typeis, key.Name}
+			keybind.callback(key)
+			keybind.outline.Size = UDim2.new(0, keybind.value.TextBounds.X + 20, 1, 0)
+		end
 	end
+	
+	return self
 end
---
--- Replace the existing sections:colorpicker function with this:
+
 function sections:colorpicker(props)
-	-- // properties
 	local name = props.name or props.Name or "new colorpicker"
 	local cpname = props.cpname or props.Cpname or props.CPname or props.CPName or props.cPname or props.cpName or props.colorpickername or nil
 	local def = props.def or props.Def or props.default or props.Default or Color3.fromRGB(255,255,255)
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
-	--
+	
 	local h,s,v = def:ToHSV()
-	-- // variables
 	local colorpicker = {}
-	-- // main
 	local colorpickerholder = utility.new(
 		"Frame",
 		{
@@ -4201,7 +3849,7 @@ function sections:colorpicker(props)
 			Parent = self.content
 		}
 	)
-	--
+	
 	local outline = utility.new(
 		"Frame",
 		{
@@ -4215,7 +3863,7 @@ function sections:colorpicker(props)
 			Parent = colorpickerholder
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -4227,7 +3875,7 @@ function sections:colorpicker(props)
 			Parent = outline
 		}
 	)
-	--
+	
 	local cpcolor = utility.new(
 		"Frame",
 		{
@@ -4237,7 +3885,7 @@ function sections:colorpicker(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	utility.new(
 		"UIGradient",
 		{
@@ -4246,7 +3894,7 @@ function sections:colorpicker(props)
 			Parent = cpcolor
 		}
 	)
-	--
+	
 	local title = utility.new(
 		"TextLabel",
 		{
@@ -4262,7 +3910,7 @@ function sections:colorpicker(props)
 			Parent = colorpickerholder
 		}
 	)
-	--
+	
 	local button = utility.new(
 		"TextButton",
 		{
@@ -4278,7 +3926,7 @@ function sections:colorpicker(props)
 			Parent = colorpickerholder
 		}
 	)
-	--
+	
 	local cpholder = utility.new(
 		"Frame",
 		{
@@ -4294,7 +3942,7 @@ function sections:colorpicker(props)
 			Parent = colorpickerholder
 		}
 	)
-	--
+	
 	local outline2 = utility.new(
 		"Frame",
 		{
@@ -4307,7 +3955,7 @@ function sections:colorpicker(props)
 			Parent = cpholder
 		}
 	)
-	--
+	
 	local color = utility.new(
 		"Frame",
 		{
@@ -4320,9 +3968,9 @@ function sections:colorpicker(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color)
-	--
+	
 	local cptitle = utility.new(
 		"TextLabel",
 		{
@@ -4340,7 +3988,7 @@ function sections:colorpicker(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	local cpholder2 = utility.new(
 		"Frame",
 		{
@@ -4355,7 +4003,7 @@ function sections:colorpicker(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	local outline3 = utility.new(
 		"Frame",
 		{
@@ -4368,7 +4016,7 @@ function sections:colorpicker(props)
 			Parent = cpholder2
 		}
 	)
-	--
+	
 	local cpimage = utility.new(
 		"ImageButton",
 		{
@@ -4381,7 +4029,7 @@ function sections:colorpicker(props)
 			Parent = outline3
 		}
 	)
-	--
+	
 	local cpcursor = utility.new(
 		"ImageLabel",
 		{
@@ -4395,7 +4043,7 @@ function sections:colorpicker(props)
 			Parent = cpimage
 		}
 	)
-	--
+	
 	local huepicker = utility.new(
 		"Frame",
 		{
@@ -4410,7 +4058,7 @@ function sections:colorpicker(props)
 			Parent = outline2
 		}
 	)
-	--
+	
 	local outline4 = utility.new(
 		"Frame",
 		{
@@ -4423,7 +4071,7 @@ function sections:colorpicker(props)
 			Parent = huepicker
 		}
 	)
-	--
+	
 	local huebutton = utility.new(
 		"TextButton",
 		{
@@ -4440,7 +4088,7 @@ function sections:colorpicker(props)
 			Parent = huepicker
 		}
 	)
-	--
+	
 	utility.new(
 		"UIGradient",
 		{
@@ -4449,7 +4097,7 @@ function sections:colorpicker(props)
 			Parent = outline4
 		}
 	)
-	--
+	
 	local huecursor = utility.new(
 		"Frame",
 		{
@@ -4464,7 +4112,7 @@ function sections:colorpicker(props)
 			Parent = outline4
 		}
 	)
-	--
+	
 	local huecursor_inline = utility.new(
 		"Frame",
 		{
@@ -4478,7 +4126,7 @@ function sections:colorpicker(props)
 			Parent = huecursor
 		}
 	)
-	--
+	
 	local function textbox(parent,size,position)
 		local textbox_holder = utility.new(
 			"Frame",
@@ -4491,7 +4139,7 @@ function sections:colorpicker(props)
 				Parent = parent
 			}
 		)
-		--
+		
 		local outline5 = utility.new(
 			"Frame",
 			{
@@ -4505,7 +4153,7 @@ function sections:colorpicker(props)
 				Parent = textbox_holder
 			}
 		)
-		--
+		
 		local outline6 = utility.new(
 			"Frame",
 			{
@@ -4519,7 +4167,7 @@ function sections:colorpicker(props)
 				Parent = outline5
 			}
 		)
-		--
+		
 		local color2 = utility.new(
 			"Frame",
 			{
@@ -4532,7 +4180,7 @@ function sections:colorpicker(props)
 				Parent = outline6
 			}
 		)
-		--
+		
 		utility.new(
 			"UIGradient",
 			{
@@ -4541,7 +4189,7 @@ function sections:colorpicker(props)
 				Parent = color2
 			}
 		)
-		--
+		
 		local tbox = utility.new(
 			"TextBox",
 			{
@@ -4560,7 +4208,7 @@ function sections:colorpicker(props)
 				Parent = textbox_holder
 			}
 		)
-		--
+		
 		local tbox_button = utility.new(
 			"TextButton",
 			{
@@ -4577,14 +4225,12 @@ function sections:colorpicker(props)
 				Parent = textbox_holder
 			}
 		)
-		--
+		
 		tbox_button.MouseButton1Down:Connect(function()
 			tbox:CaptureFocus()
 		end)
-		--
 		return {textbox_holder,tbox,outline5}
 	end
-	--
 	local red = textbox(outline2,UDim2.new(0,62,0,20),UDim2.new(0,5,0,175))
 	local green = textbox(outline2,UDim2.new(0,62,0,20),UDim2.new(0,5,0,175))
 	green[1].AnchorPoint = Vector2.new(0.5,0)
@@ -4595,7 +4241,6 @@ function sections:colorpicker(props)
 	local hex = textbox(outline2,UDim2.new(1,-10,0,20),UDim2.new(0,5,0,200))
 	hex[2].Size = UDim2.new(1,-12,1,0)
 	hex[2].TextXAlignment = "Left"
-	-- // colorpicker tbl
 	colorpicker = {
 		["library"] = self.library,
 		["cpholder"] = cpholder,
@@ -4615,18 +4260,18 @@ function sections:colorpicker(props)
 		["hex"] = hex[2],
 		["callback"] = callback
 	}
-	--
+	
 	table.insert(self.library.colorpickers,colorpicker)
-	--
+	
 	local function updateboxes()
 		colorpicker.red.PlaceholderText = "R: "..tostring(math.floor(colorpicker.current.R*255))
 		colorpicker.green.PlaceholderText = "G: "..tostring(math.floor(colorpicker.current.G*255))
 		colorpicker.blue.PlaceholderText = "B: "..tostring(math.floor(colorpicker.current.B*255))
 		colorpicker.hex.PlaceholderText = "Hex: "..utility.to_hex(colorpicker.current)
 	end
-	--
+	
 	updateboxes()
-	--
+	
 	local function movehue()
 		local posy = math.clamp(plr:GetMouse().Y-outline3.AbsolutePosition.Y,0,outline3.AbsoluteSize.Y)
 		local resy = (1/outline3.AbsoluteSize.Y)*posy
@@ -4639,7 +4284,7 @@ function sections:colorpicker(props)
 		colorpicker.callback(colorpicker.current)
 		huecursor:TweenPosition(UDim2.new(0.5,0,resy,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.15,true)
 	end
-	--
+	
 	local function movecp()
 		local posx,posy = math.clamp(plr:GetMouse().X-outline3.AbsolutePosition.X,0,outline3.AbsoluteSize.X),math.clamp(plr:GetMouse().Y-outline3.AbsolutePosition.Y,0,outline3.AbsoluteSize.Y)
 		local resx,resy = (1/outline3.AbsoluteSize.X)*posx,(1/outline3.AbsoluteSize.Y)*posy
@@ -4651,23 +4296,23 @@ function sections:colorpicker(props)
 		colorpicker.callback(colorpicker.current)
 		cpcursor:TweenPosition(UDim2.new(resx,0,resy,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.15,true)
 	end
-	--
+	
 	button.MouseButton1Down:Connect(function()
 		self.library:closewindows(colorpicker)
 		cpholder.Visible = not colorpicker.open
 		colorpicker.open = not colorpicker.open
 	end)
-	--
+	
 	huebutton.MouseButton1Down:Connect(function()
 		colorpicker.hue = true
 		movehue()
 	end)
-	--
+	
 	cpimage.MouseButton1Down:Connect(function()
 		colorpicker.cp = true
 		movecp()
 	end)
-	--
+	
 	uis.InputChanged:Connect(function()
 		if colorpicker.cp then
 			movecp()
@@ -4676,7 +4321,7 @@ function sections:colorpicker(props)
 			movehue()
 		end
 	end)
-	--
+	
 	uis.InputEnded:Connect(function(Input)
 		if Input.UserInputType.Name == 'MouseButton1'  then
 			if colorpicker.cp then
@@ -4687,11 +4332,11 @@ function sections:colorpicker(props)
 			end
 		end
 	end)
-	--
+	
 	red[2].Focused:Connect(function()
 		red[3].BorderColor3 = self.library.theme.accent
 	end)
-	--
+	
 	red[2].FocusLost:Connect(function()
 		local saved = red[2].Text
 		local num = tonumber(saved)
@@ -4712,11 +4357,11 @@ function sections:colorpicker(props)
 			red[3].BorderColor3 = Color3.fromRGB(12,12,12)
 		end
 	end)
-	--
+	
 	green[2].Focused:Connect(function()
 		green[3].BorderColor3 = self.library.theme.accent
 	end)
-	--
+	
 	green[2].FocusLost:Connect(function()
 		local saved = green[2].Text
 		local num = tonumber(saved)
@@ -4737,11 +4382,11 @@ function sections:colorpicker(props)
 			green[3].BorderColor3 = Color3.fromRGB(12,12,12)
 		end
 	end)
-	--
+	
 	blue[2].Focused:Connect(function()
 		blue[3].BorderColor3 = self.library.theme.accent
 	end)
-	--
+	
 	blue[2].FocusLost:Connect(function()
 		local saved = blue[2].Text
 		local num = tonumber(saved)
@@ -4762,11 +4407,11 @@ function sections:colorpicker(props)
 			blue[3].BorderColor3 = Color3.fromRGB(12,12,12)
 		end
 	end)
-	--
+	
 	hex[2].Focused:Connect(function()
 		hex[3].BorderColor3 = self.library.theme.accent
 	end)
-	--
+	
 	hex[2].FocusLost:Connect(function()
 		local saved = hex[2].Text
 		if #saved >= 6 and #saved <= 7 then
@@ -4792,71 +4437,77 @@ function sections:colorpicker(props)
 			hex[3].BorderColor3 = Color3.fromRGB(12,12,12)
 		end
 	end)
-	--
+	
 	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-	--
+	
 	if pointer then
 		if self.pointers then
 			self.pointers[tostring(pointer)] = colorpicker
 		end
 	end
-	--
+	
 	self.library.labels[#self.library.labels+1] = title
 	self.library.labels[#self.library.labels+1] = hex[2]
 	self.library.labels[#self.library.labels+1] = red[2]
 	self.library.labels[#self.library.labels+1] = green[2]
 	self.library.labels[#self.library.labels+1] = blue[2]
 	self.library.labels[#self.library.labels+1] = cptitle
-	-- // metatable indexing + return
 	setmetatable(colorpicker, colorpickers)
 	return colorpicker
 end
---
+
 function colorpickers:set(color)
-	if color then
-		if typeof(color) == "table" then
-			color = Color3.fromRGB(color[1]*255,color[2]*255,color[3]*255)
-		end
-		local colorpicker = self
-		local h,s,v = color:ToHSV()
-		--
-		local function updateboxes()
-			colorpicker.red.PlaceholderText = "R: "..tostring(math.floor(colorpicker.current.R*255))
-			colorpicker.green.PlaceholderText = "G: "..tostring(math.floor(colorpicker.current.G*255))
-			colorpicker.blue.PlaceholderText = "B: "..tostring(math.floor(colorpicker.current.B*255))
-			colorpicker.hex.PlaceholderText = "Hex: "..utility.to_hex(colorpicker.current)
-		end
-		--
-		local function movehue()
-			colorpicker.outline3.BackgroundColor3 = Color3.fromHSV(h,1,1)
-			colorpicker.huecursor_inline.BackgroundColor3 = Color3.fromHSV(h,1,1)
-			colorpicker.hsv[1] = h
-			colorpicker.current = Color3.fromHSV(colorpicker.hsv[1],colorpicker.hsv[2],colorpicker.hsv[3])
-			colorpicker.cpcolor.BackgroundColor3 = colorpicker.current
-			colorpicker.huecursor:TweenPosition(UDim2.new(0.5,0,h,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.15,true)
-		end
-		--
-		local function movecp()
-			colorpicker.hsv[2] = s
-			colorpicker.hsv[3] = v
-			colorpicker.current = Color3.fromHSV(colorpicker.hsv[1],colorpicker.hsv[2],colorpicker.hsv[3])
-			colorpicker.cpcolor.BackgroundColor3 = colorpicker.current
-			colorpicker.cpcursor:TweenPosition(UDim2.new(s,0,1-v,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.15,true)
-		end
-		--
-		movehue()
-		movecp()
-		updateboxes()
-		colorpicker.callback(colorpicker.current)
+	if color == nil then return self end
+	
+	local colorpicker = self
+	
+	if typeof(color) == "table" and #color >= 3 then
+		color = Color3.fromRGB(color[1]*255, color[2]*255, color[3]*255)
 	end
+	
+	if typeof(color) ~= "Color3" then return self end
+	
+	colorpicker.current = color
+	
+	local h, s, v = color:ToHSV()
+	colorpicker.hsv = {h, s, v}
+	
+	colorpicker.cpcolor.BackgroundColor3 = color
+	
+	if colorpicker.huecursor then
+		colorpicker.outline3.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
+		colorpicker.huecursor_inline.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
+		colorpicker.huecursor.Position = UDim2.new(0.5, 0, h, 0)
+	end
+	
+	if colorpicker.cpcursor then
+		colorpicker.cpcursor.Position = UDim2.new(s, 0, 1-v, 0)
+	end
+	
+	if colorpicker.red then
+		colorpicker.red.PlaceholderText = "R: " .. tostring(math.floor(color.R * 255))
+	end
+	
+	if colorpicker.green then
+		colorpicker.green.PlaceholderText = "G: " .. tostring(math.floor(color.G * 255))
+	end
+	
+	if colorpicker.blue then
+		colorpicker.blue.PlaceholderText = "B: " .. tostring(math.floor(color.B * 255))
+	end
+	
+	if colorpicker.hex then
+		colorpicker.hex.PlaceholderText = "Hex: " .. utility.to_hex(color)
+	end
+	
+	colorpicker.callback(color)
+	
+	return self
 end
---
+
 function sections:configloader(props)
-    -- // properties
-    local folder = props.folder or props.Folder or "nexifyv3" -- Default to nexifyv3 if not provided
-    -- // variables
+    local folder = props.folder or props.Folder or "nexifyv3" 
     local configloader = {}
-    -- // main
     local clholder = utility.new(
         "Frame",
         {
@@ -4865,7 +4516,7 @@ function sections:configloader(props)
             Parent = self.content
         }
     )
-    --
+    
     local outline = utility.new(
         "Frame",
         {
@@ -4877,7 +4528,7 @@ function sections:configloader(props)
             Parent = clholder
         }
     )
-    --
+    
     local outline2 = utility.new(
         "Frame",
         {
@@ -4889,7 +4540,7 @@ function sections:configloader(props)
             Parent = outline
         }
     )
-    --
+    
     local title = utility.new(
         "TextLabel",
         {
@@ -4905,9 +4556,9 @@ function sections:configloader(props)
             Parent = outline
         }
     )
-    --
+    
     self.library.labels[#self.library.labels + 1] = title
-    --
+    
     local color = utility.new(
         "Frame",
         {
@@ -4921,9 +4572,9 @@ function sections:configloader(props)
             Parent = outline
         }
     )
-    --
+    
     table.insert(self.library.themeitems["accent"]["BackgroundColor3"], color)
-    --
+    
     local buttonsholder = utility.new(
         "Frame",
         {
@@ -4934,7 +4585,7 @@ function sections:configloader(props)
             Parent = outline
         }
     )
-    --
+    
     local configsholder = utility.new(
         "Frame",
         {
@@ -4948,7 +4599,7 @@ function sections:configloader(props)
             Parent = outline
         }
     )
-    --
+    
     local outline3 = utility.new(
         "Frame",
         {
@@ -4961,7 +4612,7 @@ function sections:configloader(props)
             Parent = configsholder
         }
     )
-    --
+    
     local outline4 = utility.new(
         "ScrollingFrame",
         {
@@ -4981,7 +4632,7 @@ function sections:configloader(props)
             Parent = outline3
         }
     )
-    --
+    
     utility.new(
         "UIListLayout",
         {
@@ -4990,10 +4641,9 @@ function sections:configloader(props)
             Parent = outline4
         }
     )
-    --
+    
     local createdbuttons = {}
     local selected
-    --
     local makebutton = function(name, toggled)
         local createdbutton = utility.new(
             "TextButton",
@@ -5006,7 +4656,7 @@ function sections:configloader(props)
                 Parent = outline4
             }
         )
-        --
+        
         local grey = utility.new(
             "Frame",
             {
@@ -5020,7 +4670,7 @@ function sections:configloader(props)
                 Parent = createdbutton
             }
         )
-        --
+        
         local createdtitle = utility.new(
             "TextLabel",
             {
@@ -5037,25 +4687,25 @@ function sections:configloader(props)
                 Parent = createdbutton
             }
         )
-        --
+        
         self.library.labels[#self.library.labels + 1] = createdtitle
-        --
+        
         local createdb = {
             ["button"] = createdbutton,
             ["grey"] = grey,
             ["title"] = createdtitle,
             ["name"] = name
         }
-        --
+        
         table.insert(createdbuttons, createdb)
-        --
+        
         if toggled then
             createdb.grey.Visible = true
             createdb.title.TextColor3 = self.library.theme.accent
             table.insert(self.library.themeitems["accent"]["TextColor3"], createdb.title)
             selected = createdb
         end
-        --
+    
         createdbutton.MouseButton1Down:Connect(function()
             for i, v in pairs(createdbuttons) do
                 if v ~= createdb then
@@ -5067,14 +4717,14 @@ function sections:configloader(props)
                     end
                 end
             end
-            --
+            
             createdb.grey.Visible = true
             createdb.title.TextColor3 = self.library.theme.accent
             table.insert(self.library.themeitems["accent"]["TextColor3"], createdb.title)
             selected = createdb
         end)
     end
-    --
+    
     local newbutton = function(parent, name)
         local button_holder = utility.new(
             "Frame",
@@ -5085,7 +4735,7 @@ function sections:configloader(props)
                 Parent = parent
             }
         )
-        --
+        
         local button_outline = utility.new(
             "Frame",
             {
@@ -5099,7 +4749,7 @@ function sections:configloader(props)
                 Parent = button_holder
             }
         )
-        --
+        
         local button_outline2 = utility.new(
             "Frame",
             {
@@ -5113,7 +4763,7 @@ function sections:configloader(props)
                 Parent = button_outline
             }
         )
-        --
+        
         local button_color = utility.new(
             "Frame",
             {
@@ -5126,7 +4776,7 @@ function sections:configloader(props)
                 Parent = button_outline2
             }
         )
-        --
+        
         utility.new(
             "UIGradient",
             {
@@ -5135,7 +4785,7 @@ function sections:configloader(props)
                 Parent = button_color
             }
         )
-        --
+        
         local button_button = utility.new(
             "TextButton",
             {
@@ -5152,12 +4802,12 @@ function sections:configloader(props)
                 Parent = button_holder
             }
         )
-        --
+        
         self.library.labels[#self.library.labels + 1] = button_button
-        --
+        
         return {button_holder, button_outline, button_button}
     end
-    --
+    
     local function textbox(parent)
         local textbox_holder = utility.new(
             "Frame",
@@ -5168,7 +4818,7 @@ function sections:configloader(props)
                 Parent = parent
             }
         )
-        --
+        
         local outline5 = utility.new(
             "Frame",
             {
@@ -5182,7 +4832,7 @@ function sections:configloader(props)
                 Parent = textbox_holder
             }
         )
-        --
+        
         local outline6 = utility.new(
             "Frame",
             {
@@ -5196,7 +4846,7 @@ function sections:configloader(props)
                 Parent = outline5
             }
         )
-        --
+        
         local color2 = utility.new(
             "Frame",
             {
@@ -5209,7 +4859,7 @@ function sections:configloader(props)
                 Parent = outline6
             }
         )
-        --
+        
         utility.new(
             "UIGradient",
             {
@@ -5218,7 +4868,7 @@ function sections:configloader(props)
                 Parent = color2
             }
         )
-        --
+        
         local tbox = utility.new(
             "TextBox",
             {
@@ -5237,7 +4887,7 @@ function sections:configloader(props)
                 Parent = textbox_holder
             }
         )
-        --
+        
         local tbox_button = utility.new(
             "TextButton",
             {
@@ -5254,14 +4904,14 @@ function sections:configloader(props)
                 Parent = textbox_holder
             }
         )
-        --
+        
         tbox_button.MouseButton1Down:Connect(function()
             tbox:CaptureFocus()
         end)
-        --
+        
         return {textbox_holder, tbox, outline5}
     end
-    --
+    
     local function refresh()
         for i, v in pairs(createdbuttons) do
             v.button:Remove()
@@ -5269,7 +4919,6 @@ function sections:configloader(props)
             v.title:Remove()
         end
         createdbuttons = {}
-        -- Ensure folder exists
         if not isfolder(folder) then
             makefolder(folder)
         end
@@ -5285,44 +4934,44 @@ function sections:configloader(props)
             end
         end
     end
-    --
+    
     refresh()
-    --
+    
     local name = textbox(buttonsholder)
     local load = newbutton(buttonsholder, "Load")
     local delete = newbutton(buttonsholder, "Delete")
     local save = newbutton(buttonsholder, "Save")
     local create = newbutton(buttonsholder, "Create")
-    --
+    
     name[1].Size = UDim2.new(1, -10, 0, 20)
     load[1].Size = UDim2.new(0.5, -6, 0, 20)
     delete[1].Size = UDim2.new(0.5, -6, 0, 20)
     save[1].Size = UDim2.new(0.5, -6, 0, 20)
     create[1].Size = UDim2.new(0.5, -6, 0, 20)
-    --
+    
     name[1].Position = UDim2.new(0.5, 0, 0, 0)
     name[1].AnchorPoint = Vector2.new(0.5, 0)
-    --
+    
     load[1].Position = UDim2.new(0, 5, 0, 22)
     load[1].AnchorPoint = Vector2.new(0, 0)
-    --
+    
     delete[1].Position = UDim2.new(1, -5, 0, 22)
     delete[1].AnchorPoint = Vector2.new(1, 0)
-    --
+    
     save[1].Position = UDim2.new(0, 5, 0, 44)
     save[1].AnchorPoint = Vector2.new(0, 0)
-    --
+    
     create[1].Position = UDim2.new(1, -5, 0, 44)
     create[1].AnchorPoint = Vector2.new(1, 0)
-    --
+    
     name[2].PlaceholderText = "Name"
-    --
+    
     local currentname = nil
-    --
+    
     name[2].Focused:Connect(function()
         name[3].BorderColor3 = self.library.theme.accent
     end)
-    --
+    
     name[2].FocusLost:Connect(function()
         local saved = name[2].Text
         if #saved >= 3 and #saved <= 15 then
@@ -5333,7 +4982,7 @@ function sections:configloader(props)
         end
         name[3].BorderColor3 = Color3.fromRGB(12, 12, 12)
     end)
-    --
+    
     load[3].MouseButton1Down:Connect(function()
         if selected then
             local filepath = folder .. "/" .. selected.name .. ".cfg"
@@ -5345,7 +4994,7 @@ function sections:configloader(props)
             end
         end
     end)
-    --
+    
     delete[3].MouseButton1Down:Connect(function()
         if selected then
             local filepath = folder .. "/" .. selected.name .. ".cfg"
@@ -5359,7 +5008,7 @@ function sections:configloader(props)
             end
         end
     end)
-    --
+    
     save[3].MouseButton1Down:Connect(function()
         if selected then
             local filepath = folder .. "/" .. selected.name .. ".cfg"
@@ -5376,7 +5025,7 @@ function sections:configloader(props)
             end
         end
     end)
-    --
+    
     create[3].MouseButton1Down:Connect(function()
         if currentname then
             local filepath = folder .. "/" .. currentname .. ".cfg"
@@ -5393,12 +5042,606 @@ function sections:configloader(props)
             end
         end
     end)
-    -- // button tbl
     configloader = {
         ["library"] = self.library
     }
-    -- // metatable indexing + return
     setmetatable(configloader, configloaders)
     return configloader
 end
+
+function library:debugpointers()
+    local function serializeTable(tbl, indent)
+        if not indent then indent = 0 end
+        local result = ""
+        for k, v in pairs(tbl) do
+            local formatting = string.rep("  ", indent) .. tostring(k) .. ": "
+            if type(v) == "table" then
+                if k == "library" or k == "titles" or k == "themeitems" then
+                    result = result .. formatting .. "[table: circular reference]\n"
+                else
+                    result = result .. formatting .. "\n" .. serializeTable(v, indent + 1)
+                end
+            elseif type(v) == "function" then
+                result = result .. formatting .. "[function]\n"
+            elseif type(v) == "userdata" then
+                result = result .. formatting .. "[userdata]\n"
+            else
+                result = result .. formatting .. tostring(v) .. "\n"
+            end
+        end
+        return result
+    end
+
+    warn("\n--- POINTER STRUCTURE DEBUG ---\n")
+    warn(serializeTable(self.pointers))
+    warn("\n--- END POINTER STRUCTURE ---\n")
+end
+
+function library:settheme(theme, color)
+	local window = self
+	
+	if not window.theme then
+		warn("Theme table not found")
+		return self
+	end
+	
+	if not window.theme[theme] then
+		warn("Theme '" .. tostring(theme) .. "' not found")
+		return self
+	end
+	
+	window.theme[theme] = color
+	
+	if window.themeitems and window.themeitems[theme] then
+		for property, elements in pairs(window.themeitems[theme]) do
+			for _, element in pairs(elements) do
+				if element and element[property] then
+					utility.tweenColor(element, property, color)
+				end
+			end
+		end
+	end
+	
+	return self
+end
+
+function library:setaccentcolor(color)
+	if typeof(color) ~= "Color3" then 
+		warn("Accent color must be a Color3 value")
+		return self
+	end
+	
+	return self:settheme("accent", color)
+end
+
+function library:setuptheme(options)
+	local options = options or {}
+	local accent = options.accent or options.Accent or options.accentColor or options.AccentColor or self.theme.accent
+	
+	self:setaccentcolor(accent)
+	
+	
+	return self
+end
+
+function library:setkey(key)
+	if typeof(key) == "EnumItem" then
+		local window = self
+		window.key = key
+	end
+	return self
+end
+
+function library:settoggle(side,bool)
+	if side == "x" then
+		self.x = bool
+	else
+		self.y = bool
+	end
+	return self
+end
+
+function library:setfont(font)
+	if font ~= nil then
+		local window = self
+		for i,v in pairs(window.labels) do
+			if v ~= nil then
+				v.Font = font
+			end
+		end
+	end
+	return self
+end
+
+function library:settextsize(size)
+	if size ~= nil then
+		local window = self
+		for i,v in pairs(window.labels) do
+			if v ~= nil then
+				v.TextSize = size
+			end
+		end
+	end
+	return self
+end
+
+function library:page(props)
+	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
+	local page = {}
+	local tabbutton = utility.new(
+		"Frame",
+		{
+			BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+			BorderColor3 = Color3.fromRGB(12, 12, 12),
+			BorderMode = "Inset",
+			BorderSizePixel = 1,
+			Size = UDim2.new(0,75,1,0), 
+			Parent = self.tabsbuttons
+		}
+	)
+	
+	local outline = utility.new(
+		"Frame",
+		{
+			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+			BorderColor3 = Color3.fromRGB(56, 56, 56),
+			BorderMode = "Inset",
+			BorderSizePixel = 1,
+			Size = UDim2.new(1,0,1,0),
+			Position = UDim2.new(0,0,0,0),
+			Parent = tabbutton
+		}
+	)
+	
+	local button = utility.new(
+		"TextButton",
+		{
+			AnchorPoint = Vector2.new(0,0),
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1,0,1,0),
+			Position = UDim2.new(0,0,0,0),
+			Text = "",
+			Parent = tabbutton
+		}
+	)
+	
+	local r_line = utility.new(
+		"Frame",
+		{
+			BackgroundColor3 = Color3.fromRGB(56, 56, 56),
+			BorderSizePixel = 0,
+			Size = UDim2.new(0,1,0,1),
+			Position = UDim2.new(1,0,1,1),
+			ZIndex = 2,
+			Parent = outline
+		}
+	)
+	
+	local l_line = utility.new(
+		"Frame",
+		{
+			AnchorPoint = Vector2.new(1,0),
+			BackgroundColor3 = Color3.fromRGB(56, 56, 56),
+			BorderSizePixel = 0,
+			Size = UDim2.new(0,1,0,1),
+			Position = UDim2.new(0,0,1,1),
+			ZIndex = 2,
+			Parent = outline
+		}
+	)
+	
+	local line = utility.new(
+		"Frame",
+		{
+			BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+			BorderSizePixel = 0,
+			Size = UDim2.new(1,0,0,2),
+			Position = UDim2.new(0,0,1,0),
+			ZIndex = 2,
+			Parent = outline
+		}
+	)
+	
+	local label = utility.new(
+		"TextLabel",
+		{
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1,0,0,20),
+			Position = UDim2.new(0,0,0,0),
+			Font = self.font,
+			Text = name,
+			TextColor3 = Color3.fromRGB(255,255,255),
+			TextSize = self.textsize,
+			TextStrokeTransparency = 0,
+			Parent = outline
+		}
+	)
+
+	local underline = utility.new(
+		"Frame",
+		{
+			AnchorPoint = Vector2.new(0.5, 1),
+			BackgroundColor3 = self.theme.accent,
+			BorderSizePixel = 0,
+			Size = UDim2.new(0.8, 0, 0, 1),
+			Position = UDim2.new(0.5, 0, 0.9, 0),
+			Visible = false,
+			ZIndex = 3,
+			Parent = label
+		}
+	)
+
+	table.insert(self.themeitems["accent"]["BackgroundColor3"], underline)
+
+	local function updateTabWidth()
+		local textWidth = label.TextBounds.X
+		local padding = 24 
+		tabbutton.Size = UDim2.new(0, textWidth + padding, 1, 0)
+	end
+
+	label:GetPropertyChangedSignal("TextBounds"):Connect(updateTabWidth)
+	updateTabWidth() 
+
+	local pageholder = utility.new(
+		"Frame",
+		{
+			AnchorPoint = Vector2.new(0.5,0.5),
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1,-20,1,-20),
+			Position = UDim2.new(0.5,0,0.5,0),
+			Visible = false,
+			Parent = self.tabs
+		}
+	)
+	
+	local left = utility.new(
+		"ScrollingFrame",
+		{
+			BackgroundTransparency = 1,
+			BorderSizePixel = 0,
+			Size = UDim2.new(0.5,-5,1,0),
+			Position = UDim2.new(0,0,0,0),
+			AutomaticCanvasSize = "Y",
+			CanvasSize = UDim2.new(0,0,0,0),
+			ScrollBarImageTransparency = 1,
+			ScrollBarImageColor3 = Color3.fromRGB(0,0,0),
+			ScrollBarThickness = 0,
+			ClipsDescendants = false,
+			VerticalScrollBarInset = "None",
+			VerticalScrollBarPosition = "Right",
+			Parent = pageholder
+		}
+	)
+	
+	utility.new(
+		"UIListLayout",
+		{
+			FillDirection = "Vertical",
+			Padding = UDim.new(0,10),
+			Parent = left
+		}
+	)
+	
+	local right = utility.new(
+		"ScrollingFrame",
+		{
+			AnchorPoint = Vector2.new(1,0),
+			BackgroundTransparency = 1,
+			BorderSizePixel = 0,
+			Size = UDim2.new(0.5,-5,1,0),
+			Position = UDim2.new(1,0,0,0),
+			AutomaticCanvasSize = "Y",
+			CanvasSize = UDim2.new(0,0,0,0),
+			ScrollBarImageTransparency = 1,
+			ScrollBarImageColor3 = Color3.fromRGB(0,0,0),
+			ScrollBarThickness = 0,
+			ClipsDescendants = false,
+			VerticalScrollBarInset = "None",
+			VerticalScrollBarPosition = "Right",
+			Parent = pageholder
+		}
+	)
+	
+	utility.new(
+		"UIListLayout",
+		{
+			FillDirection = "Vertical",
+			Padding = UDim.new(0,10),
+			Parent = right
+		}
+	)
+	
+	page = {
+		["library"] = self,
+		["outline"] = outline,
+		["r_line"] = r_line,
+		["l_line"] = l_line,
+		["line"] = line,
+		["page"] = pageholder,
+		["left"] = left,
+		["right"] = right,
+		["open"] = false,
+		["underline"] = underline,
+		["pointers"] = {}
+	}
+	
+	table.insert(self.pages,page)
+	
+	button.MouseButton1Down:Connect(function()
+		
+		if page.open == false then
+			for i,v in pairs(self.pages) do
+				if v ~= page then
+					if v.open then
+						v.page.Visible = false
+						v.open = false
+						v.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+						v.line.Size = UDim2.new(1,0,0,2)
+						v.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+						v.underline.Visible = false
+					end
+				end
+			end
+			
+			self:closewindows()
+			
+			page.page.Visible = true
+			page.open = true
+			page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+			page.line.Size = UDim2.new(1,0,0,3)
+			page.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+			page.underline.Visible = true
+
+			for _, esppreview in pairs(self.esppreviews or {}) do
+				utility.tweenTransparency(esppreview.previewholder, 0.5, 1)
+				esppreview.previewholder.Visible = false
+			end
+			if page.esppreview then
+				utility.tweenTransparency(page.esppreview.previewholder, 0.5, 0)
+				page.esppreview.previewholder.Visible = true
+			end
+
+		end
+	end)
+
+	page.openpage = function()
+		if page.open == false then
+			for i,v in pairs(page.library.pages) do
+				if v ~= page then
+					if v.open then
+						v.page.Visible = false
+						v.open = false
+						v.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+						v.line.Size = UDim2.new(1,0,0,2)
+						v.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+						v.underline.Visible = false
+					end
+				end
+			end
+			
+			page.page.Visible = true
+			page.open = true
+			page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+			page.line.Size = UDim2.new(1,0,0,3)
+			page.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+			page.underline.Visible = true
+			
+			for _, esppreview in pairs(page.library.esppreviews or {}) do
+				utility.tweenTransparency(esppreview.previewholder, 0.5, 1)
+				esppreview.previewholder.Visible = false
+			end
+			if page.esppreview then
+				utility.tweenTransparency(page.esppreview.previewholder, 0.5, 0)
+				page.esppreview.previewholder.Visible = true
+			end
+		end
+	end
+	
+	if #self.pages == 1 then
+		task.defer(function()
+			page.openpage()
+		end)
+	end
+	
+	local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
+	
+	if pointer then
+		self.pointers[tostring(pointer)] = page.pointers
+	end
+	
+	self.labels[#self.labels+1] = label
+	setmetatable(page, pages)
+	return page
+end
+
+function library:selectPageIndex(index)
+	if self.pages and self.pages[index] then
+		self.pages[index].openpage()
+		return true
+	end
+	return false
+end
+
+
+function library:settingspage(props)
+    local props = props or {}
+    local name = props.name or props.Name or "Settings"
+    local config_folder = props.folder or props.Folder or props.config_folder or "nexify/settings"
+    local custom_settings = props.settings or props.Settings or props.custom_settings or props.Custom_Settings or {}
+    
+    local settings_page = self:page({
+        name = name,
+        pointer = "settingsPage"
+    })
+    
+    local theme_section = settings_page:section({
+        name = "Theme",
+        side = "left",
+        pointer = "themeSection"
+    })
+    
+    local current_accent = self.theme.accent
+    theme_section:colorpicker({
+        name = "Accent Color",
+        def = current_accent,
+        pointer = "accentColor",
+        callback = function(color)
+            self:setaccentcolor(color)
+        end
+    })
+    
+    local ui_section = settings_page:section({
+        name = "UI Settings",
+        side = "left",
+        pointer = "uiSection"
+    })
+    
+    ui_section:keybind({
+        name = "UI Toggle Key",
+        def = self.key,
+        pointer = "uiToggleKey",
+        callback = function(key)
+            self:setkey(key)
+        end
+    })
+    
+    ui_section:toggle({
+        name = "X Axis Animation",
+        def = self.x,
+        pointer = "xAxisToggle",
+        callback = function(state)
+            self:settoggle("x", state)
+        end
+    })
+    
+    ui_section:toggle({
+        name = "Y Axis Animation",
+        def = self.y,
+        pointer = "yAxisToggle",
+        callback = function(state)
+            self:settoggle("y", state)
+        end
+    })
+    
+    if type(custom_settings) == "table" and #custom_settings > 0 then
+        local custom_section = settings_page:section({
+            name = "Custom Settings",
+            side = props.custom_side or "left",
+            pointer = "customSettingsSection"
+        })
+        
+        for _, setting in ipairs(custom_settings) do
+            local element_type = setting.type or "toggle"
+            local setting_props = {}
+            
+            for k, v in pairs(setting) do
+                if k ~= "type" then
+                    setting_props[k] = v
+                end
+            end
+            
+            if element_type == "toggle" then
+                custom_section:toggle(setting_props)
+            elseif element_type == "slider" then
+                custom_section:slider(setting_props)
+            elseif element_type == "dropdown" then
+                custom_section:dropdown(setting_props)
+            elseif element_type == "colorpicker" then
+                custom_section:colorpicker(setting_props)
+            elseif element_type == "keybind" then
+                custom_section:keybind(setting_props)
+            elseif element_type == "button" then
+                custom_section:button(setting_props)
+            elseif element_type == "textbox" then
+                custom_section:textbox(setting_props)
+            end
+        end
+    end
+    
+    local config_section = settings_page:section({
+        name = "Configuration",
+        side = "right",
+        pointer = "configSection"
+    })
+    
+    local configs = config_section:configloader({
+        folder = config_folder,
+        pointer = "configLoader"
+    })
+    
+    local info_section = settings_page:section({
+        name = "Information",
+        side = "right",
+        pointer = "infoSection"
+    })
+    
+    local function createInfoLabel(title, value)
+        local holder = utility.new(
+            "Frame",
+            {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 20),
+                Parent = info_section.content
+            }
+        )
+        
+        local titleLabel = utility.new(
+            "TextLabel",
+            {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0.4, 0, 1, 0),
+                Position = UDim2.new(0, 0, 0, 0),
+                Font = self.font,
+                Text = title,
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextSize = self.textsize,
+                TextStrokeTransparency = 0,
+                TextXAlignment = "Left",
+                Parent = holder
+            }
+        )
+        
+        local valueLabel = utility.new(
+            "TextLabel",
+            {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0.6, 0, 1, 0),
+                Position = UDim2.new(0.4, 0, 0, 0),
+                Font = self.font,
+                Text = value,
+                TextColor3 = self.theme.accent,
+                TextSize = self.textsize,
+                TextStrokeTransparency = 0,
+                TextXAlignment = "Left",
+                Parent = holder
+            }
+        )
+        
+        table.insert(self.labels, titleLabel)
+        table.insert(self.labels, valueLabel)
+        table.insert(self.themeitems["accent"]["TextColor3"], valueLabel)
+        
+        return holder
+    end
+    
+    createInfoLabel("Library", "XWare | V3")
+    createInfoLabel("Version", version)
+    createInfoLabel("Developed by", "Mafaka")
+    createInfoLabel("Edited by", "NexusScripts")
+    
+    local separator = utility.new(
+        "Frame",
+        {
+            BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+            BorderSizePixel = 0,
+            Size = UDim2.new(1, -10, 0, 1),
+            Position = UDim2.new(0, 5, 0, 85),
+            Parent = info_section.content
+        }
+    )
+    
+    return settings_page
+
+end
+
 return library
