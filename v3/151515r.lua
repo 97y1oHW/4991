@@ -2,7 +2,7 @@
 
 --[[
 
- ___    ___  ___       __    ________   ________   _______      
+ ___    ___  ___       __    ________   ________   _______      ;
 |\  \  /  /||\  \     |\  \ |\   __  \ |\   __  \ |\  ___ \     
 \ \  \/  / /\ \  \    \ \  \\ \  \|\  \\ \  \|\  \\ \   __/|    
  \ \    / /  \ \  \  __\ \  \\ \   __  \\ \   _  _\\ \  \_|/__  
@@ -886,43 +886,48 @@ collorofui = Color3.fromRGB(150, 13, 242)
 ----
 
 local tabnxxame = 'XWARE | PD | V3.2 | ' ..identifyexecutor()
-local Window = libary:new({name = tabnxxame, accent =collorofui, textsize = 13})
-local AimingTab = Window:page({name = "Combat"})
-local RageTab = Window:page({name = "Rage"})
-local VisualTab = Window:page({name = "Visuals"})
-local MiscTab = Window:page({name = "Misc"})
-local UISettings = Window:page({name = "UI"})
-local SAimSection = AimingTab:section({name = "Silent Aim", side = "left",size = 100})
-local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left",size = 195})
-local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left",size = 100})
-local uiSettings2 = UISettings:section({name = " UI Settings 2", side = "right",size = 100})
-local Envioromental = AimingTab:section({name = "Environmental", side = "left",size = 160})
-local WaterTab = MiscTab:section({name = "Water", side = "left",size = 80})
-local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200})
-local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50})
-local DesyncTab = RageTab:section({name = "Desync", side = "left", size = 300})
-local AASettings = RageTab:section({name = "Settings", side = "right", size = 220})
---local ViewModelChams = VisualTab:section({name = "ViewModel Chams", side = "right", size = 220})
-local VisualMainSection = VisualTab:section({name = "Normal Esp",side = "left", size = 200})
-local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2",side = "right", size = 210})
-local CorpseEsp = VisualTab:section({name = "Corpse Esp",side = "left", size = 100})
-local BotEsp = VisualTab:section({name = "Bot Esp", side = "right",size = 180})
-local nograsstab = VisualTab:section({name = "Grass", side = "right",size = 75})
-local MiscMoveSettings = MiscTab:section({name = "Movement Cheats",side = "left", size = 181})
-local MiscCharSettings = MiscTab:section({name = "Character Cheats",side = "left", size = 60})
-local MiscNorSettings = MiscTab:section({name = "Normal Cheats",side = "left", size = 140})
-local VisorSettings = MiscTab:section({name = "Visor Settings",side = "left", size = 60})
-local Brightt = MiscTab:section({name = "Bright",side = "left", size = 40})
-local MiscCamSettings = MiscTab:section({name = "Camera Settings",side = "right", size = 120})
-local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings",side = "right", size = 88})
-local Bulletset = RageTab:section({name = "Bullet Settings", side = "right",size = 120})
-local KnifeModss = RageTab:section({name = "Knife Mods", side = "right",size = 200})
-local ConfigSection = MiscTab:section({name = "Config",side = "right", size = 260})
-local ItemWeight = MiscTab:section({name = "Item Weight",side = "right", size = 40})
-local GameLogsTab = MiscTab:section({name = "Game Logs",side = "right", size = 80})
-local ConfigLoader = ConfigSection:configloader({folder = "XWare"})
-local GunMods = AimingTab:section({name = "Gun Mods", side = "right",size = 270})
-SAimSection:toggle({name = "Silent Aim", def = false, callback = function(Value)
+local Window = libary:new({name = tabnxxame, accent = collorofui, textsize = 13})
+local AimingTab = Window:page({name = "Combat", pointer = "0.483472"})
+local RageTab = Window:page({name = "Rage", pointer = "0.925317"})
+local VisualTab = Window:page({name = "Visuals", pointer = "0.234851"})
+local MiscTab = Window:page({name = "Misc", pointer = "0.176492"})
+local UISettings = Window:page({name = "UI", pointer = "0.702813"})
+
+local SAimSection = AimingTab:section({name = "Silent Aim", side = "left", size = 100, pointer = "0.918273"})
+local fovsettingsss = AimingTab:section({name = "Fov Settings", side = "left", size = 195, pointer = "0.125367"})
+local uiSettings1 = UISettings:section({name = " UI Settings 1", side = "left", size = 100, pointer = "0.839201"})
+local uiSettings2 = UISettings:section({name = " UI Settings 2", pointer = "0.913746", side = "right", size = 100})
+local Envioromental = AimingTab:section({name = "Environmental", side = "left", size = 160, pointer = "0.384920"})
+
+local WaterTab = MiscTab:section({name = "Water", side = "left", size = 80, pointer = "0.627384"})
+local AAMainSection = RageTab:section({name = "Main", side = "left", size = 200, pointer = "0.493812"})
+local PlayerInfof = RageTab:section({name = "Player Info", side = "left", size = 50, pointer = "0.592731"})
+local DesyncTab = RageTab:section({name = "Desync", side = "left", size = 300, pointer = "0.918374"})
+local AASettings = RageTab:section({name = "Settings", side = "right", size = 220, pointer = "0.281937"})
+
+local VisualMainSection = VisualTab:section({name = "Normal Esp", side = "left", size = 200, pointer = "0.483920"})
+local VisualMainSection2 = VisualTab:section({name = "Normal Esp 2", side = "right", size = 210, pointer = "0.567823"})
+local CorpseEsp = VisualTab:section({name = "Corpse Esp", side = "left", size = 100, pointer = "0.321784"})
+local BotEsp = VisualTab:section({name = "Bot Esp", side = "right", size = 180, pointer = "0.867293"})
+local nograsstab = VisualTab:section({name = "Grass", side = "right", size = 75, pointer = "0.159283"})
+
+local MiscMoveSettings = MiscTab:section({name = "Movement Cheats", side = "left", size = 181, pointer = "0.762849"})
+local MiscCharSettings = MiscTab:section({name = "Character Cheats", side = "left", size = 60, pointer = "0.182739"})
+local MiscNorSettings = MiscTab:section({name = "Normal Cheats", side = "left", size = 140, pointer = "0.927364"})
+local VisorSettings = MiscTab:section({name = "Visor Settings", side = "left", size = 60, pointer = "0.348261"})
+local Brightt = MiscTab:section({name = "Bright", side = "left", size = 40, pointer = "0.589274"})
+local MiscCamSettings = MiscTab:section({name = "Camera Settings", side = "right", size = 120, pointer = "0.681923"})
+local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings", side = "right", size = 88, pointer = "0.937462"})
+
+local Bulletset = RageTab:section({name = "Bullet Settings", side = "right", size = 120, pointer = "0.721983"})
+local KnifeModss = RageTab:section({name = "Knife Mods", side = "right", size = 200, pointer = "0.183729"})
+
+local ConfigSection = MiscTab:section({name = "Config", side = "right", size = 260, pointer = "0.468291"})
+local ItemWeight = MiscTab:section({name = "Item Weight", side = "right", size = 40, pointer = "0.739182"})
+local GameLogsTab = MiscTab:section({name = "Game Logs", side = "right", size = 80, pointer = "0.594823"})
+local GunMods = AimingTab:section({name = "Gun Mods", side = "right", size = 270, pointer = "0.748291",})
+
+SAimSection:toggle({name = "Silent Aim", def = false, pointer = "0.781984576", callback = function(Value)
     silent_aim.enabled = not silent_aim.enabled
 end})
 
@@ -1097,6 +1102,35 @@ for i = 0, labelCountX - 1 do
         createWatermarkLabel("XWare", UDim2.new(posX, 0, posY, 0), rotation)
     end
 end
+local configs = uiSettings2:configloader({
+    folder = "XWARE/Configs"
+})
+
+
+-- You can also add direct buttons for specific config operations
+uiSettings2:button({
+    name = "Save Default",
+    callback = function()
+        local configData = Window:saveconfig()
+        if not isfolder("XWARE/Configs") then
+            makefolder("XWARE/Configs")
+        end
+        writefile("XWARE/Configs/default.cfg", configData)
+        print("Saved default config")
+    end
+})
+
+uiSettings2:button({
+    name = "Load Default",
+    callback = function()
+        if isfile("XWARE/Configs/default.cfg") then
+            Window:loadconfig("XWARE/Configs/default.cfg")
+            print("Loaded default config")
+        else
+            print("Default config not found")
+        end
+    end
+})
 
 
 uiSettings2:toggle({name = "Watermark", pointer = "watermarktext", def = false, callback = function(Value)
@@ -1173,7 +1207,7 @@ pcall(
     print('Manuplated Executor: ' ..identifyexecutor())
 end})
 
-SAimSection:dropdown({name = "Silent Aim Part", def = "Head", max = 3, options = {"Head","UpperTorso","HumanoidRootPart"}, callback = function(part)
+SAimSection:dropdown({name = "Silent Aim Part", def = "Head", pointer = "0.781907945", max = 3, options = {"Head","UpperTorso","HumanoidRootPart"}, callback = function(part)
     silent_aim.part = part
 end})
 
@@ -1216,7 +1250,7 @@ end
 
 
 
-GunMods:toggle({name = "Rapid Fire", def = false , pointer = "rapidfire", callback = function(state)
+GunMods:toggle({name = "Rapid Fire", def = false , pointer = "0.8713489098*56", callback = function(state)
      if state then
             -- Enable rapid fire
             setFireRateForAllItems(newFireRate)  -- Set to desired rapid fire rate
@@ -1232,7 +1266,7 @@ end})
 
 
 
-        GunMods:toggle({name = "Instant Aim", def = false, pointer = "instaaim", callback = function(state)
+        GunMods:toggle({name = "Instant Aim", def = false, pointer = "0.781904586976", callback = function(state)
             -- Iterate through each weapon in the local player's inventory
         local inventory = game.ReplicatedStorage.Players[localplayernameee].Inventory:GetChildren()
         
@@ -1258,7 +1292,7 @@ end})
             end
         end
 end})
-GunMods:toggle({name = "Instant Equip", def = false, callback = function(Value)
+GunMods:toggle({name = "Instant Equip", def = false, pointer = "0.1687940567", callback = function(Value)
 
  workspace.Camera.ChildAdded:Connect(function(child)
             if child:IsA("Model") then
@@ -1282,7 +1316,7 @@ local instanthit = false
 GunMods:toggle({
     name = "Instant Hit",
     def = false,
-    pointer = "instanthit",
+    pointer = "134895067..258",
     callback = function(state)
         instanthit = state
     end
@@ -1321,7 +1355,7 @@ local function hookHandler(self, method, ...)
 end
 
 
-        GunMods:toggle({name = "Instant Reload", def = false, callback = function(Value)
+        GunMods:toggle({name = "Instant Reload", def = false,pointer = "0.81798049805", callback = function(Value)
 
 
 -- Instant Reload for Project Delta
@@ -1452,11 +1486,11 @@ local function stopInventoryCheck()
 end
 
 
- GunMods:toggle({name = "Unlock Fire Modes", def = false, callback = function(Value)
+ GunMods:toggle({name = "Unlock Fire Modes", def = false,pointer = "table0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", callback = function(Value)
 
 startInventoryCheck()
 end})
-GunMods:toggle({name = "No Gun Collision", def = false, callback = function(Value)
+GunMods:toggle({name = "No Gun Collision", def = false,pointer = "0.82945", callback = function(Value)
 	local plr = game:GetService("Players").LocalPlayer
 	local rs = game:GetService("ReplicatedStorage")
 	local inv = rs.Players:FindFirstChild(plr.Name).Inventory
@@ -1474,7 +1508,7 @@ GunMods:toggle({name = "No Gun Collision", def = false, callback = function(Valu
 	end
 end})
 
-GunMods:toggle({name = "No Sway", def = false, callback = function(Value)
+GunMods:toggle({name = "No Sway", def = false,pointer = "0.187903*4567890", callback = function(Value)
 	local plr = game:GetService("Players").LocalPlayer
 	local rs = game:GetService("ReplicatedStorage")
 	local inv = rs.Players:FindFirstChild(plr.Name).Inventory
@@ -1500,6 +1534,7 @@ end})
 
 GunMods:toggle({
     name = "No ADS Block",
+    pointer = "0.24579",
     def = false,
     callback = function(Value)
         if Value then
@@ -1529,7 +1564,7 @@ GunMods:toggle({
 
 local ammo = game.ReplicatedStorage.AmmoTypes
 
-GunMods:slider({name = "Recoil Slider", def = 230, max = 583, min = 0, rounding = true, callback = function(State)
+GunMods:slider({name = "Recoil Slider", def = 230, max = 583, min = 0,pointer = "113456", rounding = true, callback = function(State)
 
  -- Check if the slider value is zero
     if State == 0 then
@@ -1551,6 +1586,7 @@ GunMods:slider({
 	name = "Rapid Fire Delay",
 	def = 0.001,
 	max = 0.005,
+    pointer = "0.91745429900",
 	min = 0.000001,
 	roundingvalue = 0.000001,
 	callback = function(State)
@@ -1686,7 +1722,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end
 end)
 
-fovsettingsss:toggle({name = "Show FOV", def = false, callback = function(bool)
+fovsettingsss:toggle({name = "Show FOV", def = false,pointer = "showfov", callback = function(bool)
     FOVConfig.Visible = bool
     fovCircle.Visible = bool
 end})
@@ -1694,40 +1730,40 @@ end})
 
 
 
-fovsettingsss:toggle({name = "Internal FOV", def = false, callback = function(bool)
+fovsettingsss:toggle({name = "Internal FOV", def = false,pointer = "internalfov", callback = function(bool)
     FOVConfig.InternalFOV = bool
     filler.Visible = bool
 end})
 
-fovsettingsss:colorpicker({name = "Inner FOV Color", def = Color3.fromRGB(255, 255, 255), callback = function(col)
+fovsettingsss:colorpicker({name = "Inner FOV Color", def = Color3.fromRGB(255, 255, 255),pointer = "innerfovcolor", callback = function(col)
     FOVConfig.InternalColor = col
     filler.BackgroundColor3 = col
 end})
 
 
 
-fovsettingsss:toggle({name = "Show Player Info", def = false, callback = function(bool)
+fovsettingsss:toggle({name = "Show Player Info", def = false,pointer = "playerinfo", callback = function(bool)
     FOVConfig.ShowNameTag = bool
 end})
 
-fovsettingsss:slider({name = "FOV Size", def = 276, max = 276, min = 270, rounding = true, callback = function(val)
+fovsettingsss:slider({name = "FOV Size", def = 276, max = 276, min = 270,pointer = "8755q4", rounding = true, callback = function(val)
     FOVConfig.Size = val
     fovCircle.Size = UDim2.new(0, val, 0, val)
     fovCircle.Position = UDim2.new(0.5, -val/2, 0.5, -val/2)
     nearestLabel.Position = UDim2.new(0.5, -100, 0.5, val/2 + 5)
 end})
 
-fovsettingsss:slider({name = "FOV Thickness", def = 1, max = 3, min = 1, rounding = true, callback = function(val)
+fovsettingsss:slider({name = "FOV Thickness", def = 1, max = 3, min = 1, pointer = "0.27n3181EFF",rounding = true, callback = function(val)
     FOVConfig.Thickness = val
     stroke.Thickness = val
 end})
 
-fovsettingsss:slider({name = "Rotation Speed", def = 1, max = 10, min = 0, rounding = true, callback = function(val)
+fovsettingsss:slider({name = "Rotation Speed", def = 1, max = 10, min = 0,pointer = "0.76184WF", rounding = true, callback = function(val)
     FOVConfig.RotationSpeed = val
 end})
 
 
-SAimSection:toggle({name = "Wall Check", def = false, callback = function(Boolean)
+SAimSection:toggle({name = "Wall Check", def = false,pointer = "0.187945677", callback = function(Boolean)
     PuppySettings.SilentAim.WallCheck = Boolean
 end})
 
@@ -1764,7 +1800,7 @@ end;
 
 
 
-Brightt:toggle({name = "Full Bright", def = false, callback = function(state)
+Brightt:toggle({name = "Full Bright", def = false, pointer = "0.18945670000",callback = function(state)
             fullBrightActive = state
         if fullBrightActive then
             enableFullBright() 
@@ -1888,13 +1924,13 @@ end
 coroutine.wrap(EEXR_fake_script)()
 
 
-VisorSettings:toggle({name = "Visor Checker", def = false, callback = function(state)
+VisorSettings:toggle({name = "Visor Checker", def = false,pointer = "001..68156.76,,eck", callback = function(state)
 
 
 visorprotc.Enabled = state
 
 end})
-VisorSettings:toggle({name = "Remove Visor", def = false, callback = function(state)
+VisorSettings:toggle({name = "Remove Visor", def = false,pointer = "0.8732567", callback = function(state)
 
 
         if state then
@@ -1908,13 +1944,13 @@ end})
 
 
 -- Silent FOV Section --
-local AimbotFOVSection = AimingTab:section({name = "Snapline", side = "right",size = 60})
+local AimbotFOVSection = AimingTab:section({name = "Snapline", side = "right",size = 60,pointer = "snaplinetab"})
 
-AimbotFOVSection:toggle({name = "Snapline Enabled", def = false, callback = function(Boolean)
+AimbotFOVSection:toggle({name = "Snapline Enabled", def = false,pointer = "snaplines", callback = function(Boolean)
     config.snapline_enabled = Boolean
 end})
 
-AimbotFOVSection:colorpicker({name = "Snapline Color", cpname = "", def = Color3.new(255, 255, 255), callback = function(color)
+AimbotFOVSection:colorpicker({name = "Snapline Color", cpname = "",pointer = "snaplinescolor", def = Color3.new(255, 255, 255), callback = function(color)
    
    config.snapline_color = color
 end})
@@ -2098,17 +2134,17 @@ game:GetService("RunService").Heartbeat:Connect(function()
 end)
 
 -- Silent Aim Settings Section --
-local SilentAimSettings = AimingTab:section({name = "Inventory Viewer", side = "right",size = 130})
+local SilentAimSettings = AimingTab:section({name = "Inventory Viewer", side = "right",size = 130,pointer = "0.87154"})
 
-SilentAimSettings:toggle({name = "Inventory Viewer Toggle", def = false, callback = function(Boolean)
+SilentAimSettings:toggle({name = "Inventory Viewer Toggle",pointer = "0.81725890", def = false, callback = function(Boolean)
     frame231.Visible = Boolean
 end})
 
-SilentAimSettings:toggle({name = "Inventory Viewer Outline", def = true, callback = function(Boolean)
+SilentAimSettings:toggle({name = "Inventory Viewer Outline",pointer = "0.87198456", def = true, callback = function(Boolean)
     strokesdade.Enabled = Boolean
 end})
 
-SilentAimSettings:toggle({name = "Gradiant Animation", def = false, callback = function(Boolean)
+SilentAimSettings:toggle({name = "Gradiant Animation", pointer = "0.2825",def = false, callback = function(Boolean)
     animatexxx = Boolean  -- Use this to toggle the gradient animation
 end})
 
@@ -2128,7 +2164,7 @@ local stabSettings = {
 KnifeModss:toggle({
     name = "Ultra Hit", 
     def = false, 
-    pointer = "ultrahit", 
+    pointer = "0.28596", 
     callback = function(state)
         stabSettings.ultraHit = state
     end
@@ -2137,7 +2173,7 @@ KnifeModss:toggle({
 KnifeModss:toggle({
     name = "Angry Swing", 
     def = false, 
-    pointer = "angryswing", 
+    pointer = "0.17987", 
     callback = function(state)
         stabSettings.angrySwing = state
     end
@@ -2146,7 +2182,7 @@ KnifeModss:toggle({
 KnifeModss:toggle({
     name = "Tilt Mode", 
     def = false, 
-    pointer = "tiltmodex", 
+    pointer = "0.719804", 
     callback = function(state)
         stabSettings.tiltMode = state
     end
@@ -2155,7 +2191,7 @@ KnifeModss:toggle({
 KnifeModss:toggle({
     name = "Ghost Tilt", 
     def = false, 
-    pointer = "ghosttilt", 
+    pointer = "0.817945", 
     callback = function(state)
         stabSettings.ghostTilt = state
     end
@@ -2258,6 +2294,7 @@ local invistrack
 DesyncTab:toggle({
     name = "Desync",
     def = false,
+    pointer = "0.871945",
     callback = function(v)
         allvars.desyncbool = v
 
@@ -2344,6 +2381,7 @@ DesyncTab:toggle({
 DesyncTab:toggle({
     name = "Edit Position",
     def = false,
+    pointer = "edpos",
     callback = function(v)
         allvars.desyncPos = v
     end
@@ -2354,6 +2392,7 @@ DesyncTab:slider({
     name = "Position X",
     def = allvars.desynXp,
     min = -3,
+    pointer = "145678",
     max = 3,
     rounding = true,
     callback = function(v)
@@ -2366,6 +2405,7 @@ DesyncTab:slider({
     def = allvars.desynYp,
     min = -2.5,
     max = 2.5,
+    pointer = "1456789",
     rounding = true,
     callback = function(v)
         allvars.desynYp = v
@@ -2377,6 +2417,7 @@ DesyncTab:slider({
     def = allvars.desynZp,
     min = -3,
     max = 3,
+    pointer = "8765",
     rounding = true,
     callback = function(v)
         allvars.desynZp = v
@@ -2386,6 +2427,7 @@ DesyncTab:slider({
 -- Edit orientation toggle
 DesyncTab:toggle({
     name = "Edit Rotation",
+    pointer = "edrot",
     def = false,
     callback = function(v)
         allvars.desyncOr = v
@@ -2397,6 +2439,7 @@ DesyncTab:slider({
     name = "Rotation X",
     def = allvars.desynXo,
     min = -180,
+    pointer = "98765",
     max = 180,
     rounding = true,
     callback = function(v)
@@ -2409,6 +2452,7 @@ DesyncTab:slider({
     def = allvars.desynYo,
     min = -180,
     max = 180,
+    pointer = "8764",
     rounding = true,
     callback = function(v)
         allvars.desynYo = v
@@ -2420,6 +2464,7 @@ DesyncTab:slider({
     def = allvars.desynZo,
     min = -180,
     max = 180,
+    pointer = "12.13455",
     rounding = true,
     callback = function(v)
         allvars.desynZo = v
@@ -2480,7 +2525,7 @@ end)
 
 
 local statussssssss = false
-PlayerInfof:toggle({name = "Player Info UI", def = false, callback = function(Boolean)
+PlayerInfof:toggle({name = "Player Info UI", def = false,pointer = "0.87194", callback = function(Boolean)
     statussssssss = Boolean
 if Boolean == true then
 
@@ -2862,17 +2907,17 @@ end
 end})
 --]]
 
-SilentAimSettings:toggle({name = "Gradiant Toggle", def = false, callback = function(Boolean)
+SilentAimSettings:toggle({name = "Gradiant Toggle",pointer = "graidnattgogle", def = false, callback = function(Boolean)
     gradientxx_upval.Enabled = Boolean
 end})
 
-SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, min = 0, roundingvalue = 0.1, callback = function(Value)
+SilentAimSettings:slider({name = "Gradiant Transparency", def = 1, max = 1.3, pointer = "097", min = 0, roundingvalue = 0.1, callback = function(Value)
  frame231.BackgroundTransparency = Value
 end})
 
- DoubleJump = AimingTab:section({name = "Double Jump", side = "left",size = 75})
- BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 70})
- TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 160})
+ DoubleJump = AimingTab:section({name = "Double Jump", side = "left",size = 75,pointer = "26789"})
+ BobbingSection = AimingTab:section({name = "Bobbing", side = "right",size = 70,pointer = "0.23567890*"})
+ TracersSection = VisualTab:section({name = "Tracers", side = "left",size = 160,pointer = "25467890"})
 
 
 
@@ -2930,6 +2975,7 @@ end
 DoubleJump:toggle({
 	name = "Double Jump",
 	def = false,
+
 	pointer = "superjump",
 	callback = function(state)
 		playerSettings.enableDoubleJump = state
@@ -2940,6 +2986,7 @@ DoubleJump:slider({
 	name = "Double Jump Height",
 	def = 0.4,
 	max = 0.4,
+    pointer = "0.1",
 	min = 0,
 	roundingvalue = 0.1,
 	callback = function(Value)
@@ -2963,6 +3010,7 @@ local tractextures = {
 TracersSection:toggle({
     name = "Enable Tracers",
     def = false,
+    pointer = "tracers",
     callback = function(v)
         tracbool = v
     end
@@ -2972,6 +3020,7 @@ TracersSection:toggle({
 TracersSection:toggle({
     name = "Smooth Tracer Fade",
     def = false,
+    pointer = "0.1687947",
     callback = function(v)
         smoothfade = v
     end
@@ -2982,6 +3031,7 @@ TracersSection:slider({
     name = "Tracer Wait Time",
     def = 2,
     min = 0,
+    pointer = "0.6367865",
     max = 10,
     rounding = true,
     callback = function(v)
@@ -2993,6 +3043,7 @@ TracersSection:slider({
 TracersSection:dropdown({
     name = "Tracer Texture",
     def = "None",
+    Pointer = "6674",
     max = 3,
     options = {"None", "Glow", "Lighting"},
     callback = function(selected)
@@ -3004,6 +3055,7 @@ TracersSection:dropdown({
 TracersSection:colorpicker({
     name = "Tracer Color",
     cpname = "",
+    pointer = "8493",
     def = Color3.fromRGB(255, 255, 255),
     callback = function(color)
         traccolor = color
@@ -3273,6 +3325,7 @@ local originalUpdates = {}
 
 BobbingSection:toggle({
     name = "No Bob",
+    pointer = "nobbo",
     def = false,
     callback = function(state)
         BobEnabled = state
@@ -3362,6 +3415,7 @@ local loop
 BobbingSection:toggle({
     name = "No Camera Bob",
     def = false,
+    pointer = "nocambob",
     callback = function(state)
         local localplayername = game.Players.LocalPlayer.Name
         local sprintAttr = game.ReplicatedStorage.Players[localplayername].Status.GameplayVariables.Sprinting
@@ -3385,7 +3439,7 @@ BobbingSection:toggle({
 
 
 
-Bulletset:toggle({name = "No Projectile Drop", def = false, callback = function(isEnabled)
+Bulletset:toggle({name = "No Projectile Drop",pointer = "0.08719845", def = false, callback = function(isEnabled)
         local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
         if ammoTypesFolder then
             for _, item in ipairs(ammoTypesFolder:GetChildren()) do
@@ -3399,7 +3453,7 @@ Bulletset:toggle({name = "No Projectile Drop", def = false, callback = function(
 
 end})
 
-Bulletset:toggle({name = "No Projectile Drag", def = false, callback = function(isEnabled)
+Bulletset:toggle({name = "No Projectile Drag",pointer = "0.161879850876.3", def = false, callback = function(isEnabled)
         local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
         if ammoTypesFolder then
             for _, item in ipairs(ammoTypesFolder:GetChildren()) do
@@ -3413,7 +3467,7 @@ Bulletset:toggle({name = "No Projectile Drag", def = false, callback = function(
 
 end})
 
-Bulletset:toggle({name = "Force Tracer", def = false, callback = function(isEnabled)
+Bulletset:toggle({name = "Force Tracer",pointer = "1", def = false, callback = function(isEnabled)
  local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
         if ammoTypesFolder then
             for _, item in ipairs(ammoTypesFolder:GetChildren()) do
@@ -3427,7 +3481,7 @@ Bulletset:toggle({name = "Force Tracer", def = false, callback = function(isEnab
 
 end})
 
-Bulletset:slider({name = "Bullet Speed", def = 2145, max = 3000, min = 10, rounding = true, callback = function(Value)
+Bulletset:slider({name = "Bullet Speed", pointer = "2",def = 2145, max = 3000, min = 10, rounding = true, callback = function(Value)
      local ammoTypesFolder = game.ReplicatedStorage:FindFirstChild("AmmoTypes")
         if ammoTypesFolder then
             for _, item in ipairs(ammoTypesFolder:GetChildren()) do
@@ -3620,19 +3674,19 @@ AAMainSection:colorpicker({
 })
 ]]
 
-AAMainSection:toggle({name = "Auto Peak", def = false, callback = function(Boolean)
+AAMainSection:toggle({name = "Auto Peak",pointer = "3", def = false, callback = function(Boolean)
     PuppySettings.AutoPeak.Enabled = Boolean
 end})
 
-AASettings:slider({name = "Desync Velocity", def = 500, max = 1000, min = 0, rounding = true, callback = function(Value)
+AASettings:slider({name = "Desync Velocity",pointer = "4", def = 500, max = 1000, min = 0, rounding = true, callback = function(Value)
  PuppySettings.AntiAim.DesyncValues.Velocity = tonumber(Value)
 end})
 
-AASettings:slider({name = "Desync CFrame", def = 500, max = 1000, min = 0, rounding = true, callback = function(Value)
+AASettings:slider({name = "Desync CFrame", pointer = "5",def = 500, max = 1000, min = 0, rounding = true, callback = function(Value)
  PuppySettings.AntiAim.DesyncValues.CFrame = tonumber(Value)
 end})
 
-AASettings:keybind({name = "Legit AA Keybind", def = Enum.KeyCode.Z, callback = function(Key)
+AASettings:keybind({name = "Legit AA Keybind",pointer = "6", def = Enum.KeyCode.Z, callback = function(Key)
  PuppySettings.AntiAim.LegitAAKey = Key
 end})
 
@@ -3644,6 +3698,7 @@ end})
 GameLogsTab:toggle({
 	name = "Player Joined Log",
 	def = false,
+    pointer = "7",
 	callback = function(Value)
 		JoinLogEnabled = Value
 	end
@@ -3652,6 +3707,7 @@ GameLogsTab:toggle({
 GameLogsTab:toggle({
 	name = "Player Leaved Log",
 	def = false,
+    pointer = "9",
 	callback = function(Value)
 		LeaveLogEnabled = Value
 	end
@@ -3675,7 +3731,7 @@ AASettings:keybind({name = "Auto Peak Keybind", def = Enum.KeyCode.N, callback =
 end})
  teleportHeight = 60 -- Change this value to adjust how high you want to teleport (in meters)
 
-AASettings:keybind({name = "Teleport Kill Keybind", def = Enum.KeyCode.X, callback = function(Key)
+AASettings:keybind({name = "Teleport Kill Keybind",pointer = "8", def = Enum.KeyCode.X, callback = function(Key)
     print("Key pressed: " .. Key.Name)  -- Keybind tetiklendi mi kontrol et
 
     local player = game:GetService("Players").LocalPlayer
@@ -3738,23 +3794,23 @@ AASettings:keybind({name = "Teleport Kill Keybind", def = Enum.KeyCode.X, callba
 end})
 
 
-AASettings:toggle({name = "Underground Resolver", def = false, callback = function(Boolean)
+AASettings:toggle({name = "Underground Resolver",pointer = "10", def = false, callback = function(Boolean)
     settingsxxx.enabled = Boolean
 end})
 
 
 
-AASettings:slider({name = "Teleport Kill Height Slider", def = 60, max = 200, min = 10, rounding = true, callback = function(Value)
+AASettings:slider({name = "Teleport Kill Height Slider",pointer = "11", def = 60, max = 200, min = 10, rounding = true, callback = function(Value)
 teleportHeight = value
 end})
 
 
-AAMainSection:toggle({name = "Fps Unlocker", def = false, callback = function(Boolean)
+AAMainSection:toggle({name = "Fps Unlocker",pointer = "12", def = false, callback = function(Boolean)
     setfpscap(99999999)
 end})
 
 
-AAMainSection:toggle({name = "Server Info", def = true, callback = function(value)
+AAMainSection:toggle({name = "Server Info",pointer = "13", def = true, callback = function(value)
             local player = game.Players.LocalPlayer 
         if player and player:FindFirstChild("PlayerGui") then 
             local serverInfo = player.PlayerGui:FindFirstChild("ServerInfo") 
@@ -3769,7 +3825,7 @@ AAMainSection:toggle({name = "Server Info", def = true, callback = function(valu
 end})
 
 
-AAMainSection:toggle({name = "Menu Blur", def = true, callback = function(value)
+AAMainSection:toggle({name = "Menu Blur",pointer = "14", def = true, callback = function(value)
 game.Lighting.InventoryBlur.Enabled = value
 
 end})
@@ -3818,11 +3874,11 @@ runserv.Heartbeat:Connect(function()
     end
 end)
 
-AAMainSection:toggle({name = "Moderator Detector UI", def = false, callback = function(value)
+AAMainSection:toggle({name = "Moderator Detector UI",pointer = "0.7184567", def = false, callback = function(value)
     createModDetectorGUI(value)
 end})
 
-AAMainSection:toggle({name = "Underground", def = false, callback = function(value)
+AAMainSection:toggle({name = "Underground", pointer = "0.17849567",def = false, callback = function(value)
     pcall(function()
         if enabled == false then
             enabled = true
@@ -3873,6 +3929,7 @@ end})]]
 AAMainSection:toggle({
     name = "Remove Fall Damage", 
     def = false, 
+    pointer = "16",
     callback = function(value)
         local character = game.Players.LocalPlayer.Character
         if character and character:FindFirstChild("Humanoid") then
@@ -3897,39 +3954,39 @@ AAMainSection:toggle({
 
 
 --// Visual Sections
-VisualMainSection:toggle({name = "ESP Masterswitch", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "ESP Masterswitch",pointer = "21", def = false, callback = function(enabled)
      ESP.Enabled = enabled
     ESP.TeamCheck = enabled
 end})
 
 
-VisualMainSection:toggle({name = "Fade Out On Distance", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "Fade Out On Distance",pointer = "22", def = false, callback = function(enabled)
  ESP.FadeOut.OnDistance = enabled
 end})
 
-VisualMainSection:toggle({name = "Friend Check", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "Friend Check", pointer = "23",def = false, callback = function(enabled)
  ESP.Options.Friendcheck = enabled
 end})
 
-VisualMainSection:toggle({name = "Chams", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "Chams",pointer = "24", def = false, callback = function(enabled)
 ESP.Drawing.Chams.Enabled = enabled
 end})
 
 
 
-VisualMainSection:toggle({name = "Pulsing Chams", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "Pulsing Chams",pointer = "25", def = false, callback = function(enabled)
 ESP.Drawing.Chams.Thermal = enabled
 end})
 
-VisualMainSection:toggle({name = "Name ESP", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "Name ESP",pointer = "26", def = false, callback = function(enabled)
  ESP.Drawing.Names.Enabled = enabled
 end})
 
-VisualMainSection:toggle({name = "Flags ESP", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "Flags ESP",pointer = "27", def = false, callback = function(enabled)
  ESP.Drawing.Flags.Enabled = enabled
 end})
 
-VisualMainSection:toggle({name = "Distance ESP", def = false, callback = function(enabled)
+VisualMainSection:toggle({name = "Distance ESP",pointer = "28", def = false, callback = function(enabled)
 ESP.Drawing.Distances.Enabled = enabled
 end})
 terrain = game:GetService("Workspace").Terrain
@@ -3941,6 +3998,7 @@ terrain = game:GetService("Workspace").Terrain
 Envioromental:colorpicker({
     name = "Ground Color Picker",
     cpname = "",
+    pointer = "groundcolorpicker",
     def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Ground),
     callback = function(Value)
         local newColor = Value
@@ -3952,6 +4010,7 @@ Envioromental:colorpicker({
 Envioromental:colorpicker({
     name = "Rock Color Picker",
     cpname = "",
+    pointer = "rockcolor",
     def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Rock),
     callback = function(Value)
         local newColor = Value
@@ -3963,6 +4022,7 @@ Envioromental:colorpicker({
 Envioromental:colorpicker({
     name = "Sand Color Picker",
     cpname = "",
+    pointer = "sandcolor",
     def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Sand),
     callback = function(Value)
         local newColor = Value
@@ -3977,19 +4037,21 @@ Envioromental:colorpicker({
 
 originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
 
-Envioromental:colorpicker({name = "Grass Color Picker", cpname = "", def = originalGrassColor, callback = function(Value)
+Envioromental:colorpicker({name = "Grass Color Picker", cpname = "",pointer = "grasscolor", def = originalGrassColor, callback = function(Value)
         local grassColor = Value
+
 
         
         terrain:SetMaterialColor(Enum.Material.Grass, grassColor)
 
         
-        sethiddenproperty(terrain, "Decoration", true) 
+       -- sethiddenproperty(terrain, "Decoration", true) 
 end})
 
 Envioromental:colorpicker({
     name = "Bullet Color Picker",
     cpname = "",
+    pointer = "bulletcolor",
     def = Color3.new(144, 175, 127),
     callback = function(color)
         local function changeAllProjectileColorsGradually(selectedColor)
@@ -4015,6 +4077,7 @@ Envioromental:colorpicker({
 Envioromental:colorpicker({
     name = "Ambient Color Picker",
     cpname = "",
+    pointer = "ambientcolor",
     def = game.Lighting.Ambient,
     callback = function(color)
 
@@ -4118,15 +4181,15 @@ end;
 
 
 
-VisualMainSection2:toggle({name = "Weapons ESP", def = false, callback = function(enabled)
+VisualMainSection2:toggle({name = "Weapons ESP", pointer = "31",def = false, callback = function(enabled)
 ESP.Drawing.Weapons.Enabled = enabled
 end})
 
-VisualMainSection2:toggle({name = "Health Bar ESP", def = false, callback = function(enabled)
+VisualMainSection2:toggle({name = "Health Bar ESP",pointer = "32", def = false, callback = function(enabled)
  ESP.Drawing.Healthbar.Enabled = enabled
 end})
 
-VisualMainSection2:toggle({name = "Boxes ESP", def = false, callback = function(enabled)
+VisualMainSection2:toggle({name = "Boxes ESP",pointer = "33", def = false, callback = function(enabled)
 ESP.Drawing.Boxes.Full.Enabled = enabled
         ESP.Drawing.Boxes.Corner.Enabled = enabled
 end})
@@ -4145,15 +4208,15 @@ VisualMainSection2:toggle({name = "Animated Box ESP", def = false, callback = fu
  ESP.Drawing.Boxes.Animate = enabled
 end})
 ]]
-VisualMainSection2:slider({name = "Max Distance Slider", def = 5, max = 1200, min = 1, rounding = true, callback = function(Value)
+VisualMainSection2:slider({name = "Max Distance Slider",pointer = "34", def = 700, max = 1200, min = 1, rounding = true, callback = function(Value)
 ESP.MaxDistance = Value
 end})
 
-VisualMainSection2:slider({name = "Esp Transparency Slider", def = 50, max = 120, min = 20, rounding = true, callback = function(Value)
+VisualMainSection2:slider({name = "Esp Transparency Slider", pointer = "35",def = 500, max = 500, min = 20, rounding = true, callback = function(Value)
 ESP.MaxDistance = Value
 end})
 
-VisualMainSection2:slider({name = "Rotation Speed Slider", def = 50, max = 500, min = 1, rounding = true, callback = function(Value)
+VisualMainSection2:slider({name = "Rotation Speed Slider",pointer = "36", def = 50, max = 500, min = 1, rounding = true, callback = function(Value)
 ESP.Drawing.Boxes.RotationSpeed = Value
 end})
 
@@ -4241,6 +4304,7 @@ end)
 -- UI Bağlantıları
 CorpseEsp:toggle({
     name = "Corpse Esp",
+    pointer = "38",
     def = false,
     callback = function(value)
         Settingsofhiglight.enabledHighlightToggle = value
@@ -4266,6 +4330,7 @@ CorpseEsp:slider({
     def = 0.5,
     min = 0,
     max = 1,
+    pointer = "1457",
     roundingvalue = 0.1,
     callback = function(val)
         Settingsofhiglight.HighlightTransparency = val
@@ -4306,6 +4371,7 @@ MiscCamSettings:slider({
     name = "Zoom Slider",
     def = 10,
     min = 1,
+    pointer = "981",
     max = 50,
     rounding = true,
     callback = function(val)
@@ -4372,14 +4438,14 @@ HitSoundsTab:dropdown({name = "Custom Hit Sounds Sound", def = "Gamesense", max 
         end;
 end})
 
-HitSoundsTab:toggle({name = "No Gun Sounds", def = false, callback = function(value)
+HitSoundsTab:toggle({name = "No Gun Sounds",pointer = "39", def = false, callback = function(value)
 game.ReplicatedStorage.Temp:Destroy()
 end})
 
 
 
 
-ItemWeight:toggle({name = "Remove Item Weight", def = false, callback = function(value)
+ItemWeight:toggle({name = "Remove Item Weight", pointer = "40",def = false, callback = function(value)
  local localplayer = game.Players.LocalPlayer
 local character = localplayer.Character or localplayer.CharacterAdded:Wait()
 local rootPart = character and character:FindFirstChild("HumanoidRootPart")
@@ -4446,18 +4512,19 @@ local function onJesusToggle(enabled)
     end;
 end;
 
-WaterTab:toggle({name = "Walk On Water", def = false, callback = function(value)
+WaterTab:toggle({name = "Walk On Water",pointer = "41", def = false, callback = function(value)
 
 onJesusToggle(value)
 
 end})
 
-WaterTab:colorpicker({name = "Water Color", cpname = "", def =game:GetService("Workspace").Terrain.WaterColor, callback = function(color)
+WaterTab:colorpicker({name = "Water Color",pointer = "42", cpname = "", def =game:GetService("Workspace").Terrain.WaterColor, callback = function(color)
     game:GetService("Workspace").Terrain.WaterColor = color
 end})
 
 WaterTab:toggle({
     name = "No Drowning",
+    pointer = "43",
     def = false,
     callback = function(value)
         if value then
@@ -4622,6 +4689,7 @@ _G._____ = "?"
 
 BotEsp:toggle({
     name = "Bot Esp", 
+    pointer = "44",
     def = false, 
     callback = function(value)
         if _G._____ == "?" then
@@ -4635,6 +4703,7 @@ BotEsp:slider({
     def = 1,
     min = 0.1,
     max = 10,
+    pointer = "855",
     rounding = true,
     callback = function(val)
         _G.waittimeforbotesp = val
@@ -4662,6 +4731,7 @@ BotEsp:colorpicker({
 BotEsp:slider({
     name = "Cham Transparency",
     def = 0.5,
+    pointer = "001",
     min = 0,
     max = 1,
     roundingvalue = 0.1,
@@ -4697,7 +4767,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end;
 end);
 
-MiscMoveSettings:toggle({name = "Bhop", def = false, callback = function(first)
+MiscMoveSettings:toggle({name = "Bhop", def = false, pointer = "45",callback = function(first)
 
 
 
@@ -4706,7 +4776,7 @@ toggleBunnyHop()
 
 end})
 
-MiscMoveSettings:keybind({name = "CFrame Keybind", def = Enum.KeyCode.V, callback = function(Key)
+MiscMoveSettings:keybind({name = "CFrame Keybind",pointer = "46", def = Enum.KeyCode.V, callback = function(Key)
  PuppySettings.Misc.CFrameSpeed.Keybind = Key
 end})
 
@@ -4717,6 +4787,7 @@ local speedconfig = {
 
 MiscMoveSettings:toggle({
     name = "SpeedHack",
+    pointer = "47",
     def = speedconfig.speedhackEnabled,
     callback = function(state)
         speedconfig.speedhackEnabled = state
@@ -4727,6 +4798,7 @@ MiscMoveSettings:slider({
     name = "SpeedHack Value",
     def = speedconfig.speedValue,
     min = 1,
+    pointer = "48",
     max = 19,
     rounding = true,
     callback = function(val)
@@ -4757,6 +4829,7 @@ MiscNorSettings:slider({
     name = "Time Changer",
     def = game.Lighting.ClockTime,
     min = 0,
+    pointer = "562",
     max = 24,
     rounding = true,
     callback = function(val)
@@ -4817,16 +4890,16 @@ game:GetService("RunService").RenderStepped:Connect(function(dt)
     end;
 end);
 
-MiscMoveSettings:toggle({name = "Fly", def = false, callback = function(state3)
+MiscMoveSettings:toggle({name = "Fly", def = false,pointer = "51", callback = function(state3)
 getgenv().Fly3 = state3
 end})
-MiscMoveSettings:slider({name = "Fly Speed", def = 30, max = 35, min = -35, rounding = true, callback = function(first)
+MiscMoveSettings:slider({name = "Fly Speed",pointer = "52", def = 30, max = 35, min = -35, rounding = true, callback = function(first)
    getgenv().speed3 = first
 end})
 
 
 
-MiscMoveSettings:toggle({name = "Antislow", def = false, callback = function(Boolean)
+MiscMoveSettings:toggle({name = "Antislow", pointer = "53",def = false, callback = function(Boolean)
  PuppySettings.Misc.Antislow = Boolean 
 end})
 
@@ -4839,7 +4912,7 @@ MiscCharSettings:button({name = "Nil Char", callback = function()
 end})
 --]]
 
-MiscCharSettings:toggle({name = "Third Person", def = false, callback = function(isEnabled)
+MiscCharSettings:toggle({name = "Third Person",pointer = "54", def = false, callback = function(isEnabled)
  if isEnabled then
             print("called")
             
@@ -4851,7 +4924,7 @@ MiscCharSettings:toggle({name = "Third Person", def = false, callback = function
         end;
 end})
 
-MiscCharSettings:toggle({name = "Instant Respawn", def = false, callback = function(isEnabled)
+MiscCharSettings:toggle({name = "Instant Respawn",pointer = "55", def = false, callback = function(isEnabled)
 
 
 
@@ -4871,13 +4944,14 @@ MiscNorSettings:keybind({name = "AutoClicker Keybind", def = Enum.KeyCode.B, cal
 end})
 ]]
 
-nograsstab:toggle({name = "No Grass", def = false, callback = function(first)
+nograsstab:toggle({name = "No Grass",pointer = "56", def = false, callback = function(first)
  sethiddenproperty(game:GetService("Workspace").Terrain, "Decoration", not first)
 end})
 
 MiscNorSettings:toggle({
 	name = "Remove Trees",
 	def = false,
+    pointer = "57",
 	callback = function(state)
 		for _, v in pairs(workspace.SpawnerZones:GetDescendants()) do
 			if v:IsA("MeshPart") and v:FindFirstChildOfClass("SurfaceAppearance") then
@@ -4907,7 +4981,7 @@ MiscNorSettings:toggle({
 
 
 
-MiscNorSettings:button({name = "No Fog", callback = function()
+MiscNorSettings:button({name = "No Fog", pointer = "58",callback = function()
 
     if Lighting:FindFirstChildOfClass("Atmosphere") then
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
@@ -4969,6 +5043,7 @@ end})
 MiscNorSettings:toggle({
     name = "Remove Clouds",
     def = false,
+    pointer = "101",
     callback = function(isEnabled)
         local terrain = game:GetService("Workspace").Terrain
 
@@ -5119,8 +5194,8 @@ end)
 
 
 
-uiSettings1:toggle({name = "Performance Saver", def = true, callback = function(Boolean) end})
-uiSettings1:toggle({name = "Experiemental Features", def = true, callback = function(Boolean) end})
+uiSettings1:toggle({name = "Performance Saver", def = true,pointer = "114", callback = function(Boolean) end})
+uiSettings1:toggle({name = "Experiemental Features", pointer = "156",def = true, callback = function(Boolean) end})
 
 uiSettings1:colorpicker({name = "Accent Color", cpname = "", def = Color3.RGB, callback = function(color)
     collorofui = color
