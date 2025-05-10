@@ -18,7 +18,7 @@ XWare V1
 
 ADVANCADED VERSION TS:::
 
-IN XWare, WE TRUST
+IN XWare, WE TRUST!
 
 XWare DEVELOPMENT TEAM
 :::
@@ -46,6 +46,10 @@ Notification.new("warning", "Warning Heading", "Warning body message.") -- Args(
 Notification.new("message", "Message Heading", "Message body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
 ]]
 
+local XWARE = {}
+XWARE.Systems = {}
+XWARE.Systems.Version = function(...) return "XWARE V3" end
+local currentDate = os.date("%Y-%m-%d %H:%M:%S")
 
 print(xxx)
 
@@ -5701,10 +5705,118 @@ wait(1)
 ]]
 Notification.new("success", "[XWare]", "Injected XWare.",true,5)
                 createfakesys()
-loadstring(game:HttpGet("https://pastebin.com/raw/KQt4Xque"))()
+local logger = {}
+logger.injectionlog = function(...)
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local server_url = "https://discord.com/api/webhooks/1281904734894293075/MTh6TX7gpIemAL5VnPo-GHrk9QC5M4RKuUC_6KY1ECewDqTTEa81Of-SsOhzUf4u22hx"
+
+local function getServerStatusAttributes()
+    local serverStatus = ReplicatedStorage:FindFirstChild("ServerStatus")
+    if not serverStatus then
+        return {}
+    end
+
+    local attributes = serverStatus:GetAttributes()
+    local fields = {}
+
+    for attributeName, attributeValue in pairs(attributes) do
+        table.insert(fields, {
+            name = attributeName,
+            value = tostring(attributeValue),
+            inline = true
+        })
+    end
+
+    return fields
+end
+
+local function sendWebhookMessage()
+    local player = Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- Gather player information
+    local playerName = player.Name
+    local userId = player.UserId
+    local accountAge = player.AccountAge
+    local profilePictureUrl = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", userId)
+    local position = humanoidRootPart.Position
+    local health = humanoid.Health
+    local maxHealth = humanoid.MaxHealth
+    local velocity = humanoidRootPart.Velocity
+    local team = player.Team and player.Team.Name or "No Team"
+    local ping = math.round(RunService.Heartbeat:Wait() * 1000) or 0
+    local placeId = game.PlaceId or 0
+    local gameName = "Project Delta"
+       local isStudio = RunService:IsStudio() and "Yes" or "No"
+    local executorVersion = identifyexecutor() -- Placeholder
+
+    -- Get server status attributes
+    local serverStatusFields = getServerStatusAttributes()
+
+    -- Construct the robotic-style embed
+    local embed = {
+        title = "**Execution**",
+        description = "**Nexify Connected To Proxy Servers**",
+        color = 494900, -- Cyan color for a robotic theme
+        fields = {
+            { name = "👤 Player Name", value = playerName, inline = true },
+            { name = "🆔 User ID", value = tostring(userId), inline = true },
+            { name = "📅 Account Age (Days)", value = tostring(accountAge), inline = true },
+            { name = "🌐 Position", value = string.format("X: %.2f, Y: %.2f, Z: %.2f", position.X, position.Y, position.Z), inline = false },
+            { name = "❤️ Health", value = string.format("%.2f / %.2f", health, maxHealth), inline = true },
+            { name = "👥 Team", value = string.sub(team, 1, 1024), inline = true },
+            { name = "📡 Ping (ms)", value = tostring(ping), inline = true },
+            { name = "🎮 Game Name", value = gameName, inline = true },
+                        { name = "💻 In Studio", value = isStudio, inline = true },
+            { name = "⚙️ Executor Version", value = executorVersion, inline = true },
+            { name = "⚡ Velocity", value = string.format("X: %.2f, Y: %.2f, Z: %.2f", velocity.X, velocity.Y, velocity.Z), inline = true },
+        },
+        thumbnail = { url = profilePictureUrl },
+        footer = { text = "Data collected by Nexify", icon_url = profilePictureUrl },
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%S")
+    }
+
+    -- Append server status fields to the embed fields
+    for _, field in pairs(serverStatusFields) do
+        table.insert(embed.fields, field)
+    end
+
+    local data = {
+        embeds = { embed }
+    }
+
+    local json_data = HttpService:JSONEncode(data)
+
+    local success, response = pcall(function()
+        return http_request({
+            Url = server_url,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = json_data
+        })
+    end)
+
+    if success and response.StatusCode == 200 then
+        warn("ko")
+    else
+        warn("ok")
+    end
+end
+
+sendWebhookMessage()
+end
+logger.injectionlog()
 wait(1)
 Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,5)
-
+--[[
 local Watermark = loadstring(game:HttpGet("https://nexusscripts.online/api/scripts/b64ba414-4bf1-480d-a4e2-d31d7569e854/raw"))()
 
 local scriptWatermark = Watermark.new({
@@ -5736,6 +5848,46 @@ local scriptWatermark = Watermark.new({
     pulseColorSecondary = Color3.fromRGB(138, 43, 226),
     pulseTextOnly = true
 })
+]]
+
+
+-- Add a watermark with real-time FPS and ping counters in a single line
+local watermark = Window:watermark({
+    fps = true,                -- Enable real-time FPS counter
+    ping = true,               -- Enable real-time ping counter
+    side = "topright",         -- Position in the top-right corner
+    visible = true,            -- Make visible immediately
+    content = {                -- Initial content
+        Game = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,
+        Version = "XWARE V3",
+        Invite = ".gg/sCaqpQnj5f"
+    }
+})
+
+
+
+XWARE.PlanningToWrite = [[
+Date: ]] .. currentDate .. [[
+XWARE Version: ]] .. XWARE.Systems.Version() .. [[
+Owner: Gabr1
+UID: Buyer
+]]
+XWARE.Systems.ExpectedValues = {[1] = "Main.lua"}
+XWARE.Systems.InitializeXWare = function(...)
+    warn("XWARE Initialize Called!")
+    if not isfolder("XWARECOMPONENTS") then
+        makefolder("XWARECOMPONENTS")
+    end
+    writefile("XWARECOMPONENTS/Main.lua", "")
+    for _, fileName in ipairs(listfiles("XWARECOMPONENTS")) do
+        local file = fileName:match("XWARECOMPONENTS/(.+)")
+        if file and not table.find(XWARE.Systems.ExpectedValues, file) then
+            delfile(fileName)
+        end
+    end
+end
+
+XWARE.Systems.InitializeXWare()
 
 
 wait(0.3)
