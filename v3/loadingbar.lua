@@ -184,7 +184,7 @@ local terminalLines = {
 	"[ N ] > CATCHING IMAGES.....",
     "  [ N ] > READING CONFIG FILES..",
 	"   [ N ] > LOADING UI MODULES.....",
-	"[ N ] > BOOTING X1.........."
+	"[ N ] > BOOTING X3.........."
 }
 
 coroutine.wrap(function()
