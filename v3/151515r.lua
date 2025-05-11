@@ -1,4 +1,43 @@
+local XWARECONTROLLER = {
+	MainController = {}
+};
 
+function XWARECONTROLLER.MainController:Init()
+	print("MainController başlatıldı babo!");
+	self.startTime = os.time();
+	self.plugins = {};
+end;
+
+function XWARECONTROLLER.MainController:GetUptime()
+	return os.time() - (self.startTime or os.time());
+end;
+
+function XWARECONTROLLER.MainController:Shutdown()
+	print("MainController kapatıldı, görüşürüz kanka.");
+	self.startTime = nil;
+	self.plugins = nil;
+end;
+
+function XWARECONTROLLER.MainController:LoadPlugin(name, func)
+	if type(func) ~= "function" then
+		warn("Plugin fonksiyonu geçerli değil dayı."); return;
+	end;
+	self.plugins[name] = func;
+	print("Plugin yüklendi:", name);
+end;
+
+function XWARECONTROLLER.MainController:RunPlugin(name, ...)
+	local plugin = self.plugins and self.plugins[name];
+	if not plugin then
+		warn("Plugin bulunamadı:", name); return;
+	end;
+	print("Plugin çalıştırılıyor:", name);
+	local success, result = pcall(plugin, ...);
+	if not success then
+		warn("Plugin patladı babo:", result); return;
+	end;
+	return result;
+end;
 
 --[[
 
@@ -913,7 +952,7 @@ local nograsstab = VisualTab:section({name = "Grass", side = "right", size = 75,
 
 local MiscMoveSettings = MiscTab:section({name = "Movement Cheats", side = "left", size = 181, pointer = "0.762849"})
 local MiscCharSettings = MiscTab:section({name = "Character Cheats", side = "left", size = 60, pointer = "0.182739"})
-local MiscNorSettings = MiscTab:section({name = "Normal Cheats", side = "left", size = 140, pointer = "0.927364"})
+local MiscNorSettings = MiscTab:section({name = "Normal Cheats", side = "right", size = 140, pointer = "0.927364"})
 local VisorSettings = MiscTab:section({name = "Visor Settings", side = "left", size = 60, pointer = "0.348261"})
 local Brightt = MiscTab:section({name = "Bright", side = "left", size = 40, pointer = "0.589274"})
 local MiscCamSettings = MiscTab:section({name = "Camera Settings", side = "right", size = 120, pointer = "0.681923"})
@@ -922,7 +961,7 @@ local HitSoundsTab = MiscTab:section({name = "Hit Sounds Settings", side = "righ
 local Bulletset = RageTab:section({name = "Bullet Settings", side = "right", size = 120, pointer = "0.721983"})
 local KnifeModss = RageTab:section({name = "Knife Mods", side = "right", size = 200, pointer = "0.183729"})
 
-local ConfigSection = MiscTab:section({name = "Config", side = "right", size = 260, pointer = "0.468291"})
+--local ConfigSection = MiscTab:section({name = "Config", side = "right", size = 260, pointer = "0.468291"})
 local ItemWeight = MiscTab:section({name = "Item Weight", side = "right", size = 40, pointer = "0.739182"})
 local GameLogsTab = MiscTab:section({name = "Game Logs", side = "right", size = 80, pointer = "0.594823"})
 local GunMods = AimingTab:section({name = "Gun Mods", side = "right", size = 270, pointer = "0.748291",})
