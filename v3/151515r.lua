@@ -1172,11 +1172,11 @@ uiSettings2:button({
 })
 
 
-uiSettings2:toggle({name = "Watermark", pointer = "watermarktext", def = false, callback = function(Value)
+uiSettings2:toggle({name = "Watermark", pointer = "0.802566", def = false, callback = function(Value)
     screenGuiwatermark.Enabled = Value
 end})
 
-uiSettings2:dropdown({name = "Executor Name Manuplator", def = "", max = 7, options = {"Swift","Solara","Wave","Synapse","Celery","Xeno","Argon","NX","AWP","Velocity","Delta","Krnl","JJSploit","Sentinel","Nezur",""}, callback = function(executor)
+uiSettings2:dropdown({name = "Executor Name Manuplator", def = "", max = 7, pointer = "0.198056662", options = {"Swift","Solara","Wave","Synapse","Celery","Xeno","Argon","NX","AWP","Velocity","Delta","Krnl","JJSploit","Sentinel","Nezur",""}, callback = function(executor)
 print('Current Executor: ' ..identifyexecutor())
 local execeutornametomanup = executor
     getgenv().identifyexecutor = function(...) return executor end
@@ -1761,7 +1761,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end
 end)
 
-fovsettingsss:toggle({name = "Show FOV", def = false,pointer = "showfov", callback = function(bool)
+fovsettingsss:toggle({name = "Show FOV", def = false,pointer = "0.1985551  5", callback = function(bool)
     FOVConfig.Visible = bool
     fovCircle.Visible = bool
 end})
@@ -1769,12 +1769,12 @@ end})
 
 
 
-fovsettingsss:toggle({name = "Internal FOV", def = false,pointer = "internalfov", callback = function(bool)
+fovsettingsss:toggle({name = "Internal FOV", def = false,pointer = "0.876467", callback = function(bool)
     FOVConfig.InternalFOV = bool
     filler.Visible = bool
 end})
 
-fovsettingsss:colorpicker({name = "Inner FOV Color", def = Color3.fromRGB(255, 255, 255),pointer = "innerfovcolor", callback = function(col)
+fovsettingsss:colorpicker({name = "Inner FOV Color", def = Color3.fromRGB(255, 255, 255),pointer = "0.357848", callback = function(col)
     FOVConfig.InternalColor = col
     filler.BackgroundColor3 = col
 end})
@@ -1985,11 +1985,11 @@ end})
 -- Silent FOV Section --
 local AimbotFOVSection = AimingTab:section({name = "Snapline", side = "right",size = 60,pointer = "snaplinetab"})
 
-AimbotFOVSection:toggle({name = "Snapline Enabled", def = false,pointer = "snaplines", callback = function(Boolean)
+AimbotFOVSection:toggle({name = "Snapline Enabled", def = false,pointer = "0.764536789", callback = function(Boolean)
     config.snapline_enabled = Boolean
 end})
 
-AimbotFOVSection:colorpicker({name = "Snapline Color", cpname = "",pointer = "snaplinescolor", def = Color3.new(255, 255, 255), callback = function(color)
+AimbotFOVSection:colorpicker({name = "Snapline Color", cpname = "",pointer = "0.817985", def = Color3.new(255, 255, 255), callback = function(color)
    
    config.snapline_color = color
 end})
@@ -3015,7 +3015,7 @@ DoubleJump:toggle({
 	name = "Double Jump",
 	def = false,
 
-	pointer = "superjump",
+	pointer = "0.198703598652",
 	callback = function(state)
 		playerSettings.enableDoubleJump = state
 	end
@@ -3049,7 +3049,7 @@ local tractextures = {
 TracersSection:toggle({
     name = "Enable Tracers",
     def = false,
-    pointer = "tracers",
+    pointer = "0.980319285",
     callback = function(v)
         tracbool = v
     end
@@ -3364,7 +3364,7 @@ local originalUpdates = {}
 
 BobbingSection:toggle({
     name = "No Bob",
-    pointer = "nobbo",
+    pointer = "0.73678",
     def = false,
     callback = function(state)
         BobEnabled = state
@@ -3454,7 +3454,7 @@ local loop
 BobbingSection:toggle({
     name = "No Camera Bob",
     def = false,
-    pointer = "nocambob",
+    pointer = "10956.146",
     callback = function(state)
         local localplayername = game.Players.LocalPlayer.Name
         local sprintAttr = game.ReplicatedStorage.Players[localplayername].Status.GameplayVariables.Sprinting
@@ -4037,7 +4037,7 @@ terrain = game:GetService("Workspace").Terrain
 Envioromental:colorpicker({
     name = "Ground Color Picker",
     cpname = "",
-    pointer = "groundcolorpicker",
+    pointer = "0.285793013",
     def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Ground),
     callback = function(Value)
         local newColor = Value
@@ -4049,7 +4049,7 @@ Envioromental:colorpicker({
 Envioromental:colorpicker({
     name = "Rock Color Picker",
     cpname = "",
-    pointer = "rockcolor",
+    pointer = "0.1115906",
     def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Rock),
     callback = function(Value)
         local newColor = Value
@@ -4061,7 +4061,7 @@ Envioromental:colorpicker({
 Envioromental:colorpicker({
     name = "Sand Color Picker",
     cpname = "",
-    pointer = "sandcolor",
+    pointer = "0.89109566",
     def = game.Workspace.Terrain:GetMaterialColor(Enum.Material.Sand),
     callback = function(Value)
         local newColor = Value
@@ -4076,7 +4076,7 @@ Envioromental:colorpicker({
 
 originalGrassColor = terrain:GetMaterialColor(Enum.Material.Grass)
 
-Envioromental:colorpicker({name = "Grass Color Picker", cpname = "",pointer = "grasscolor", def = originalGrassColor, callback = function(Value)
+Envioromental:colorpicker({name = "Grass Color Picker", cpname = "",pointer = "0.763567", def = originalGrassColor, callback = function(Value)
         local grassColor = Value
 
 
@@ -4090,7 +4090,7 @@ end})
 Envioromental:colorpicker({
     name = "Bullet Color Picker",
     cpname = "",
-    pointer = "bulletcolor",
+    pointer = "0.178705966",
     def = Color3.new(144, 175, 127),
     callback = function(color)
         local function changeAllProjectileColorsGradually(selectedColor)
@@ -4951,23 +4951,68 @@ MiscCharSettings:button({name = "Nil Char", callback = function()
 end})
 --]]
 
-MiscCharSettings:toggle({name = "Third Person",pointer = "54", def = false, callback = function(isEnabled)
- if isEnabled then
-            print("called")
-            
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdpe.lua"))()
-        else
-        print("called2")
-            
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/97y1oHW/4991/refs/heads/main/thirdsianle.lua"))()
-        end;
-end})
 
-MiscCharSettings:toggle({name = "Instant Respawn",pointer = "55", def = false, callback = function(isEnabled)
+MiscCharSettings:toggle({name = "Instant Respawn",pointer = "145.651", def = false, callback = function(isEnabled)
 
 
 
 end})
+
+local thirdpersondistancee = 10;
+
+local player = game:GetService("Players").LocalPlayer;
+local userInputService = game:GetService("UserInputService");
+local runService = game:GetService("RunService");
+
+getgenv().thirdperson = false;
+
+local function updateCamera()
+    if getgenv().thirdperson then
+        userInputService.MouseBehavior = Enum.MouseBehavior.LockCenter;
+        player.CameraMaxZoomDistance = thirdpersondistancee;
+        player.CameraMinZoomDistance = thirdpersondistancee;
+        player.CameraMode = Enum.CameraMode.Classic;
+        
+        local humanoid = player.Character and player.Character:FindFirstChildOfClass('Humanoid');
+        if humanoid and humanoid.Health > 0 then
+            local root = humanoid.RootPart;
+            root.CFrame = CFrame.new(root.Position) * CFrame.fromOrientation(0, ({workspace.CurrentCamera.CFrame:ToOrientation()})[2], 0);
+        end
+
+        workspace.CurrentCamera.CameraType = Enum.CameraType.Custom;
+    else
+        userInputService.MouseBehavior = Enum.MouseBehavior.Default;
+        player.CameraMaxZoomDistance = 0;
+        player.CameraMinZoomDistance = 0;
+        player.CameraMode = Enum.CameraMode.LockFirstPerson;
+        workspace.CurrentCamera.CameraType = Enum.CameraType.Custom;
+    end
+end
+
+runService:BindToRenderStep("ThirdPersonCam", Enum.RenderPriority.Camera.Value + 1, updateCamera);
+
+MiscCharSettings:toggle({
+    name = "Third Person",
+    pointer = "54",
+    def = false,
+    callback = function(isEnabled)
+        getgenv().thirdperson = isEnabled;
+        print("Third person: " .. tostring(isEnabled));
+    end
+});
+
+MiscCharSettings:slider({
+    name = "Third Person Distance",
+    def = 10,
+    max = 100,
+    min = 5,
+    pointer = "0.9184722",
+    rounding = true,
+    callback = function(State)
+        thirdpersondistancee = State;
+    end
+});
+
 
 --[[
 MiscNorSettings:toggle({name = "AutoClicker", def = false, callback = function(Boolean)
@@ -5018,13 +5063,46 @@ MiscNorSettings:toggle({
 	end
 })
 
+MiscNorSettings:toggle({
+    name = "Remove Clouds",
+    def = false,
+    pointer = "101",
+    callback = function(isEnabled)
+        local terrain = game:GetService("Workspace").Terrain
 
+        if terrain and terrain.Clouds then
+            if isEnabled then
+                terrain.Clouds.Density = 0
+            else
+                terrain.Clouds.Density = 1
+            end
+        else
+            print("Error: No Clouds found!")
+        end
+    end
+})
 
 MiscNorSettings:button({name = "No Fog", pointer = "58",callback = function()
 
     if Lighting:FindFirstChildOfClass("Atmosphere") then
         Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
  end;
+
+end})
+
+    
+MiscNorSettings:button({name = "Rejoin", pointer = "0.7817498",callback = function()
+
+if #plrs:GetPlayers() <= 1 then
+        plrs.LocalPlayer:Kick("\nrejoining⚡")
+        wait(3)
+        game:GetService("TeleportService"):Teleport(game.PlaceId, plrs.LocalPlayer)
+    else
+    plrs.LocalPlayer:Kick("\nrejoining⚡")
+    wait(3)
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, plrs.LocalPlayer)
+    end;
+
 
 end})
 
@@ -5078,25 +5156,6 @@ if not game.Players.LocalPlayer.Character then
 
 
 end})
-
-MiscNorSettings:toggle({
-    name = "Remove Clouds",
-    def = false,
-    pointer = "101",
-    callback = function(isEnabled)
-        local terrain = game:GetService("Workspace").Terrain
-
-        if terrain and terrain.Clouds then
-            if isEnabled then
-                terrain.Clouds.Density = 0
-            else
-                terrain.Clouds.Density = 1
-            end
-        else
-            print("Error: No Clouds found!")
-        end
-    end
-})
 
 
 AimingTab:openpage()
