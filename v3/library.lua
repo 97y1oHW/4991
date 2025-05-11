@@ -1069,9 +1069,41 @@ function library:graphcheck()
 end
 
 
+-- Assuming this is part of your existing library file (library.txt)
+-- We'll modify only the relevant parts and add necessary utilities
+
+-- Utility function to convert JSON string to bytecode
+local function jsonToBytecode(jsonString)
+    -- Create a function that returns the JSON string
+    local funcString = string.format('return %q', jsonString)
+    -- Load the string as a function
+    local func = loadstring(funcString)
+    if not func then
+        error("Failed to compile JSON to function")
+    end
+    -- Convert the function to bytecode
+    local bytecode = string.dump(func)
+    return bytecode
+end
+
+-- Utility function to convert bytecode back to JSON string
+local function bytecodeToJson(bytecode)
+    -- Load the bytecode as a function
+    local func = loadstring(bytecode)
+    if not func then
+        error("Failed to load bytecode")
+    end
+    -- Execute the function to get the JSON string
+    local success, jsonString = pcall(func)
+    if not success then
+        error("Failed to execute bytecode: " .. tostring(jsonString))
+    end
+    return jsonString
+end
+
 function library:saveconfig()
     local cfg = {}
-    local processedTables = {} 
+    local processedTables = {}
     
     local function recursivelyGetValues(tbl, depth)
         if depth > 10 then return {} end
@@ -1117,7 +1149,7 @@ function library:saveconfig()
                     cfg[pointer_name] = pointer_value.current
                 end
             else
-                processedTables = {} 
+                processedTables = {}
                 local nestedValues = recursivelyGetValues(pointer_value, 1)
                 if next(nestedValues) ~= nil then
                     cfg[pointer_name] = nestedValues
@@ -1129,114 +1161,134 @@ function library:saveconfig()
     local json_data = hs:JSONEncode(cfg)
     if json_data == "{}" or json_data == "[]" then
         warn("No configuration data to save: cfg table is empty")
+        return nil
     end
     
-    return json_data
+    -- Convert JSON to bytecode
+    local success, bytecode = pcall(jsonToBytecode, json_data)
+    if not success then
+        warn("Failed to convert JSON to bytecode: " .. tostring(bytecode))
+        return nil
+    end
+    
+    return bytecode
 end
 
-function library:loadconfig(cfg)
-	local success, configData = pcall(function()
-		return hs:JSONDecode(readfile(cfg))
-	end)
-	
-	if not success then
-		warn("Failed to load config: " .. tostring(configData))
-		return false
-	end
-	
-	local function getTableKeys(tbl)
-		local keys = {}
-		for k, _ in pairs(tbl) do
-			table.insert(keys, k)
-		end
-		return keys
-	end
-	
-	warn("Loading config with " .. tostring(#getTableKeys(configData)) .. " root entries")
-	
-	local processedTables = {}
-	
-	local function recursivelySetValues(tbl, config, depth)
-		
-		if depth > 10 then return end
-		
-		if processedTables[tbl] then return end
-		processedTables[tbl] = true
-		
-		for element_name, element_value in pairs(config) do
-			if type(element_value) == "table" then
-				local isContainer = false
-				for k, _ in pairs(element_value) do
-					if type(k) == "string" then
-						isContainer = true
-						break
-					end
-				end
-				
-				if not isContainer then
-					if tbl[element_name] and tbl[element_name].set then
-						pcall(function() 
-							tbl[element_name]:set(element_value)
-						end)
-					end
-				else
-					if tbl[element_name] then
-						if tbl[element_name].pointers and not processedTables[tbl[element_name].pointers] then
-							recursivelySetValues(tbl[element_name].pointers, element_value, depth + 1)
-						elseif not processedTables[tbl[element_name]] then
-							recursivelySetValues(tbl[element_name], element_value, depth + 1)
-						end
-					end
-				end
-			else
-				if tbl[element_name] and tbl[element_name].set then
-					pcall(function() 
-						tbl[element_name]:set(element_value)
-					end)
-				end
-			end
-		end
-	end
-	
-	for pointer_name, value in pairs(configData) do
-		if self.pointers[pointer_name] == nil then
-			warn("Pointer not found: " .. tostring(pointer_name))
-			continue
-		end
-		
-		if type(value) == "table" then
-			local isContainer = false
-			for k, _ in pairs(value) do
-				if type(k) == "string" then
-					isContainer = true
-					break
-				end
-			end
-			
-			if isContainer then
-				processedTables = {} 
-				recursivelySetValues(self.pointers[pointer_name], value, 1)
-			else
-				if self.pointers[pointer_name].set then
-					pcall(function() 
-						self.pointers[pointer_name]:set(value)
-					end)
-				else
-					warn("Pointer has no set method: " .. tostring(pointer_name))
-				end
-			end
-		else
-			if self.pointers[pointer_name].set then
-				pcall(function() 
-					self.pointers[pointer_name]:set(value)
-				end)
-			else
-				warn("Pointer has no set method: " .. tostring(pointer_name))
-			end
-		end
-	end
-	
-	return true
+function library:loadconfig(filepath)
+    -- Read the bytecode from the file
+    local success, bytecode = pcall(readfile, filepath)
+    if not success then
+        warn("Failed to read config file: " .. tostring(bytecode))
+        return false
+    end
+    
+    -- Convert bytecode back to JSON
+    local success, json_data = pcall(bytecodeToJson, bytecode)
+    if not success then
+        warn("Failed to decode bytecode: " .. tostring(json_data))
+        return false
+    end
+    
+    -- Decode JSON to table
+    local success, configData = pcall(function()
+        return hs:JSONDecode(json_data)
+    end)
+    if not success then
+        warn("Failed to decode JSON: " .. tostring(configData))
+        return false
+    end
+    
+    local function getTableKeys(tbl)
+        local keys = {}
+        for k, _ in pairs(tbl) do
+            table.insert(keys, k)
+        end
+        return keys
+    end
+    
+    warn("Loading config with " .. tostring(#getTableKeys(configData)) .. " root entries")
+    
+    local processedTables = {}
+    
+    local function recursivelySetValues(tbl, config, depth)
+        if depth > 10 then return end
+        if processedTables[tbl] then return end
+        processedTables[tbl] = true
+        
+        for element_name, element_value in pairs(config) do
+            if type(element_value) == "table" then
+                local isContainer = false
+                for k, _ in pairs(element_value) do
+                    if type(k) == "string" then
+                        isContainer = true
+                        break
+                    end
+                end
+                
+                if not isContainer then
+                    if tbl[element_name] and tbl[element_name].set then
+                        pcall(function()
+                            tbl[element_name]:set(element_value)
+                        end)
+                    end
+                else
+                    if tbl[element_name] then
+                        if tbl[element_name].pointers and not processedTables[tbl[element_name].pointers] then
+                            recursivelySetValues(tbl[element_name].pointers, element_value, depth + 1)
+                        elseif not processedTables[tbl[element_name]] then
+                            recursivelySetValues(tbl[element_name], element_value, depth + 1)
+                        end
+                    end
+                end
+            else
+                if tbl[element_name] and tbl[element_name].set then
+                    pcall(function()
+                        tbl[element_name]:set(element_value)
+                    end)
+                end
+            end
+        end
+    end
+    
+    for pointer_name, value in pairs(configData) do
+        if self.pointers[pointer_name] == nil then
+            warn("Pointer not found: " .. tostring(pointer_name))
+            continue
+        end
+        
+        if type(value) == "table" then
+            local isContainer = false
+            for k, _ in pairs(value) do
+                if type(k) == "string" then
+                    isContainer = true
+                    break
+                end
+            end
+            
+            if isContainer then
+                processedTables = {}
+                recursivelySetValues(self.pointers[pointer_name], value, 1)
+            else
+                if self.pointers[pointer_name].set then
+                    pcall(function()
+                        self.pointers[pointer_name]:set(value)
+                    end)
+                else
+                    warn("Pointer has no set method: " .. tostring(pointer_name))
+                end
+            end
+        else
+            if self.pointers[pointer_name].set then
+                pcall(function()
+                    self.pointers[pointer_name]:set(value)
+                end)
+            else
+                warn("Pointer has no set method: " .. tostring(pointer_name))
+            end
+        end
+    end
+    
+    return true
 end
 
 function pages:section(props)
@@ -4507,7 +4559,7 @@ function colorpickers:set(color)
 end
 
 function sections:configloader(props)
-    local folder = props.folder or props.Folder or "nexifyv3" 
+    local folder = props.folder or props.Folder or "nexifyv3"
     local configloader = {}
     local clholder = utility.new(
         "Frame",
@@ -4549,7 +4601,7 @@ function sections:configloader(props)
             Size = UDim2.new(1, 0, 0, 15),
             Position = UDim2.new(0, 0, 0, 3),
             Font = self.library.font,
-            Text = "configs",
+            Text = "Configs",
             TextColor3 = Color3.fromRGB(255, 255, 255),
             TextSize = self.library.textsize,
             TextStrokeTransparency = 0,
@@ -4878,7 +4930,7 @@ function sections:configloader(props)
                 Size = UDim2.new(1, 0, 1, 0),
                 Position = UDim2.new(0.5, 0, 0, 0),
                 PlaceholderColor3 = Color3.fromRGB(178, 178, 178),
-                PlaceholderText = "",
+                PlaceholderText = "Name",
                 Text = "",
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextSize = self.library.textsize,
@@ -4965,8 +5017,6 @@ function sections:configloader(props)
     create[1].Position = UDim2.new(1, -5, 0, 44)
     create[1].AnchorPoint = Vector2.new(1, 0)
     
-    name[2].PlaceholderText = "Name"
-    
     local currentname = nil
     
     name[2].Focused:Connect(function()
@@ -4988,11 +5038,19 @@ function sections:configloader(props)
         if selected then
             local filepath = folder .. "/" .. selected.name .. ".cfg"
             if isfile(filepath) then
-                self.library:loadconfig(filepath)
-                load[2].BorderColor3 = self.library.theme.accent
-                wait(0.05)
-                load[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                local success = self.library:loadconfig(filepath)
+                if success then
+                    load[2].BorderColor3 = self.library.theme.accent
+                    wait(0.05)
+                    load[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                else
+                    warn("Failed to load config: " .. selected.name)
+                end
+            else
+                warn("Config file does not exist: " .. filepath)
             end
+        else
+            warn("No config selected to load")
         end
     end)
     
@@ -5006,7 +5064,11 @@ function sections:configloader(props)
                 delete[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
                 wait()
                 refresh()
+            else
+                warn("Config file does not exist: " .. filepath)
             end
+        else
+            warn("No config selected to delete")
         end
     end)
     
@@ -5014,7 +5076,7 @@ function sections:configloader(props)
         if selected then
             local filepath = folder .. "/" .. selected.name .. ".cfg"
             local config_data = self.library:saveconfig()
-            if config_data and config_data ~= "{}" then
+            if config_data then
                 writefile(filepath, config_data)
                 save[2].BorderColor3 = self.library.theme.accent
                 wait(0.05)
@@ -5024,6 +5086,8 @@ function sections:configloader(props)
             else
                 warn("Failed to save config: No configuration data available")
             end
+        else
+            warn("No config selected to save")
         end
     end)
     
@@ -5031,20 +5095,26 @@ function sections:configloader(props)
         if currentname then
             local filepath = folder .. "/" .. currentname .. ".cfg"
             local config_data = self.library:saveconfig()
-            if config_data and config_data ~= "{}" then
+            if config_data then
                 writefile(filepath, config_data)
                 create[2].BorderColor3 = self.library.theme.accent
                 wait(0.05)
                 create[2].BorderColor3 = Color3.fromRGB(12, 12, 12)
+                name[2].Text = ""
+                currentname = nil
                 wait()
                 refresh()
             else
                 warn("Failed to create config: No configuration data available")
             end
+        else
+            warn("No valid config name provided")
         end
     end)
+    
     configloader = {
-        ["library"] = self.library
+        ["library"] = self.library,
+        ["refresh"] = refresh
     }
     setmetatable(configloader, configloaders)
     return configloader
