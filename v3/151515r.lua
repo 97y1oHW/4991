@@ -1,3 +1,14 @@
+if not LPH_OBFUSCATED then
+LPH_JIT = function(...) return ... end;
+LPH_JIT_MAX = function(...) return ... end;
+LPH_JIT_ULTRA = function(...) return ... end;
+LPH_NO_VIRTUALIZE = function(...) return ... end;
+LPH_ENCSTR = function(...) return ... end;
+LPH_STRENC = function(...) return ... end;
+LPH_HOOK_FIX = function(...) return ... end;
+LPH_CRASH = function() return print(debug.traceback()) end;
+end;
+
 local memory = {
   PUSH = function() return "error" end,
   SET = function() return "error" end,
