@@ -1,6 +1,6 @@
 local version = "0.30 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
-getgenv().log("nofitication","Library Version: " ..version)
+getgenv().log("warning","Library Version: " ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
 blurEffect.Parent = game:GetService("Lighting")
@@ -58,9 +58,9 @@ colorpickers.__index = colorpickers
 configloaders.__index = configloaders
 watermarks.__index = watermarks
 loaders.__index = loaders
-
+getgenv().log("warning","Utility Creation Logs Suspended")
 utility.new = function(instance,properties) 
-	getgenv().log("nofitication","New Utility Created")
+	--getgenv().log("nofitication","New Utility Created")
 	local ins = Instance.new(instance)
 	for property,value in pairs(properties) do
 		ins[property] = value
@@ -108,6 +108,7 @@ utility.dragify = function(ins,touse)
 end
 
 utility.tweenColor = function(object, property, color, duration)
+	getgenv().log("success","Tweened Color")
     duration = duration or 0.2
     local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     ts:Create(object, tweenInfo, {[property] = color}):Play()
@@ -299,6 +300,7 @@ function library:new(props)
 	)
 	
 	local titletext = utility.new(
+		
 		"TextLabel",
 		{
 			AnchorPoint = Vector2.new(0.5,0),
@@ -502,7 +504,8 @@ local lastPingUpdate = 0
 local currentPing = 0
 
 function library:watermark(props)
-	getgenv().log("nofitication","Watermark Started")
+	getgenv().log("success","Watermark Started")
+	getgenv().log("warning","Unused Watermark Detected")
 	local props = props or {}
 	local showFps = props.fps or props.Fps or props.FPS or props.showFps or props.ShowFps or props.showFPS or false
 	local showPing = props.ping or props.Ping or props.PING or props.showPing or props.ShowPing or props.showPING or false
