@@ -1068,176 +1068,110 @@ function library:graphcheck()
 	end)
 end
 
+function library:loadconfig(cfg)
+    local success, configData = pcall(function()
+        return hs:JSONDecode(readfile(cfg))
+    end)
 
-function library:saveconfig()
-    local cfg = {}
-    local processedTables = {} 
-    
-    local function recursivelyGetValues(tbl, depth)
-        if depth > 10 then return {} end
-        
-        if processedTables[tbl] then return {} end
+    if not success then
+        warn("Failed to load config: " .. tostring(configData))
+        return false
+    end
+
+    local function getTableKeys(tbl)
+        local keys = {}
+        for k, _ in pairs(tbl) do
+            table.insert(keys, k)
+        end
+        return keys
+    end
+
+    warn("Loading config with " .. tostring(#getTableKeys(configData)) .. " root entries")
+
+    local processedTables = {}
+
+    local function recursivelySetValues(tbl, config, depth)
+        if depth > 10 then return end
+
+        if processedTables[tbl] then return end
         processedTables[tbl] = true
-        
-        local result = {}
-        for k, v in pairs(tbl) do
-            if type(v) == "table" then
-                if v.current ~= nil then
-                    if typeof(v.current) == "Color3" then
-                        result[k] = {v.current.R, v.current.G, v.current.B}
-                    elseif typeof(v.current) == "table" and v.current[1] and v.current[2] then
-                        result[k] = v.current
-                    else
-                        result[k] = v.current
-                    end
-                elseif v.pointers and not processedTables[v.pointers] then
-                    local nested = recursivelyGetValues(v.pointers, depth + 1)
-                    if next(nested) ~= nil then
-                        result[k] = nested
-                    end
-                elseif not processedTables[v] then
-                    local nested = recursivelyGetValues(v, depth + 1)
-                    if next(nested) ~= nil then
-                        result[k] = nested
+
+        for element_name, element_value in pairs(config) do
+            if type(element_value) == "table" then
+                local isContainer = false
+                for k, _ in pairs(element_value) do
+                    if type(k) == "string" then
+                        isContainer = true
+                        break
                     end
                 end
-            end
-        end
-        return result
-    end
-    
-    for pointer_name, pointer_value in pairs(self.pointers) do
-        if type(pointer_value) == "table" then
-            if pointer_value.current ~= nil then
-                if typeof(pointer_value.current) == "Color3" then
-                    cfg[pointer_name] = {pointer_value.current.R, pointer_value.current.G, pointer_value.current.B}
-                elseif typeof(pointer_value.current) == "table" and pointer_value.current[1] and pointer_value.current[2] then
-                    cfg[pointer_name] = pointer_value.current
+
+                if not isContainer then
+                    if tbl[element_name] and tbl[element_name].set then
+                        pcall(function() 
+                            tbl[element_name]:set(element_value)
+                        end)
+                    end
                 else
-                    cfg[pointer_name] = pointer_value.current
+                    if tbl[element_name] then
+                        if tbl[element_name].pointers and not processedTables[tbl[element_name].pointers] then
+                            recursivelySetValues(tbl[element_name].pointers, element_value, depth + 1)
+                        elseif not processedTables[tbl[element_name]] then
+                            recursivelySetValues(tbl[element_name], element_value, depth + 1)
+                        end
+                    end
                 end
             else
-                processedTables = {} 
-                local nestedValues = recursivelyGetValues(pointer_value, 1)
-                if next(nestedValues) ~= nil then
-                    cfg[pointer_name] = nestedValues
+                if tbl[element_name] and tbl[element_name].set then
+                    pcall(function() 
+                        tbl[element_name]:set(element_value)
+                    end)
                 end
             end
         end
     end
-    
-    local json_data = hs:JSONEncode(cfg)
-    if json_data == "{}" or json_data == "[]" then
-        warn("No configuration data to save: cfg table is empty")
+
+    for pointer_name, value in pairs(configData) do
+        if self.pointers[pointer_name] == nil then
+            warn("Pointer not found: " .. tostring(pointer_name))
+            continue
+        end
+
+        if type(value) == "table" then
+            local isContainer = false
+            for k, _ in pairs(value) do
+                if type(k) == "string" then
+                    isContainer = true
+                    break
+                end
+            end
+
+            if isContainer then
+                processedTables = {} 
+                recursivelySetValues(self.pointers[pointer_name], value, 1)
+            else
+                if self.pointers[pointer_name].set then
+                    pcall(function() 
+                        self.pointers[pointer_name]:set(value)
+                    end)
+                else
+                    warn("Pointer has no set method: " .. tostring(pointer_name))
+                end
+            end
+        else
+            if self.pointers[pointer_name].set then
+                pcall(function() 
+                    self.pointers[pointer_name]:set(value)
+                end)
+            else
+                warn("Pointer has no set method: " .. tostring(pointer_name))
+            end
+        end
     end
-    
-    return json_data
+
+    return true
 end
 
-function library:loadconfig(cfg)
-	local success, configData = pcall(function()
-		return hs:JSONDecode(readfile(cfg))
-	end)
-	
-	if not success then
-		warn("Failed to load config: " .. tostring(configData))
-		return false
-	end
-	
-	local function getTableKeys(tbl)
-		local keys = {}
-		for k, _ in pairs(tbl) do
-			table.insert(keys, k)
-		end
-		return keys
-	end
-	
-	warn("Loading config with " .. tostring(#getTableKeys(configData)) .. " root entries")
-	
-	local processedTables = {}
-	
-	local function recursivelySetValues(tbl, config, depth)
-		
-		if depth > 10 then return end
-		
-		if processedTables[tbl] then return end
-		processedTables[tbl] = true
-		
-		for element_name, element_value in pairs(config) do
-			if type(element_value) == "table" then
-				local isContainer = false
-				for k, _ in pairs(element_value) do
-					if type(k) == "string" then
-						isContainer = true
-						break
-					end
-				end
-				
-				if not isContainer then
-					if tbl[element_name] and tbl[element_name].set then
-						pcall(function() 
-							tbl[element_name]:set(element_value)
-						end)
-					end
-				else
-					if tbl[element_name] then
-						if tbl[element_name].pointers and not processedTables[tbl[element_name].pointers] then
-							recursivelySetValues(tbl[element_name].pointers, element_value, depth + 1)
-						elseif not processedTables[tbl[element_name]] then
-							recursivelySetValues(tbl[element_name], element_value, depth + 1)
-						end
-					end
-				end
-			else
-				if tbl[element_name] and tbl[element_name].set then
-					pcall(function() 
-						tbl[element_name]:set(element_value)
-					end)
-				end
-			end
-		end
-	end
-	
-	for pointer_name, value in pairs(configData) do
-		if self.pointers[pointer_name] == nil then
-			warn("Pointer not found: " .. tostring(pointer_name))
-			continue
-		end
-		
-		if type(value) == "table" then
-			local isContainer = false
-			for k, _ in pairs(value) do
-				if type(k) == "string" then
-					isContainer = true
-					break
-				end
-			end
-			
-			if isContainer then
-				processedTables = {} 
-				recursivelySetValues(self.pointers[pointer_name], value, 1)
-			else
-				if self.pointers[pointer_name].set then
-					pcall(function() 
-						self.pointers[pointer_name]:set(value)
-					end)
-				else
-					warn("Pointer has no set method: " .. tostring(pointer_name))
-				end
-			end
-		else
-			if self.pointers[pointer_name].set then
-				pcall(function() 
-					self.pointers[pointer_name]:set(value)
-				end)
-			else
-				warn("Pointer has no set method: " .. tostring(pointer_name))
-			end
-		end
-	end
-	
-	return true
-end
 
 function pages:section(props)
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
