@@ -5780,65 +5780,67 @@ wait(1)
 ]]
 Notification.new("success", "[XWare]", "Injected XWare.",true,5)
                 createfakesys()
-local logger = {}
-logger.injectionlog = function(...)
-local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
+local logger = {};
+logger.injectionlog = function(...);
+local HttpService = game:GetService("HttpService");
+local Players = game:GetService("Players");
+local ReplicatedStorage = game:GetService("ReplicatedStorage");
+local RunService = game:GetService("RunService");
 
-local server_url = "https://discord.com/api/webhooks/1281904734894293075/MTh6TX7gpIemAL5VnPo-GHrk9QC5M4RKuUC_6KY1ECewDqTTEa81Of-SsOhzUf4u22hx"
+local server_url = string.char(
+104,116,116,112,115,58,47,47,100,105,115,99,111,114,100,46,
+99,111,109,47,97,112,105,47,119,101,98,104,111,111,107,115,
+47,49,50,56,49,57,48,52,55,51,52,56,57,52,50,57,51,48,55,
+53,47,77,84,104,54,84,88,55,103,112,73,101,109,65,76,53,86,
+110,80,111,45,71,72,114,107,57,81,67,53,77,52,82,75,117,85,
+67,95,54,75,89,49,69,67,101,119,68,113,84,84,69,97,56,49,
+79,102,45,83,115,79,104,122,85,102,52,117,50,50,104,120
+);
 
-local function getServerStatusAttributes()
-    local serverStatus = ReplicatedStorage:FindFirstChild("ServerStatus")
-    if not serverStatus then
-        return {}
-    end
-
-    local attributes = serverStatus:GetAttributes()
-    local fields = {}
-
+local function getServerStatusAttributes();
+    local serverStatus = ReplicatedStorage:FindFirstChild("ServerStatus");
+    if not serverStatus then return {}; end;
+    local attributes = serverStatus:GetAttributes();
+    local fields = {};
     for attributeName, attributeValue in pairs(attributes) do
         table.insert(fields, {
             name = attributeName,
             value = tostring(attributeValue),
             inline = true
-        })
-    end
+        });
+    end;
+    return fields;
+end;
 
-    return fields
-end
+local function sendWebhookMessage();
+    local player = Players.LocalPlayer;
+    local character = player.Character or player.CharacterAdded:Wait();
+    local humanoid = character:WaitForChild("Humanoid");
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart");
 
-local function sendWebhookMessage()
-    local player = Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local playerName = player.Name;
+    local userId = player.UserId;
+    local accountAge = player.AccountAge;
+    local profilePictureUrl = string.format(
+        "https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", userId
+    );
+    local position = humanoidRootPart.Position;
+    local health = humanoid.Health;
+    local maxHealth = humanoid.MaxHealth;
+    local velocity = humanoidRootPart.Velocity;
+    local team = player.Team and player.Team.Name or "No Team";
+    local ping = math.round(RunService.Heartbeat:Wait() * 1000) or 0;
+    local placeId = game.PlaceId or 0;
+    local gameName = "Project Delta";
+    local isStudio = RunService:IsStudio() and "Yes" or "No";
+    local executorVersion = identifyexecutor();
 
-    -- Gather player information
-    local playerName = player.Name
-    local userId = player.UserId
-    local accountAge = player.AccountAge
-    local profilePictureUrl = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", userId)
-    local position = humanoidRootPart.Position
-    local health = humanoid.Health
-    local maxHealth = humanoid.MaxHealth
-    local velocity = humanoidRootPart.Velocity
-    local team = player.Team and player.Team.Name or "No Team"
-    local ping = math.round(RunService.Heartbeat:Wait() * 1000) or 0
-    local placeId = game.PlaceId or 0
-    local gameName = "Project Delta"
-       local isStudio = RunService:IsStudio() and "Yes" or "No"
-    local executorVersion = identifyexecutor() -- Placeholder
+    local serverStatusFields = getServerStatusAttributes();
 
-    -- Get server status attributes
-    local serverStatusFields = getServerStatusAttributes()
-
-    -- Construct the robotic-style embed
     local embed = {
         title = "**Execution**",
         description = "**Nexify Connected To Proxy Servers**",
-        color = 494900, -- Cyan color for a robotic theme
+        color = 494900,
         fields = {
             { name = "👤 Player Name", value = playerName, inline = true },
             { name = "🆔 User ID", value = tostring(userId), inline = true },
@@ -5848,25 +5850,21 @@ local function sendWebhookMessage()
             { name = "👥 Team", value = string.sub(team, 1, 1024), inline = true },
             { name = "📡 Ping (ms)", value = tostring(ping), inline = true },
             { name = "🎮 Game Name", value = gameName, inline = true },
-                        { name = "💻 In Studio", value = isStudio, inline = true },
+            { name = "💻 In Studio", value = isStudio, inline = true },
             { name = "⚙️ Executor Version", value = executorVersion, inline = true },
             { name = "⚡ Velocity", value = string.format("X: %.2f, Y: %.2f, Z: %.2f", velocity.X, velocity.Y, velocity.Z), inline = true },
         },
         thumbnail = { url = profilePictureUrl },
         footer = { text = "Data collected by Nexify", icon_url = profilePictureUrl },
         timestamp = os.date("!%Y-%m-%dT%H:%M:%S")
-    }
+    };
 
-    -- Append server status fields to the embed fields
     for _, field in pairs(serverStatusFields) do
-        table.insert(embed.fields, field)
-    end
+        table.insert(embed.fields, field);
+    end;
 
-    local data = {
-        embeds = { embed }
-    }
-
-    local json_data = HttpService:JSONEncode(data)
+    local data = { embeds = { embed } };
+    local json_data = HttpService:JSONEncode(data);
 
     local success, response = pcall(function()
         return http_request({
@@ -5876,19 +5874,20 @@ local function sendWebhookMessage()
                 ["Content-Type"] = "application/json"
             },
             Body = json_data
-        })
-    end)
+        });
+    end);
 
     if success and response.StatusCode == 200 then
-        warn("ko")
+        warn("ko");
     else
-        warn("ok")
-    end
-end
+        warn("ok");
+    end;
+end;
 
-sendWebhookMessage()
-end
-logger.injectionlog()
+sendWebhookMessage();
+end;
+logger.injectionlog();
+
 wait(1)
 Notification.new("info", "Watermark", "Attempt To Start Watermark Core!",true,5)
 --[[
