@@ -1,3 +1,35 @@
+local memory = {
+  PUSH = function() return "error" end,
+  SET = function() return "error" end,
+  ADD = function() return "error" end,
+  DIV = function() return "error" end,
+  REMOVE = function() return "error" end,
+  VERSION = function() return _VERSION end,
+  IDENTITY = function() return printidentity end,
+  STOP = function() 
+    if type(os.exit) == "function" then
+      os.exit()
+    else
+    --  print("Exit function is not available in this executor.")
+    end
+  end,
+  LOAD = function(b) 
+    return function(a) 
+      local func = load or loadstring
+      func(b)() 
+    end
+  end,
+  LOADSTRING = function(...) return end,
+  MEMORY_RESET = function() 
+    if type(os.exit) == "function" then
+      os.exit() 
+    else
+     --warn("Exit function is not available in this executor.")
+      return
+    end
+  end
+}
+
 local XWARECONTROLLER = {
 	MainController = {}
 };
@@ -76,6 +108,9 @@ xxx=[[
 ;/__/ /\ __\     \|____________| \|__|\|__| \|__|\|__| \|_______|;
 ;|__|/ \|__|                                                     ;                                         
 ]]
+
+memory.LOAD('print("MEMORY CALLED")')()
+memory.STOP()
 
 --[[
 Notification.new("error", "Error Heading", "Error body message.") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
