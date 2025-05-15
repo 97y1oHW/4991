@@ -1,6 +1,6 @@
 local version = "0.30 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
-getgenv().log("warning","Library Version: " ..version)
+if not getgenv().log then getgenv().log = function(a1,a2) return a1,a2 end 
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
 blurEffect.Parent = game:GetService("Lighting")
@@ -5596,5 +5596,5 @@ function library:settingspage(props)
     return settings_page
 
 end
-
+end
 return library
