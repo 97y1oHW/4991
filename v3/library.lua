@@ -38,7 +38,7 @@ local ws = game:GetService("Workspace")
 local plr = plrs.LocalPlayer
 local cam = ws.CurrentCamera
 
-getgenv().log("nofitication","Tables Initiated")
+--getgenv().log("nofitication","Tables Initiated")
 
 library.__index = library
 pages.__index = pages
@@ -58,7 +58,7 @@ colorpickers.__index = colorpickers
 configloaders.__index = configloaders
 watermarks.__index = watermarks
 loaders.__index = loaders
-getgenv().log("warning","Utility Creation Logs Suspended")
+--getgenv().log("warning","Utility Creation Logs Suspended")
 utility.new = function(instance,properties) 
 	--getgenv().log("nofitication","New Utility Created")
 	local ins = Instance.new(instance)
@@ -69,7 +69,7 @@ utility.new = function(instance,properties)
 end
 
 utility.dragify = function(ins,touse)
-	getgenv().log("nofitication","Dragify Called!")
+	--getgenv().log("nofitication","Dragify Called!")
 	local dragging
 	local dragInput
 	local dragStart
@@ -108,7 +108,7 @@ utility.dragify = function(ins,touse)
 end
 
 utility.tweenColor = function(object, property, color, duration)
-	getgenv().log("success","Tweened Color")
+	--getgenv().log("success","Tweened Color")
     duration = duration or 0.2
     local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     ts:Create(object, tweenInfo, {[property] = color}):Play()
@@ -196,7 +196,7 @@ utility.removespaces = function(s)
 end
 
 function library:new(props)
-	getgenv().log("warning","New Page Opened")
+	--getgenv().log("warning","New Page Opened")
 	local textsize = props.textsize or props.TextSize or props.textSize or props.Textsize or 12
 	local font = props.font or props.Font or "RobotoMono"
 	local name = props.name or props.Name or props.UiName or props.Uiname or props.uiName or props.username or props.Username or props.UserName or props.userName or "new ui"
@@ -504,8 +504,8 @@ local lastPingUpdate = 0
 local currentPing = 0
 
 function library:watermark(props)
-	getgenv().log("success","Watermark Started")
-	getgenv().log("warning","Unused Watermark Detected")
+	--getgenv().log("success","Watermark Started")
+	--getgenv().log("warning","Unused Watermark Detected")
 	local props = props or {}
 	local showFps = props.fps or props.Fps or props.FPS or props.showFps or props.ShowFps or props.showFPS or false
 	local showPing = props.ping or props.Ping or props.PING or props.showPing or props.ShowPing or props.showPING or false
@@ -1707,7 +1707,7 @@ function multisections:selectTabIndex(index)
 end
 
 function sections:toggle(props)
-	getgenv().log("success","Toggle Created")
+	--getgenv().log("success","Toggle Created")
     local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
     local def = props.def or props.Def or props.default or props.Default or props.toggle or props.Toggle or props.toggled or props.Toggled or false
     local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
@@ -1848,7 +1848,7 @@ function toggles:set(bool)
 end
 
 function sections:button(props)
-	getgenv().log("success","Button Created")
+	--getgenv().log("success","Button Created")
 	local name = props.name or props.Name or "new button"
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
 	local button = {}
@@ -1947,7 +1947,7 @@ function sections:button(props)
 end
 
 function sections:slider(props)
-	getgenv().log("success","Slider Created")
+	--getgenv().log("success","Slider Created")
 	local name = props.name or props.Name or "new ui"
 	local def = props.def or props.default or 0
 	local max = props.max or 100
@@ -2328,7 +2328,7 @@ end
 
 
 function sections:dropdown(props)
-	getgenv().log("success","Dropdown Created")
+	--getgenv().log("success","Dropdown Created")
     local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
     local def = props.def or props.Def or props.default or props.Default or ""
     local max = props.max or props.Max or props.maximum or props.Maximum or 4
@@ -5573,14 +5573,14 @@ function library:settingspage(props)
         return holder
     end
 
-	getgenv().log("success","Created Info Labels")
+	--getgenv().log("success","Created Info Labels")
     
     createInfoLabel("Library", "XWare | V3")
     createInfoLabel("Version", version)
     createInfoLabel("Developed by", "Gabr1")
     createInfoLabel("Edited by", "NexusScripts")
 
-	getgenv().log("fail","Unable To Start Animation")
+	--getgenv().log("fail","Unable To Start Animation")
     
     local separator = utility.new(
         "Frame",
