@@ -1,4 +1,4 @@
-local version = "0.30 B-X ALPHA"
+local version = "0.31 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
 if not getgenv().log then getgenv().log = function(a1,a2) return a1,a2 end 
 --[[local blurEffect = Instance.new("BlurEffect")
