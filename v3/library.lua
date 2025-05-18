@@ -1,6 +1,6 @@
-local version = "0.31 B-X ALPHA"
+
+local version = "0.30 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
-if not getgenv().log then getgenv().log = function(a1,a2) return a1,a2 end 
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
 blurEffect.Parent = game:GetService("Lighting")
@@ -38,8 +38,6 @@ local ws = game:GetService("Workspace")
 local plr = plrs.LocalPlayer
 local cam = ws.CurrentCamera
 
---getgenv().log("nofitication","Tables Initiated")
-
 library.__index = library
 pages.__index = pages
 esppreviews.__index = esppreviews
@@ -58,9 +56,8 @@ colorpickers.__index = colorpickers
 configloaders.__index = configloaders
 watermarks.__index = watermarks
 loaders.__index = loaders
---getgenv().log("warning","Utility Creation Logs Suspended")
+
 utility.new = function(instance,properties) 
-	--getgenv().log("nofitication","New Utility Created")
 	local ins = Instance.new(instance)
 	for property,value in pairs(properties) do
 		ins[property] = value
@@ -69,7 +66,6 @@ utility.new = function(instance,properties)
 end
 
 utility.dragify = function(ins,touse)
-	--getgenv().log("nofitication","Dragify Called!")
 	local dragging
 	local dragInput
 	local dragStart
@@ -108,7 +104,6 @@ utility.dragify = function(ins,touse)
 end
 
 utility.tweenColor = function(object, property, color, duration)
-	--getgenv().log("success","Tweened Color")
     duration = duration or 0.2
     local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
     ts:Create(object, tweenInfo, {[property] = color}):Play()
@@ -196,7 +191,6 @@ utility.removespaces = function(s)
 end
 
 function library:new(props)
-	--getgenv().log("warning","New Page Opened")
 	local textsize = props.textsize or props.TextSize or props.textSize or props.Textsize or 12
 	local font = props.font or props.Font or "RobotoMono"
 	local name = props.name or props.Name or props.UiName or props.Uiname or props.uiName or props.username or props.Username or props.UserName or props.userName or "new ui"
@@ -300,7 +294,6 @@ function library:new(props)
 	)
 	
 	local titletext = utility.new(
-		
 		"TextLabel",
 		{
 			AnchorPoint = Vector2.new(0.5,0),
@@ -504,8 +497,6 @@ local lastPingUpdate = 0
 local currentPing = 0
 
 function library:watermark(props)
-	--getgenv().log("success","Watermark Started")
-	--getgenv().log("warning","Unused Watermark Detected")
 	local props = props or {}
 	local showFps = props.fps or props.Fps or props.FPS or props.showFps or props.ShowFps or props.showFPS or false
 	local showPing = props.ping or props.Ping or props.PING or props.showPing or props.ShowPing or props.showPING or false
@@ -1078,110 +1069,176 @@ function library:graphcheck()
 	end)
 end
 
-function library:loadconfig(cfg)
-    local success, configData = pcall(function()
-        return hs:JSONDecode(readfile(cfg))
-    end)
 
-    if not success then
-        warn("Failed to load config: " .. tostring(configData))
-        return false
-    end
-
-    local function getTableKeys(tbl)
-        local keys = {}
-        for k, _ in pairs(tbl) do
-            table.insert(keys, k)
-        end
-        return keys
-    end
-
-    warn("Loading config with " .. tostring(#getTableKeys(configData)) .. " root entries")
-
-    local processedTables = {}
-
-    local function recursivelySetValues(tbl, config, depth)
-        if depth > 10 then return end
-
-        if processedTables[tbl] then return end
+function library:saveconfig()
+    local cfg = {}
+    local processedTables = {} 
+    
+    local function recursivelyGetValues(tbl, depth)
+        if depth > 10 then return {} end
+        
+        if processedTables[tbl] then return {} end
         processedTables[tbl] = true
-
-        for element_name, element_value in pairs(config) do
-            if type(element_value) == "table" then
-                local isContainer = false
-                for k, _ in pairs(element_value) do
-                    if type(k) == "string" then
-                        isContainer = true
-                        break
+        
+        local result = {}
+        for k, v in pairs(tbl) do
+            if type(v) == "table" then
+                if v.current ~= nil then
+                    if typeof(v.current) == "Color3" then
+                        result[k] = {v.current.R, v.current.G, v.current.B}
+                    elseif typeof(v.current) == "table" and v.current[1] and v.current[2] then
+                        result[k] = v.current
+                    else
+                        result[k] = v.current
+                    end
+                elseif v.pointers and not processedTables[v.pointers] then
+                    local nested = recursivelyGetValues(v.pointers, depth + 1)
+                    if next(nested) ~= nil then
+                        result[k] = nested
+                    end
+                elseif not processedTables[v] then
+                    local nested = recursivelyGetValues(v, depth + 1)
+                    if next(nested) ~= nil then
+                        result[k] = nested
                     end
                 end
-
-                if not isContainer then
-                    if tbl[element_name] and tbl[element_name].set then
-                        pcall(function() 
-                            tbl[element_name]:set(element_value)
-                        end)
-                    end
+            end
+        end
+        return result
+    end
+    
+    for pointer_name, pointer_value in pairs(self.pointers) do
+        if type(pointer_value) == "table" then
+            if pointer_value.current ~= nil then
+                if typeof(pointer_value.current) == "Color3" then
+                    cfg[pointer_name] = {pointer_value.current.R, pointer_value.current.G, pointer_value.current.B}
+                elseif typeof(pointer_value.current) == "table" and pointer_value.current[1] and pointer_value.current[2] then
+                    cfg[pointer_name] = pointer_value.current
                 else
-                    if tbl[element_name] then
-                        if tbl[element_name].pointers and not processedTables[tbl[element_name].pointers] then
-                            recursivelySetValues(tbl[element_name].pointers, element_value, depth + 1)
-                        elseif not processedTables[tbl[element_name]] then
-                            recursivelySetValues(tbl[element_name], element_value, depth + 1)
-                        end
-                    end
+                    cfg[pointer_name] = pointer_value.current
                 end
             else
-                if tbl[element_name] and tbl[element_name].set then
-                    pcall(function() 
-                        tbl[element_name]:set(element_value)
-                    end)
-                end
-            end
-        end
-    end
-
-    for pointer_name, value in pairs(configData) do
-        if self.pointers[pointer_name] == nil then
-            warn("Pointer not found: " .. tostring(pointer_name))
-            continue
-        end
-
-        if type(value) == "table" then
-            local isContainer = false
-            for k, _ in pairs(value) do
-                if type(k) == "string" then
-                    isContainer = true
-                    break
-                end
-            end
-
-            if isContainer then
                 processedTables = {} 
-                recursivelySetValues(self.pointers[pointer_name], value, 1)
-            else
-                if self.pointers[pointer_name].set then
-                    pcall(function() 
-                        self.pointers[pointer_name]:set(value)
-                    end)
-                else
-                    warn("Pointer has no set method: " .. tostring(pointer_name))
+                local nestedValues = recursivelyGetValues(pointer_value, 1)
+                if next(nestedValues) ~= nil then
+                    cfg[pointer_name] = nestedValues
                 end
-            end
-        else
-            if self.pointers[pointer_name].set then
-                pcall(function() 
-                    self.pointers[pointer_name]:set(value)
-                end)
-            else
-                warn("Pointer has no set method: " .. tostring(pointer_name))
             end
         end
     end
-
-    return true
+    
+    local json_data = hs:JSONEncode(cfg)
+    if json_data == "{}" or json_data == "[]" then
+        warn("No configuration data to save: cfg table is empty")
+    end
+    
+    return json_data
 end
 
+function library:loadconfig(cfg)
+	local success, configData = pcall(function()
+		return hs:JSONDecode(readfile(cfg))
+	end)
+	
+	if not success then
+		warn("Failed to load config: " .. tostring(configData))
+		return false
+	end
+	
+	local function getTableKeys(tbl)
+		local keys = {}
+		for k, _ in pairs(tbl) do
+			table.insert(keys, k)
+		end
+		return keys
+	end
+	
+	warn("Loading config with " .. tostring(#getTableKeys(configData)) .. " root entries")
+	
+	local processedTables = {}
+	
+	local function recursivelySetValues(tbl, config, depth)
+		
+		if depth > 10 then return end
+		
+		if processedTables[tbl] then return end
+		processedTables[tbl] = true
+		
+		for element_name, element_value in pairs(config) do
+			if type(element_value) == "table" then
+				local isContainer = false
+				for k, _ in pairs(element_value) do
+					if type(k) == "string" then
+						isContainer = true
+						break
+					end
+				end
+				
+				if not isContainer then
+					if tbl[element_name] and tbl[element_name].set then
+						pcall(function() 
+							tbl[element_name]:set(element_value)
+						end)
+					end
+				else
+					if tbl[element_name] then
+						if tbl[element_name].pointers and not processedTables[tbl[element_name].pointers] then
+							recursivelySetValues(tbl[element_name].pointers, element_value, depth + 1)
+						elseif not processedTables[tbl[element_name]] then
+							recursivelySetValues(tbl[element_name], element_value, depth + 1)
+						end
+					end
+				end
+			else
+				if tbl[element_name] and tbl[element_name].set then
+					pcall(function() 
+						tbl[element_name]:set(element_value)
+					end)
+				end
+			end
+		end
+	end
+	
+	for pointer_name, value in pairs(configData) do
+		if self.pointers[pointer_name] == nil then
+			warn("Pointer not found: " .. tostring(pointer_name))
+			continue
+		end
+		
+		if type(value) == "table" then
+			local isContainer = false
+			for k, _ in pairs(value) do
+				if type(k) == "string" then
+					isContainer = true
+					break
+				end
+			end
+			
+			if isContainer then
+				processedTables = {} 
+				recursivelySetValues(self.pointers[pointer_name], value, 1)
+			else
+				if self.pointers[pointer_name].set then
+					pcall(function() 
+						self.pointers[pointer_name]:set(value)
+					end)
+				else
+					warn("Pointer has no set method: " .. tostring(pointer_name))
+				end
+			end
+		else
+			if self.pointers[pointer_name].set then
+				pcall(function() 
+					self.pointers[pointer_name]:set(value)
+				end)
+			else
+				warn("Pointer has no set method: " .. tostring(pointer_name))
+			end
+		end
+	end
+	
+	return true
+end
 
 function pages:section(props)
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
@@ -1707,7 +1764,6 @@ function multisections:selectTabIndex(index)
 end
 
 function sections:toggle(props)
-	--getgenv().log("success","Toggle Created")
     local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
     local def = props.def or props.Def or props.default or props.Default or props.toggle or props.Toggle or props.toggled or props.Toggled or false
     local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
@@ -1848,7 +1904,6 @@ function toggles:set(bool)
 end
 
 function sections:button(props)
-	--getgenv().log("success","Button Created")
 	local name = props.name or props.Name or "new button"
 	local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
 	local button = {}
@@ -1947,7 +2002,6 @@ function sections:button(props)
 end
 
 function sections:slider(props)
-	--getgenv().log("success","Slider Created")
 	local name = props.name or props.Name or "new ui"
 	local def = props.def or props.default or 0
 	local max = props.max or 100
@@ -2328,7 +2382,6 @@ end
 
 
 function sections:dropdown(props)
-	--getgenv().log("success","Dropdown Created")
     local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
     local def = props.def or props.Def or props.default or props.Default or ""
     local max = props.max or props.Max or props.maximum or props.Maximum or 4
@@ -5572,15 +5625,11 @@ function library:settingspage(props)
         
         return holder
     end
-
-	--getgenv().log("success","Created Info Labels")
     
     createInfoLabel("Library", "XWare | V3")
     createInfoLabel("Version", version)
     createInfoLabel("Developed by", "Gabr1")
     createInfoLabel("Edited by", "NexusScripts")
-
-	--getgenv().log("fail","Unable To Start Animation")
     
     local separator = utility.new(
         "Frame",
@@ -5596,5 +5645,5 @@ function library:settingspage(props)
     return settings_page
 
 end
-end
+
 return library
