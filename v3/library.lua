@@ -1,6 +1,6 @@
 
-local version = "0.33 B-X ALPHA"
-getgenv().libversion = "0.33"
+local version = "0.34 B-X ALPHA"
+getgenv().libversion = "0.34"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
@@ -132,14 +132,14 @@ utility.fadeIn = function(object, duration)
     for _, child in pairs(object:GetDescendants()) do
         if child:IsA("GuiObject") then
             if child:IsA("Frame") or child:IsA("ImageLabel") or child:IsA("ImageButton") then
+                local originalTransparency = child.BackgroundTransparency
                 child.BackgroundTransparency = 1
-                ts:Create(child, tweenInfo, {BackgroundTransparency = 0}):Play()
+                ts:Create(child, tweenInfo, {BackgroundTransparency = originalTransparency}):Play()
             end
             if child:IsA("TextLabel") or child:IsA("TextButton") or child:IsA("TextBox") then
                 child.TextTransparency = 1
                 ts:Create(child, tweenInfo, {TextTransparency = 0}):Play()
             end
-            -- Add other GUI types if your UI uses them
         end
     end
 end
@@ -5415,10 +5415,10 @@ button.MouseButton1Down:Connect(function()
                 break
             end
         end
-        if currentPage and currentPage.page then
-            utility.fadeOut(currentPage.page, 0.3)
+        if currentPage and currentPage.pageholder then
+            utility.fadeOut(currentPage.pageholder, 0.3)
             task.wait(0.3)
-            currentPage.page.Visible = false
+            currentPage.pageholder.Visible = false
             currentPage.open = false
             currentPage.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
             currentPage.line.Size = UDim2.new(1,0,0,2)
@@ -5426,8 +5426,8 @@ button.MouseButton1Down:Connect(function()
             currentPage.underline.Visible = false
         end
         self:closewindows()
-        page.page.Visible = true
-        utility.fadeIn(page.page, 0.3)
+        page.pageholder.Visible = true
+        utility.fadeIn(page.pageholder, 0.3)
         page.open = true
         page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
         page.line.Size = UDim2.new(1,0,0,3)
