@@ -109,6 +109,40 @@ utility.tweenColor = function(object, property, color, duration)
     ts:Create(object, tweenInfo, {[property] = color}):Play()
 end
 
+utility.fadeOut = function(object, duration)
+    duration = duration or 0.3
+    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    for _, child in pairs(object:GetDescendants()) do
+        if child:IsA("GuiObject") then
+            if child:IsA("Frame") or child:IsA("ImageLabel") or child:IsA("ImageButton") then
+                ts:Create(child, tweenInfo, {BackgroundTransparency = 1}):Play()
+            end
+            if child:IsA("TextLabel") or child:IsA("TextButton") or child:IsA("TextBox") then
+                ts:Create(child, tweenInfo, {TextTransparency = 1}):Play()
+            end
+            -- Add other GUI types if your UI uses them
+        end
+    end
+end
+
+utility.fadeIn = function(object, duration)
+    duration = duration or 0.3
+    local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    for _, child in pairs(object:GetDescendants()) do
+        if child:IsA("GuiObject") then
+            if child:IsA("Frame") or child:IsA("ImageLabel") or child:IsA("ImageButton") then
+                child.BackgroundTransparency = 1
+                ts:Create(child, tweenInfo, {BackgroundTransparency = 0}):Play()
+            end
+            if child:IsA("TextLabel") or child:IsA("TextButton") or child:IsA("TextBox") then
+                child.TextTransparency = 1
+                ts:Create(child, tweenInfo, {TextTransparency = 0}):Play()
+            end
+            -- Add other GUI types if your UI uses them
+        end
+    end
+end
+
 utility.tweenTransparency = function(object, duration, transparency)
     duration = duration or 0.5
     local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -5369,42 +5403,47 @@ function library:page(props)
 	
 	table.insert(self.pages,page)
 	
-	button.MouseButton1Down:Connect(function()
-		
-		if page.open == false then
-			for i,v in pairs(self.pages) do
-				if v ~= page then
-					if v.open then
-						v.page.Visible = false
-						v.open = false
-						v.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-						v.line.Size = UDim2.new(1,0,0,2)
-						v.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-						v.underline.Visible = false
-					end
-				end
-			end
-			
-			self:closewindows()
-			
-			page.page.Visible = true
-			page.open = true
-			page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-			page.line.Size = UDim2.new(1,0,0,3)
-			page.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-			page.underline.Visible = true
 
-			for _, esppreview in pairs(self.esppreviews or {}) do
-				utility.tweenTransparency(esppreview.previewholder, 0.5, 1)
-				esppreview.previewholder.Visible = false
-			end
-			if page.esppreview then
-				utility.tweenTransparency(page.esppreview.previewholder, 0.5, 0)
-				page.esppreview.previewholder.Visible = true
-			end
 
-		end
-	end)
+button.MouseButton1Down:Connect(function()
+    if page.open == false then
+        local currentPage
+        for i,v in pairs(self.pages) do
+            if v.open then
+                currentPage = v
+                break
+            end
+        end
+        if currentPage then
+            utility.fadeOut(currentPage.pageholder, 0.3)
+            task.wait(0.3)
+            currentPage.pageholder.Visible = false
+            currentPage.open = false
+            currentPage.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+            currentPage.line.Size = UDim2.new(1,0,0,2)
+            currentPage.line.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+            currentPage.underline.Visible = false
+        end
+        self:closewindows()
+        page.pageholder.Visible = true
+        utility.fadeIn(page.pageholder, 0.3)
+        page.open = true
+        page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+        page.line.Size = UDim2.new(1,0,0,3)
+        page.line.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+        page.underline.Visible = true
+        for _, esppreview in pairs(self.esppreviews or {}) do
+            utility.tweenTransparency(esppreview.previewholder, 0.5, 1)
+            esppreview.previewholder.Visible = false
+        end
+        if page.esppreview then
+            utility.tweenTransparency(page.esppreview.previewholder, 0.5, 0)
+            page.esppreview.previewholder.Visible = true
+        end
+    end
+end)
+	
+	
 
 	page.openpage = function()
 		if page.open == false then
