@@ -1,6 +1,6 @@
 
-local version = "0.32 B-X ALPHA"
-getgenv().libversion = "0.32"
+local version = "0.33 B-X ALPHA"
+getgenv().libversion = "0.33"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
@@ -5415,10 +5415,10 @@ button.MouseButton1Down:Connect(function()
                 break
             end
         end
-        if currentPage and currentPage.pageholder then
-            utility.fadeOut(currentPage.pageholder, 0.3)
+        if currentPage and currentPage.page then
+            utility.fadeOut(currentPage.page, 0.3)
             task.wait(0.3)
-            currentPage.pageholder.Visible = false
+            currentPage.page.Visible = false
             currentPage.open = false
             currentPage.outline.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
             currentPage.line.Size = UDim2.new(1,0,0,2)
@@ -5426,8 +5426,8 @@ button.MouseButton1Down:Connect(function()
             currentPage.underline.Visible = false
         end
         self:closewindows()
-        page.pageholder.Visible = true
-        utility.fadeIn(page.pageholder, 0.3)
+        page.page.Visible = true
+        utility.fadeIn(page.page, 0.3)
         page.open = true
         page.outline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
         page.line.Size = UDim2.new(1,0,0,3)
