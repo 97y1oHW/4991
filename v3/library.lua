@@ -1,5 +1,6 @@
 
 local version = "0.32 B-X ALPHA"
+getgenv().libversion = "0.32"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
