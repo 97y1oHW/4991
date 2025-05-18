@@ -1,5 +1,5 @@
 
-local version = "0.30 B-X ALPHA"
+local version = "0.32 B-X ALPHA"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
@@ -5414,7 +5414,7 @@ button.MouseButton1Down:Connect(function()
                 break
             end
         end
-        if currentPage then
+        if currentPage and currentPage.pageholder then
             utility.fadeOut(currentPage.pageholder, 0.3)
             task.wait(0.3)
             currentPage.pageholder.Visible = false
