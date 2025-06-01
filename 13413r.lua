@@ -1,4 +1,12 @@
-return game.Players.LocalPlayer:Kick("\n\n XWARE V3 \n\n Nexify Is Bought By Gabr1.\n\n XWare Does Not Support Solara Anymore. \n\n" ..identifyexecutor())
+if not identifyexecutor then identifyexecutor = function(...) return "Unknown" end end;
+
+local reason = {
+	"Hello dear **Nexify** user. We're reaching out to let you know that Nexify has officially been acquired by **Gabr1**,\n and with this change, Nexify is now known as **XWARE**.\n As part of this transition, **XWARE no longer supports Solara**. But hey, don’t panic... \nyou can still use **Swift**. It’s kinda better – but let’s be real,\n it’s also kinda trash. It might crash your game, ruin your scripts, and make your grandma cry.\n So... use at your own risk.\n\nExecutor Detected: \n" .. identifyexecutor(),
+};
+
+game.Players.LocalPlayer:Kick(table.unpack(reason));
+
+
 --[[
 if game.workspace:FindFirstChild("ardaOkeremO1234") or game.workspace:FindFirstChild("egeebaal") then
 local forbiddenPlayers = {"ardaOkeremO1234", "egeebaal"}
