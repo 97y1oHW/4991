@@ -58,6 +58,50 @@ configloaders.__index = configloaders
 watermarks.__index = watermarks
 loaders.__index = loaders
 
+local fonts = {}; do
+            function Register_Font(Name, Weight, Style, Asset)
+                if not isfile(Asset.Id) then
+                    writefile(Asset.Id, Asset.Font)
+                end
+
+                if isfile(Name .. ".font") then
+                    delfile(Name .. ".font")
+                end
+
+                local Data = {
+                    name = Name,
+                    faces = {
+                        {
+                            name = "Regular",
+                            weight = Weight,
+                            style = Style,
+                            assetId = getcustomasset(Asset.Id),
+                        },
+                    },
+                }
+
+                writefile(Name .. ".font", game:GetService("HttpService"):JSONEncode(Data))
+
+                return getcustomasset(Name .. ".font");
+            end
+
+            local ProggyTiny = Register_Font("ProggyTiny", 200, "Normal", {
+                Id = "ProggyTiny.ttf",
+                Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/tahoma_bold.ttf"),
+            })
+
+            local ProggyClean = Register_Font("ProggyClean", 200, "normal", {
+                Id = "ProggyClean.ttf",
+                Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/ProggyClean.ttf")
+            })
+
+            fonts = {
+                ["TahomaBold"] = Font.new(ProggyTiny, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+                ["ProggyClean"] = Font.new(ProggyClean, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+            }
+        end
+print("downloaded fonts")
+
 utility.new = function(instance,properties) 
 	local ins = Instance.new(instance)
 	for property,value in pairs(properties) do
@@ -301,7 +345,7 @@ function library:new(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-10,1,0),
 			Position = UDim2.new(0.5,0,0,0),
-			Font = font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextXAlignment = "Left",
@@ -400,7 +444,7 @@ function library:new(props)
 		["y"] = true,
 		["key"] = Enum.KeyCode.RightShift,
 		["textsize"] = textsize,
-		["font"] = font,
+		["font"] = fonts["ProggyClean"],
 		["theme"] = {
 			["accent"] = color
 		},
@@ -570,7 +614,7 @@ function library:watermark(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-10,1,0),
 			Position = UDim2.new(0.5,0,0,0),
-			Font = Enum.Font.Code,
+			FontFace = fonts["ProggyClean"],
 			Text = "",
 			TextColor3 = self.theme.accent,
 			TextXAlignment = "Left",
@@ -849,7 +893,7 @@ function library:loader(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-10,0,20),
 			Position = UDim2.new(0.5,0,0,0),
-			Font = "RobotoMono",
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(168, 52, 235),
 			TextXAlignment = "Center",
@@ -867,7 +911,7 @@ function library:loader(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-10,0,20),
 			Position = UDim2.new(0.5,0,0,20),
-			Font = "RobotoMono",
+			FontFace = fonts["ProggyClean"],
 			Text = "Script: "..scriptname,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			TextXAlignment = "Center",
@@ -950,7 +994,7 @@ function library:loader(props)
 				TextColor3 = Color3.fromRGB(255,255,255),
 				TextSize = 12,
 				TextStrokeTransparency = 0,
-				Font = "RobotoMono",
+				FontFace = fonts["ProggyClean"],
 				ZIndex = 9908,
 				Parent = button_holder
 			}
@@ -1303,7 +1347,7 @@ function pages:section(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-5,0,20),
 			Position = UDim2.new(0,5,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -1430,7 +1474,7 @@ function pages:multisection(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-5,0,20),
 			Position = UDim2.new(0,5,0,0),
-			Font = self.library.font,
+			Font = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -1597,7 +1641,7 @@ function multisections:section(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,0,20),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -1808,7 +1852,7 @@ function sections:toggle(props)
             BackgroundTransparency = 1,
             Size = UDim2.new(1,-20,1,0),
             Position = UDim2.new(0,20,0,0),
-            Font = self.library.font,
+            FontFace = fonts["ProggyClean"],
             Text = name,
             TextColor3 = Color3.fromRGB(255,255,255),
             TextSize = self.library.textsize,
@@ -1971,7 +2015,7 @@ function sections:button(props)
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
 			TextStrokeTransparency = 0,
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Parent = buttonholder
 		}
 	)
@@ -2045,7 +2089,7 @@ function sections:slider(props)
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 2),
 		Position = UDim2.new(0, 0, 0.5, 0),
-		Font = self.library.font,
+		FontFace = fonts["ProggyClean"],
 		Text = def .. measurement .. "/" .. max .. measurement,
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextSize = self.library.textsize,
@@ -2101,7 +2145,7 @@ function sections:slider(props)
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 15),
 		Position = UDim2.new(0, 0, 0, 0),
-		Font = self.library.font,
+		FontFace = fonts["ProggyClean"],
 		Text = name,
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextSize = self.library.textsize,
@@ -2311,7 +2355,7 @@ function sections:esppreview(props)
             BackgroundTransparency = 1,
             Size = UDim2.new(1, -10, 0, 20),
             Position = UDim2.new(0, 5, 0, 0),
-            Font = self.library.font,
+           FontFace = fonts["ProggyClean"],
             Text = name,
             TextColor3 = Color3.fromRGB(255, 255, 255),
             TextSize = self.library.textsize,
@@ -2452,7 +2496,7 @@ function sections:dropdown(props)
             BackgroundTransparency = 1,
             Size = UDim2.new(1,-20,1,0),
             Position = UDim2.new(0,5,0,0),
-            Font = self.library.font,
+          FontFace = fonts["ProggyClean"],
             Text = def,
             TextColor3 = Color3.fromRGB(255,255,255),
             TextSize = self.library.textsize,
@@ -2470,7 +2514,7 @@ function sections:dropdown(props)
             BackgroundTransparency = 1,
             Size = UDim2.new(1,-10,1,0),
             Position = UDim2.new(0.5,0,0,0),
-            Font = self.library.font,
+           FontFace = fonts["ProggyClean"],
             Text = "+",
             TextColor3 = Color3.fromRGB(255,255,255),
             TextSize = self.library.textsize,
@@ -2487,7 +2531,7 @@ function sections:dropdown(props)
             BackgroundTransparency = 1,
             Size = UDim2.new(1,0,0,15),
             Position = UDim2.new(0,0,0,0),
-            Font = self.library.font,
+            FontFace = fonts["ProggyClean"],
             Text = name,
             TextColor3 = Color3.fromRGB(255,255,255),
             TextSize = self.library.textsize,
@@ -2592,7 +2636,7 @@ function sections:dropdown(props)
                 BackgroundTransparency = 1,
                 Size = UDim2.new(1,-10,1,0),
                 Position = UDim2.new(0.5,0,0,0),
-                Font = self.library.font,
+              FontFace = fonts["ProggyClean"],
                 Text = v,
                 TextColor3 = Color3.fromRGB(255,255,255),
                 TextSize = self.library.textsize,
@@ -2746,7 +2790,7 @@ function sections:buttonbox(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-10,1,0),
 			Position = UDim2.new(0.5,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = "+",
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -2763,7 +2807,7 @@ function sections:buttonbox(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,0,15),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -2863,7 +2907,7 @@ function sections:buttonbox(props)
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1,-10,1,0),
 				Position = UDim2.new(0.5,0,0,0),
-				Font = self.library.font,
+				FontFace = fonts["ProggyClean"],
 				Text = v,
 				TextColor3 = Color3.fromRGB(255,255,255),
 				TextSize = self.library.textsize,
@@ -3030,7 +3074,7 @@ function sections:multibox(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-20,1,0),
 			Position = UDim2.new(0,5,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = defstr,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -3048,7 +3092,7 @@ function sections:multibox(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-10,1,0),
 			Position = UDim2.new(0.5,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = "+",
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -3065,7 +3109,7 @@ function sections:multibox(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,0,15),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -3168,7 +3212,7 @@ function sections:multibox(props)
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1,-10,1,0),
 				Position = UDim2.new(0.5,0,0,0),
-				Font = self.library.font,
+				FontFace = fonts["ProggyClean"],
 				Text = v,
 				TextColor3 = Color3.fromRGB(255,255,255),
 				TextSize = self.library.textsize,
@@ -3411,7 +3455,7 @@ function sections:textbox(props)
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
 			TextStrokeTransparency = 0,
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Parent = textboxholder
 		}
 	)
@@ -3422,7 +3466,7 @@ function sections:textbox(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,0,15),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -3445,7 +3489,7 @@ function sections:textbox(props)
 			TextSize = self.library.textsize,
 			TextStrokeTransparency = 0,
 			TextTruncate = "AtEnd",
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Parent = textboxholder
 		}
 	)
@@ -3580,7 +3624,7 @@ function sections:keybind(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,1,0),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = default,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -3623,7 +3667,7 @@ function sections:keybind(props)
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
 			TextStrokeTransparency = 0,
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Parent = keybindholder
 		}
 	)
@@ -3634,7 +3678,7 @@ function sections:keybind(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,1,0),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -3904,7 +3948,7 @@ function sections:colorpicker(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,1,0),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -3925,7 +3969,7 @@ function sections:colorpicker(props)
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
 			TextStrokeTransparency = 0,
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Parent = colorpickerholder
 		}
 	)
@@ -3981,7 +4025,7 @@ function sections:colorpicker(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,-10,0,20),
 			Position = UDim2.new(0.5,0,0,0),
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			Text = cpname or name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
@@ -4086,7 +4130,7 @@ function sections:colorpicker(props)
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.library.textsize,
 			TextStrokeTransparency = 0,
-			Font = self.library.font,
+			FontFace = fonts["ProggyClean"],
 			ZIndex = 5,
 			Parent = huepicker
 		}
@@ -4206,7 +4250,7 @@ function sections:colorpicker(props)
 				TextColor3 = Color3.fromRGB(255,255,255),
 				TextSize = self.library.textsize,
 				TextStrokeTransparency = 0,
-				Font = self.library.font,
+				FontFace = fonts["ProggyClean"],
 				ZIndex = 5,
 				Parent = textbox_holder
 			}
@@ -4223,7 +4267,7 @@ function sections:colorpicker(props)
 				TextColor3 = Color3.fromRGB(255,255,255),
 				TextSize = self.library.textsize,
 				TextStrokeTransparency = 0,
-				Font = self.library.font,
+				FontFace = fonts["ProggyClean"],
 				ZIndex = 5,
 				Parent = textbox_holder
 			}
@@ -4550,7 +4594,7 @@ function sections:configloader(props)
             BackgroundTransparency = 1,
             Size = UDim2.new(1, 0, 0, 15),
             Position = UDim2.new(0, 0, 0, 3),
-            Font = self.library.font,
+          FontFace = fonts["ProggyClean"],
             Text = "configs",
             TextColor3 = Color3.fromRGB(255, 255, 255),
             TextSize = self.library.textsize,
@@ -4681,7 +4725,7 @@ function sections:configloader(props)
                 BackgroundTransparency = 1,
                 Size = UDim2.new(1, -10, 1, 0),
                 Position = UDim2.new(0.5, 0, 0, 0),
-                Font = self.library.font,
+              FontFace = fonts["ProggyClean"],
                 Text = name,
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextSize = self.library.textsize,
@@ -4800,7 +4844,7 @@ function sections:configloader(props)
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextSize = self.library.textsize,
                 TextStrokeTransparency = 0,
-                Font = self.library.font,
+               FontFace = fonts["ProggyClean"],
                 ZIndex = 5,
                 Parent = button_holder
             }
@@ -4885,7 +4929,7 @@ function sections:configloader(props)
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextSize = self.library.textsize,
                 TextStrokeTransparency = 0,
-                Font = self.library.font,
+              FontFace = fonts["ProggyClean"],
                 ZIndex = 5,
                 Parent = textbox_holder
             }
@@ -4902,7 +4946,7 @@ function sections:configloader(props)
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextSize = self.library.textsize,
                 TextStrokeTransparency = 0,
-                Font = self.library.font,
+                FontFace = fonts["ProggyClean"],
                 ZIndex = 5,
                 Parent = textbox_holder
             }
@@ -5251,7 +5295,7 @@ function library:page(props)
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1,0,0,20),
 			Position = UDim2.new(0,0,0,0),
-			Font = self.font,
+			FontFace = fonts["ProggyClean"],
 			Text = name,
 			TextColor3 = Color3.fromRGB(255,255,255),
 			TextSize = self.textsize,
@@ -5594,7 +5638,7 @@ function library:settingspage(props)
                 BackgroundTransparency = 1,
                 Size = UDim2.new(0.4, 0, 1, 0),
                 Position = UDim2.new(0, 0, 0, 0),
-                Font = self.font,
+               FontFace = fonts["ProggyClean"],
                 Text = title,
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextSize = self.textsize,
@@ -5610,7 +5654,7 @@ function library:settingspage(props)
                 BackgroundTransparency = 1,
                 Size = UDim2.new(0.6, 0, 1, 0),
                 Position = UDim2.new(0.4, 0, 0, 0),
-                Font = self.font,
+               FontFace = fonts["ProggyClean"],
                 Text = value,
                 TextColor3 = self.theme.accent,
                 TextSize = self.textsize,
