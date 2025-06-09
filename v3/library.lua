@@ -57,8 +57,9 @@ colorpickers.__index = colorpickers
 configloaders.__index = configloaders
 watermarks.__index = watermarks
 loaders.__index = loaders
-
-local fonts = {}; do
+if not getgenv().FontsLoaded then
+    getgenv().FontsLoaded = true;
+   local fonts = {}; do
             function Register_Font(Name, Weight, Style, Asset)
                 if not isfile(Asset.Id) then
                     writefile(Asset.Id, Asset.Font)
@@ -101,6 +102,9 @@ local fonts = {}; do
             }
         end
 print("downloaded fonts")
+end
+
+
 
 utility.new = function(instance,properties) 
 	local ins = Instance.new(instance)
