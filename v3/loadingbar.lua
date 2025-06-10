@@ -6,6 +6,50 @@ local TweenTable = {
 	Default = TweenInfo.new(0.17, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, 0, false, 0)
 }
 
+local fonts = {}; do
+            function Register_Font(Name, Weight, Style, Asset)
+                if not isfile(Asset.Id) then
+                    writefile(Asset.Id, Asset.Font)
+                end
+
+                if isfile(Name .. ".font") then
+                    delfile(Name .. ".font")
+                end
+
+                local Data = {
+                    name = Name,
+                    faces = {
+                        {
+                            name = "Regular",
+                            weight = Weight,
+                            style = Style,
+                            assetId = getcustomasset(Asset.Id),
+                        },
+                    },
+                }
+
+                writefile(Name .. ".font", game:GetService("HttpService"):JSONEncode(Data))
+
+                return getcustomasset(Name .. ".font");
+            end
+
+            local ProggyTiny = Register_Font("ProggyTiny", 200, "Normal", {
+                Id = "ProggyTiny.ttf",
+                Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/tahoma_bold.ttf"),
+            })
+
+            local ProggyClean = Register_Font("ProggyClean", 200, "normal", {
+                Id = "ProggyClean.ttf",
+                Font = game:HttpGet("https://github.com/97y1oHW/4991/raw/refs/heads/main/v3/Minecraftia-Regular.ttf")
+            })
+
+            fonts = {
+                ["TahomaBold"] = Font.new(ProggyTiny, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+                ["ProggyClean"] = Font.new(ProggyClean, Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+            }
+        end
+print("downloaded fonts")
+
 local CreateTween = function(name, speed, style, direction, loop, reverse, delay)
 	speed = speed or 0.17
 	style = style or Enum.EasingStyle.Sine
@@ -106,7 +150,7 @@ xsx.Parent = background
 xsx.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 xsx.BackgroundTransparency = 1
 xsx.Size = UDim2.new(0, 80, 0, 21)
-xsx.Font = Enum.Font.Code
+xsx.FontFace = fonts["ProggyClean"]
 xsx.Text = "XWARE V3"
 xsx.TextColor3 = Color3.fromRGB(124, 124, 124)
 xsx.TextSize = 10
@@ -118,7 +162,7 @@ text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 text.BackgroundTransparency = 1
 text.Position = UDim2.new(0.912751675, 0, 0, 0)
 text.Size = UDim2.new(0, 26, 0, 21)
-text.Font = Enum.Font.Code
+text.FontFace = fonts["ProggyClean"]
 text.Text = "PD"
 text.TextColor3 = Color3.fromRGB(124, 124, 124)
 text.TextSize = 10
@@ -131,13 +175,24 @@ n3TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 n3TextLabel.BackgroundTransparency = 1
 n3TextLabel.Position = UDim2.new(0.16, 8, 0.24, -8)
 n3TextLabel.Size = UDim2.new(0, 200, 0, 100)
-n3TextLabel.Font = Enum.Font.Code
+n3TextLabel.FontFace = fonts["ProggyClean"]
 n3TextLabel.Text = "<b><font size=\"60\">X</font><font color=\"rgb(159, 115, 255)\"><font size=\"60\">3</font></font></b>"
 n3TextLabel.TextColor3 = Color3.fromRGB(124, 124, 124)
 n3TextLabel.TextSize = 60
 n3TextLabel.TextTransparency = 1
 n3TextLabel.TextScaled = true
 n3TextLabel.RichText = true
+
+task.spawn(function()
+	while true do
+		pcall(function()
+			task.wait(1);
+			xsx.Text = 'XWare V3';
+			task.wait(1);
+			xsx.Text = 'XWare V3_';
+		end);
+	end;
+end);
 
 pageLayout.Name = "pageLayout"
 pageLayout.Parent = introduction
@@ -163,7 +218,7 @@ local function addTerminalLine(textContent)
 	local newText = Instance.new("TextLabel")
 	newText.Parent = terminalTextFrame
 	newText.BackgroundTransparency = 1
-	newText.Font = Enum.Font.Code
+	newText.FontFace = fonts["ProggyClean"]
 	newText.Text = textContent
 	newText.TextColor3 = Color3.fromRGB(124, 124, 124)
 	newText.TextSize = 12
