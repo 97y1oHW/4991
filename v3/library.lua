@@ -312,6 +312,22 @@ function library:new(props)
 			Parent = outline2
 		}
 	)
+
+	local gradient = utility.new(
+    "UIGradient",
+    {
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 40, 80)), -- Weak purple start
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 40))  -- Darker purple end
+        }),
+        Rotation = 45,
+        Transparency = NumberSequence.new({
+            NumberSequenceKeypoint.new(0, 0.3), -- Slightly transparent start
+            NumberSequenceKeypoint.new(1, 0.7)  -- More transparent end
+        }),
+        Parent = main
+    }
+)
 	
 	local title = utility.new(
 		"Frame",
