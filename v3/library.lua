@@ -325,6 +325,14 @@ glow.Size = UDim2.new(1, 40, 1, 40);
 glow.Position = UDim2.new(0, -20, 0, -20);
 glow.ZIndex = -1;
 
+	local function Pulse()
+	local info = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true);
+	local props = { ImageTransparency = 0.6 };
+	local tween = TweenService:Create(glow, info, props);
+	tween:Play();
+end;
+
+	task.spawn(Pulse)
 	
 	local title = utility.new(
 		"Frame",
