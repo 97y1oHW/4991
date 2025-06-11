@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.56"
+local version = "Developer mode 0.57"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1869,13 +1869,16 @@ function multisections:selectTabIndex(index)
 	return false
 end
 -- [Previous code remains unchanged until the sections:toggle function]
-
 function sections:toggle(props)
     local name = props.name or props.Name or props.togglename or props.Togglename or props.ToggleName or props.toggleName or "new toggle"
     local def = props.def or props.Default or props.default or props.Def or false
     local callback = props.callback or props.Callback or props.callBack or props.CallBack or function() end
     local toggle = {}
-    
+
+    self.library.themeitems = self.library.themeitems or {}
+    self.library.themeitems["accent"] = self.library.themeitems["accent"] or {}
+    self.library.themeitems["accent"]["BackgroundColor3"] = self.library.themeitems["accent"]["BackgroundColor3"] or {}
+
     local holder = utility.new(
         "Frame",
         {
@@ -1884,7 +1887,7 @@ function sections:toggle(props)
             Parent = self.content
         }
     )
-    
+
     local button = utility.new(
         "TextButton",
         {
@@ -1896,7 +1899,7 @@ function sections:toggle(props)
             Parent = holder
         }
     )
-    
+
     local outline = utility.new(
         "Frame",
         {
@@ -1909,7 +1912,7 @@ function sections:toggle(props)
             Parent = holder
         }
     )
-    
+
     local outline2 = utility.new(
         "Frame",
         {
@@ -1922,7 +1925,7 @@ function sections:toggle(props)
             Parent = outline
         }
     )
-    
+
     local color = utility.new(
         "Frame",
         {
@@ -1934,7 +1937,7 @@ function sections:toggle(props)
             Parent = outline2
         }
     )
-    
+
     utility.new(
         "UIGradient",
         {
@@ -1943,7 +1946,7 @@ function sections:toggle(props)
             Parent = color
         }
     )
-    
+
     local check = utility.new(
         "Frame",
         {
@@ -1957,7 +1960,7 @@ function sections:toggle(props)
             Parent = outline
         }
     )
-    
+
     local checkmark = utility.new(
         "Frame",
         {
@@ -1969,9 +1972,9 @@ function sections:toggle(props)
             Parent = check
         }
     )
-    
+
     table.insert(self.library.themeitems["accent"]["BackgroundColor3"], checkmark)
-    
+
     local title = utility.new(
         "TextLabel",
         {
@@ -1987,7 +1990,7 @@ function sections:toggle(props)
             Parent = holder
         }
     )
-    
+
     toggle = {
         ["library"] = self.library,
         ["holder"] = holder,
@@ -1997,9 +2000,9 @@ function sections:toggle(props)
         ["title"] = title,
         ["callback"] = callback
     }
-    
+
     table.insert(self.library.toggles, toggle)
-    
+
     local function setstate(state)
         if state then
             checkmark:TweenSize(UDim2.new(0, 8, 0, 8), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
@@ -2013,23 +2016,24 @@ function sections:toggle(props)
         toggle.current = state
         callback(state)
     end
-    
+
     button.MouseButton1Down:Connect(function()
         setstate(not toggle.current)
     end)
-    
+
     local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
-    
+
     if pointer then
         self.library.pointers[tostring(pointer)] = toggle
     end
-    
+
     setstate(def)
-    
+
     self.library.labels[#self.library.labels + 1] = title
     setmetatable(toggle, toggles)
     return toggle
 end
+
 
 -- [Rest of the code remains unchanged]
 
