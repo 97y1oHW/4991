@@ -95,6 +95,19 @@ edgeCorner.CornerRadius = UDim.new(0, 2)
 edgeCorner.Name = "edgeCorner"
 edgeCorner.Parent = edge
 
+
+local glow = Instance.new("ImageLabel", edge);
+glow.Name = "GlowEffect";
+glow.Image = "rbxassetid://18245826428";
+glow.ScaleType = Enum.ScaleType.Slice;
+glow.SliceCenter = Rect.new(10, 10, 60, 60);
+glow.ImageColor3 = Color3.fromRGB(80, 60, 150);
+glow.ImageTransparency = 0.3;
+glow.BackgroundTransparency = 1;
+glow.Size = UDim2.new(1, 40, 1, 40);
+glow.Position = UDim2.new(0, -20, 0, -20);
+glow.ZIndex = -1;
+
 background.Name = "background"
 background.Parent = edge
 background.AnchorPoint = Vector2.new(0.5, 0.5)
