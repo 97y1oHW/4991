@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.3"
+local version = "Developer mode 0.4"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1884,7 +1884,7 @@ local outline = utility.new(
 utility.new(
 	"UIStroke",
 	{
-		Color = Color3.fromRGB(40, 40, 40),
+		Color = Color3.fromRGB(74, 74, 74),
 		Thickness = 1,
 		Transparency = 0.25,
 		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
