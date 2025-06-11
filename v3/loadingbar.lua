@@ -96,6 +96,8 @@ edgeCorner.Name = "edgeCorner"
 edgeCorner.Parent = edge
 
 
+local TweenService = game:GetService("TweenService");
+
 local glow = Instance.new("ImageLabel", edge);
 glow.Name = "GlowEffect";
 glow.Image = "rbxassetid://18245826428";
@@ -107,6 +109,17 @@ glow.BackgroundTransparency = 1;
 glow.Size = UDim2.new(1, 40, 1, 40);
 glow.Position = UDim2.new(0, -20, 0, -20);
 glow.ZIndex = -1;
+
+local function Pulse()
+	local info = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true);
+	local props = { ImageTransparency = 0.6 };
+	local tween = TweenService:Create(glow, info, props);
+	tween:Play();
+end;
+
+task.spawn(Pulse)
+
+
 
 background.Name = "background"
 background.Parent = edge
@@ -248,11 +261,11 @@ local function addTerminalLine(textContent)
 end
 
 local terminalLines = {
-	"     [ N ] > INITIALIZING LIBRARY.....",
-	"[ N ] > CATCHING IMAGES.....",
-    "  [ N ] > READING CONFIG FILES..",
-	"   [ N ] > LOADING UI MODULES.....",
-	"[ N ] > BOOTING X3.........."
+	"     [ X ] > INITIALIZING LIBRARY.....",
+	"[ X ] > CATCHING IMAGES.....",
+    "  [ X ] > READING CONFIG FILES..",
+	"   [ X ] > LOADING UI MODULES.....",
+	"[ X ] > BOOTING X3.........."
 }
 
 coroutine.wrap(function()
