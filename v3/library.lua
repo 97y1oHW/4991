@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.58"
+local version = "Developer mode 0.59"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1868,39 +1868,25 @@ function multisections:selectTabIndex(index)
 	end
 	return false
 end
+
+
+
+
+
 function sections:toggle(props)
-    self.library.toggles = self.library.toggles or {}; -- 🔥 sorun bu satırla gömülür
-
-    local name = props.name or props.Name or props.togglename or props.Togglename or props.ToggleName or props.toggleName or "new toggle"
-    local def = props.def or props.Default or props.default or props.Def or false
-    local callback = props.callback or props.Callback or props.callBack or props.CallBack or function() end
-    local toggle = {}
-
-    self.library.themeitems = self.library.themeitems or {}
-    self.library.themeitems["accent"] = self.library.themeitems["accent"] or {}
-    self.library.themeitems["accent"]["BackgroundColor3"] = self.library.themeitems["accent"]["BackgroundColor3"] or {}
-
-    local holder = utility.new(
+    local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui";
+    local def = props.def or props.Def or props.default or props.Default or props.toggle or props.Toggle or props.toggled or props.Toggled or false;
+    local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end;
+    local toggle = {};
+    local toggleholder = utility.new(
         "Frame",
         {
             BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 0, 20),
+            Size = UDim2.new(1,0,0,15),
             Parent = self.content
         }
-    )
-
-    local button = utility.new(
-        "TextButton",
-        {
-            AnchorPoint = Vector2.new(0, 0),
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 1, 0),
-            Position = UDim2.new(0, 0, 0, 0),
-            Text = "",
-            Parent = holder
-        }
-    )
-
+    );
+    
     local outline = utility.new(
         "Frame",
         {
@@ -1908,36 +1894,61 @@ function sections:toggle(props)
             BorderColor3 = Color3.fromRGB(12, 12, 12),
             BorderMode = "Inset",
             BorderSizePixel = 1,
-            Size = UDim2.new(0, 14, 0, 14),
-            Position = UDim2.new(0, 0, 0.5, -7),
-            Parent = holder
+            Size = UDim2.new(0,15,0,15),
+            Parent = toggleholder
         }
-    )
+    );
 
-    local outline2 = utility.new(
-        "Frame",
+    utility.new(
+        "UIStroke",
         {
-            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-            BorderColor3 = Color3.fromRGB(56, 56, 56),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(1, 0, 1, 0),
-            Position = UDim2.new(0, 0, 0, 0),
+            Color = Color3.fromRGB(74, 74, 74),
+            Thickness = 1,
+            Transparency = 0.25,
+            ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
             Parent = outline
         }
-    )
+    );
+
+    local button = utility.new(
+        "TextButton",
+        {
+            AnchorPoint = Vector2.new(0,0),
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1,0,1,0),
+            Position = UDim2.new(0,0,0,0),
+            Text = "",
+            Parent = toggleholder
+        }
+    );
+
+    local title = utility.new(
+        "TextLabel",
+        {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1,-20,1,0),
+            Position = UDim2.new(0,20,0,0),
+            FontFace = fonts["ProggyClean"],
+            Text = name,
+            TextColor3 = def and Color3.fromRGB(255,255,255) or Color3.fromRGB(100,100,100),
+            TextSize = self.library.textsize,
+            TextStrokeTransparency = 0,
+            TextXAlignment = "Left",
+            Parent = toggleholder
+        }
+    );
 
     local color = utility.new(
         "Frame",
         {
-            AnchorPoint = Vector2.new(0, 0),
-            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-            BorderSizePixel = 0,
-            Size = UDim2.new(1, 0, 0, 0),
-            Position = UDim2.new(0, 0, 0, 0),
-            Parent = outline2
+            BackgroundColor3 = def and self.library.theme.accent or Color3.fromRGB(20, 20, 20),
+            BorderColor3 = Color3.fromRGB(56, 56, 56),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1,0,1,0),
+            Parent = outline
         }
-    )
+    );
 
     utility.new(
         "UIGradient",
@@ -1946,94 +1957,63 @@ function sections:toggle(props)
             Rotation = 90,
             Parent = color
         }
-    )
-
-    local check = utility.new(
-        "Frame",
-        {
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-            BorderColor3 = Color3.fromRGB(12, 12, 12),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(0, 8, 0, 8),
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            Parent = outline
-        }
-    )
-
-    local checkmark = utility.new(
-        "Frame",
-        {
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundColor3 = self.library.theme.accent,
-            BorderSizePixel = 0,
-            Size = UDim2.new(0, 0, 0, 0),
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            Parent = check
-        }
-    )
-
-    table.insert(self.library.themeitems["accent"]["BackgroundColor3"], checkmark)
-
-    local title = utility.new(
-        "TextLabel",
-        {
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, -20, 1, 0),
-            Position = UDim2.new(0, 20, 0, 0),
-            FontFace = fonts["ProggyClean"],
-            Text = name,
-            TextColor3 = def and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(178, 178, 178),
-            TextSize = self.library.textsize,
-            TextStrokeTransparency = 0,
-            TextXAlignment = "Left",
-            Parent = holder
-        }
-    )
+    );
 
     toggle = {
         ["library"] = self.library,
-        ["holder"] = holder,
-        ["outline"] = outline,
-        ["checkmark"] = checkmark,
-        ["current"] = def,
+        ["toggleholder"] = toggleholder,
         ["title"] = title,
-        ["callback"] = callback
-    }
+        ["color"] = color,
+        ["callback"] = callback,
+        ["current"] = def
+    };
 
-    table.insert(self.library.toggles, toggle)
-
-    local function setstate(state)
-        if state then
-            checkmark:TweenSize(UDim2.new(0, 8, 0, 8), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
-            outline2.BorderColor3 = self.library.theme.accent
-            title.TextColor3 = Color3.fromRGB(255, 255, 255)
-        else
-            checkmark:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
-            outline2.BorderColor3 = Color3.fromRGB(56, 56, 56)
-            title.TextColor3 = Color3.fromRGB(178, 178, 178)
-        end
-        toggle.current = state
-        callback(state)
-    end
+    if def then
+        table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color);
+    end;
 
     button.MouseButton1Down:Connect(function()
-        setstate(not toggle.current)
-    end)
+        if toggle.current then
+            toggle.callback(false);
+            utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(20, 20, 20));
+            title.TextColor3 = Color3.fromRGB(100, 100, 100);
+            local find = table.find(self.library.themeitems["accent"]["BackgroundColor3"],toggle.color);
+            if find then
+                table.remove(self.library.themeitems["accent"]["BackgroundColor3"],find);
+            end;
+            toggle.current = false;
+        else
+            toggle.callback(true);
+            utility.tweenColor(toggle.color, "BackgroundColor3", self.library.theme.accent);
+            title.TextColor3 = Color3.fromRGB(255, 255, 255);
+            table.insert(self.library.themeitems["accent"]["BackgroundColor3"],toggle.color);
+            toggle.current = true;
+        end;
+    end);
 
-    local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
+    local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil;
 
     if pointer then
-        self.library.pointers[tostring(pointer)] = toggle
-    end
+        warn("Registering toggle pointer: " .. tostring(pointer));
+        if self.pointers then
+            self.pointers[tostring(pointer)] = toggle;
+            warn("  Registered at: self.pointers[" .. tostring(pointer) .. "]");
+        else
+            warn("  No pointers table in section!");
+        end;
+    end;
 
-    setstate(def)
-
-    self.library.labels[#self.library.labels + 1] = title
-    setmetatable(toggle, toggles)
-    return toggle
+    self.library.labels[#self.library.labels+1] = title;
+    setmetatable(toggle, toggles);
+    return toggle;
 end
+
+
+
+
+
+
+
 
 
 -- [Rest of the code remains unchanged]
