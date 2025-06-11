@@ -1,5 +1,5 @@
 
-local version = "Developer Mode"
+local version = "Developer mode 0.2"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -967,6 +967,32 @@ function library:loader(props)
 				Parent = button_holder
 			}
 		)
+
+		local button_outline = utility.new(
+	"Frame",
+	{
+		BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+		BorderColor3 = Color3.fromRGB(12, 12, 12),
+		BorderMode = "Inset",
+		BorderSizePixel = 1,
+		Position = UDim2.new(0,0,0,0),
+		Size = UDim2.new(1,0,1,0),
+		ZIndex = 9905,
+		Parent = button_holder
+	}
+);
+
+utility.new(
+	"UIStroke",
+	{
+		Color = Color3.fromRGB(40, 40, 40),
+		Thickness = 1,
+		Transparency = 0.25,
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+		Parent = button_outline
+	}
+);
+
 		
 		local button_outline2 = utility.new(
 			"Frame",
