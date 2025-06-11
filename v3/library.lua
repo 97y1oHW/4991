@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.5"
+local version = "Developer mode 0.56"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1868,82 +1868,70 @@ function multisections:selectTabIndex(index)
 	end
 	return false
 end
+-- [Previous code remains unchanged until the sections:toggle function]
 
 function sections:toggle(props)
-    local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
-    local def = props.def or props.Def or props.default or props.Default or props.toggle or props.Toggle or props.toggled or props.Toggled or false
-    local callback = props.callback or props.callBack or props.CallBack or props.Callback or function()end
+    local name = props.name or props.Name or props.togglename or props.Togglename or props.ToggleName or props.toggleName or "new toggle"
+    local def = props.def or props.Default or props.default or props.Def or false
+    local callback = props.callback or props.Callback or props.callBack or props.CallBack or function() end
     local toggle = {}
-    local toggleholder = utility.new(
+    
+    local holder = utility.new(
         "Frame",
         {
             BackgroundTransparency = 1,
-            Size = UDim2.new(1,0,0,15),
+            Size = UDim2.new(1, 0, 0, 20),
             Parent = self.content
         }
     )
     
-local outline = utility.new(
-	"Frame",
-	{
-		BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-		BorderColor3 = Color3.fromRGB(12, 12, 12),
-		BorderMode = "Inset",
-		BorderSizePixel = 1,
-		Size = UDim2.new(0,15,0,15),
-		Parent = toggleholder
-	}
-);
-
-utility.new(
-	"UIStroke",
-	{
-		Color = Color3.fromRGB(74, 74, 74),
-		Thickness = 1,
-		Transparency = 0.25,
-		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-		Parent = outline
-	}
-);
-
-
     local button = utility.new(
         "TextButton",
         {
-            AnchorPoint = Vector2.new(0,0),
+            AnchorPoint = Vector2.new(0, 0),
             BackgroundTransparency = 1,
-            Size = UDim2.new(1,0,1,0),
-            Position = UDim2.new(0,0,0,0),
+            Size = UDim2.new(1, 0, 1, 0),
+            Position = UDim2.new(0, 0, 0, 0),
             Text = "",
-            Parent = toggleholder
+            Parent = holder
         }
     )
     
-    local title = utility.new(
-        "TextLabel",
+    local outline = utility.new(
+        "Frame",
         {
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1,-20,1,0),
-            Position = UDim2.new(0,20,0,0),
-            FontFace = fonts["ProggyClean"],
-            Text = name,
-            TextColor3 = Color3.fromRGB(255,255,255),
-            TextSize = self.library.textsize,
-            TextStrokeTransparency = 0,
-            TextXAlignment = "Left",
-            Parent = toggleholder
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(0, 14, 0, 14),
+            Position = UDim2.new(0, 0, 0.5, -7),
+            Parent = holder
+        }
+    )
+    
+    local outline2 = utility.new(
+        "Frame",
+        {
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(56, 56, 56),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(1, 0, 1, 0),
+            Position = UDim2.new(0, 0, 0, 0),
+            Parent = outline
         }
     )
     
     local color = utility.new(
         "Frame",
         {
-            BackgroundColor3 = def and self.library.theme.accent or Color3.fromRGB(20, 20, 20),
-            BorderColor3 = Color3.fromRGB(56, 56, 56),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(1,0,1,0),
-            Parent = outline
+            AnchorPoint = Vector2.new(0, 0),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+            BorderSizePixel = 0,
+            Size = UDim2.new(1, 0, 0, 0),
+            Position = UDim2.new(0, 0, 0, 0),
+            Parent = outline2
         }
     )
     
@@ -1956,52 +1944,94 @@ utility.new(
         }
     )
     
+    local check = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+            BorderColor3 = Color3.fromRGB(12, 12, 12),
+            BorderMode = "Inset",
+            BorderSizePixel = 1,
+            Size = UDim2.new(0, 8, 0, 8),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            Parent = outline
+        }
+    )
+    
+    local checkmark = utility.new(
+        "Frame",
+        {
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundColor3 = self.library.theme.accent,
+            BorderSizePixel = 0,
+            Size = UDim2.new(0, 0, 0, 0),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            Parent = check
+        }
+    )
+    
+    table.insert(self.library.themeitems["accent"]["BackgroundColor3"], checkmark)
+    
+    local title = utility.new(
+        "TextLabel",
+        {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, -20, 1, 0),
+            Position = UDim2.new(0, 20, 0, 0),
+            FontFace = fonts["ProggyClean"],
+            Text = name,
+            TextColor3 = def and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(178, 178, 178),
+            TextSize = self.library.textsize,
+            TextStrokeTransparency = 0,
+            TextXAlignment = "Left",
+            Parent = holder
+        }
+    )
+    
     toggle = {
         ["library"] = self.library,
-        ["toggleholder"] = toggleholder,
+        ["holder"] = holder,
+        ["outline"] = outline,
+        ["checkmark"] = checkmark,
+        ["current"] = def,
         ["title"] = title,
-        ["color"] = color,
-        ["callback"] = callback,
-        ["current"] = def
+        ["callback"] = callback
     }
     
-    if def then
-        table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color)
+    table.insert(self.library.toggles, toggle)
+    
+    local function setstate(state)
+        if state then
+            checkmark:TweenSize(UDim2.new(0, 8, 0, 8), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+            outline2.BorderColor3 = self.library.theme.accent
+            title.TextColor3 = Color3.fromRGB(255, 255, 255)
+        else
+            checkmark:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+            outline2.BorderColor3 = Color3.fromRGB(56, 56, 56)
+            title.TextColor3 = Color3.fromRGB(178, 178, 178)
+        end
+        toggle.current = state
+        callback(state)
     end
     
     button.MouseButton1Down:Connect(function()
-        if toggle.current then
-            toggle.callback(false)
-            utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(20, 20, 20))
-            local find = table.find(self.library.themeitems["accent"]["BackgroundColor3"],toggle.color)
-            if find then
-                table.remove(self.library.themeitems["accent"]["BackgroundColor3"],find)
-            end
-            toggle.current = false
-        else
-            toggle.callback(true)
-            utility.tweenColor(toggle.color, "BackgroundColor3", self.library.theme.accent)
-            table.insert(self.library.themeitems["accent"]["BackgroundColor3"],toggle.color)
-            toggle.current = true
-        end
+        setstate(not toggle.current)
     end)
     
     local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil
     
     if pointer then
-        warn("Registering toggle pointer: " .. tostring(pointer))
-        if self.pointers then
-            self.pointers[tostring(pointer)] = toggle
-            warn("  Registered at: self.pointers[" .. tostring(pointer) .. "]")
-        else
-            warn("  No pointers table in section!")
-        end
+        self.library.pointers[tostring(pointer)] = toggle
     end
     
-    self.library.labels[#self.library.labels+1] = title
+    setstate(def)
+    
+    self.library.labels[#self.library.labels + 1] = title
     setmetatable(toggle, toggles)
     return toggle
 end
+
+-- [Rest of the code remains unchanged]
 
 function toggles:set(bool)
     if bool ~= nil then
