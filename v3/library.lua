@@ -1,5 +1,5 @@
 
-local version = "0.31 B-X ALPHA"
+local version = "Developer Mode"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -313,21 +313,18 @@ function library:new(props)
 		}
 	)
 
-	local gradient = utility.new(
-    "UIGradient",
-    {
-        Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 40, 80)), -- Weak purple start
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 40))  -- Darker purple end
-        }),
-        Rotation = 45,
-        Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.3), -- Slightly transparent start
-            NumberSequenceKeypoint.new(1, 0.7)  -- More transparent end
-        }),
-        Parent = main
-    }
-)
+local glow = Instance.new("ImageLabel", main);
+glow.Name = "GlowEffect";
+glow.Image = "rbxassetid://18245826428";
+glow.ScaleType = Enum.ScaleType.Slice;
+glow.SliceCenter = Rect.new(21, 21, 79, 79);
+glow.ImageColor3 = Color3.fromRGB(170, 100, 255);
+glow.ImageTransparency = 0.1;
+glow.BackgroundTransparency = 1;
+glow.Size = UDim2.new(1, 40, 1, 40);
+glow.Position = UDim2.new(0, -20, 0, -20);
+glow.ZIndex = -1;
+
 	
 	local title = utility.new(
 		"Frame",
