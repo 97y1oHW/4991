@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.57"
+local version = "Developer mode 0.58"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1868,8 +1868,9 @@ function multisections:selectTabIndex(index)
 	end
 	return false
 end
--- [Previous code remains unchanged until the sections:toggle function]
 function sections:toggle(props)
+    self.library.toggles = self.library.toggles or {}; -- 🔥 sorun bu satırla gömülür
+
     local name = props.name or props.Name or props.togglename or props.Togglename or props.ToggleName or props.toggleName or "new toggle"
     local def = props.def or props.Default or props.default or props.Def or false
     local callback = props.callback or props.Callback or props.callBack or props.CallBack or function() end
