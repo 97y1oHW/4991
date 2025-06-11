@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.2"
+local version = "Developer mode 0.3"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1869,17 +1869,29 @@ function sections:toggle(props)
         }
     )
     
-    local outline = utility.new(
-        "Frame",
-        {
-            BackgroundColor3 = Color3.fromRGB(24, 24, 24),
-            BorderColor3 = Color3.fromRGB(12, 12, 12),
-            BorderMode = "Inset",
-            BorderSizePixel = 1,
-            Size = UDim2.new(0,15,0,15),
-            Parent = toggleholder
-        }
-    )
+local outline = utility.new(
+	"Frame",
+	{
+		BackgroundColor3 = Color3.fromRGB(24, 24, 24),
+		BorderColor3 = Color3.fromRGB(12, 12, 12),
+		BorderMode = "Inset",
+		BorderSizePixel = 1,
+		Size = UDim2.new(0,15,0,15),
+		Parent = toggleholder
+	}
+);
+
+utility.new(
+	"UIStroke",
+	{
+		Color = Color3.fromRGB(40, 40, 40),
+		Thickness = 1,
+		Transparency = 0.25,
+		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+		Parent = outline
+	}
+);
+
 
     local button = utility.new(
         "TextButton",
