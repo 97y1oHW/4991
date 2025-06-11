@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.4"
+local version = "Developer mode 0.5"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1633,17 +1633,31 @@ function multisections:section(props)
 		}
 	)
 	
-	local button = utility.new(
-		"TextButton",
-		{
-			AnchorPoint = Vector2.new(0,0),
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1,0,1,0),
-			Position = UDim2.new(0,0,0,0),
-			Text = "",
-			Parent = tabbutton
-		}
-	)
+local button = utility.new(
+	"TextButton",
+	{
+		AnchorPoint = Vector2.new(0,0),
+		BackgroundTransparency = 1,
+		Size = UDim2.new(1,0,1,0),
+		Position = UDim2.new(0,0,0,0),
+		Text = "",
+		Parent = tabbutton
+	}
+);
+
+utility.new(
+	"UIGradient",
+	{
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 50, 50)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(30, 30, 30))
+		},
+		Rotation = 90,
+		Transparency = NumberSequence.new(0),
+		Parent = button
+	}
+);
+
 	
 	local r_line = utility.new(
 		"Frame",
