@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.62"
+local version = "Developer mode 0.62 [ BUG FIX ]"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -515,11 +515,11 @@ end;
 						if window.x == false and window.y == false then
 							screen.Enabled = false
 								utility.lockMouse(true)
-								uis.MouseIconEnabled = false -- Hide mouse when menu is closed
+								uis.MouseIconEnabled = true -- Hide mouse when menu is closed
 								--blurEffect.Size = 0
 						else
 								--blurEffect.Size = 0
-								 uis.MouseIconEnabled = true -- Show mouse when menu is open
+								 uis.MouseIconEnabled = false -- Show mouse when menu is open
 								utility.lockMouse(true) 
 								
 							ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.In), {Position = UDim2.new(xx,xxx,yy,yyy)}):Play()
@@ -532,12 +532,12 @@ end;
 						if window.x == false and window.y == false then
 							screen.Enabled = true
 								utility.lockMouse(false)
-								 uis.MouseIconEnabled = true -- Show mouse when menu is open
+								 uis.MouseIconEnabled = false -- Show mouse when menu is open
 								--blurEffect.Size = 50
 						else
 							utility.lockMouse(false) 
 								--blurEffect.Size = 50
-								 uis.MouseIconEnabled = false -- Show mouse when menu is open
+								 uis.MouseIconEnabled = true -- Show mouse when menu is open
 								ts:Create(outline, TweenInfo.new(0.5,Enum.EasingStyle.Quad,Enum.EasingDirection.Out), {Position = saved}):Play()
 						end
 						wait(0.5)
