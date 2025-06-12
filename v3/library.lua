@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.60"
+local version = "Developer mode 0.61"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1975,23 +1975,24 @@ function sections:toggle(props)
     end;
 
     button.MouseButton1Down:Connect(function()
-        if toggle.current then
-            toggle.callback(false);
-            utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(20, 20, 20));
-            title.TextColor3 = Color3.fromRGB(100, 100, 100);
-            local find = table.find(self.library.themeitems["accent"]["BackgroundColor3"],toggle.color);
-            if find then
-                table.remove(self.library.themeitems["accent"]["BackgroundColor3"],find);
-            end;
-            toggle.current = false;
-        else
-            toggle.callback(true);
-            utility.tweenColor(toggle.color, "BackgroundColor3", self.library.theme.accent);
-            title.TextColor3 = Color3.fromRGB(255, 255, 255);
-            table.insert(self.library.themeitems["accent"]["BackgroundColor3"],toggle.color);
-            toggle.current = true;
+    if toggle.current then
+        toggle.callback(false);
+        utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(20, 20, 20));
+        utility.tweenColor(title, "TextColor3", Color3.fromRGB(100, 100, 100));
+        local find = table.find(self.library.themeitems["accent"]["BackgroundColor3"], toggle.color);
+        if find then
+            table.remove(self.library.themeitems["accent"]["BackgroundColor3"], find);
         end;
-    end);
+        toggle.current = false;
+    else
+        toggle.callback(true);
+        utility.tweenColor(toggle.color, "BackgroundColor3", self.library.theme.accent);
+        utility.tweenColor(title, "TextColor3", Color3.fromRGB(255, 255, 255));
+        table.insert(self.library.themeitems["accent"]["BackgroundColor3"], toggle.color);
+        toggle.current = true;
+    end;
+end);
+
 
     local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil;
 
