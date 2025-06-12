@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.64 [[ ( { EXPERIEMENTAL } ) ]]"
+local version = "Developer mode 0.65 [[ ( { EXPERIEMENTAL } ) ]]"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1650,18 +1650,6 @@ local button = utility.new(
 	}
 );
 
-utility.new(
-	"UIGradient",
-	{
-		Color = ColorSequence.new{
-			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 192, 203)), -- soft pink
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0)) -- siyah
-		},
-		Rotation = 90,
-		Transparency = NumberSequence.new(0),
-		Parent = button
-	}
-);
 
 
 	
@@ -1716,6 +1704,20 @@ utility.new(
 			Parent = outline
 		}
 	)
+
+local grad = utility.new(
+	"UIGradient",
+	{
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))
+		},
+		Rotation = 90,
+		Parent = label
+	}
+)
+
+
 	
 	local underline = utility.new(
 		"Frame",
@@ -1978,47 +1980,25 @@ function sections:toggle(props)
         table.insert(self.library.themeitems["accent"]["BackgroundColor3"],color);
     end;
 
-local soundId = "rbxassetid://138080526" -- Example sound ID (Roblox "click" sound)
-	
-	button.MouseEnter:Connect(function()
-    -- Play sound on hover
-    local sound = Instance.new("Sound")
-    sound.SoundId = soundId
-    sound.Parent = game:GetService("SoundService")
-    sound:Play()
-    game:GetService("Debris"):AddItem(sound, sound.TimeLength)
-    
-    -- Optional visual feedback
-    utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(40, 40, 40))
-end)
-
-button.MouseLeave:Connect(function()
-    -- Reset color when mouse leaves
+    button.MouseButton1Down:Connect(function()
     if toggle.current then
-        utility.tweenColor(toggle.color, "BackgroundColor3", self.library.theme.accent)
-    else
-        utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(20, 20, 20))
-    end
-end)
-
-button.MouseButton1Down:Connect(function()
-    if toggle.current then
-        toggle.callback(false)
-        utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(20, 20, 20))
-        utility.tweenColor(title, "TextColor3", Color3.fromRGB(100, 100, 100))
-        local find = table.find(self.library.themeitems["accent"]["BackgroundColor3"], toggle.color)
+        toggle.callback(false);
+        utility.tweenColor(toggle.color, "BackgroundColor3", Color3.fromRGB(20, 20, 20));
+        utility.tweenColor(title, "TextColor3", Color3.fromRGB(100, 100, 100));
+        local find = table.find(self.library.themeitems["accent"]["BackgroundColor3"], toggle.color);
         if find then
-            table.remove(self.library.themeitems["accent"]["BackgroundColor3"], find)
-        end
-        toggle.current = false
+            table.remove(self.library.themeitems["accent"]["BackgroundColor3"], find);
+        end;
+        toggle.current = false;
     else
-        toggle.callback(true)
-        utility.tweenColor(toggle.color, "BackgroundColor3", self.library.theme.accent)
-        utility.tweenColor(title, "TextColor3", Color3.fromRGB(255, 255, 255))
-        table.insert(self.library.themeitems["accent"]["BackgroundColor3"], toggle.color)
-        toggle.current = true
-    end
-end)
+        toggle.callback(true);
+        utility.tweenColor(toggle.color, "BackgroundColor3", self.library.theme.accent);
+        utility.tweenColor(title, "TextColor3", Color3.fromRGB(255, 255, 255));
+        table.insert(self.library.themeitems["accent"]["BackgroundColor3"], toggle.color);
+        toggle.current = true;
+    end;
+end);
+
 
     local pointer = props.pointer or props.Pointer or props.pointername or props.Pointername or props.PointerName or props.pointerName or nil;
 
