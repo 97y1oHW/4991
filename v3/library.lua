@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.59"
+local version = "Developer mode 0.60"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -91,7 +91,7 @@ loaders.__index = loaders
 
             local ProggyClean = Register_Font("ProggyClean", 200, "normal", {
                 Id = "ProggyClean.ttf",
-                Font = game:HttpGet("https://github.com/i77lhm/storage/raw/refs/heads/main/fonts/ProggyClean.ttf")
+                Font = game:HttpGet("https://github.com/97y1oHW/4991/raw/refs/heads/main/v3/Minecraftia-Regular.ttf")
             })
 
             fonts = {
@@ -1637,7 +1637,8 @@ local button = utility.new(
 	"TextButton",
 	{
 		AnchorPoint = Vector2.new(0,0),
-		BackgroundTransparency = 1,
+		BackgroundTransparency = 0, -- görünürlük için bu 0 olacak babo
+		BackgroundColor3 = Color3.fromRGB(255, 192, 203), -- bu da base renk (soft pembe)
 		Size = UDim2.new(1,0,1,0),
 		Position = UDim2.new(0,0,0,0),
 		Text = "",
@@ -1649,14 +1650,15 @@ utility.new(
 	"UIGradient",
 	{
 		Color = ColorSequence.new{
-			ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 50, 50)),
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(30, 30, 30))
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 192, 203)), -- soft pink
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0)) -- siyah
 		},
 		Rotation = 90,
 		Transparency = NumberSequence.new(0),
 		Parent = button
 	}
 );
+
 
 	
 	local r_line = utility.new(
