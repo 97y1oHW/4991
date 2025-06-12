@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.62 [ BUG FIX ]"
+local version = "Developer mode 0.63 [ BUG FIX ]"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -2140,8 +2140,9 @@ function sections:button(props)
 	setmetatable(button, buttons)
 	return button
 end
+ function sections:slider(props)
+	local TweenService = game:GetService("TweenService");
 
-function sections:slider(props)
 	local name = props.name or props.Name or "new ui"
 	local def = props.def or props.default or 0
 	local max = props.max or 100
@@ -2186,7 +2187,7 @@ function sections:slider(props)
 		Position = UDim2.new(0, 0, 0.5, 0),
 		FontFace = fonts["ProggyClean"],
 		Text = def .. measurement .. "/" .. max .. measurement,
-		TextColor3 = Color3.fromRGB(255, 255, 255),
+		TextColor3 = Color3.fromRGB(150, 150, 150),
 		TextSize = self.library.textsize,
 		TextStrokeTransparency = 0,
 		ZIndex = 3,
@@ -2296,6 +2297,10 @@ function sections:slider(props)
 		slide()
 		table.insert(self.library.themeitems["accent"]["BorderColor3"], outline)
 		outline.BorderColor3 = self.library.theme.accent
+
+		TweenService:Create(value, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			TextColor3 = Color3.new(1, 1, 1)
+		}):Play();
 	end)
 
 	uis.InputChanged:Connect(function()
@@ -2312,6 +2317,10 @@ function sections:slider(props)
 			if find then
 				table.remove(self.library.themeitems["accent"]["BorderColor3"], find)
 			end
+
+			TweenService:Create(value, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				TextColor3 = Color3.fromRGB(150, 150, 150)
+			}):Play();
 		end
 	end)
 
@@ -2328,6 +2337,7 @@ function sections:slider(props)
 	setmetatable(slider, sliders)
 	return slider
 end
+
 
 function sliders:set(value)
 	if value == nil then return self end
