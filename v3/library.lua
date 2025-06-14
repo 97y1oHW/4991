@@ -1,6 +1,6 @@
 
 local version = "Developer mode 0.66"
-getgenv().libversion = "0.30"
+getgenv().libversion = "0.66"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
