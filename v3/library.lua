@@ -1,5 +1,5 @@
 
-local version = "Developer mode 0.65 [[ ( { EXPERIEMENTAL } ) ]]"
+local version = "Developer mode 0.66"
 getgenv().libversion = "0.30"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
@@ -1612,17 +1612,37 @@ end
 function multisections:section(props)
 	local name = props.name or props.Name or props.page or props.Page or props.pagename or props.Pagename or props.PageName or props.pageName or "new ui"
 	local mssection = {}
-	local tabbutton = utility.new(
-		"Frame",
-		{
-			BackgroundColor3 = Color3.fromRGB(20, 20, 20),
-			BorderColor3 = Color3.fromRGB(12, 12, 12),
-			BorderMode = "Inset",
-			BorderSizePixel = 1,
-			Size = UDim2.new(0,60,0,20),
-			Parent = self.buttons
-		}
-	)
+local tabbutton = utility.new(
+	"Frame",
+	{
+		BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+		BorderColor3 = Color3.fromRGB(12, 12, 12),
+		BorderMode = "Inset",
+		BorderSizePixel = 1,
+		Size = UDim2.new(0,60,0,20),
+		Parent = self.buttons
+	}
+);
+
+local gradient = utility.new(
+	"UIGradient",
+	{
+		Color = ColorSequence.new{
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 0))
+		},
+		Rotation = 90,
+		Parent = tabbutton
+	}
+);
+
+task.spawn(function()
+	for i = 1, 100 do
+		gradient.Offset = Vector2.new(0, 1 - (i / 100));
+		task.wait()
+	end
+end);
+
 	
 	local outline = utility.new(
 		"Frame",
