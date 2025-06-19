@@ -1,6 +1,6 @@
 
-local version = "Developer mode 0.66"
-getgenv().libversion = "0.66"
+local version = "Developer mode 0.67"
+getgenv().libversion = "0.67"
 warn("LIB VERSION: "  ..version)
 --[[local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 50
@@ -91,7 +91,7 @@ loaders.__index = loaders
 
             local ProggyClean = Register_Font("ProggyClean", 200, "normal", {
                 Id = "ProggyClean.ttf",
-                Font = game:HttpGet("https://github.com/97y1oHW/4991/raw/refs/heads/main/v3/Minecraftia-Regular.ttf")
+                Font = game:HttpGet("https://github.com/sametexe001/luas/raw/refs/heads/main/fonts/windows-xp-tahoma.ttf")
             })
 
             fonts = {
